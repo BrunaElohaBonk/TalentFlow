@@ -1,1 +1,92 @@
-ebaa
+Método de desenvolvimento de rotas:
+
+Autenticação
+Método	Rota	Descrição
+POST	/login	Login de aprendiz ou instrutor
+POST	/logout	Encerrar sessão
+POST	/esqueci-senha	Solicitar recuperação de senha
+PUT	/alterar-senha	Alterar senha
+
+Instrutores
+Método	Rota	Descrição
+GET	/instrutores	Listar todos os instrutores
+GET	/instrutores/:edv	Buscar instrutor por EDV
+POST	/instrutores	Cadastrar instrutor
+PUT	/instrutores/:edv	Atualizar dados
+DELETE	/instrutores/:edv	Excluir instrutor
+
+Turmas
+Método	Rota	Descrição
+GET	/turmas	Listar turmas
+GET	/turmas/:id	Buscar turma
+POST	/turmas	Criar turma
+PUT	/turmas/:id	Atualizar turma
+DELETE	/turmas/:id	Excluir turma
+GET	/turmas/:id/aprendizes	Listar aprendizes da turma
+
+Aprendizes
+Método	Rota	Descrição
+GET	/aprendizes	Listar aprendizes
+GET	/aprendizes/:edv	Buscar aprendiz
+POST	/aprendizes	Cadastrar aprendiz
+PUT	/aprendizes/:edv	Atualizar aprendiz
+DELETE	/aprendizes/:edv	Excluir aprendiz
+
+Perfil
+Um aprendiz possui apenas um perfil.
+Método	Rota	Descrição
+GET	/perfil/:edv	Buscar perfil completo
+POST	/perfil	Criar perfil
+PUT	/perfil/:id	Atualizar perfil
+DELETE	/perfil/:id	Excluir perfil
+
+Formação Acadêmica
+Método	Rota
+GET	/perfil/:id/formacoes
+POST	/perfil/:id/formacoes
+PUT	/formacoes/:id
+DELETE	/formacoes/:id
+
+Daqui pra baixo é a Lays :)
+
+Situação Profissional
+Método	Rota
+GET	/perfil/:id/situacao-profissional
+POST	/perfil/:id/situacao-profissional
+PUT	/situacao-profissional/:id
+DELETE	/situacao-profissional/:id
+
+Soft Skills
+Método	Rota
+GET	/perfil/:id/softskills
+POST	/perfil/:id/softskills
+PUT	/softskills/:id
+DELETE	/softskills/:id
+
+Competências
+Método	Rota
+GET	/perfil/:id/competencias
+POST	/perfil/:id/competencias
+PUT	/competencias/:id
+DELETE	/competencias/:id
+
+Idiomas
+Método	Rota
+GET	/perfil/:id/idiomas
+POST	/perfil/:id/idiomas
+PUT	/idiomas/:id
+DELETE	/idiomas/:id
+
+Cursos
+Método	Rota
+GET	/perfil/:id/cursos
+POST	/perfil/:id/cursos
+PUT	/cursos/:id
+DELETE	/cursos/:id
+
+Dashboard (opcional)
+Essas rotas retornam informações consolidadas para o sistema.
+Método	Rota	Descrição
+GET	/dashboard	Estatísticas gerais
+GET	/dashboard/turmas	Quantidade de aprendizes por turma
+GET	/dashboard/Situação Profissional Quantidade de aprendizes em estagio 
