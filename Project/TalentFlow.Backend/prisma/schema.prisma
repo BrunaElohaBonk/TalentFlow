@@ -1,0 +1,108 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url = env("DATABASE_URL")
+}
+
+model Instrutor {
+  EDV Int @id 
+  Name String 
+  Data_nascimento DateTime
+  User_bosch String @unique
+  Email_bosch String @unique
+  Password_login String 
+  Turmas Turma[]
+}
+model Turma {
+  id Int @id @default(autoincrement()) 
+  EDV_Instrutor Int 
+  Instrutor Instrutor @relation(fields: [EDV_Instrutor], references: [EDV])
+  Name_Curso String
+  Aprediz Aprendiz[]
+
+}
+
+model Aprendiz {
+  EDV Int @id 
+  Name String 
+  Data_nascimento DateTime
+  User_bosch String? @unique
+  Email_bosch String? @unique
+  Password_login String 
+  Id_Turma Int 
+  Turmas Turma  @relation(fields: [Id_Turma], references: [id])
+  Contato String
+  Profile Profile[]
+}
+
+model Profile {
+  id Int @id @default(autoincrement()) 
+  EDV_Aprendiz Int 
+  Aprediz Aprendiz @relation(fields: [EDV_Aprendiz], references: [EDV])
+  Situacao_profissional Situacao_profissional[]
+  Soft_Skills Soft_Skills[]
+  Competencia Competencia[]
+  Formacao_Academica Formacao_Academica[]
+  Idiomas Idiomas[]
+  Cursos Cursos[]
+}
+model Situacao_profissional{
+  id Int @id @default(autoincrement())
+  Id_Profile Int
+  Profile Profile @relation(fields: [Id_Profile], references: [id])
+  Nome_Setor String
+  Nome_Lider String
+  Cumprido_Estagio Boolean
+  Bio_profissional String?
+
+}
+model Soft_Skills{
+  id Int @id @default(autoincrement())
+  Id_Profile Int
+  Profile Profile @relation(fields: [Id_Profile], references: [id])
+  Nome_SoftSkills String 
+}
+model Competencia{
+  id Int @id @default(autoincrement())
+  Id_Profile Int
+  Profile Profile @relation(fields: [Id_Profile], references: [id])
+  Nome_Competencia String
+  Nivel_Competencia String
+}
+model Formacao_Academica{
+  id Int @id @default(autoincrement())
+  Id_Profile Int
+  Profile Profile @relation(fields: [Id_Profile], references: [id])
+  Name_Curso String
+  Status_Academico String
+  Nivel_formacao String
+  Periodo_Atual Int
+  Total_Periodo Int
+  Nome_Institucao String
+
+}
+model Idiomas{
+  id Int @id @default(autoincrement())
+  Id_Profile Int
+  Profile Profile @relation(fields: [Id_Profile], references: [id])
+  Nome_Idioma String
+  Nivel_Idioma String
+}
+model Cursos{
+  id Int @id @default(autoincrement())
+  Id_Profile Int
+  Profile Profile @relation(fields: [Id_Profile], references: [id])
+  Name_Curso String
+  Status_Cursos String
+  Data_Conclusao DateTime
+  Carga_horaria Int
+  }
