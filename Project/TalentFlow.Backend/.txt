@@ -41,4 +41,13 @@ PUT	/perfil/:id	Atualizar perfil
 DELETE	/perfil/:id	Excluir perfil
 
 
+src/
+├── controllers/  3
+├── services/     4
+├── models/       4
+├── routes/       2
+├── middlewares/  5 
+├── config/       4
+└── server.ts     1
+
 
