@@ -23,10 +23,10 @@ route
     .get('verPerfil/idiomas/:EDV/:id')
     .get('verPerfil/cursos/:EDV/:id')
 
-    .get('filtrarAprendizes/tudo') //dashboard
+    .get('filtrarAprendizes/todos') //dashboard
     .get('filtrarAprendizes/turma') //
 
-    .get('')
+
 export default route;
 
 // localhost:8080/aprendiz/verPerfil/92906822/3

@@ -9,8 +9,6 @@ PUT	/alterar-senha	Alterar senha
 
 Instrutores
 Método	Rota	Descrição
-GET	/instrutores	Listar todos os instrutores
-GET	/instrutores/:edv	Buscar instrutor por EDV
 POST	/instrutores	Cadastrar instrutor
 PUT	/instrutores/:edv	Atualizar dados
 DELETE	/instrutores/:edv	Excluir instrutor
@@ -22,7 +20,7 @@ GET	/turmas/:id	Buscar turma
 POST	/turmas	Criar turma
 PUT	/turmas/:id	Atualizar turma
 DELETE	/turmas/:id	Excluir turma
-GET	/turmas/:id/aprendizes	Listar aprendizes da turma
+
 
 Aprendizes
 Método	Rota	Descrição
@@ -32,13 +30,10 @@ POST	/aprendizes	Cadastrar aprendiz
 PUT	/aprendizes/:edv	Atualizar aprendiz
 DELETE	/aprendizes/:edv	Excluir aprendiz
 
-Perfil
-Um aprendiz possui apenas um perfil.
-Método	Rota	Descrição
-GET	/perfil/:edv	Buscar perfil completo
-POST	/perfil	Criar perfil
-PUT	/perfil/:id	Atualizar perfil
-DELETE	/perfil/:id	Excluir perfil
+GET e PUT para cada informação que compõe o perfil
+
+-> Ao apagar um aprendiz, automaticamente apagamos o perfil 
+
 
 
 src/
