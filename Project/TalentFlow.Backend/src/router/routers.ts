@@ -12,5 +12,4 @@ export default function (app: Express) {
        .use('/api/instrutor',instrutor )
        .use('/api/turma', turma)
        .use('/api/auth', auth)
-
 }
