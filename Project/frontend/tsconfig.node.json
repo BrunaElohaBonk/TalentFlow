@@ -5,6 +5,7 @@
     "lib": ["ES2023"],
     "types": ["node"],
     "skipLibCheck": true,
+    "extends": "@tsconfig/node22/tsconfig.json",
 
     /* Bundler mode */
     "module": "nodenext",
