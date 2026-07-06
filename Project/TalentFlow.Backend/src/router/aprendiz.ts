@@ -1,14 +1,34 @@
-
 import express from 'express'
 
-const router = express.Router();
+const route = express.Router();
 
-router.post('/add/:EDV');
-router.get('/aprediz/:EDV')
-router.put('/updade/:EDV');
-//  47 aprendiz
-// 59 intrutor
+route
+    .post('/adicionarAprendiz/:EDV')
+    .delete('/deletarAprendiz/:EDV')
 
- export default router;
+    
+    .put('/atualizarPerfil/:EDV/:id')
+    .put('atualizarPerfil/formacaoAcademica/:EDV/:id')
+    .put('atualizarPerfil/situacaoProfissional/:EDV/:id')
+    .put('atualizarPerfil/softskills/:EDV/:id')
+    .put('atualizarPerfil/competencias/:EDV/:id')
+    .put('atualizarPerfil/idiomas/:EDV/:id')
+    .put('atualizarPerfil/cursos/:EDV/:id')
 
- 
+    .get('/verPerfil/:EDV/:id')
+    .get('verPerfil/formacaoAcademica/:EDV/:id')
+    .get('verPerfil/situacaoProfissional/:EDV/:id')
+    .get('verPerfil/softskills/:EDV/:id')
+    .get('verPerfil/competencias/:EDV/:id')
+    .get('verPerfil/idiomas/:EDV/:id')
+    .get('verPerfil/cursos/:EDV/:id')
+
+    .get('filtrarAprendizes/tudo') //dashboard
+    .get('filtrarAprendizes/turma') //
+
+    .get('')
+export default route;
+
+// localhost:8080/aprendiz/verPerfil/92906822/3
+// 47 aprendiz
+// 59 instrutor

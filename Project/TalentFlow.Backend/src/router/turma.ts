@@ -1,8 +1,11 @@
 import express from 'express'
-const router = express.Router();
+const route = express.Router();
 
- router.get('/turmas');
- router.get('/turmas/:id');
- router.put('/update/:id');
+ route
+    .get('/visualizarTurmas')
+    .get('/verTurma/:id')
+    .put('/updateTurma/:id')
+    .delete('/deletarTurma/:id')
 
- export default router;
+ 
+ export default route;
