@@ -27,7 +27,7 @@ export interface AtualizarPerfilDto {
     email: string;
     user?: string;
     dataNascimento:string;
-    EDV:string;
+    EDV:number;
     contato:string;
 }
 

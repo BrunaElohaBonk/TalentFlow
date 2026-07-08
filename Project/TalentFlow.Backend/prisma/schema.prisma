@@ -13,6 +13,19 @@ datasource db {
   url = env("DATABASE_URL")
 }
 
+enum NivelIdioma {
+  BASICO
+  INTERMEDIARIO
+  AVANCADO
+  FLUENTE
+}
+
+ enum NivelFormacao {
+    ENSINO_MEDIO
+    TECNICO
+    GRADUACAO
+    POS_GRADUACAO
+ }
 model Instrutor {
   EDV Int @id 
   Name String 
@@ -87,7 +100,7 @@ model Formacao_Academica{
   Profile Profile @relation(fields: [Id_Profile], references: [id])
   Name_Curso String
   Status_Academico String
-  Nivel_formacao String
+  Nivel_formacao NivelFormacao
   Periodo_Atual Int
   Total_Periodo Int
   Nome_Institucao String
@@ -98,7 +111,7 @@ model Idiomas{
   Id_Profile Int
   Profile Profile @relation(fields: [Id_Profile], references: [id])
   Nome_Idioma String
-  Nivel_Idioma String
+  Nivel_Idioma NivelIdioma
 }
 model Cursos{
   id Int @id @default(autoincrement())
