@@ -3,11 +3,11 @@ import logo from "../../assets/img/logo.png";
 
 function Header(){
     return(
-        <div style={quadrado}>
+        <div style={style.quadrado}>
             <img src={faixa} alt="faixa" />
             <div>
                 <div>
-
+                    <h1>OIII</h1>
                 </div>
             </div>
             <div>
@@ -19,6 +19,8 @@ function Header(){
 
 export default Header;
 
-const quadrado = {
-    
+const style = {
+    quadrado: {
+        backgroundColor: 'blue'
+    }
 }
