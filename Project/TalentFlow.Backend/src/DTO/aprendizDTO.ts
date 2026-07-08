@@ -12,7 +12,7 @@ export type NivelIdioma =
 
 export interface AdicionarAprendizDto {
     nomeAprendiz:string;
-    EDV:string;
+    EDV:number;
     turma: string;
     email: string;
     user?: string;

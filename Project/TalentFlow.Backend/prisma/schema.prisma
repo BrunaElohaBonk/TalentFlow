@@ -21,6 +21,7 @@ model Instrutor {
   Email_bosch String @unique
   Password_login String 
   Turmas Turma[]
+  ResetTokens TokenRecuperacaoSenha[]
 }
 model Turma {
   id Int @id @default(autoincrement()) 
@@ -42,6 +43,7 @@ model Aprendiz {
   Turmas Turma  @relation(fields: [Id_Turma], references: [id])
   Contato String
   Profile Profile[]
+  ResetTokens TokenRecuperacaoSenha[]
 }
 
 model Profile {
@@ -106,3 +108,15 @@ model Cursos{
   Data_Conclusao DateTime
   Carga_horaria Int
   }
+
+model TokenRecuperacaoSenha {
+  id Int @id @default(autoincrement())
+  token String @unique
+  expiresAt DateTime
+  EDV_Aprendiz Int?
+  Aprendiz Aprendiz? @relation(fields: [EDV_Aprendiz], references: [EDV])
+  EDV_Instrutor Int?
+  Instrutor Instrutor? @relation(fields: [EDV_Instrutor], references: [EDV])
+  createdAt DateTime @default(now())
+  usedAt DateTime?
+}
