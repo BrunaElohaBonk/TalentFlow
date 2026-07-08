@@ -1,3 +1,10 @@
-Sombra: box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px
+Sombra container: box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px
+Sombra input: box-shadow: #b4b4b4 0px 1px 4px;
 
-Cor cinza: #B4B4B4
+Cor cinza: #B4B4B4;
+Cor texto input: color: #8a8a8a;
+
+Borda arredondada geral: border-radius: 15px;
+Borda arredondada botão: border-radius: 10px;
+
+Fonte: 

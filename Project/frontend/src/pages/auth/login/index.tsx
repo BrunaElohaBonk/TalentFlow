@@ -1,20 +1,32 @@
 import icon_user from '../../../assets/img/icon_user.png'
 import icon_cadeado from '../../../assets/img/icon_cadeado.png'
+import './index.css'
+import Header from '../../../components/header'
 
 function Login() {
 
   return (
     <>
     <div>
-        <span>Seja bem-vindo(a)!</span>
+      <Header></Header>
+    </div>
+    <div className='container'>
+        <div className='titulo'>
+          <span className='span'>Seja bem-vindo(a)!</span>
+        </div>
 
-        <div>
-            <input src='icon_user' placeholder="EDV" style={{height: '50px', width: '100px'}}></input>
-            <input src='icon_cadeado' placeholder="Password" style={{height: '50px', width: '100px'}}></input>
+        <div className='input-container'>
+          <img src={icon_user} alt="icon_user" className='icon'/>
+          <input placeholder="EDV" className='input'></input>
+        </div>
+
+        <div className='input-container'>
+          <img src={icon_cadeado} alt="icon_cadeado" className='icon'/>
+          <input placeholder="Password" className='input'></input>
         </div>
 
         <div>
-            <button>ENTRAR</button>
+          <button className='button'>ENTRAR</button>
         </div>
     </div>
     </>
