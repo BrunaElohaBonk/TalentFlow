@@ -1,4 +1,4 @@
-Sombra container: box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px
+Sombra container: box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
 Sombra input: box-shadow: #b4b4b4 0px 1px 4px;
 
 Cor cinza: #B4B4B4;
@@ -8,3 +8,13 @@ Borda arredondada geral: border-radius: 15px;
 Borda arredondada botão: border-radius: 10px;
 
 Fonte: 
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+font-family: 'Poppins', sans-serif;
+
+Hover:
+- botão: 
+.button:hover {
+    height: +2px;
+    width: +2px;
+    background-color: #3d96e9;
+}

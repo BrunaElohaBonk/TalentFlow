@@ -18,8 +18,6 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<Login />} />
-<<<<<<< HEAD
-
           <Route path='/CadastrarAprendiz' element={<CadAprendiz />} />
           <Route path='/CadastrarInstrutor' element={<CadInstrutor />} />
           <Route path='/CadastrarTurma' element={<CadTurma />} />
@@ -30,9 +28,7 @@ function App() {
           <Route path='/Aprendiz' element={<VerAprendiz />} />
           <Route path='/Instrutor' element={<VerInstrutor />} />
           <Route path='/Turma' element={<VerTurma />} />
-=======
           <Route path='/perfil' element={<Perfil />} />
->>>>>>> acc35ea6a10bbcaa75bf88e40470210dafa42606
         </Routes>
       </BrowserRouter>
     </>

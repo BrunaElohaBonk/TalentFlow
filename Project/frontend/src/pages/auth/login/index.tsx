@@ -10,24 +10,25 @@ function Login() {
     <div>
       <Header></Header>
     </div>
-    <div className='container'>
-        <div className='titulo'>
-          <span className='span'>Seja bem-vindo(a)!</span>
-        </div>
+    <div className='body'>
+      <div className='container'>
+          <div className='titulo'>
+            <span className='span'>Seja bem-vindo(a)!</span>
+          </div>
 
-        <div className='input-container'>
-          <img src={icon_user} alt="icon_user" className='icon'/>
-          <input placeholder="EDV" className='input'></input>
-        </div>
+          <div className='edv'>
+            <img src={icon_user} alt="icon_user" className='icon_user'/>
+            <input placeholder="EDV" className='input'></input>
+          </div>
+          <div className='password'>
+            <img src={icon_cadeado} alt="icon_cadeado" className='icon_cadeado'/>
+            <input placeholder="Password" className='input'></input>
+          </div>
 
-        <div className='input-container'>
-          <img src={icon_cadeado} alt="icon_cadeado" className='icon'/>
-          <input placeholder="Password" className='input'></input>
-        </div>
-
-        <div>
-          <button className='button'>ENTRAR</button>
-        </div>
+          <div className='button'>
+            <button className='entrar'>ENTRAR</button>
+          </div>
+      </div>
     </div>
     </>
   )
