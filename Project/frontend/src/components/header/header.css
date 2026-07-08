@@ -1,9 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
 html, body, #root {
-    height: 100%;
+    height: 6vh;
     width: 100%;
     margin: 0;
+}
+
+.header-body{
+    height: 6vh;
 }
 
 .header-position{

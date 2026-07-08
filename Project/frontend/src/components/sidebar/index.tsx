@@ -1,11 +1,12 @@
 import './sidebar.css'
 import { NavLink } from 'react-router-dom';
+import sair from './../../assets/img/icon logout.png'
 
 function Sidebar(){
     return(
         <div className='sidebar-container'>
             <div className='sidebar-corpo'>
-                <div className='sidebar-actions'>
+                <div className='sidebar-action'>
                     <NavLink to='/CadastrarAprendiz' className='sidebar-link'>
                         <span>Cadastrar Aprendiz</span>
                     </NavLink>
@@ -34,9 +35,9 @@ function Sidebar(){
                         <span>Turma</span>
                     </NavLink>
                 </div>
-                <div>
-                    <NavLink to='/Turma' className='sidebar-link'>
-                        <img src="" alt="" />
+                <div className='sidebar-loginout'>
+                    <NavLink to='/Loginout' className='sidebar-link'>
+                        <img src={sair} alt="sair" className='sidebar-img'/>
                     </NavLink>
                 </div>
             </div>

@@ -4,7 +4,7 @@ import './header.css'
 
 function Header(){
     return(
-        <div>
+        <div className="header-body">
             <img src={faixa} alt="faixa" className="header-faixa"/>
             <div className="header-position">
                 <img src={logo} alt="logo" className="header-logo"/>
