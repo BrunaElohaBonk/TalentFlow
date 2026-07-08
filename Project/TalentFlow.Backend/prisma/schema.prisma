@@ -19,6 +19,7 @@ model Instrutor {
   Data_nascimento DateTime
   User_bosch String @unique
   Email_bosch String @unique
+  Contato String
   Password_login String 
   Turmas Turma[]
   ResetTokens TokenRecuperacaoSenha[]
