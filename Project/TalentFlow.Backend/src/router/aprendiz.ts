@@ -8,12 +8,12 @@ route
 
     
     .put('/atualizarPerfil/:EDV/:id')
-    .put('atualizarPerfil/formacaoAcademica/:EDV/:id')
-    .put('atualizarPerfil/situacaoProfissional/:EDV/:id')
-    .put('atualizarPerfil/softskills/:EDV/:id')
+    .put('atualizarPerfil/formacaoAcademica/:EDV/:id') //
+    .put('atualizarPerfil/situacaoProfissional/:EDV/:id')//
+    .put('atualizarPerfil/softskills/:EDV/:id')//
     .put('atualizarPerfil/competencias/:EDV/:id')
-    .put('atualizarPerfil/idiomas/:EDV/:id')
-    .put('atualizarPerfil/cursos/:EDV/:id')
+    .put('atualizarPerfil/idiomas/:EDV/:id')//
+    .put('atualizarPerfil/cursos/:EDV/:id')//
 
     .get('/verPerfil/:EDV/:id')
     .get('verPerfil/formacaoAcademica/:EDV/:id')
