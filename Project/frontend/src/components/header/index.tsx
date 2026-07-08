@@ -1,26 +1,18 @@
 import faixa from "../../assets/img/faixa.png";
 import logo from "../../assets/img/logo.png";
+import './header.css'
 
 function Header(){
     return(
-        <div style={style.quadrado}>
-            <img src={faixa} alt="faixa" />
-            <div>
-                <div>
-                    <h1>OIII</h1>
-                </div>
+        <div>
+            <img src={faixa} alt="faixa" className="header-faixa"/>
+            <div className="header-position">
+                <img src={logo} alt="logo" className="header-logo"/>
             </div>
-            <div>
-                <img src={logo} alt="logo" />
-            </div>
+            <div className="header-final"></div>
         </div>
     );
 }
 
 export default Header;
 
-const style = {
-    quadrado: {
-        backgroundColor: 'blue'
-    }
-}

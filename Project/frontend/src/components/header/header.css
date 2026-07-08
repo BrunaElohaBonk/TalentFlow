@@ -1,0 +1,28 @@
+html, body, #root {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+}
+
+.header-position{
+    display: flex;
+    justify-content: right;
+    align-items: flex-start;
+}
+
+.header-logo{
+    margin: 1%;
+    height: 1.6rem;
+    width: 7.5rem;
+}
+
+.header-faixa{
+    height: 0.5rem;
+    width: 100%;
+}
+
+.header-final{
+    height: 0.01rem;
+    width: 100%;
+    background-color: rgb(190, 190, 190);
+}
