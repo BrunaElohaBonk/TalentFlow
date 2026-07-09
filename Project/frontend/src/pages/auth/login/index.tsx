@@ -1,14 +1,9 @@
 import icon_user from '../../../assets/img/icon_user.png'
 import icon_cadeado from '../../../assets/img/icon_cadeado.png'
-<<<<<<< HEAD
-=======
-import './login.css'
->>>>>>> a63b585d3efbd6aba56feb6386fec5d1169813d3
 import Header from '../../../components/header'
 import './login.css'
 
 function Login() {
-
   return (
     <>
     <div>
@@ -21,11 +16,11 @@ function Login() {
           </div>
 
           <div className='edv'>
-            <div className='img_icon'><img src={icon_user} alt="icon_user" className='icon_user'/></div>
+            <div className='img_icon'><img src={icon_user} alt="icon_user" className='icon'/></div>
             <input placeholder="EDV" className='input_login'></input>
           </div>
           <div className='password'>
-            <div className='img_icon'><img src={icon_cadeado} alt="icon_cadeado" className='icon_cadeado'/></div>
+            <div className='img_icon'><img src={icon_cadeado} alt="icon_cadeado" className='icon'/></div>
             <input placeholder="Password" className='input_login'></input>
           </div>
 

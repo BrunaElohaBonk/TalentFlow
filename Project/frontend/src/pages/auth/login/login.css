@@ -33,6 +33,7 @@
     width: 370px;
     border-radius: 15px;
     margin-left: 38px;
+    display: flex;
 }
 
 .password {
@@ -42,16 +43,12 @@
     border-radius: 15px;
     margin-left: 38px;
     margin-top: 15px;
+    display: flex;
 }
 
-.icon_user {
-    width: 30px;
-    height: 30px;
-}
-
-.icon_cadeado {
-    width: 30px;
-    height: 30px;
+.icon {
+    width: 35px;
+    height: 35px;
 }
 
 .img_icon {

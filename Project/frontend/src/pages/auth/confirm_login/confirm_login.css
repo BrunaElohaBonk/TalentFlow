@@ -1,66 +1,66 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
-.body {
+.a {
     display: flex;
     align-items: center;
     justify-content: center;
     margin-top: 185px;
 }
 
-.container {
+.b {
     height: 500px;
     width: 450px;
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
     border-radius: 15px;
 }
 
-.titulo {
+.c {
     display: flex;
     align-items: center;
     justify-content: center;
     margin-top: 60px;
 }
 
-.span {
+.d {
     font-weight: bold;
     font-size: 35px;
     font-family: 'Poppins', sans-serif;
 }
 
-.edv {
+.e {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-top: 70px;
 }
 
-.password {
+.f {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.confirm_password {
+.g {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.icon_user {
+.h {
     position: absolute;
     width: 30px;
     height: 30px;
     left: -45px;
 }
 
-.icon_cadeado {
+.i {
     position: absolute;
     width: 30px;
     height: 30px;
     left: -45px;
 }
 
-.input {
+.j {
     height: 40px;
     width: 370px;
     border-radius: 15px;
@@ -72,14 +72,14 @@
     font-size: 1rem;
 }
 
-.button {
+.k {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-top: 70px;
 }
 
-.entrar {
+.l {
     height: 40px;
     width: 90px;
     border-radius: 10px;
@@ -88,7 +88,7 @@
     font-family: 'Poppins', sans-serif;
 }
 
-.entrar:hover {
+.l:hover {
     height: 42px;
     width: 92px;
     background-color: #3d96e9;
