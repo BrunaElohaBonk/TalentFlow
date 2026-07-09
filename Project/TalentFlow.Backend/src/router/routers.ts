@@ -8,7 +8,7 @@ import auth from './auth.ts'
 export default function (app: Express) {
     app
        .use(express.json())
-       .use('/api/aprediz', aprendiz)
+       .use('/api/aprendiz', aprendiz)
        .use('/api/instrutor',instrutor )
        .use('/api/turma', turma)
        .use('/api/auth', auth)
