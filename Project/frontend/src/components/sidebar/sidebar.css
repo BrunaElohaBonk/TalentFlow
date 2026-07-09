@@ -70,11 +70,14 @@ html, body, #root {
 }
 
 .sidebar-img{
-    width: 13rem;
-    height: 8rem;
+    width: 1.5rem;
+    height: 2rem;
 }
 
 .sidebar-logout {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-top: 13rem;
     padding-bottom: 20px;
 }

@@ -56,20 +56,20 @@ function PerfilInstrutor(){
                 <Sidebar></Sidebar>
                 <div className="perfil-body">   
                     <div className="perfil-form">
-                        <button onClick={()=> navigate('/editar')}>
+                        <button onClick={()=> navigate(`/editar/${perfil.edv}`)}>
                             <img src={editar} alt="editar" className="perfil-editar"/>
                         </button>
-                        <div>
-                            <img src={user} alt="user" />
+                        <div className="perfil-header">
+                            <img src={user} alt="user" className="perfil-user"/>
                             <span className="perfil-titulo">{perfil.name}</span>
                         </div>
-                        <div>
-                            <span>EDV: {perfil.edv}</span>
-                            <span>User: {perfil.user}</span>
-                            <span>Email: {perfil.email}</span>
-                            <span>Data de Nascimento: 02/02/2005</span>
-                            <span>Idade: </span>
-                            <span>Contato: {perfil.contato}</span>
+                        <div className="perfil-conteudo">
+                            <span className="perfil-span">EDV: {perfil.edv}</span>
+                            <span className="perfil-span">User: {perfil.user}</span>
+                            <span className="perfil-span">Email: {perfil.email}</span>
+                            <span className="perfil-span">Data de Nascimento: </span>
+                            <span className="perfil-span">Idade: {Idade(perfil.nascimento)}</span>
+                            <span className="perfil-span">Contato: {Telefone(perfil.contato)}</span>
                         </div>
                     </div>
                 </div>
@@ -78,3 +78,22 @@ function PerfilInstrutor(){
     )
 }
 export default PerfilInstrutor
+
+function Telefone(numero: number) {
+    const telefone = numero.toString();
+    return telefone.replace(/^(\d{2})(\d{5})(\d{4})$/,"($1)$2-$3");
+}
+
+function Idade(dataNascimento: Date) {
+    const hoje = new Date();
+    let idade = hoje.getFullYear() - dataNascimento.getFullYear();
+    const mesAtual = hoje.getMonth();
+    const mesNascimento = dataNascimento.getMonth();
+    if (
+        mesAtual < mesNascimento ||
+        (mesAtual === mesNascimento && hoje.getDate() < dataNascimento.getDate())
+    ) {
+        idade--;
+    }
+    return idade;
+}
