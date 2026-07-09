@@ -34,6 +34,7 @@
     border-radius: 15px;
     margin-left: 38px;
     display: flex;
+    margin-top: 70px;
 }
 
 .password {
@@ -48,7 +49,7 @@
 
 .icon {
     width: 35px;
-    height: 35px;
+    height: 30px;
 }
 
 .img_icon {
@@ -56,6 +57,7 @@
     width: 30px;
     margin-left: 8px;
     margin-right: 8px;
+    margin-top: 5px;
 }
 
 .input_login {

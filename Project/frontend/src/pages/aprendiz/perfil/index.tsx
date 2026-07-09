@@ -5,7 +5,6 @@ function Perfil(){
     return(
         <div>
             <Header></Header>
-            <Sidebar></Sidebar>
         </div>
     )
 }

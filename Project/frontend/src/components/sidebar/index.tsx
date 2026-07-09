@@ -1,6 +1,6 @@
 import './sidebar.css'
 import { NavLink } from 'react-router-dom';
-import sair from './../../assets/img/icon logout.png'
+import sair from './../../assets/img/icon_logout.png'
 
 function Sidebar(){
     return(

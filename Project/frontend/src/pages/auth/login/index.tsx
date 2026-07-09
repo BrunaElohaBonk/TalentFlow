@@ -2,8 +2,17 @@ import icon_user from '../../../assets/img/icon_user.png'
 import icon_cadeado from '../../../assets/img/icon_cadeado.png'
 import Header from '../../../components/header'
 import './login.css'
+import { useNavigate } from "react-router-dom"
+import Confirm_login from '../confirm_login'
 
 function Login() {
+
+  const navigate = useNavigate() 
+
+  const handleNavigateConfirm_login = () => {
+    navigate('/Confirm_login')
+  }
+
   return (
     <>
     <div>
@@ -25,7 +34,7 @@ function Login() {
           </div>
 
           <div className='button'>
-            <button className='entrar'>ENTRAR</button>
+            <button className='entrar' onClick={handleNavigateConfirm_login}>ENTRAR</button>
           </div>
       </div>
     </div>
