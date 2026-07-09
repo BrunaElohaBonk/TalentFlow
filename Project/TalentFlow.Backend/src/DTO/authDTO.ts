@@ -26,4 +26,6 @@ export interface AdicionarUserDto {
     dataNascimento:string;
     contato:string;
     password:string;
+    trurmas?:[];
+    
 }

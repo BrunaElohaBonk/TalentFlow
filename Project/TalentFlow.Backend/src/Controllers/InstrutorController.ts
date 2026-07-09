@@ -1,8 +1,9 @@
 import { Request, Response } from "express"
+import { AdicionarUserDto } from "../DTO/authDTO.ts";
 
 export default class instrutorController{
     static async create(req: Request,res:Response){
-        const data = req.body;
+        const data:AdicionarUserDto = req.body;
         try{
             return res.status(200).send({response: "Sucesso ao criar Instrutor!" })
     

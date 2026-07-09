@@ -42,6 +42,7 @@ model User {
   password_login String 
   turmas Turma[]
   resetTokens TokenRecuperacaoSenha[]
+  user User[]
 }
 model Turma {
   id Int @id @default(autoincrement()) 
@@ -55,9 +56,10 @@ model Turma {
 model Aprendiz {
   EDV Int @id 
   Id_Turma Int 
-  turmas Turma  @relation(fields: [Id_Turma], references: [id])
+  turmas Turma  @relation(fields: [Id_Turma], references: [id]) 
+  Id_User Int 
+  users User  @relation(fields: [Id_User], references: [id])
   profile Profile[]
-  resetTokens TokenRecuperacaoSenha[]
 }
 
 model Profile {
