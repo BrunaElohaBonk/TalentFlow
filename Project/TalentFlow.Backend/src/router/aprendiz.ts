@@ -3,7 +3,7 @@ import express from 'express'
 const route = express.Router();
 
 route
-    .post('/adicionarAprendiz/:EDV')
+    // .post('/adicionarAprendiz/:EDV')
     .delete('/deletarAprendiz/:EDV')
 
     

@@ -1,5 +1,6 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "../generated/prisma/client.ts";
 
 export const prisma = new PrismaClient({
-log: ['query']
+  log: ["query"],
+  accelerateUrl: ''
 });

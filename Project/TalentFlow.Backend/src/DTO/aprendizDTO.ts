@@ -10,16 +10,6 @@ export type NivelIdioma =
     | "GRADUACAO"
     | "POS_GRADUACAO";
 
-export interface AdicionarAprendizDto {
-    nomeAprendiz:string;
-    EDV:number;
-    turma: string;
-    email: string;
-    user?: string;
-    dataNascimento:string;
-    contato:string;
-    password: string;
-}
 
 export interface AtualizarPerfilDto {
     fotoAprendiz: File;
