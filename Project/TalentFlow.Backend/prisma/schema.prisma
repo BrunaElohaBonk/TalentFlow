@@ -20,115 +20,122 @@ enum NivelIdioma {
   FLUENTE
 }
 
- enum NivelFormacao {
-    ENSINO_MEDIO
-    TECNICO
-    GRADUACAO
-    POS_GRADUACAO
- }
+enum NivelFormacao {
+  ENSINO_MEDIO
+  TECNICO
+  GRADUACAO
+  POS_GRADUACAO
+}
 
- enum TipoUser{
+enum TipoUser {
   APRENDIZ
   INSTRUTOR
- }
-model User {
-  EDV Int @id
-  tipoUser TipoUser
-  name String 
-  data_nascimento DateTime
-  user_bosch String @unique
-  email_bosch String @unique
-  contato String
-  password_login String 
-  turmas Turma[]
-  resetTokens TokenRecuperacaoSenha[]
 }
-model Turma {
-  id Int @id @default(autoincrement()) 
-  EDV_Instrutor Int 
-  user User @relation(fields: [EDV_Instrutor], references: [EDV])
-  name_Curso String
-  aprendiz Aprendiz[]
 
+model User {
+  EDV             Int                     @id
+  tipoUser        TipoUser
+  name            String
+  data_nascimento DateTime
+  user_bosch      String                  @unique
+  email_bosch     String                  @unique
+  contato         String
+  password_login  String
+  turmas          Turma[]
+  resetTokens     TokenRecuperacaoSenha[]
+}
+
+model Turma {
+  id            Int        @id @default(autoincrement())
+  EDV_Instrutor Int
+  user          User       @relation(fields: [EDV_Instrutor], references: [EDV])
+  name_Curso    String
+  aprendiz      Aprendiz[]
 }
 
 model Aprendiz {
-  EDV Int @id 
-  Id_Turma Int 
-  turmas Turma  @relation(fields: [Id_Turma], references: [id])
-  profile Profile[]
+  EDV         Int                     @id
+  Id_Turma    Int
+  turmas      Turma                   @relation(fields: [Id_Turma], references: [id])
+  profile     Profile[]
   resetTokens TokenRecuperacaoSenha[]
 }
 
 model Profile {
-  id Int @id @default(autoincrement()) 
-  EDV_Aprendiz Int 
-  aprediz Aprendiz @relation(fields: [EDV_Aprendiz], references: [EDV])
+  id                    Int                     @id @default(autoincrement())
+  EDV_Aprendiz          Int
+  aprediz               Aprendiz                @relation(fields: [EDV_Aprendiz], references: [EDV])
   situacao_profissional Situacao_profissional[]
-  soft_Skills Soft_Skills[]
-  competencia Competencia[]
-  formacao_Academica Formacao_Academica[]
-  idiomas Idiomas[]
-  cursos Cursos[]
+  soft_Skills           Soft_Skills[]
+  competencia           Competencia[]
+  formacao_Academica    Formacao_Academica[]
+  idiomas               Idiomas[]
+  cursos                Cursos[]
 }
-model Situacao_profissional{
-  id Int @id @default(autoincrement())
-  Id_Profile Int
-  profile Profile @relation(fields: [Id_Profile], references: [id])
-  nome_Setor String
-  nome_Lider String
+
+model Situacao_profissional {
+  id               Int     @id @default(autoincrement())
+  Id_Profile       Int
+  profile          Profile @relation(fields: [Id_Profile], references: [id])
+  nome_Setor       String
+  nome_Lider       String
   cumprido_Estagio Boolean
   bio_profissional String?
+}
 
+model Soft_Skills {
+  id              Int     @id @default(autoincrement())
+  Id_Profile      Int
+  profile         Profile @relation(fields: [Id_Profile], references: [id])
+  nome_SoftSkills String
 }
-model Soft_Skills{
-  id Int @id @default(autoincrement())
-  Id_Profile Int
-  profile Profile @relation(fields: [Id_Profile], references: [id])
-  nome_SoftSkills String 
-}
-model Competencia{
-  id Int @id @default(autoincrement())
-  Id_Profile Int
-  profile Profile @relation(fields: [Id_Profile], references: [id])
-  nome_Competencia String
+
+model Competencia {
+  id                Int     @id @default(autoincrement())
+  Id_Profile        Int
+  profile           Profile @relation(fields: [Id_Profile], references: [id])
+  nome_Competencia  String
   nivel_Competencia String
 }
-model Formacao_Academica{
-  id Int @id @default(autoincrement())
-  Id_Profile Int
-  profile Profile @relation(fields: [Id_Profile], references: [id])
-  name_Curso String
-  status_Academico String
-  nivel_formacao NivelFormacao
-  periodo_Atual Int
-  total_Periodo Int
-  nome_Institucao String
 
+model Formacao_Academica {
+  id               Int           @id @default(autoincrement())
+  Id_Profile       Int
+  profile          Profile       @relation(fields: [Id_Profile], references: [id])
+  name_Curso       String
+  status_Academico String
+  nivel_formacao   NivelFormacao
+  periodo_Atual    Int
+  total_Periodo    Int
+  nome_Institucao  String
 }
-model Idiomas{
-  id Int @id @default(autoincrement())
-  Id_Profile Int
-  profile Profile @relation(fields: [Id_Profile], references: [id])
-  nome_Idioma String
+
+model Idiomas {
+  id           Int         @id @default(autoincrement())
+  Id_Profile   Int
+  profile      Profile     @relation(fields: [Id_Profile], references: [id])
+  nome_Idioma  String
   nivel_Idioma NivelIdioma
 }
-model Cursos{
-  id Int @id @default(autoincrement())
-  Id_Profile Int
-  profile Profile @relation(fields: [Id_Profile], references: [id])
-  name_Curso String
-  status_Cursos String
+
+model Cursos {
+  id             Int      @id @default(autoincrement())
+  Id_Profile     Int
+  profile        Profile  @relation(fields: [Id_Profile], references: [id])
+  name_Curso     String
+  status_Cursos  String
   data_Conclusao DateTime
-  carga_horaria Int
-  }
+  carga_horaria  Int
+}
 
 model TokenRecuperacaoSenha {
-  id Int @id @default(autoincrement())
-  token String @unique
-  expiresAt DateTime
-  EDV Int?
-  user User? @relation(fields: [EDV], references: [EDV])
-  createdAt DateTime @default(now())
-  usedAt DateTime?
+  id          Int       @id @default(autoincrement())
+  token       String    @unique
+  expiresAt   DateTime
+  EDV         Int?
+  user        User?     @relation(fields: [EDV], references: [EDV])
+  createdAt   DateTime  @default(now())
+  usedAt      DateTime?
+  aprendiz    Aprendiz? @relation(fields: [aprendizEDV], references: [EDV])
+  aprendizEDV Int?
 }

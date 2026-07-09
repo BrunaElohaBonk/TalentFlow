@@ -9,6 +9,21 @@ dotenv.config();
 
 class AuthController {
 
+    static async create(req: Request, res: Response) {
+        const data = req.body
+        try {
+            return res.status(200).send({ response: "Sucesso ao criar Aprendiz!" })
+        }
+        catch (error) {
+            console.error(error)
+            return res.status(200).send({
+                messagem: error instanceof Error
+                    ? error.message
+                    : error
+            })
+        }
+    }
+
     static async register(req: Request, res: Response): Promise<void> {
         const data:AdicionarUserDto = req.body;
 
