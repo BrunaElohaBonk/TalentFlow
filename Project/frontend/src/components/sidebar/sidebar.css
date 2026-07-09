@@ -27,7 +27,7 @@ html, body, #root {
 
 .sidebar-corpo {
     width: 16rem;
-    height: 94vh;
+    height: 92.4vh;
     background: #fff;
     border: 0.01rem solid rgb(190, 190, 190);
     display: flex;
@@ -76,7 +76,7 @@ html, body, #root {
     height: 8rem;
 }
 
-.sidebar-loginout {
+.sidebar-logout {
     margin-top: 13rem;
     padding-bottom: 20px;
 }
