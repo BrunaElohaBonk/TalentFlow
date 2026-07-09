@@ -60,7 +60,6 @@ model Aprendiz {
   EDV_User Int 
   users User  @relation(fields: [EDV_User], references: [EDV])
   profile Profile[]
-  resetTokens TokenRecuperacaoSenha[]
 }
 
 model Profile {
