@@ -30,19 +30,22 @@ enum NivelFormacao {
 enum TipoUser {
   APRENDIZ
   INSTRUTOR
- }
+}
+
 model User {
-  EDV             Int                     @id
+  EDV             Int      @id
   tipoUser        TipoUser
   name            String
   data_nascimento DateTime
-  user_bosch      String                  @unique
-  email_bosch     String                  @unique
+  user_bosch      String   @unique
+  email_bosch     String   @unique
   contato         String
   password_login  String
-  user User[]
-  turmas          Turma[]
-  resetTokens     TokenRecuperacaoSenha[]
+
+  aprendiz Aprendiz?
+
+  turmas      Turma[]
+  resetTokens TokenRecuperacaoSenha[]
 }
 
 model Turma {
@@ -54,11 +57,14 @@ model Turma {
 }
 
 model Aprendiz {
-  EDV Int @id 
-  Id_Turma Int 
-  turmas Turma  @relation(fields: [Id_Turma], references: [id]) 
-  EDV_User Int 
-  users User  @relation(fields: [EDV_User], references: [EDV])
+  EDV Int @id
+
+  user User @relation(fields: [EDV], references: [EDV])
+
+  Id_Turma Int
+
+  turmas Turma @relation(fields: [Id_Turma], references: [id])
+
   profile Profile[]
 }
 
@@ -130,13 +136,11 @@ model Cursos {
 }
 
 model TokenRecuperacaoSenha {
-  id          Int       @id @default(autoincrement())
-  token       String    @unique
-  expiresAt   DateTime
-  EDV         Int?
-  user        User?     @relation(fields: [EDV], references: [EDV])
-  createdAt   DateTime  @default(now())
-  usedAt      DateTime?
-  aprendiz    Aprendiz? @relation(fields: [aprendizEDV], references: [EDV])
-  aprendizEDV Int?
+  id        Int       @id @default(autoincrement())
+  token     String    @unique
+  expiresAt DateTime
+  EDV       Int?
+  user      User?     @relation(fields: [EDV], references: [EDV])
+  createdAt DateTime  @default(now())
+  usedAt    DateTime?
 }
