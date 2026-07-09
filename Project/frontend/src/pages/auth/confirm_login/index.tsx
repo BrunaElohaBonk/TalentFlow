@@ -13,6 +13,10 @@ function Confirm_login() {
     navigate('/')
   }
 
+  const handleNavigatePerfil = () => {
+    navigate('/Perfil')
+  }
+
   return (
     <>
     <div>
@@ -20,7 +24,7 @@ function Confirm_login() {
     </div>
     <div className='logout'>
         <img src={icon_logout} alt="icon_logout" onClick={handleNavigateLogin}/>
-      </div>
+    </div>
     <div className='a'>
       <div className='b'>
           <div className='c'>
@@ -41,7 +45,7 @@ function Confirm_login() {
           </div>
 
           <div className='j'>
-            <button className='k'>ENTRAR</button>
+            <button className='k' onClick={handleNavigatePerfil}>ENTRAR</button>
           </div>
       </div>
     </div>
