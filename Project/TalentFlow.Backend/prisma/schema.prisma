@@ -30,7 +30,6 @@ enum NivelFormacao {
 enum TipoUser {
   APRENDIZ
   INSTRUTOR
-<<<<<<< HEAD
  }
 model User {
   EDV Int @id
@@ -44,8 +43,6 @@ model User {
   turmas Turma[]
   resetTokens TokenRecuperacaoSenha[]
   user User[]
-=======
->>>>>>> 8888847eb06509762f375f3999c94d4a617f0bac
 }
 
 model User {
@@ -70,20 +67,18 @@ model Turma {
 }
 
 model Aprendiz {
-<<<<<<< HEAD
   EDV Int @id 
   Id_Turma Int 
   turmas Turma  @relation(fields: [Id_Turma], references: [id]) 
   Id_User Int 
   users User  @relation(fields: [Id_User], references: [id])
   profile Profile[]
-=======
+
   EDV         Int                     @id
   Id_Turma    Int
   turmas      Turma                   @relation(fields: [Id_Turma], references: [id])
   profile     Profile[]
   resetTokens TokenRecuperacaoSenha[]
->>>>>>> 8888847eb06509762f375f3999c94d4a617f0bac
 }
 
 model Profile {
