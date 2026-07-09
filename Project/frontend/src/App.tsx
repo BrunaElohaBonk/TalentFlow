@@ -11,7 +11,8 @@ import PerfilInstrutor from "./pages/instrutor/perfilInstrutor"
 import VerAprendiz from "./pages/instrutor/verAprendiz"
 import VerInstrutor from "./pages/instrutor/verInstrutor"
 import VerTurma from "./pages/instrutor/verTurma" 
-import Loginout from "./pages/auth/loginout"
+import Logout from "./pages/auth/logout"
+import Confirm_login from "./pages/auth/confirm_login"
 
 function App() {
   return (
@@ -30,7 +31,8 @@ function App() {
           <Route path='/Instrutor' element={<VerInstrutor />} />
           <Route path='/Turma' element={<VerTurma />} />
           <Route path='/perfil' element={<Perfil />} />
-          <Route path='/Loginout' element={<Loginout />} />
+          <Route path='/Logout' element={<Logout />} />
+          <Route path='/Confirm_login' element={<Confirm_login />} />
         </Routes>
       </BrowserRouter>
     </>
