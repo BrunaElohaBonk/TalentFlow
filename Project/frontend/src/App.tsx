@@ -13,6 +13,7 @@ import VerInstrutor from "./pages/instrutor/verInstrutor"
 import VerTurma from "./pages/instrutor/verTurma" 
 import Logout from "./pages/auth/logout"
 import Confirm_login from "./pages/auth/confirm_login"
+import EditarPerfil from "./pages/auth/editarPerfil"
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           <Route path='/Perfil' element={<Perfil />} />
           <Route path='/Logout' element={<Logout />} />
           <Route path='/Confirm_login' element={<Confirm_login />} />
+          <Route path="/Editar/:edv" element={<EditarPerfil />} />
         </Routes>
       </BrowserRouter>
     </>

@@ -23,10 +23,10 @@ function PerfilInstrutor(){
         edv: 12345678,
         img: "foto.png",
         name: "Maria Joaquina Silveira",
-        email: "maria@email.com",
-        user: "MAR1CT",
+        email: "maria.silveira@br.bosch.com",
+        user: "MJS1CT",
         contato: 41991234567,
-        nascimento: new Date("2008-01-01"),
+        nascimento: new Date("07/09/2008"),
     });
 
 
@@ -56,7 +56,7 @@ function PerfilInstrutor(){
                 <Sidebar></Sidebar>
                 <div className="perfil-body">   
                     <div className="perfil-form">
-                        <button onClick={()=> navigate(`/editar/${perfil.edv}`)}>
+                        <button onClick={()=> navigate(`/Editar/${perfil.edv}`)}>
                             <img src={editar} alt="editar" className="perfil-editar"/>
                         </button>
                         <div className="perfil-header">
@@ -67,7 +67,7 @@ function PerfilInstrutor(){
                             <span className="perfil-span">EDV: {perfil.edv}</span>
                             <span className="perfil-span">User: {perfil.user}</span>
                             <span className="perfil-span">Email: {perfil.email}</span>
-                            <span className="perfil-span">Data de Nascimento: </span>
+                            <span className="perfil-span">Data de Nascimento: {perfil.nascimento.toLocaleDateString("pt-BR")}</span>
                             <span className="perfil-span">Idade: {Idade(perfil.nascimento)}</span>
                             <span className="perfil-span">Contato: {Telefone(perfil.contato)}</span>
                         </div>

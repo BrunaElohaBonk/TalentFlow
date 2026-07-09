@@ -15,15 +15,15 @@
     align-items: center;
     justify-content: center;
     height: 94vh;
-    width: 10000vw;
+    width: 100%;
 }
 
 .perfil-form {
-    align-items: flex-start;
     display: flex;
+    flex-direction: column;
     position: relative;
     height: 45rem;
-    width: 50rem;
+    width: 50%;
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
     border-radius: 15px;
     background-color: rgb(255, 255, 255);
@@ -55,7 +55,7 @@
     align-items: center;
     justify-content: center;
     font-weight: bold;
-    font-size: 3rem;
+    font-size: 3.5rem;
     font-family: 'Poppins', sans-serif;
 }
 
@@ -64,15 +64,17 @@
     width: 150px;
 }
 
-.perfil-conteudo{
+.perfil-conteudo {
     display: flex;
+    flex-direction: column;
+    margin-left: 8%;
 }
 
 .perfil-span{
     display: flex;
     align-items: flex-start;
     color: #8a8a8a;
-    font-size: 1rem;
+    font-size: 1.2rem;
     font-family: 'Poppins', sans-serif;
-    padding: 0.5rem;
+    padding: 1rem;
 }

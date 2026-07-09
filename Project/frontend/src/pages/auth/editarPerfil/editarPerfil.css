@@ -1,0 +1,108 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.editar-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 94vh;
+    width: 100%;
+}
+
+.editar-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+}
+
+.editar-form {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    height: 75%;
+    width: 35%;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+    border-radius: 15px;
+    background-color: white;
+}
+
+.editar-botao{
+    position: absolute;
+    background: none;
+    top: 3%;
+    right: 3%;
+    border: none;
+    cursor: pointer;
+}
+
+.editar-sair{
+    justify-content: end ;
+    height: 30px;
+    width: 30px;
+}
+
+.editar-header{
+    margin: 5%;
+    display: flex;
+}
+
+.editar-titulo {
+    margin-top: 5%;
+    padding-left: 5%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 3.5rem;
+    font-family: 'Poppins', sans-serif;
+}
+
+.editar-input {
+    display: flex;
+    height: 45px;
+    width: 70%;
+    border-radius: 10px;
+    box-shadow: #b4b4b4 0px 1px 4px;
+    padding-left: 1%;
+    color: #8a8a8a;
+    margin: 10px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+}
+
+.editar-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 6%;
+}
+
+.editar-salvar {
+    height: 3rem;
+    width: 250px;
+    border-radius: 10px;
+    background-color: #2B83D5;
+    color: white;
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+    border: none;
+    cursor: pointer;
+}
+
+
+.foto-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.editar-download {
+    width: 19px;
+    height: 22px;
+    object-fit: cover;
+}
