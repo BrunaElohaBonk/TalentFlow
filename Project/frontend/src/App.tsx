@@ -30,10 +30,7 @@ function App() {
           <Route path='/Instrutor' element={<VerInstrutor />} />
           <Route path='/Turma' element={<VerTurma />} />
           <Route path='/perfil' element={<Perfil />} />
-<<<<<<< HEAD
           <Route path='/Loginout' element={<Loginout />} />
-=======
->>>>>>> 0d3788ef38ee8a6a7bc4f7574c5f010e5a843045
         </Routes>
       </BrowserRouter>
     </>
