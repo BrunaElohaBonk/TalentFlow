@@ -32,20 +32,6 @@ enum TipoUser {
   INSTRUTOR
  }
 model User {
-  EDV Int @id
-  tipoUser TipoUser
-  name String 
-  data_nascimento DateTime
-  user_bosch String @unique
-  email_bosch String @unique
-  contato String
-  password_login String 
-  turmas Turma[]
-  resetTokens TokenRecuperacaoSenha[]
-  user User[]
-}
-
-model User {
   EDV             Int                     @id
   tipoUser        TipoUser
   name            String
@@ -54,6 +40,7 @@ model User {
   email_bosch     String                  @unique
   contato         String
   password_login  String
+  user User[]
   turmas          Turma[]
   resetTokens     TokenRecuperacaoSenha[]
 }
@@ -70,14 +57,9 @@ model Aprendiz {
   EDV Int @id 
   Id_Turma Int 
   turmas Turma  @relation(fields: [Id_Turma], references: [id]) 
-  Id_User Int 
-  users User  @relation(fields: [Id_User], references: [id])
+  EDV_User Int 
+  users User  @relation(fields: [EDV_User], references: [EDV])
   profile Profile[]
-
-  EDV         Int                     @id
-  Id_Turma    Int
-  turmas      Turma                   @relation(fields: [Id_Turma], references: [id])
-  profile     Profile[]
   resetTokens TokenRecuperacaoSenha[]
 }
 
