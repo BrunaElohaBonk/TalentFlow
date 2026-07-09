@@ -26,13 +26,12 @@ html, body, #root {
 }
 
 .sidebar-corpo {
-    width: 16rem;
-    height: 94vh;
+    width: 13vw;
+    height: 92.4vh;
     background: #fff;
     border: 0.01rem solid rgb(190, 190, 190);
     display: flex;
     flex-direction: column;
-    padding: 20px 5px;
 }
 
 .sidebar-action{
@@ -44,8 +43,7 @@ html, body, #root {
 .sidebar-link{
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 12px;
+    gap: 20px;
     text-decoration: none;
     background: transparent;
     border: none;
@@ -76,7 +74,11 @@ html, body, #root {
     height: 8rem;
 }
 
-.sidebar-loginout {
+.sidebar-logout {
     margin-top: 13rem;
     padding-bottom: 20px;
+}
+
+.sidebar-routes{
+    padding: 12px;
 }

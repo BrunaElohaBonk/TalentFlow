@@ -1,5 +1,9 @@
 import icon_user from '../../../assets/img/icon_user.png'
 import icon_cadeado from '../../../assets/img/icon_cadeado.png'
+<<<<<<< HEAD
+=======
+import './login.css'
+>>>>>>> a63b585d3efbd6aba56feb6386fec5d1169813d3
 import Header from '../../../components/header'
 import './login.css'
 

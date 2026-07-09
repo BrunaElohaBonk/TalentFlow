@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.perfil-container{
+    display: flex;
+}
+
+.perfil-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 94vh;
+    width: 10000vw;
+}
+
+.perfil-form {
+    justify-content: flex-end;
+    align-items: flex-start;
+    display: flex;
+    position: relative;
+    height: 45rem;
+    width: 50rem;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+    border-radius: 15px;
+    background-color: rgb(255, 255, 255);
+}
+
+.perfil-form button {
+    position: absolute;
+    background: none;
+    top: 3%;
+    right: 3%;
+    border: none;
+    cursor: pointer;
+}
+
+.perfil-titulo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 35px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.perfil-editar{
+
+    justify-content: end ;
+    height: 30px;
+    width: 30px;
+}
