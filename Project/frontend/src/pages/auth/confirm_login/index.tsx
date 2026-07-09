@@ -1,9 +1,9 @@
 import icon_user from '../../../assets/img/icon_user.png'
 import icon_cadeado from '../../../assets/img/icon_cadeado.png'
-import './login.css'
+import './confirm_login.css'
 import Header from '../../../components/header'
 
-function Login() {
+function Confirm_login() {
 
   return (
     <>
@@ -34,4 +34,4 @@ function Login() {
   )
 }
 
-export default Login
+export default Confirm_login

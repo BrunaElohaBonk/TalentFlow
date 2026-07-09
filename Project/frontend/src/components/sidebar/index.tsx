@@ -8,31 +8,31 @@ function Sidebar(){
             <div className='sidebar-corpo'>
                 <div className='sidebar-action'>
                     <NavLink to='/Dashboard' className='sidebar-link'>
-                        <span>Home</span>
+                        <span className='sidebar-routes'>Home</span>
                     </NavLink>
                     <NavLink to='/PerfilInstrutor' className='sidebar-link'>
-                        <span>Perfil</span>
+                        <span className='sidebar-routes'>Perfil</span>
                     </NavLink>
                     <NavLink to='/Notificações' className='sidebar-link'>
-                        <span>Histórico de Atualização</span>
+                        <span className='sidebar-routes'>Histórico de Atualização</span>
                     </NavLink>
                     <NavLink to='/Aprendiz' className='sidebar-link'>
-                        <span>Aprendizes</span>
+                        <span className='sidebar-routes'>Aprendizes</span>
                     </NavLink>
                     <NavLink to='/Turma' className='sidebar-link'>
-                        <span>Turma</span>
+                        <span className='sidebar-routes'>Turma</span>
                     </NavLink>
                     <NavLink to='/Instrutor' className='sidebar-link'>
-                        <span>Instrutores</span>
+                        <span className='sidebar-routes'>Instrutores</span>
                     </NavLink>
                     <NavLink to='/CadastrarAprendiz' className='sidebar-link'>
-                        <span>Cadastrar Aprendiz</span>
+                        <span className='sidebar-routes'>Cadastrar Aprendiz</span>
                     </NavLink>
                     <NavLink to='/CadastrarTurma' className='sidebar-link'>
-                        <span>Cadastrar Turma</span>
+                        <span className='sidebar-routes'>Cadastrar Turma</span>
                     </NavLink>
                     <NavLink to='/CadastrarInstrutor' className='sidebar-link'>
-                        <span>Cadastrar Instrutor</span>
+                        <span className='sidebar-routes'>Cadastrar Instrutor</span>
                     </NavLink>
                 </div>
                 <div className='sidebar-logout'>

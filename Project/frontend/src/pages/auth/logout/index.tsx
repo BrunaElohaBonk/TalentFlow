@@ -1,7 +1,7 @@
 import Header from "../../../components/header"
 import Sidebar from "../../../components/sidebar"
 
-function Loginout(){
+function Logout(){
     return(
         <div>
             <Header></Header>
@@ -9,4 +9,4 @@ function Loginout(){
         </div>
     )
 }
-export default Loginout
+export default Logout

@@ -42,6 +42,7 @@
 }
 
 .icon_user {
+    position: absolute;
     width: 160px;
     height: 100px;
     left: -45px;
@@ -49,8 +50,6 @@
 
 .icon_cadeado {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
     width: 160px;
     height: 100px;
     left: -45px;
@@ -58,7 +57,7 @@
 
 .input {
     height: 40px;
-    width: 400px;
+    width: 370px;
     border-radius: 15px;
     box-shadow: #b4b4b4 0px 1px 4px;
     padding-left: 45px;
