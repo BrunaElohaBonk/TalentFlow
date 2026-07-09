@@ -19,7 +19,6 @@
 }
 
 .perfil-form {
-    justify-content: flex-end;
     align-items: flex-start;
     display: flex;
     position: relative;
@@ -39,18 +38,41 @@
     cursor: pointer;
 }
 
+.perfil-editar{
+    justify-content: end ;
+    height: 30px;
+    width: 30px;
+}
+
+.perfil-header{
+    margin: 5%;
+    display: flex;
+}
+
 .perfil-titulo {
+    padding-left: 5%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: bold;
-    font-size: 35px;
+    font-size: 3rem;
     font-family: 'Poppins', sans-serif;
 }
 
-.perfil-editar{
+.perfil-user{
+    height: 150px;
+    width: 150px;
+}
 
-    justify-content: end ;
-    height: 30px;
-    width: 30px;
+.perfil-conteudo{
+    display: flex;
+}
+
+.perfil-span{
+    display: flex;
+    align-items: flex-start;
+    color: #8a8a8a;
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+    padding: 0.5rem;
 }
