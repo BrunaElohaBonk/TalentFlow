@@ -30,7 +30,7 @@ function App() {
           <Route path='/Aprendiz' element={<VerAprendiz />} />
           <Route path='/Instrutor' element={<VerInstrutor />} />
           <Route path='/Turma' element={<VerTurma />} />
-          <Route path='/perfil' element={<Perfil />} />
+          <Route path='/Perfil' element={<Perfil />} />
           <Route path='/Logout' element={<Logout />} />
           <Route path='/Confirm_login' element={<Confirm_login />} />
         </Routes>

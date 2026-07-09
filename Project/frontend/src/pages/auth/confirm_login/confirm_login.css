@@ -38,20 +38,25 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 20px;
+}
+
+.confirm_password {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .icon_user {
     position: absolute;
-    width: 160px;
-    height: 100px;
+    width: 30px;
+    height: 30px;
     left: -45px;
 }
 
 .icon_cadeado {
     position: absolute;
-    width: 160px;
-    height: 100px;
+    width: 30px;
+    height: 30px;
     left: -45px;
 }
 
