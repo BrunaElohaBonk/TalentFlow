@@ -5,6 +5,7 @@ import './perfil.css'
 import { useState } from "react";
 import icon_editar from '../../../assets/img/icon_editar.png'
 import icon_user from '../../../assets/img/icon_user.png'
+import icon_olho from '../../../assets/img/icon_olho.png'
 
 function Perfil(){
     interface Aprendiz {
@@ -62,6 +63,53 @@ function Perfil(){
                         </div>
                     </div>
                 </div>
+
+                <div className="cards-superiores">
+
+                <div className="card-perfil">
+                    <h3>Situação Profissional</h3>
+                    <ul><li>Descrição da situação atual e das expectativas para o futuro.</li></ul>
+                    <button className="btn-visualizar"><img src="icon_olho" alt="olho" /></button>
+                </div>
+                <div className="card-perfil">
+                    <h3>Formação Acadêmica</h3>
+                    <ul>
+                        <li>Técnico em Informática</li>
+                        <li>ADS (cursando)</li>
+                    </ul>
+
+                    <button className="btn-visualizar">
+                        👁
+                    </button>
+                </div>
+
+                <div className="card-perfil">
+                    <h3>Cursos Complementares</h3>
+
+                    <ul>
+                        <li>Power BI</li>
+                        <li>Excel</li>
+                    </ul>
+
+                    <button className="btn-visualizar">
+                        👁
+                    </button>
+                </div>
+
+                <div className="card-perfil">
+                    <h3>Idiomas</h3>
+
+                    <ul>
+                        <li>Português</li>
+                        <li>Inglês B1</li>
+                    </ul>
+
+                    <button className="btn-visualizar">
+                        👁
+                    </button>
+                </div>
+
+            </div>
             </section>
         </main>
         </>

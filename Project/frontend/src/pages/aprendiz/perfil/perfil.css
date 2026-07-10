@@ -48,8 +48,8 @@
 }
 
 .foto-perfil{
-    width:140px;
-    height:140px;
+    width:150px;
+    height:150px;
     border-radius:50%;
     object-fit:cover;
 }
@@ -88,7 +88,7 @@
 }
 
 .btn-editar img{
-    width:22px;
+    width:30px;
     transition:.2s;
 }
 
