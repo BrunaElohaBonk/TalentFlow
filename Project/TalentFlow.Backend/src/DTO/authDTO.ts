@@ -14,6 +14,7 @@ export interface EsqueceuSenhaDto {
 
 export interface RedefinirSenhaDto{
     token:string;
+    EDV:number;
     password:string;
     confirmPassword:string;
 }
