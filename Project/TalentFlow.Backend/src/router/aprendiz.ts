@@ -22,7 +22,7 @@ route
     .get('/verPerfil/idiomas/:EDV/:id',AprendizController.atualizarIdiomas)
     .get('/verPerfil/cursos/:EDV/:id',AprendizController.verCursos)
 
-    .get('/filtrarAprendizes/todos')
+    .get('/filtrarAprendizes/todos',AprendizController.filtrarApredizDashboart)
     .get('/filtrarAprendizes/turma');
 
 export default route;

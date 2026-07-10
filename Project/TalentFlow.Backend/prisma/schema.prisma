@@ -62,15 +62,14 @@ model Aprendiz {
   user User @relation(fields: [EDV], references: [EDV])
 
   Id_Turma Int
-
   turmas Turma @relation(fields: [Id_Turma], references: [id])
 
-  profile Profile[]
+  profile Profile?
 }
 
 model Profile {
   id                    Int                     @id @default(autoincrement())
-  EDV_Aprendiz          Int
+  EDV_Aprendiz          Int                     @unique
   aprediz               Aprendiz                @relation(fields: [EDV_Aprendiz], references: [EDV])
   situacao_profissional Situacao_profissional[]
   soft_Skills           Soft_Skills[]

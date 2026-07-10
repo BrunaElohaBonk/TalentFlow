@@ -26,23 +26,25 @@ export default class aprendizController {
     }
 }
 
-    static async atualizarPerfil(req:Request, res: Response){
-        const { idPerfil } = req.params
-        const data = req.params;
+static async atualizarPerfil(req: Request, res: Response) {
+    const { idPerfil } = req.params;
+    const data = req.body;
 
-        try {
-            const perfilAtualizado = await prisma.profile.update({
-                where : {
-                    id:Number(idPerfil),
-                },
-                data,
-            });
-        return res.status(200).json({
-            response: "Perfil atualizado com sucesso!",
-            perfil: perfilAtualizado,
+    try {
+
+        const perfilAtualizado = await prisma.profile.updateMany({
+            where: {
+                id: Number(idPerfil)
+            },
+            data
         });
 
-    } catch(error) {
+        return res.status(200).json({
+            response: "Perfil atualizado com sucesso!",
+            perfil: perfilAtualizado
+        });
+
+    } catch (error) {
         console.error(error);
 
         return res.status(500).json({
@@ -58,7 +60,7 @@ export default class aprendizController {
         const data = req.body;
 
     try {
-        const formacaoAtualizada = await prisma.formacao_Academica.update({
+        const formacaoAtualizada = await prisma.formacao_Academica.updateMany({
             where: {
                 id: Number(id),
                 profile: {
@@ -90,7 +92,7 @@ export default class aprendizController {
     const data = req.body;
 
     try {
-        const situacaoAtualizada = await prisma.situacao_profissional.update({
+        const situacaoAtualizada = await prisma.situacao_profissional.updateMany({
             where: {
                 id: Number(id),
                 profile: {
@@ -121,7 +123,7 @@ export default class aprendizController {
     const data = req.body;
 
     try {
-        const softskill = await prisma.soft_Skills.update({
+        const softskill = await prisma.soft_Skills.updateMany({
             where: {
                 id: Number(id),
                 profile:{
@@ -152,7 +154,7 @@ export default class aprendizController {
         const data = req.body;
 
     try {
-        const competencia = await prisma.competencia.update({
+        const competencia = await prisma.competencia.updateMany({
             where: {
                 id: Number(id),
                 profile:{
@@ -183,7 +185,7 @@ export default class aprendizController {
         const data = req.body;
 
     try {
-        const idioma = await prisma.idiomas.update({
+        const idioma = await prisma.idiomas.updateMany({
             where: {
                 id: Number(id),
                 profile:{
@@ -214,7 +216,7 @@ export default class aprendizController {
         const data = req.body;
 
     try {
-        const curso = await prisma.cursos.update({
+        const curso = await prisma.cursos.updateMany({
             where: {
                 id: Number(id),
                 profile:{
@@ -452,7 +454,7 @@ static async filtrarApredizDashboart(req: Request, res: Response) {
 
     try {
 
-        // 1 - Quantidade de aprendizes em estágio
+        //Quantidade de aprendizes em estágio
         const aprendizesEstagio = await prisma.situacao_profissional.count({
             where: {
                 cumprido_Estagio: true
@@ -460,7 +462,7 @@ static async filtrarApredizDashboart(req: Request, res: Response) {
         });
 
 
-        // 2 - Idade dos aprendizes
+        //Idade dos aprendizes
         const aprendizes = await prisma.aprendiz.findMany({
             include: {
                 user: true
@@ -468,7 +470,7 @@ static async filtrarApredizDashboart(req: Request, res: Response) {
         });
 
 
-        const idades = aprendizes.map(aprendiz => {
+        const idades = aprendizes.map((aprendiz: { user: { data_nascimento: string | number | Date; }; }) => {
 
             const nascimento = new Date(
                 aprendiz.user.data_nascimento
@@ -490,9 +492,10 @@ static async filtrarApredizDashboart(req: Request, res: Response) {
             return idade;
 
         });
+        
 
 
-        // 3 - Quantidade de aprendizes que falam outro idioma
+        //Quantidade de aprendizes que falam outro idioma
         const aprendizesIdioma = await prisma.idiomas.findMany({
             distinct: [
                 "Id_Profile"
@@ -500,7 +503,7 @@ static async filtrarApredizDashboart(req: Request, res: Response) {
         });
 
 
-        // 4 - Quantidade de aprendizes acima do ensino médio
+        //Quantidade de aprendizes acima do ensino médio
         const aprendizesMaisQueMedio = await prisma.formacao_Academica.count({
             where: {
                 nivel_formacao: {
@@ -547,20 +550,114 @@ static async filtrarApredizDashboart(req: Request, res: Response) {
 
     }
 }
-    static async filtrarTudoAprediz(req:Request, res: Response){
-        
-        try {
-            return res.status(200).send({response: "Atualizado Sucesso!"})
-        }
-        catch(error){
-            console.error(error)
-            return res.status(200).send({
-                messagem: error instanceof Error
-                ? error.message
-                :error
-            })
-        }
-    }
 
-    
+static async filtrarTudoAprendiz(req: Request, res: Response) {
+
+    const {
+        nome,
+        turma,
+        curso,
+        idioma,
+        competencia,
+        softskill,
+        setor
+    } = req.query;
+
+    try {
+
+        const aprendizes = await prisma.aprendiz.findMany({
+            where: {
+
+                user: nome ? {
+                    name: {
+                        contains: String(nome),
+                        mode: "insensitive"
+                    }
+                } : undefined,
+
+                Id_Turma: turma
+                    ? Number(turma)
+                    : undefined,
+
+                profile: {
+                    some: {
+
+                        formacao_Academica: curso ? {
+                            
+                                name_Curso: {
+                                    contains: String(curso),
+                                    mode: "insensitive"
+                                }
+                            }
+                         : undefined,
+
+                        idiomas: idioma ? {
+                            
+                                nome_Idioma: {
+                                    contains: String(idioma),
+                                    mode: "insensitive"
+                                }
+                            
+                        } : undefined,
+
+                        competencia: competencia ? {
+                            
+                                nome_Competencia: {
+                                    contains: String(competencia),
+                                    mode: "insensitive"
+                                }
+                            
+                        } : undefined,
+
+                        soft_Skills: softskill ? {
+                            
+                                nome_SoftSkills: {
+                                    contains: String(softskill),
+                                    mode: "insensitive"
+                                }
+                            
+                        } : undefined,
+
+                        situacao_profissional: setor ? {
+                            
+                                nome_Setor: {
+                                    contains: String(setor),
+                                    mode: "insensitive"
+                                }
+                            
+                        } : undefined
+                    }
+                }
+
+            },
+
+            include: {
+                user: true,
+                turmas: true,
+                profile: {
+                    include: {
+                        formacao_Academica: true,
+                        idiomas: true,
+                        competencia: true,
+                        soft_Skills: true,
+                        situacao_profissional: true,
+                        cursos: true
+                    }
+                }
+            }
+
+        });
+
+        return res.status(200).json(aprendizes);
+
+    } catch (error) {
+        console.error(error);
+
+        return res.status(500).json({
+            message: error instanceof Error
+                ? error.message
+                : error
+        });
+    }
+}
 }
