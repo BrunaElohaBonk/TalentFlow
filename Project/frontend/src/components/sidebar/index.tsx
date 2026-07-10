@@ -7,7 +7,7 @@ function Sidebar(){
         <div className='sidebar-container'>
             <div className='sidebar-corpo'>
                 <div className='sidebar-action'>
-                    <NavLink to='/Dashboard' className='sidebar-link'>
+                    <NavLink to='/Home' className='sidebar-link'>
                         <span className='sidebar-routes'>Home</span>
                     </NavLink>
                     <NavLink to='/PerfilInstrutor' className='sidebar-link'>
@@ -25,14 +25,11 @@ function Sidebar(){
                     <NavLink to='/Instrutor' className='sidebar-link'>
                         <span className='sidebar-routes'>Instrutores</span>
                     </NavLink>
-                    <NavLink to='/CadastrarAprendiz' className='sidebar-link'>
-                        <span className='sidebar-routes'>Cadastrar Aprendiz</span>
+                    <NavLink to='/Cadastrar' className='sidebar-link'>
+                        <span className='sidebar-routes'>Cadastrar Usuário</span>
                     </NavLink>
                     <NavLink to='/CadastrarTurma' className='sidebar-link'>
                         <span className='sidebar-routes'>Cadastrar Turma</span>
-                    </NavLink>
-                    <NavLink to='/CadastrarInstrutor' className='sidebar-link'>
-                        <span className='sidebar-routes'>Cadastrar Instrutor</span>
                     </NavLink>
                 </div>
                 <div className='sidebar-logout'>

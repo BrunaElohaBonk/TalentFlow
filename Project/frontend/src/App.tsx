@@ -1,8 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import Login from "./pages/auth/login"
 import Perfil from "./pages/aprendiz/perfil"
-import CadAprendiz from "./pages/instrutor/cadAprendiz"
-import CadInstrutor from "./pages/instrutor/cadInstrutor"
 import CadTurma from "./pages/instrutor/cadTurma"
 import Dashboard from "./pages/instrutor/dashboard"
 import Notificacao from "./pages/instrutor/notificacao"
@@ -14,6 +12,7 @@ import VerTurma from "./pages/instrutor/verTurma"
 import Logout from "./pages/auth/logout"
 import Confirm_login from "./pages/auth/confirm_login"
 import EditarPerfil from "./pages/auth/editarPerfil"
+import CadastrarUser from "./pages/instrutor/cadastrarUser"
 
 function App() {
   return (
@@ -21,10 +20,9 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<Login />} />
-          <Route path='/CadastrarAprendiz' element={<CadAprendiz />} />
-          <Route path='/CadastrarInstrutor' element={<CadInstrutor />} />
+          <Route path='/Cadastrar' element={<CadastrarUser />} />
           <Route path='/CadastrarTurma' element={<CadTurma />} />
-          <Route path='/Dashboard' element={<Dashboard />} />
+          <Route path='/Home' element={<Dashboard />} />
           <Route path='/Notificações' element={<Notificacao />} />
           <Route path='/PerfilAprendiz' element={<PerfilAprendiz />} />
           <Route path='/PerfilInstrutor' element={<PerfilInstrutor />} />

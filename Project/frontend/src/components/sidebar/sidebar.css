@@ -80,7 +80,7 @@ html, body, #root {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 13rem;
+    margin-top: 120%;
     padding-bottom: 20px;
 }
 

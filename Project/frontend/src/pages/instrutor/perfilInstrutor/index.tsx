@@ -7,7 +7,7 @@ import user from '../../../assets/img/icon_user.png'
 import { useEffect, useState } from "react"
 import axios from "axios"
 
-interface Perfil {
+interface IPerfil {
     edv: number;
     img: string;
     name: string;
@@ -19,7 +19,7 @@ interface Perfil {
 
 function PerfilInstrutor(){
 
-    const [perfil, setPerfil] = useState<Perfil>({
+    const [perfil, setPerfil] = useState<IPerfil>({
         edv: 12345678,
         img: "foto.png",
         name: "Maria Joaquina Silveira",
