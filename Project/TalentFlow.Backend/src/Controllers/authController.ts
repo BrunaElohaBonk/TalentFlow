@@ -11,7 +11,7 @@ dotenv.config();
 class AuthController {
     static async register(req: Request, res: Response): Promise<void> {
         const data: AdicionarUserDto = req.body;
-        
+
         function converterDataBR(dataString: string): Date {
             const [dia, mes, ano] = dataString.split("/");
             return new Date(`${ano}-${mes}-${dia}`);
@@ -106,18 +106,18 @@ class AuthController {
         }
 
         try {
-            const decoded = jwt.verify(data.token, secret as string) as unknown as { EDV: Number };
-            const user = await prisma.user.findUnique({ where: { EDV: Number(decoded.EDV) } });
-            const passwordCrypt = await bcrypt.hash(data.password, 10);
+            const decoded = jwt.verify(data.token, secret) as unknown as { EDV: number };
+            const user = await prisma.user.findUnique({ where: { EDV: decoded.EDV } });
             
-
+            
             if (!user) {
                 res.status(404).send({ response: "Not Found!" });
                 return;
             }
-
+            
+            const passwordCrypt = await bcrypt.hash(data.password, 10);
             await prisma.user.update({
-                where: { EDV: Number(decoded.EDV) },
+                where: { EDV: decoded.EDV },
                 data: { password_login: passwordCrypt }
             });
 
@@ -139,6 +139,9 @@ class AuthController {
             res.status(400).send({ response: "Inválido token " });
 
         }
+    }
+    static async Logout(req:Request, res:Response): Promise<void>{
+        res.status(200).send({ response: "Logout realizado com sucesso" });
     }
 }
 
