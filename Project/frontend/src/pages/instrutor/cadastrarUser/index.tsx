@@ -5,6 +5,7 @@ import './cadastrarUser.css';
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
+import DatePicker from "react-datepicker";
 
 interface IUser {
     edv: number;
@@ -12,7 +13,7 @@ interface IUser {
     turma: string;
     email: string;
     user: string;
-    nascimento: Date;
+    nascimento: Date | null;
     contato: number;
     senha: string;
 }
@@ -25,7 +26,7 @@ function CadastrarUser() {
         turma: '',
         email: '',
         user: '',
-        nascimento: new Date(''),
+        nascimento: null,
         contato: 0,
         senha: '',
 
@@ -40,7 +41,7 @@ function CadastrarUser() {
                 turma: Usuario.turma?.toString() || '',
                 email: Usuario.email || '',
                 user: Usuario.user || '',
-                nascimento: Usuario.nascimento || '',
+                nascimento: Usuario.nascimento ? new Date(Usuario.nascimento): null,
                 contato: Usuario.contato || '',
                 senha: Usuario.senha || '',
             });
@@ -101,14 +102,19 @@ function CadastrarUser() {
                     <form onSubmit={handleSubmit} className="cadTurma-form">
                         <span className="cadTurma-titulo">Cadastrar Usuário</span>
                         <div className="cadTurma-conteudo">
-                            <input name="name" placeholder="Nome da Turma" value={user.edv} onChange={handleChange} className="editar-input"/>
-                            <input name="course" placeholder="Curso" value={user.name} onChange={handleChange} className="editar-input"/>
-                            <input name="edvInstrutor" type="number" placeholder="EDV do Instrutor" value={user.turma} onChange={handleChange} className="editar-input"/>
-                            <input name="instrutor" placeholder="Nome do Instrutor" value={user.email} onChange={handleChange} className="editar-input"/>
-                            <input name="instrutor" placeholder="Nome do Instrutor" value={user.user} onChange={handleChange} className="editar-input"/>
-                            <input name="instrutor" placeholder="Nome do Instrutor" value={user.email} onChange={handleChange} className="editar-input"/>
-                            <input name="instrutor" placeholder="Nome do Instrutor" value={user.contato} onChange={handleChange} className="editar-input"/>
-                            <input name="instrutor" placeholder="Nome do Instrutor" value={user.senha} onChange={handleChange} className="editar-input"/>
+                            <input name="edv" type="number" placeholder="EDV" value={user.edv || ''} onChange={handleChange} className="editar-input"/>
+                            <input name="name" placeholder="Nome Completo" value={user.name} onChange={handleChange} className="editar-input"/>
+                            <input name="turma"  placeholder="EDV do Instrutor" value={user.turma } onChange={handleChange} className="editar-input"/>
+                            <input name="user" placeholder="Nome do Instrutor" value={user.email} onChange={handleChange} className="editar-input"/>
+                            <input name="email" placeholder="Nome do Instrutor" value={user.user} onChange={handleChange} className="editar-input"/>
+                            <DatePicker
+                                selected={user.nascimento ? new Date(user.nascimento) : null}
+                                onChange={(date: Date | null) =>setUser({...user, nascimento: date ?? new Date(),})}
+                                dateFormat="dd/MM/yyyy"
+                                placeholderText="Data de nascimento"
+                                className='placeholderText'/>
+                            <input name="contato" type="number" placeholder="Nome do Instrutor" value={user.contato || ''} onChange={handleChange} className="editar-input"/>
+                            <input name="senha" type="password" placeholder="Nome do Instrutor" value={user.senha} onChange={handleChange} className="editar-input"/>
                         </div>
                         <div className="cadTurma-button">
                             <button type="submit" className="cadTurma-salvar">CONFIRMAR</button>
@@ -121,3 +127,4 @@ function CadastrarUser() {
 }
 
 export default CadastrarUser;
+
