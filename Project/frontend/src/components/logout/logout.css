@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+.logout-icon {
+    height: 30px;
+    width: 30px;
+    cursor: pointer;
+}
+
+.logout-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0,0,0,0.35);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.logout-card {
+    height: 320px;
+    width: 410px;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: rgba(0,0,0,0.3) 0px 4px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logout-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 28px;
+    font-weight: bold;
+    margin-top: 50px;
+}
+
+.logout-image {
+    width: 60px;
+    height: 60px;
+    margin-top: 35px;
+}
+
+.logout-buttons {
+    display: flex;
+    gap: 45px;
+    margin-top: 35px;
+}
+
+.logout-cancel {
+    height: 40px;
+    width: 130px;
+    border-radius: 10px;
+    background-color: #2B83D5;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+}
+
+.logout-confirm {
+    height: 40px;
+    width: 130px;
+    border-radius: 10px;
+    background-color: #2B83D5;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+}
+
+.logout-cancel:hover {
+    background-color: #3d96e9;
+}
+
+.logout-confirm:hover {
+    background-color: #3d96e9;
+}

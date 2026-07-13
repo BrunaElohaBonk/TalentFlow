@@ -9,7 +9,6 @@ import PerfilInstrutor from "./pages/instrutor/perfilInstrutor"
 import VerAprendiz from "./pages/instrutor/verAprendiz"
 import VerInstrutor from "./pages/instrutor/verInstrutor"
 import VerTurma from "./pages/instrutor/verTurma" 
-import Logout from "./pages/auth/logout"
 import Confirm_login from "./pages/auth/confirm_login"
 import EditarPerfil from "./pages/auth/editarPerfil"
 import CadastrarUser from "./pages/instrutor/cadastrarUser"
@@ -30,7 +29,6 @@ function App() {
           <Route path='/Instrutor' element={<VerInstrutor />} />
           <Route path='/Turma' element={<VerTurma />} />
           <Route path='/Perfil' element={<Perfil />} />
-          <Route path='/Logout' element={<Logout />} />
           <Route path='/Confirm_login' element={<Confirm_login />} />
           <Route path="/Editar/:edv" element={<EditarPerfil />} />
         </Routes>

@@ -1,52 +1,152 @@
 import icon_user from '../../../assets/img/icon_user.png'
 import icon_cadeado from '../../../assets/img/icon_cadeado.png'
 import icon_logout from '../../../assets/img/icon_logout.png'
+import icon_olho from '../../../assets/img/icon_olho.png'
+import icon_olho_fechado from '../../../assets/img/icon_olho_fechado.png'
 import Header from '../../../components/header'
+import Alert from '../../../components/alert/alert'
+import Logout from '../../../components/logout/logout'
 import './confirm_login.css'
 import { useNavigate } from "react-router-dom"
+import { useState, useEffect } from "react"
 
 function Confirm_login() {
+  const navigate = useNavigate()
 
-  const navigate = useNavigate() 
+  const [edv, setEdv] = useState("")
+  const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
 
-  const handleNavigateLogin = () => {
-    navigate('/')
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+
+  const [erroSenha, setErroSenha] = useState("")
+  const [logout, setLogout] = useState(false)
+
+  // TEMPORÁRIO - REMOVER NA INTEGRAÇÃO COM BACKEND
+  const usuario = {
+    nome: "Bruna",
+    dataNascimento: "21/08/2006"
   }
 
-  const handleNavigatePerfil = () => {
+  // AQUI VAI O BACKEND
+  const validarSenha = () => {
+    const temMaiuscula = /[A-Z]/.test(password)
+    const temMinuscula = /[a-z]/.test(password)
+    const temNumero = /[0-9]/.test(password)
+    const temEspecial = /[!@#$%^&*(),.?":{}|<>]/.test(password)
+
+    if(edv === "") {
+      return "Informe o EDV."
+    }
+
+    if(password.length < 10) {
+      return "A senha deve possuir no mínimo 10 caracteres."
+    }
+
+    if(password === usuario.dataNascimento) {
+      return "A senha não pode ser igual a data de nascimento."
+    }
+
+    if(password.toLowerCase() === usuario.nome.toLowerCase()) {
+      return "A senha não pode ser igual ao nome."
+    }
+
+    if(!temMaiuscula) {
+      return "A senha deve possuir uma letra maiúscula."
+    }
+
+    if(!temMinuscula) {
+      return "A senha deve possuir uma letra minúscula."
+    }
+
+    if(!temNumero) {
+      return "A senha deve possuir um número."
+    }
+
+    if(!temEspecial) {
+      return "A senha deve possuir um caractere especial."
+    }
+
+    if(password !== confirmPassword) {
+      return "As senhas não são iguais."
+    }
+
+    return null
+  }
+
+  const handleConfirmPassword = () => {
+    const erro = validarSenha()
+
+    if(erro) {
+      setErroSenha(erro)
+      return
+    }
+
+    // AQUI VAI O BACKEND
+    // Enviar EDV e nova senha para o banco de dados.
+
     navigate('/Perfil')
   }
 
+  useEffect(() => {
+    if(erroSenha !== "") {
+      const timer = setTimeout(() => {
+        setErroSenha("")
+      },3000)
+
+      return () => clearTimeout(timer)
+    }
+  },[erroSenha])
+
   return (
     <>
+    <Alert visible={erroSenha !== ""} message={erroSenha}/>
+
     <div>
       <Header></Header>
     </div>
-    <div className='logout'>
-        <img src={icon_logout} alt="icon_logout" onClick={handleNavigateLogin}/>
+
+    <div className="confirm-logout">
+      <img src={icon_logout} alt="icon_logout" onClick={() => setLogout(true)}/>
     </div>
-    <div className='a'>
-      <div className='b'>
-          <div className='c'>
-            <span className='d'>Seja bem-vindo(a)!</span>
-          </div>
 
-          <div className='e'>
-            <div className='h'><img src={icon_user} alt="icon_user" className='g'/></div>
-            <input placeholder="EDV" className='i'></input>
-          </div>
-          <div className='f'>
-            <div className='h'><img src={icon_cadeado} alt="icon_cadeado" className='g'/></div>
-            <input placeholder="Password" className='i'></input>
-          </div>
-          <div className='f'>
-            <div className='h'><img src={icon_cadeado} alt="icon_cadeado" className='g'/></div>
-            <input placeholder="Confirm Password" className='i'></input>
-          </div>
+    <Logout visible={logout} setVisible={setLogout}/>
 
-          <div className='j'>
-            <button className='k' onClick={handleNavigatePerfil}>ENTRAR</button>
+    <div className="confirm-body">
+      <div className="confirm-container">
+
+        <div className="confirm-titulo">
+          <span className="confirm-span">Seja bem-vindo(a)!</span>
+        </div>
+
+        <div className="confirm-edv">
+          <div className="confirm-img-icon">
+            <img src={icon_user} alt="icon_user" className="confirm-icon"/>
           </div>
+          <input placeholder="EDV" className="confirm-input-login" value={edv} onChange={(e)=>setEdv(e.target.value.replace(/[^0-9]/g,""))}/>
+        </div>
+
+        <div className="confirm-password">
+          <div className="confirm-img-icon">
+            <img src={icon_cadeado} alt="icon_cadeado" className="confirm-icon"/>
+          </div>
+          <input type={showPassword ? "text" : "password"} placeholder="Nova Password" className="confirm-input-login" value={password} onChange={(e)=>setPassword(e.target.value)}/>
+          <img src={showPassword ? icon_olho_fechado : icon_olho} alt="Visualizar senha" className="confirm-eye-icon" onClick={()=>setShowPassword(!showPassword)}/>
+        </div>
+
+        <div className="confirm-password">
+          <div className="confirm-img-icon">
+            <img src={icon_cadeado} alt="icon_cadeado" className="confirm-icon"/>
+          </div>
+          <input type={showConfirmPassword ? "text" : "password"} placeholder="Confirm Password" className="confirm-input-login" value={confirmPassword} onChange={(e)=>setConfirmPassword(e.target.value)}/>
+          <img src={showConfirmPassword ? icon_olho_fechado : icon_olho} alt="Visualizar senha" className="confirm-eye-icon" onClick={()=>setShowConfirmPassword(!showConfirmPassword)}/>
+        </div>
+
+        <div className="confirm-button">
+          <button className="confirm-entrar" onClick={handleConfirmPassword}>ENTRAR</button>
+        </div>
+
       </div>
     </div>
     </>

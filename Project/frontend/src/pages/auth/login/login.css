@@ -28,7 +28,7 @@
 }
 
 .edv { 
-    box-shadow: #b4b4b4 0px 1px 4px;
+    border: 1px solid #d9d9d9;
     height: 40px;
     width: 370px;
     border-radius: 15px;
@@ -38,7 +38,7 @@
 }
 
 .password {
-    box-shadow: #b4b4b4 0px 1px 4px;
+    border: 1px solid #d9d9d9;
     height: 40px;
     width: 370px;
     border-radius: 15px;
@@ -74,7 +74,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 120px;
+    margin-top: 70px;
 }
 
 .entrar {
@@ -90,4 +90,54 @@
     height: 42px;
     width: 92px;
     background-color: #3d96e9;
+}
+
+.forgot-password {
+    width: 370px;
+    margin-left: 38px;
+    margin-top: 25px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    color: #555;
+    text-align: center;
+}
+
+.forgot-link {
+    color: #d32f2f;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.forgot-link:hover {
+    text-decoration: underline;
+}
+
+.eye-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+    margin-top: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.eye-icon:hover {
+    opacity: 0.7;
+}
+
+.error-card {
+    width: 330px;
+    margin: 20px auto 0;
+    padding: 12px;
+
+    background-color: #FDECEC;
+    border: 1px solid #F5C2C7;
+    border-left: 5px solid #D32F2F;
+
+    border-radius: 10px;
+
+    color: #B71C1C;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    text-align: center;
 }
