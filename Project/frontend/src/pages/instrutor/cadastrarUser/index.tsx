@@ -5,7 +5,12 @@ import './cadastrarUser.css';
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
-import DatePicker from "react-datepicker";
+import { FormControl, FormControlLabel, FormLabel, MenuItem, Radio, RadioGroup, Select } from "@mui/material";
+
+interface ITurma {
+    _id: string;
+    nome: string;
+}
 
 interface IUser {
     edv: number;
@@ -13,56 +18,82 @@ interface IUser {
     turma: string;
     email: string;
     user: string;
-    nascimento: Date | null;
-    contato: number;
+    nascimento: string;
+    contato: string;
     senha: string;
+    tipo: "Instrutor" | "Aprendiz";
 }
 
 function CadastrarUser() {
     const { id } = useParams();
+    const [turmas, setTurmas] = useState<ITurma[]>([]);
     const [user, setUser] = useState<IUser>({
         edv: 0,
         name: '',
         turma: '',
         email: '',
         user: '',
-        nascimento: null,
-        contato: 0,
+        nascimento: '',
+        contato: '',
         senha: '',
-
+        tipo: "Aprendiz"
     });
+
+    const fetchTurmas = async () => {
+        try {
+            const response = await axios.get(`link backend`);
+            setTurmas(response.data.response);
+        }
+        catch (e) {
+            console.log(e);
+        }
+    };
+
     const fetchUser = async () => {
         try {
             const response = await axios.get(`link backend`);
             const Usuario = response.data.response;
             setUser({
-                edv: Usuario.edv || '',
+                edv: Usuario.edv || 0,
                 name: Usuario.name || '',
                 turma: Usuario.turma?.toString() || '',
                 email: Usuario.email || '',
                 user: Usuario.user || '',
-                nascimento: Usuario.nascimento ? new Date(Usuario.nascimento): null,
+                nascimento: Usuario.nascimento? new Date(Usuario.nascimento).toLocaleDateString("pt-BR"): '',
                 contato: Usuario.contato || '',
                 senha: Usuario.senha || '',
+                tipo: Usuario.tipo
             });
-        } 
+        }
         catch (e) {
             console.error('Erro:', e);
         }
     };
+
     useEffect(() => {
         if (id) {
             fetchUser();
         }
+        fetchTurmas();
     }, []);
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setUser({
-            ...user, 
-            [e.target.name]: e.target.value});
+        const { name, value } = e.target;
+        setUser((prev) => ({
+            ...prev,
+            [name]: name === "edv" ? Number(value) : value
+        }));
     };
-    const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (!user.edv || !user.name || !user.turma || !user.email || !user.nascimento || !user.contato || !user.senha){
+        const [dia, mes, ano] = user.nascimento.split("/");
+        const dataNascimento = new Date(
+            Number(ano),
+            Number(mes) - 1,
+            Number(dia)
+        );
+        if (!user.edv || !user.name || !user.turma || !user.email || !user.nascimento || !user.contato || !user.senha) {
             Swal.fire({
                 title: 'Atenção!',
                 text: 'Preencha os campos obrigatórios!',
@@ -71,19 +102,14 @@ function CadastrarUser() {
             return;
         }
         try {
-            const response = await axios.put(
-                `link backend`,
-                {
-                    ...user
-                }
-            );
+            const response = await axios.put(`link backend`,{...user, nascimento: dataNascimento});
             Swal.fire({
                 title: 'Sucesso!',
                 text: 'Usuário cadastrado com sucesso!',
                 icon: 'success'
             });
             console.log("Resposta API:", response.data);
-        } 
+        }
         catch (e) {
             console.error('Erro ao cadastrar:', e);
             Swal.fire({
@@ -93,31 +119,87 @@ function CadastrarUser() {
             });
         }
     };
+
+    const handleNascimento = (e: React.ChangeEvent<HTMLInputElement>) => {
+        let value = e.target.value.replace(/\D/g, "");
+        if (value.length > 8) {
+            value = value.slice(0, 8);
+        }
+        if (value.length > 2) {
+            value = value.replace(/^(\d{2})(\d)/, "$1/$2");
+        }
+        if (value.length > 5) {
+            value = value.replace(/^(\d{2})\/(\d{2})(\d)/, "$1/$2/$3");
+        }
+        setUser({
+            ...user,
+            nascimento: value
+        });
+    };
+
+    const handleContato = (e: React.ChangeEvent<HTMLInputElement>) => {
+        let value = e.target.value.replace(/\D/g, "");
+
+        if (value.length > 11) {
+            value = value.slice(0, 11);
+        }
+
+        value = value.replace(/^(\d{2})(\d)/, "($1) $2");
+        value = value.replace(/(\d{5})(\d)/, "$1-$2");
+
+        setUser({
+            ...user,
+            contato: value
+        });
+    };
+
     return (
         <div>
             <Header />
-            <div className="cadTurma-container">
+            <div className="user-container">
                 <Sidebar />
-                <div className="cadTurma-body">
-                    <form onSubmit={handleSubmit} className="cadTurma-form">
-                        <span className="cadTurma-titulo">Cadastrar Usuário</span>
-                        <div className="cadTurma-conteudo">
-                            <input name="edv" type="number" placeholder="EDV" value={user.edv || ''} onChange={handleChange} className="editar-input"/>
-                            <input name="name" placeholder="Nome Completo" value={user.name} onChange={handleChange} className="editar-input"/>
-                            <input name="turma"  placeholder="EDV do Instrutor" value={user.turma } onChange={handleChange} className="editar-input"/>
-                            <input name="user" placeholder="Nome do Instrutor" value={user.email} onChange={handleChange} className="editar-input"/>
-                            <input name="email" placeholder="Nome do Instrutor" value={user.user} onChange={handleChange} className="editar-input"/>
-                            <DatePicker
-                                selected={user.nascimento ? new Date(user.nascimento) : null}
-                                onChange={(date: Date | null) =>setUser({...user, nascimento: date ?? new Date(),})}
-                                dateFormat="dd/MM/yyyy"
-                                placeholderText="Data de nascimento"
-                                className='placeholderText'/>
-                            <input name="contato" type="number" placeholder="Nome do Instrutor" value={user.contato || ''} onChange={handleChange} className="editar-input"/>
-                            <input name="senha" type="password" placeholder="Nome do Instrutor" value={user.senha} onChange={handleChange} className="editar-input"/>
+                <div className="user-body">
+                    <form onSubmit={handleSubmit} className="user-form">
+                        <span className="user-titulo">Cadastrar Usuário</span>
+                        <div className="user-conteudo">
+                            <div className="user-row">
+                                <input name="edv" type="number" placeholder="EDV" value={user.edv || ''} onChange={handleChange} className="user-input" />
+                                <input name="name" placeholder="Nome Completo" value={user.name} onChange={handleChange} className="user-input" />
+                            </div>
+                            <div className="user-row">
+                                <input name="user" placeholder="User" value={user.user} onChange={handleChange} className="user-input" />
+                                <input name="email" placeholder="Email" value={user.email} onChange={handleChange} className="user-input" />
+                            </div>
+                            <div className="user-row">
+                                <input name="nascimento" placeholder="Data de nascimento" inputMode="numeric" value={user.nascimento} onChange={handleNascimento} className="user-input" maxLength={10}/>
+                                <input name="contato" placeholder="Contato" inputMode="numeric" value={user.contato || ''} onChange={handleContato} className="user-input" maxLength={15} />
+                            </div>
+                            <div className="user-row">
+                                <FormControl className="user-radio">
+                                    <FormLabel>Tipo de usuário</FormLabel>
+                                    <RadioGroup row value={user.tipo} onChange={(e) => {
+                                        const tipo = e.target.value;
+                                        setUser({ ...user, tipo: tipo as "Instrutor" | "Aprendiz", turma: tipo === "Instrutor" ? "Instrutor" : "" });
+                                    }}>
+                                        <FormControlLabel value="Instrutor" control={<Radio sx={{ color: "#4caf50", "&.Mui-checked": { color: "#4caf50" }, "& .MuiSvgIcon-root": { fontSize: 24 } }} />} label="Instrutor" />
+                                        <FormControlLabel value="Aprendiz" control={<Radio sx={{ color: "#4caf50", "&.Mui-checked": { color: "#4caf50" }, "& .MuiSvgIcon-root": { fontSize: 24 } }} />} label="Aprendiz" />
+                                    </RadioGroup>
+                                </FormControl>
+                                {
+                                    user.tipo === "Aprendiz" && (
+                                        <Select fullWidth displayEmpty value={user.turma} className="user-select" onChange={(e) => setUser({ ...user, turma: e.target.value })}>
+                                            <MenuItem value="">Selecione uma turma</MenuItem>
+                                            {turmas?.map((turma) => (<MenuItem key={turma._id} value={turma.nome}>{turma.nome}</MenuItem>))}
+                                        </Select>
+                                    )
+                                }
+                            </div>
+                            <div className="user-row">
+                                <input name="senha" type="password" placeholder="Senha" value={user.senha} onChange={handleChange} className="user-input" />
+                            </div>
                         </div>
-                        <div className="cadTurma-button">
-                            <button type="submit" className="cadTurma-salvar">CONFIRMAR</button>
+                        <div className="user-button">
+                            <button type="submit" className="user-salvar">CONFIRMAR</button>
                         </div>
                     </form>
                 </div>
@@ -127,4 +209,3 @@ function CadastrarUser() {
 }
 
 export default CadastrarUser;
-

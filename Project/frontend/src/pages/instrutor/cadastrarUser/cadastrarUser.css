@@ -1,34 +1,39 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
-
+ 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-
+ 
 .react-datepicker-wrapper {
-    display: flex;
-    height: 45px;
     width: 70%;
-    border-radius: 10px;
-    box-shadow: #b4b4b4 0px 1px 4px;
-    padding-left: 3%;
-    padding-top: 10px;
-    color: #8a8a8a;
-    font-family: 'Poppins', sans-serif;
-    font-size: 1rem;
 }
-
+ 
 .react-datepicker__input-container input {
-    margin: 10px;
+    width: 100%;
+    height: 48px;
+    border-radius: 10px;
+    border: 1px solid #D9D9D9;
+    padding: 0 15px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    margin: 0;
+    transition: 0.25s;
 }
-
+ 
+.react-datepicker__input-container input:focus {
+    outline: none;
+    border-color: #2B83D5;
+    box-shadow: 0 0 5px rgba(43, 131, 213, .3);
+}
+ 
 .user-container {
     display: flex;
     min-height: 94vh;
     width: 100%;
 }
-
+ 
 .user-body {
     display: flex;
     align-items: center;
@@ -36,14 +41,13 @@
     width: 100%;
     padding: 20px;
 }
-
+ 
 .user-form {
-    margin-top: 5%;
+    margin: 5% 0;
     display: flex;
     flex-direction: column;
     width: 100%;
     max-width: 700px;
-    min-height: 35rem;
     padding: clamp(20px, 4vw, 40px);
     background-color: white;
     border-radius: 15px;
@@ -51,7 +55,7 @@
         rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
         rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
 }
-
+ 
 .user-titulo {
     display: flex;
     justify-content: center;
@@ -61,39 +65,101 @@
     font-weight: bold;
     font-size: clamp(1.7rem, 3vw, 2.8rem);
     margin-bottom: 40px;
+    color: #1f2933;
 }
-
+ 
 .user-conteudo {
+    width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    width: 100%;
-    gap: 20px;
+    gap: 18px;
 }
-
+ 
+.user-row {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    align-items: flex-start;
+}
+ 
+.user-row > * {
+    flex: 1;
+    min-width: 0;
+}
+ 
 .user-input {
     width: 100%;
-    max-width: 500px;
-    height: 48px;
-    border-radius: 10px;
-    border: 1px solid #ccc;
+    height: 40px;
+    border-radius: 15px;
+    border: 1px solid #D9D9D9;
     padding: 0 15px;
     font-family: 'Poppins', sans-serif;
     font-size: 1rem;
-    outline: none;
+    color: #8a8a8a;
+    transition: 0.25s;
 }
-
+ 
+.user-input::placeholder {
+    color: #9AA5B1;
+}
+ 
 .user-input:focus {
+    outline: none;
     border-color: #2B83D5;
+    box-shadow: 0 0 5px rgba(43, 131, 213, .3);
 }
-
+ 
+.user-select {
+    width: 100%;
+}
+ 
+.user-select .MuiOutlinedInput-root {
+    height: 48px;
+    border-radius: 10px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+}
+ 
+.user-select .MuiOutlinedInput-notchedOutline {
+    border-color: #D9D9D9;
+}
+ 
+.user-select.Mui-focused .MuiOutlinedInput-notchedOutline {
+    border-color: #2B83D5;
+    box-shadow: 0 0 5px rgba(43, 131, 213, .3);
+}
+ 
+.user-radio {
+    width: 100%;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    border: 1px solid #D9D9D9;
+    border-radius: 10px;
+}
+ 
+.user-radio .MuiFormLabel-root {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    color: #52606D;
+    margin-right: 12px;
+    white-space: nowrap;
+}
+ 
+.user-radio .MuiFormControlLabel-label {
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    color: #1f2933;
+}
+ 
 .user-button {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-top: 40px;
 }
-
+ 
 .user-salvar {
     width: 100%;
     max-width: 220px;
@@ -102,85 +168,44 @@
     background-color: #2B83D5;
     color: white;
     font-size: 1rem;
+    font-weight: 600;
     font-family: 'Poppins', sans-serif;
     border: none;
     cursor: pointer;
     transition: 0.2s;
 }
-
+ 
 .user-salvar:hover {
     background-color: #1f6eb5;
 }
-
-@media (max-width: 992px) {
-
-    .user-body {
-        padding: 30px;
-    }
-
-    .user-form {
-        max-width: 600px;
-    }
+ 
+.user-salvar:active {
+    transform: scale(0.98);
 }
-
+ 
 @media (max-width: 768px) {
-
-    .user-container {
-        min-height: auto;
-    }
-
-    .user-body {
-        padding: 20px 15px;
-    }
-
     .user-form {
-        width: 100%;
-        min-height: auto;
-        padding: 25px 20px;
+        margin: 20px 0;
     }
-
-    .user-titulo {
-        margin-bottom: 30px;
+ 
+    .user-row {
+        flex-direction: column;
+        gap: 15px;
     }
-
-    .user-input {
-        width: 100%;
-        height: 45px;
-        font-size: 0.95rem;
-    }
-
-    .user-button {
-        margin-top: 30px;
-    }
-
-    .user-salvar {
-        max-width: none;
-        width: 100%;
+ 
+    .user-radio {
+        flex-wrap: wrap;
+        height: auto;
+        padding: 12px 15px;
     }
 }
-
+ 
 @media (max-width: 480px) {
-
     .user-body {
-        padding: 15px 10px;
+        padding: 12px;
     }
-
+ 
     .user-form {
-        padding: 20px 15px;
         border-radius: 10px;
-    }
-
-    .user-titulo {
-        font-size: 1.5rem;
-    }
-
-    .user-input {
-        height: 42px;
-        font-size: 0.9rem;
-    }
-
-    .user-salvar {
-        height: 45px;
-        font-size: 0.95rem;
     }
 }
