@@ -7,9 +7,9 @@ const route = express.Router();
 route
     .post('/registerUser/',AuthController.register)
     .post('/login',AuthController.login)
-    .post('/logout',AuthController.)
+    .post('/logout',AuthController.Logout)
     .post('/esqueciSenha',AuthController.EsqueceuSenha)
-    .put('/alterarSenha',AuthController.RedefinirSenha)
+    .put('/alterarSenha',AuthController.redefinirSenha)
 
 
 export default route;
