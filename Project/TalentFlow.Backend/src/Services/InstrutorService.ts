@@ -1,6 +1,6 @@
 import { prisma } from "../lib/prisma.ts";
 import {InstrutorDto } from "../DTO/instrutorDTO.ts";
-import {AdicionarUserDto} from "../DTO/userDTO.ts";
+import {AdicionarUserDto} from "../DTO/authDTO.ts";
 
 
 export default class InstrutorService {
@@ -25,9 +25,6 @@ export default class InstrutorService {
         });
 
     }
-
-
-
 
     static async editar(
         EDV: number,

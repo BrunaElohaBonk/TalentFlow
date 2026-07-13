@@ -6,7 +6,7 @@ import InstrutorService from "../Services/InstrutorService.ts";
 export default class instrutorController {
 
 
-    static async create(req: Request, res: Response) {
+    static async criarInstrutor(req: Request, res: Response) {
 
         try {
 
@@ -40,7 +40,7 @@ export default class instrutorController {
 
 
 
-    static async editar(req: Request, res: Response) {
+    static async editarInstrutor(req: Request, res: Response) {
 
         try {
 
@@ -80,7 +80,7 @@ export default class instrutorController {
 
 
 
-    static async Deletar(req: Request, res: Response) {
+    static async DeletarInstrutor(req: Request, res: Response) {
 
         try {
 
