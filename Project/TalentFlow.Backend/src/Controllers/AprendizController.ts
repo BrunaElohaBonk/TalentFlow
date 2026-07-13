@@ -1,663 +1,580 @@
 import { Request, Response } from "express";
-import { prisma } from "../lib/prisma.js";
+import AprendizService from "../Services/AprendizService.ts";
 
 export default class aprendizController {
+
+
     static async delete(req: Request, res: Response) {
-        const {EDV} = req.params
 
-    try {
-        await prisma.aprendiz.delete({
-            where: {
-                EDV: Number(EDV),
-            },
-        });
-        return res.status(200).json({
-            message: "Aprendiz deletado com sucesso!",
-        });
+        try {
 
-    } catch (error) {
-        console.error(error);
+            const { EDV } = req.params;
 
-        return res.status(500).json({
-            message: error instanceof Error
-                ? error.message
-                : "Erro interno do servidor",
-        });
-    }
-}
-
-static async atualizarPerfil(req: Request, res: Response) {
-    const { idPerfil } = req.params;
-    const data = req.body;
-
-    try {
-
-        const perfilAtualizado = await prisma.profile.updateMany({
-            where: {
-                id: Number(idPerfil)
-            },
-            data
-        });
-
-        return res.status(200).json({
-            response: "Perfil atualizado com sucesso!",
-            perfil: perfilAtualizado
-        });
-
-    } catch (error) {
-        console.error(error);
-
-        return res.status(500).json({
-            message: error instanceof Error
-                ? error.message
-                : error
-        });
-    }
-}
-
-    static async atualizarFormacaoAcademica(req: Request, res: Response) {
-        const { EDV, id } = req.params;
-        const data = req.body;
-
-    try {
-        const formacaoAtualizada = await prisma.formacao_Academica.updateMany({
-            where: {
-                id: Number(id),
-                profile: {
-                    EDV_Aprendiz: Number(EDV)
-                }
-            },
-            data,
-        });
-
-        return res.status(200).json({
-            response: "Formação acadêmica atualizada com sucesso!",
-            data: formacaoAtualizada,
-        });
-
-    } catch (error) {
-        console.error(error);
-
-        return res.status(500).json({
-            message: error instanceof Error
-                ? error.message
-                : error,
-        });
-    }
-}
+            await AprendizService.delete(Number(EDV));
 
 
-    static async atualizarSituacaoProfissional(req: Request, res: Response) {
-    const { EDV, id } = req.params;
-    const data = req.body;
-
-    try {
-        const situacaoAtualizada = await prisma.situacao_profissional.updateMany({
-            where: {
-                id: Number(id),
-                profile: {
-                    EDV_Aprendiz: Number(EDV)
-                }
-            },
-            data,
-        });
-
-        return res.status(200).json({
-            response: "Situação profissional atualizada com sucesso!",
-            data: situacaoAtualizada,
-        });
-
-    } catch (error) {
-        console.error(error);
-
-        return res.status(500).json({
-            message: error instanceof Error
-                ? error.message
-                : error,
-        });
-    }
-}
-
-    static async atualizarSoftskills(req: Request, res: Response) {
-    const { id, EDV } = req.params;
-    const data = req.body;
-
-    try {
-        const softskill = await prisma.soft_Skills.updateMany({
-            where: {
-                id: Number(id),
-                profile:{
-                    EDV_Aprendiz: Number(EDV)
-                }
-            },
-            data
-        });
-
-        return res.status(200).send({
-            response: "Soft Skill atualizada com sucesso!",
-            data: softskill
-        });
-    }
-    catch(error) {
-        console.error(error);
-
-        return res.status(500).send({
-            mensagem: error instanceof Error
-                ? error.message
-                : error
-        });
-    }
-}
-
-    static async atualizarCompetencias(req: Request, res: Response) {
-        const { id, EDV } = req.params;
-        const data = req.body;
-
-    try {
-        const competencia = await prisma.competencia.updateMany({
-            where: {
-                id: Number(id),
-                profile:{
-                    EDV_Aprendiz: Number(EDV)
-                }                
-            },
-            data
-        });
-
-        return res.status(200).send({
-            response: "Competência atualizada com sucesso!",
-            data: competencia
-        });
-    }
-    catch(error) {
-        console.error(error);
-
-        return res.status(500).send({
-            mensagem: error instanceof Error
-                ? error.message
-                : error
-        });
-    }
-}
-
-    static async atualizarIdiomas(req: Request, res: Response) {
-        const { id, EDV } = req.params;
-        const data = req.body;
-
-    try {
-        const idioma = await prisma.idiomas.updateMany({
-            where: {
-                id: Number(id),
-                profile:{
-                    EDV_Aprendiz: Number(EDV)
-                }
-            },
-            data
-        });
-
-        return res.status(200).send({
-            response: "Idioma atualizado com sucesso!",
-            data: idioma
-        });
-    }
-    catch(error) {
-        console.error(error);
-
-        return res.status(500).send({
-            mensagem: error instanceof Error
-                ? error.message
-                : error
-        });
-    }
-}
-
-    static async atualizarCursos(req: Request, res: Response) {
-        const { id,EDV} = req.params;
-        const data = req.body;
-
-    try {
-        const curso = await prisma.cursos.updateMany({
-            where: {
-                id: Number(id),
-                profile:{
-                    EDV_Aprendiz:Number(EDV)
-                }
-            },
-            data
-        });
-
-        return res.status(200).send({
-            response: "Curso atualizado com sucesso!",
-            data: curso
-        });
-    }
-    catch(error) {
-        console.error(error);
-
-        return res.status(500).send({
-            mensagem: error instanceof Error
-                ? error.message
-                : error
-        });
-    }
-}
-
-    static async verPerfil(req: Request, res: Response) {
-        const { EDV, id } = req.params;
-
-    try {
-        const perfil = await prisma.profile.findFirst({
-            where: {
-                id: Number(id),
-                EDV_Aprendiz: Number(EDV)
-            },
-            include: {
-                situacao_profissional: true,
-                soft_Skills: true,
-                competencia: true,
-                formacao_Academica: true,
-                idiomas: true,
-                cursos: true
-            }
-        });
-
-        if (!perfil) {
-            return res.status(404).send({
-                message: "Perfil não encontrado"
+            return res.status(200).json({
+                message: "Aprendiz deletado com sucesso!"
             });
+
+
+        } catch (error) {
+
+            return res.status(500).json({
+                message: error instanceof Error
+                    ? error.message
+                    : "Erro interno do servidor"
+            });
+
         }
-
-        return res.status(200).send({
-            data: perfil
-        });
-
-    } catch(error) {
-        console.error(error);
-
-        return res.status(500).send({
-            mensagem: error instanceof Error
-                ? error.message
-                : error
-        });
     }
-}
 
-    static async verFormacaoAcademica(req: Request, res: Response) {
-        const { EDV, id } = req.params;
+    static async atualizarPerfil(req: Request, res: Response) {
 
-    try {
-        const formacao = await prisma.formacao_Academica.findMany({
-            where: {
-                Id_Profile: Number(id),
-                profile: {
-                    EDV_Aprendiz: Number(EDV)
-                }
-            }
-        });
+        try {
 
-        return res.status(200).send({
-            data: formacao
-        });
+            const { idPerfil } = req.params;
 
-    } catch(error) {
-        console.error(error);
+            const perfilAtualizado =
+                await AprendizService.atualizarPerfil(
+                    Number(idPerfil),
+                    req.body
+                );
 
-        return res.status(500).send({
-            mensagem: error instanceof Error
-                ? error.message
-                : error
-        });
+
+            return res.status(200).json({
+                response: "Perfil atualizado com sucesso!",
+                perfil: perfilAtualizado
+            });
+
+
+        } catch (error) {
+
+            return res.status(500).json({
+                message: error instanceof Error
+                    ? error.message
+                    : error
+            });
+
+        }
     }
-}
 
-    static async verSituacaoProfissional(req: Request, res: Response) {
-        const { EDV, id } = req.params;
+    static async atualizarFormacaoAcademica(
+        req: Request,
+        res: Response
+    ) {
 
-    try {
-        const situacao = await prisma.situacao_profissional.findMany({
-            where: {
-                Id_Profile: Number(id),
-                profile: {
-                    EDV_Aprendiz: Number(EDV)
-                }
-            }
-        });
+        try {
 
-        return res.status(200).send({
-            data: situacao
-        });
+            const { EDV, id } = req.params;
 
-    } catch(error) {
-        console.error(error);
 
-        return res.status(500).send({
-            mensagem: error instanceof Error
-                ? error.message
-                : error
-        });
+            const formacaoAtualizada =
+                await AprendizService.atualizarFormacaoAcademica(
+                    Number(EDV),
+                    Number(id),
+                    req.body
+                );
+
+
+            return res.status(200).json({
+                response: "Formação acadêmica atualizada com sucesso!",
+                data: formacaoAtualizada
+            });
+
+
+        } catch (error) {
+
+            return res.status(500).json({
+                message: error instanceof Error
+                    ? error.message
+                    : error
+            });
+
+        }
     }
-}
 
-    static async verSoftskills(req: Request, res: Response) {
-        const { EDV, id } = req.params;
+    static async atualizarSituacaoProfissional(
+        req: Request,
+        res: Response
+    ) {
 
-    try {
-        const softskills = await prisma.soft_Skills.findMany({
-            where: {
-                Id_Profile: Number(id),
-                profile: {
-                    EDV_Aprendiz: Number(EDV)
-                }
-            }
-        });
+        try {
 
-        return res.status(200).send({
-            data: softskills
-        });
+            const { EDV, id } = req.params;
 
-    } catch(error) {
-        console.error(error);
 
-        return res.status(500).send({
-            mensagem: error instanceof Error
-                ? error.message
-                : error
-        });
+            const situacaoAtualizada =
+                await AprendizService.atualizarSituacaoProfissional(
+                    Number(EDV),
+                    Number(id),
+                    req.body
+                );
+
+
+            return res.status(200).json({
+                response: "Situação profissional atualizada com sucesso!",
+                data: situacaoAtualizada
+            });
+
+
+        } catch(error) {
+
+            return res.status(500).json({
+                message: error instanceof Error
+                    ? error.message
+                    : error
+            });
+
+        }
     }
-}
 
-    static async verCompetencias(req: Request, res: Response) {
-        const { EDV, id } = req.params;
+    static async atualizarSoftskills(
+        req: Request,
+        res: Response
+    ) {
 
-    try {
-        const competencias = await prisma.competencia.findMany({
-            where: {
-                Id_Profile: Number(id),
-                profile: {
-                    EDV_Aprendiz: Number(EDV)
-                }
-            }
-        });
+        try {
 
-        return res.status(200).send({
-            data: competencias
-        });
+            const { id, EDV } = req.params;
 
-    } catch(error) {
-        console.error(error);
 
-        return res.status(500).send({
-            mensagem: error instanceof Error
-                ? error.message
-                : error
-        });
+            const softskill =
+                await AprendizService.atualizarSoftskills(
+                    Number(EDV),
+                    Number(id),
+                    req.body
+                );
+
+
+            return res.status(200).json({
+                response: "Soft Skill atualizada com sucesso!",
+                data: softskill
+            });
+
+
+        } catch(error) {
+
+            return res.status(500).json({
+                mensagem: error instanceof Error
+                    ? error.message
+                    : error
+            });
+
+        }
     }
-}
 
-    static async verIdiomas(req: Request, res: Response) {
-        const { EDV, id } = req.params;
+    static async atualizarCompetencias(
+        req: Request,
+        res: Response
+    ) {
 
-    try {
-        const idiomas = await prisma.idiomas.findMany({
-            where: {
-                Id_Profile: Number(id),
-                profile: {
-                    EDV_Aprendiz: Number(EDV)
-                }
-            }
-        });
+        try {
 
-        return res.status(200).send({
-            data: idiomas
-        });
+            const { id, EDV } = req.params;
 
-    } catch(error) {
-        console.error(error);
 
-        return res.status(500).send({
-            mensagem: error instanceof Error
-                ? error.message
-                : error
-        });
+            const competencia =
+                await AprendizService.atualizarCompetencias(
+                    Number(EDV),
+                    Number(id),
+                    req.body
+                );
+
+
+            return res.status(200).json({
+                response: "Competência atualizada com sucesso!",
+                data: competencia
+            });
+
+
+        } catch(error) {
+
+            return res.status(500).json({
+                mensagem: error instanceof Error
+                    ? error.message
+                    : error
+            });
+
+        }
     }
-}
+        static async atualizarIdiomas(
+        req: Request,
+        res: Response
+    ) {
 
-    static async verCursos(req: Request, res: Response) {
-        const { EDV, id } = req.params;
+        try {
 
-    try {
-        const cursos = await prisma.cursos.findMany({
-            where: {
-                Id_Profile: Number(id),
-                profile: {
-                    EDV_Aprendiz: Number(EDV)
-                }
-            }
-        });
+            const { id, EDV } = req.params;
 
-        return res.status(200).send({
-            data: cursos
-        });
 
-    } catch(error) {
-        console.error(error);
+            const idioma =
+                await AprendizService.atualizarIdiomas(
+                    Number(EDV),
+                    Number(id),
+                    req.body
+                );
 
-        return res.status(500).send({
-            mensagem: error instanceof Error
-                ? error.message
-                : error
-        });
+
+            return res.status(200).json({
+                response: "Idioma atualizado com sucesso!",
+                data: idioma
+            });
+
+
+        } catch(error) {
+
+            return res.status(500).json({
+                mensagem: error instanceof Error
+                    ? error.message
+                    : error
+            });
+
+        }
     }
-}
 
-static async filtrarApredizDashboart(req: Request, res: Response) {
+    static async atualizarCursos(
+        req: Request,
+        res: Response
+    ) {
 
-    try {
+        try {
 
-        //Quantidade de aprendizes em estágio
-        const aprendizesEstagio = await prisma.situacao_profissional.count({
-            where: {
-                cumprido_Estagio: true
+            const { id, EDV } = req.params;
+
+
+            const curso =
+                await AprendizService.atualizarCursos(
+                    Number(EDV),
+                    Number(id),
+                    req.body
+                );
+
+
+            return res.status(200).json({
+                response: "Curso atualizado com sucesso!",
+                data: curso
+            });
+
+
+        } catch(error) {
+
+            return res.status(500).json({
+                mensagem: error instanceof Error
+                    ? error.message
+                    : error
+            });
+
+        }
+    }
+
+    static async verPerfil(
+        req: Request,
+        res: Response
+    ) {
+
+        try {
+
+            const { EDV, id } = req.params;
+
+
+            const perfil =
+                await AprendizService.verPerfil(
+                    Number(EDV),
+                    Number(id)
+                );
+
+
+            if (!perfil) {
+
+                return res.status(404).json({
+                    message: "Perfil não encontrado"
+                });
+
             }
-        });
 
 
-        //Idade dos aprendizes
-        const aprendizes = await prisma.aprendiz.findMany({
-            include: {
-                user: true
-            }
-        });
+            return res.status(200).json({
+                data: perfil
+            });
 
 
-        const idades = aprendizes.map((aprendiz: { user: { data_nascimento: string | number | Date; }; }) => {
+        } catch(error) {
 
-            const nascimento = new Date(
-                aprendiz.user.data_nascimento
+            return res.status(500).json({
+                mensagem: error instanceof Error
+                    ? error.message
+                    : error
+            });
+
+        }
+    }
+
+    static async verFormacaoAcademica(
+        req: Request,
+        res: Response
+    ) {
+
+        try {
+
+            const { EDV, id } = req.params;
+
+
+            const formacao =
+                await AprendizService.verFormacaoAcademica(
+                    Number(EDV),
+                    Number(id)
+                );
+
+
+            return res.status(200).json({
+                data: formacao
+            });
+
+
+        } catch(error) {
+
+            return res.status(500).json({
+                mensagem: error instanceof Error
+                    ? error.message
+                    : error
+            });
+
+        }
+    }
+
+
+
+
+    static async verSituacaoProfissional(
+        req: Request,
+        res: Response
+    ) {
+
+        try {
+
+            const { EDV, id } = req.params;
+
+
+            const situacao =
+                await AprendizService.verSituacaoProfissional(
+                    Number(EDV),
+                    Number(id)
+                );
+
+
+            return res.status(200).json({
+                data: situacao
+            });
+
+
+        } catch(error) {
+
+            return res.status(500).json({
+                mensagem: error instanceof Error
+                    ? error.message
+                    : error
+            });
+
+        }
+    }
+
+
+
+
+    static async verSoftskills(
+        req: Request,
+        res: Response
+    ) {
+
+        try {
+
+            const { EDV, id } = req.params;
+
+
+            const softskills =
+                await AprendizService.verSoftskills(
+                    Number(EDV),
+                    Number(id)
+                );
+
+
+            return res.status(200).json({
+                data: softskills
+            });
+
+
+        } catch(error) {
+
+            return res.status(500).json({
+                mensagem: error instanceof Error
+                    ? error.message
+                    : error
+            });
+
+        }
+    }
+
+
+
+
+    static async verCompetencias(
+        req: Request,
+        res: Response
+    ) {
+
+        try {
+
+            const { EDV, id } = req.params;
+
+
+            const competencias =
+                await AprendizService.verCompetencias(
+                    Number(EDV),
+                    Number(id)
+                );
+
+
+            return res.status(200).json({
+                data: competencias
+            });
+
+
+        } catch(error) {
+
+            return res.status(500).json({
+                mensagem: error instanceof Error
+                    ? error.message
+                    : error
+            });
+
+        }
+    }
+    static async verIdiomas(
+        req: Request,
+        res: Response
+    ) {
+
+        try {
+
+            const { EDV, id } = req.params;
+
+
+            const idiomas =
+                await AprendizService.verIdiomas(
+                    Number(EDV),
+                    Number(id)
+                );
+
+
+            return res.status(200).json({
+                data: idiomas
+            });
+
+
+        } catch(error) {
+
+            return res.status(500).json({
+                mensagem: error instanceof Error
+                    ? error.message
+                    : error
+            });
+
+        }
+    }
+
+    static async verCursos(
+        req: Request,
+        res: Response
+    ) {
+
+        try {
+
+            const { EDV, id } = req.params;
+
+
+            const cursos =
+                await AprendizService.verCursos(
+                    Number(EDV),
+                    Number(id)
+                );
+
+
+            return res.status(200).json({
+                data: cursos
+            });
+
+
+        } catch(error) {
+
+            return res.status(500).json({
+                mensagem: error instanceof Error
+                    ? error.message
+                    : error
+            });
+
+        }
+    }
+
+
+
+
+
+    static async filtrarApredizDashboart(
+        req: Request,
+        res: Response
+    ) {
+
+        try {
+
+            const dashboard =
+                await AprendizService.filtrarApredizDashboart();
+
+
+            return res.status(200).json(
+                dashboard
             );
 
-            const hoje = new Date();
 
-            let idade = hoje.getFullYear() - nascimento.getFullYear();
+        } catch(error) {
 
-            const mes = hoje.getMonth() - nascimento.getMonth();
+            return res.status(500).json({
+                mensagem: error instanceof Error
+                    ? error.message
+                    : error
+            });
 
-            if (
-                mes < 0 || 
-                (mes === 0 && hoje.getDate() < nascimento.getDate())
-            ) {
-                idade--;
-            }
-
-            return idade;
-
-        });
-        
-
-
-        //Quantidade de aprendizes que falam outro idioma
-        const aprendizesIdioma = await prisma.idiomas.findMany({
-            distinct: [
-                "Id_Profile"
-            ]
-        });
-
-
-        //Quantidade de aprendizes acima do ensino médio
-        const aprendizesMaisQueMedio = await prisma.formacao_Academica.count({
-            where: {
-                nivel_formacao: {
-                    in: [
-                        "TECNICO",
-                        "GRADUACAO",
-                        "POS_GRADUACAO"
-                    ]
-                }
-            }
-        });
-
-
-        return res.status(200).send({
-
-            estagio: {
-                quantidade: aprendizesEstagio
-            },
-
-            idade: {
-                idades
-            },
-
-            idiomas: {
-                quantidade: aprendizesIdioma.length
-            },
-
-            formacao: {
-                acimaEnsinoMedio: aprendizesMaisQueMedio
-            }
-
-        });
-
-
-    } catch(error) {
-
-        console.error(error);
-
-        return res.status(500).send({
-            mensagem: error instanceof Error
-                ? error.message
-                : error
-        });
-
+        }
     }
-}
 
-static async filtrarTudoAprendiz(req: Request, res: Response) {
+    static async filtrarTudoAprendiz(
+        req: Request,
+        res: Response
+    ) {
 
-    const {
-        nome,
-        turma,
-        curso,
-        idioma,
-        competencia,
-        softskill,
-        setor
-    } = req.query;
+        try {
 
-    try {
+            const aprendizes =
+                await AprendizService.filtrarTudo(
+                    req.query
+                );
 
-        const aprendizes = await prisma.aprendiz.findMany({
-            where: {
 
-                user: nome ? {
-                    name: {
-                        contains: String(nome),
-                        mode: "insensitive"
-                    }
-                } : undefined,
+            return res.status(200).json(
+                aprendizes
+            );
 
-                Id_Turma: turma
-                    ? Number(turma)
-                    : undefined,
 
-                profile: {
-                    some: {
+        } catch(error) {
 
-                        formacao_Academica: curso ? {
-                            
-                                name_Curso: {
-                                    contains: String(curso),
-                                    mode: "insensitive"
-                                }
-                            }
-                         : undefined,
+            return res.status(500).json({
+                message: error instanceof Error
+                    ? error.message
+                    : error
+            });
 
-                        idiomas: idioma ? {
-                            
-                                nome_Idioma: {
-                                    contains: String(idioma),
-                                    mode: "insensitive"
-                                }
-                            
-                        } : undefined,
-
-                        competencia: competencia ? {
-                            
-                                nome_Competencia: {
-                                    contains: String(competencia),
-                                    mode: "insensitive"
-                                }
-                            
-                        } : undefined,
-
-                        soft_Skills: softskill ? {
-                            
-                                nome_SoftSkills: {
-                                    contains: String(softskill),
-                                    mode: "insensitive"
-                                }
-                            
-                        } : undefined,
-
-                        situacao_profissional: setor ? {
-                            
-                                nome_Setor: {
-                                    contains: String(setor),
-                                    mode: "insensitive"
-                                }
-                            
-                        } : undefined
-                    }
-                }
-
-            },
-
-            include: {
-                user: true,
-                turmas: true,
-                profile: {
-                    include: {
-                        formacao_Academica: true,
-                        idiomas: true,
-                        competencia: true,
-                        soft_Skills: true,
-                        situacao_profissional: true,
-                        cursos: true
-                    }
-                }
-            }
-
-        });
-
-        return res.status(200).json(aprendizes);
-
-    } catch (error) {
-        console.error(error);
-
-        return res.status(500).json({
-            message: error instanceof Error
-                ? error.message
-                : error
-        });
+        }
     }
-}
+
+
 }

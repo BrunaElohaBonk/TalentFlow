@@ -1,54 +1,114 @@
-import { Request, Response } from "express"
-import { AdicionarUserDto } from "../DTO/authDTO.ts";
+import { Request, Response } from "express";
+import { AdicionarUserDto } from "../DTO/userDTO.ts";
+import InstrutorService from "../Services/InstrutorService.ts";
 
-export default class instrutorController{
-    static async create(req: Request,res:Response){
-        const data:AdicionarUserDto = req.body;
-        try{
-            return res.status(200).send({response: "Sucesso ao criar Instrutor!" })
-    
-        }
-        catch (error){
-            console.error(error)
+
+export default class instrutorController {
+
+
+    static async create(req: Request, res: Response) {
+
+        try {
+
+            const data: AdicionarUserDto = req.body;
+
+
+            const instrutor =
+                await InstrutorService.create(data);
+
+
             return res.status(200).send({
-                messagem:error instanceof Error
-                ? error.message
-                : error
-            })
+                response: "Sucesso ao criar Instrutor!",
+                data: instrutor
+            });
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            return res.status(500).send({
+                mensagem: error instanceof Error
+                    ? error.message
+                    : error
+            });
+
         }
 
     }
-    static async editar(req: Request,res:Response){
-        const {EDV} = req.params;
-        const data = req.body;
-        try{
-            return res.status(200).send({response: "Sucesso ao editar Instrutor!" })
-    
-        }
-        catch (error){
-            console.error(error)
+
+
+
+
+    static async editar(req: Request, res: Response) {
+
+        try {
+
+            const { EDV } = req.params;
+
+            const data = req.body;
+
+
+            const instrutor =
+                await InstrutorService.editar(
+                    Number(EDV),
+                    data
+                );
+
+
             return res.status(200).send({
-                messagem:error instanceof Error
-                ? error.message
-                : error
-            })
+                response: "Sucesso ao editar Instrutor!",
+                data: instrutor
+            });
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            return res.status(500).send({
+                mensagem: error instanceof Error
+                    ? error.message
+                    : error
+            });
+
         }
 
     }
-    static async Deletar(req: Request,res:Response){
-        const data = req.body;
-        try{
-            return res.status(200).send({response: "Sucesso ao Deletar Instrutor!" })
-    
-        }
-        catch (error){
-            console.error(error)
+
+
+
+
+
+    static async Deletar(req: Request, res: Response) {
+
+        try {
+
+            const { EDV } = req.params;
+
+
+            await InstrutorService.deletar(
+                Number(EDV)
+            );
+
+
             return res.status(200).send({
-                messagem:error instanceof Error
-                ? error.message
-                : error
-            })
+                response: "Sucesso ao Deletar Instrutor!"
+            });
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            return res.status(500).send({
+                mensagem: error instanceof Error
+                    ? error.message
+                    : error
+            });
+
         }
 
     }
+
 }

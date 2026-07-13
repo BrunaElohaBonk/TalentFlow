@@ -1,10 +1,10 @@
-export interface EditarInstrutorDto {
-    nomeInstrutor?:string;
-    EDV?:number;
-    emailBosch?:string;
-    userBosch?:string;
-    dataNascimento?:string;
-    contato?:string;
-    password?:string;
-    fotoInstrutor?:File;
+export interface InstrutorDto {
+    EDV?: number;
+    name?: string;
+    email_bosch?: string;
+    user_bosch?: string;
+    data_nascimento?: string;
+    contato?: string;
+    password_login?: string;
+    fotoInstrutor?: File;
 }

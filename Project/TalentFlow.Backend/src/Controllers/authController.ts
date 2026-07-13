@@ -136,7 +136,7 @@ class AuthController {
 
         }
         catch(erro){
-            res.status(400).send({ response: "Inválido token " });
+            res.status(400).send({ response: "Inválido token" });
 
         }
     }

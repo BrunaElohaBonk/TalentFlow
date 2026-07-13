@@ -1,1 +1,82 @@
-// aaaa
+import { prisma } from "../lib/prisma.ts";
+import {InstrutorDto } from "../DTO/instrutorDTO.ts";
+import {AdicionarUserDto} from "../DTO/userDTO.ts";
+
+
+export default class InstrutorService {
+
+
+    static async create(data: AdicionarUserDto) {
+
+        return await prisma.user.create({
+
+            data: {
+
+                ...data,
+
+                tipoUser: "INSTRUTOR",
+
+                data_nascimento: new Date(
+                    data.data_nascimento
+                )
+
+            }
+
+        });
+
+    }
+
+
+
+
+    static async editar(
+        EDV: number,
+        data: InstrutorDto
+    ) {
+
+        const dadosAtualizados = {
+
+            ...data,
+
+            data_nascimento: data.data_nascimento
+                ? new Date(data.data_nascimento)
+                : undefined
+
+        };
+
+
+        return await prisma.user.update({
+
+            where: {
+
+                EDV
+
+            },
+
+            data: dadosAtualizados
+
+        });
+
+    }
+
+
+
+
+    static async deletar(
+        EDV: number
+    ) {
+
+        return await prisma.user.delete({
+
+            where: {
+
+                EDV
+
+            }
+
+        });
+
+    }
+
+
+}
