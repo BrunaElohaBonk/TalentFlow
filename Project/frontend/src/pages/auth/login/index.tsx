@@ -18,18 +18,25 @@ function Login() {
   // TEMPORÁRIO - REMOVER NA INTEGRAÇÃO COM BACKEND
 const usuario = [
   {
-    nome: "Bruna",
-    edv: "92",
-    senha: "123",
+    edv: "92906829",
+    img: "",
+    nome: "Bruna Elohá Bonk",
+    email: "bruna@bosch.com",
+    user: "BOB1CT",
+    contato: 42999830200,
     dataNascimento: "21/08/2006",
-    tipo: "aprendiz"
+    tipo: "aprendiz",
+    senha: "123"
   },
   {
-    nome: "Las",
-    edv: "90",
-    senha: "123",
-    dataNascimento: "01/12/2006",
-    tipo: "instrutor"
+    nome: "Lasnine Miranda",
+    email: "lasnine@bosch.com",
+    edv: "92906812",
+    user: "SLN6CT",
+    contato: 41995325493,
+    dataNascimento: "08/01/2008",
+    tipo: "instrutor",
+    senha: "123"
   }
 ]
 
@@ -42,6 +49,11 @@ const usuario = [
     )
     if (usuarioEncontrado) {
 
+      localStorage.setItem(
+        "usuarioLogado",
+        JSON.stringify(usuarioEncontrado)
+      )
+    
       if (password === usuarioEncontrado.dataNascimento) {
         navigate('/Confirm_login')
         return
@@ -57,14 +69,6 @@ const usuario = [
         return
       }
     
-    } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Erro',
-        text: 'EDV ou senha inválidos!',
-        confirmButtonColor: '#2B83D5',
-        confirmButtonText: 'OK'
-      })
     }
   }
 
