@@ -4,11 +4,11 @@ import icon_logout from '../../../assets/img/icon_logout.png'
 import icon_olho from '../../../assets/img/icon_olho.png'
 import icon_olho_fechado from '../../../assets/img/icon_olho_fechado.png'
 import Header from '../../../components/header'
-import Alert from '../../../components/alert/alert'
 import Logout from '../../../components/logout/logout'
+import Swal from 'sweetalert2'
 import './confirm_login.css'
 import { useNavigate } from "react-router-dom"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 
 function Confirm_login() {
   const navigate = useNavigate()
@@ -20,7 +20,6 @@ function Confirm_login() {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
-  const [erroSenha, setErroSenha] = useState("")
   const [logout, setLogout] = useState(false)
 
   // TEMPORÁRIO - REMOVER NA INTEGRAÇÃO COM BACKEND
@@ -78,10 +77,27 @@ function Confirm_login() {
   const handleConfirmPassword = () => {
     const erro = validarSenha()
 
-    if(erro) {
-      setErroSenha(erro)
+    if (erro) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Erro',
+        text: erro,
+        confirmButtonColor: '#2B83D5',
+        confirmButtonText: 'OK'
+      })
+    
       return
     }
+
+    Swal.fire({
+      icon: 'success',
+      title: 'Senha alterada!',
+      text: 'Sua senha foi cadastrada com sucesso.',
+      confirmButtonColor: '#2B83D5',
+      confirmButtonText: 'Continuar'
+    }).then(() => {
+      navigate('/Perfil')
+    })
 
     // AQUI VAI O BACKEND
     // Enviar EDV e nova senha para o banco de dados.
@@ -89,20 +105,8 @@ function Confirm_login() {
     navigate('/Perfil')
   }
 
-  useEffect(() => {
-    if(erroSenha !== "") {
-      const timer = setTimeout(() => {
-        setErroSenha("")
-      },3000)
-
-      return () => clearTimeout(timer)
-    }
-  },[erroSenha])
-
   return (
     <>
-    <Alert visible={erroSenha !== ""} message={erroSenha}/>
-
     <div>
       <Header></Header>
     </div>

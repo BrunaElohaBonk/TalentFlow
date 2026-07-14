@@ -3,17 +3,15 @@ import icon_cadeado from '../../../assets/img/icon_cadeado.png'
 import icon_olho from '../../../assets/img/icon_olho.png'
 import icon_olho_fechado from '../../../assets/img/icon_olho_fechado.png'
 import Header from '../../../components/header'
-import Alert from '../../../components/alert/alert'
+import Swal from 'sweetalert2'
 import './login.css'
 import { useNavigate } from "react-router-dom"
 import { useState } from 'react'
-import { useEffect } from 'react'
 
 function Login() {
   const [edv, setEdv] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
-  const [erroLogin, setErroLogin] = useState(false)
 
   // EXCLUIR AQUI NO BACKEND
   // Esses dados vão vir do banco de dados através da API
@@ -43,37 +41,35 @@ const usuario = [
       (usuario) => usuario.edv === edv && usuario.senha === password
     )
     if (usuarioEncontrado) {
-      setErroLogin(false)
+
       if (password === usuarioEncontrado.dataNascimento) {
         navigate('/Confirm_login')
         return
       }
+    
       if (usuarioEncontrado.tipo === "aprendiz") {
         navigate('/Perfil')
         return
       }
+    
       if (usuarioEncontrado.tipo === "instrutor") {
         navigate('/Home')
         return
       }
+    
     } else {
-      setErroLogin(true)
+      Swal.fire({
+        icon: 'error',
+        title: 'Erro',
+        text: 'EDV ou senha inválidos!',
+        confirmButtonColor: '#2B83D5',
+        confirmButtonText: 'OK'
+      })
     }
   }
 
-  useEffect(() => {
-    if (erroLogin) {
-      const timer = setTimeout(() => {
-        setErroLogin(false)
-      }, 3000)
-      return () => clearTimeout(timer)
-    }
-  }, [erroLogin])
-
   return (
     <>
-    <Alert visible={erroLogin} message="EDV ou senha inválidos!"/>
-
     <div>
       <Header></Header>
     </div>

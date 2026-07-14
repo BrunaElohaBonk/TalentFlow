@@ -13,8 +13,6 @@ function Logout({visible, setVisible}: any) {
 
   return (
     <>
-    <img src={icon_logout} alt="icon_logout" className="logout-icon" onClick={() => setVisible(true)}/>
-
     {visible && (
       <div className="logout-overlay">
         <div className="logout-card">

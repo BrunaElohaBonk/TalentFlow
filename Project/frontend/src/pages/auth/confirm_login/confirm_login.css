@@ -101,13 +101,17 @@
 
 .confirm-logout {
     position: absolute;
-    height: 30px;
-    width: 30px;
-    margin-top: 40px;
-    margin-left: 20px;
+    top: 95px;
+    left: 20px;
+    cursor: pointer;
 }
 
-.confirm-logout:hover {
-    height: 32px;
-    width: 32px;
+.confirm-logout img {
+    width: 30px;
+    height: auto;
+}
+
+.confirm-logout img:hover {
+    transform: scale(1.05);
+    transition: 0.2s;
 }
