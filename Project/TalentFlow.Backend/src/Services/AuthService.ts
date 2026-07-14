@@ -70,18 +70,19 @@ export class UserService {
   }
 
   static async register(data: AdicionarUserDto) {
-    const passwordCrypt = await bcrypt.hash(data.password, 10);
+    
+    const passwordCrypt = await bcrypt.hash(data.password_login, 10);
 
     try {
       return await prisma.user.create({
         data: {
           EDV: data.EDV,
-          name: data.nome,
-          tipoUser: data.tipouser,
-          data_nascimento: this.converterDataBR(data.dataNascimento),
-          user_bosch: data.userBosch,
+          name: data.name,
+          tipoUser: data.tipoUser,
+          data_nascimento: this.converterDataBR(data.data_nascimento),
+          user_bosch: data.user_bosch,
           contato: data.contato,
-          email_bosch: data.emailBosch,
+          email_bosch: data.email_bosch,
           password_login: passwordCrypt,
         },
       });
@@ -147,6 +148,7 @@ export class UserService {
     }
 
     const passwordCrypt = await bcrypt.hash(data.password, 10);
+
     await prisma.user.update({
       where: { EDV: decoded.EDV },
       data: { password_login: passwordCrypt },

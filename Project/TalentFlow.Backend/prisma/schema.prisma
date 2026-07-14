@@ -83,7 +83,7 @@ model Situacao_profissional {
   id               Int     @id @default(autoincrement())
   Id_Profile       Int
   profile          Profile @relation(fields: [Id_Profile], references: [id])
-  nome_Setor       String
+  nome_Setor       String // enun
   nome_Lider       String
   cumprido_Estagio Boolean
   bio_profissional String?
@@ -93,15 +93,15 @@ model Soft_Skills {
   id              Int     @id @default(autoincrement())
   Id_Profile      Int
   profile         Profile @relation(fields: [Id_Profile], references: [id])
-  nome_SoftSkills String
+  nome_SoftSkills String // enun
 }
 
 model Competencia {
   id                Int     @id @default(autoincrement())
   Id_Profile        Int
   profile           Profile @relation(fields: [Id_Profile], references: [id])
-  nome_Competencia  String
-  nivel_Competencia String
+  nome_Competencia  String 
+  nivel_Competencia String //enun 
 }
 
 model Formacao_Academica {
@@ -109,7 +109,7 @@ model Formacao_Academica {
   Id_Profile       Int
   profile          Profile       @relation(fields: [Id_Profile], references: [id])
   name_Curso       String
-  status_Academico String
+  status_Academico String // enun
   nivel_formacao   NivelFormacao
   periodo_Atual    Int
   total_Periodo    Int
@@ -120,7 +120,7 @@ model Idiomas {
   id           Int         @id @default(autoincrement())
   Id_Profile   Int
   profile      Profile     @relation(fields: [Id_Profile], references: [id])
-  nome_Idioma  String
+  nome_Idioma  String // enun
   nivel_Idioma NivelIdioma
 }
 
@@ -129,7 +129,7 @@ model Cursos {
   Id_Profile     Int
   profile        Profile  @relation(fields: [Id_Profile], references: [id])
   name_Curso     String
-  status_Cursos  String
+  status_Cursos  String // enun
   data_Conclusao DateTime
   carga_horaria  Int
 }
