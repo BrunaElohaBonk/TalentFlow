@@ -20,15 +20,15 @@ const usuario = [
   {
     nome: "Bruna",
     edv: "92",
-    senha: "21/08/2006",
+    senha: "123",
     dataNascimento: "21/08/2006",
     tipo: "aprendiz"
   },
   {
     nome: "Las",
     edv: "90",
-    senha: "Carlos123@",
-    dataNascimento: "01012000",
+    senha: "123",
+    dataNascimento: "01/12/2006",
     tipo: "instrutor"
   }
 ]
