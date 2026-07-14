@@ -32,7 +32,7 @@ enum TipoUser {
   INSTRUTOR
 }
 
-enum Idioma{
+enum Idioma                                                                                                                                                                                                                                                                                                       {
   ALEMAO
   ARABE
   COREANO
@@ -45,10 +45,14 @@ enum Idioma{
   RUSSO
   TAILANDES
 }
-
-//status academicos
-// status curso
-// idioma
+enum statusAcademico {
+  CONCLUIDO
+  CURSANDO
+} 
+enum statusCurso {
+  CONCLUIDO
+  CURSANDO
+} 
 
 model User {
   EDV             Int      @id
