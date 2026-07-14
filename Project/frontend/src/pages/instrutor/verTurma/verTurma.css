@@ -1,0 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+.turma-container {
+    display: flex;
+    min-height: 94vh;
+}
+
+.turma-body {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+}
+
+.turma-pesquisa {
+    position: relative;
+    width: 90%;
+    margin-bottom: 40px;
+}

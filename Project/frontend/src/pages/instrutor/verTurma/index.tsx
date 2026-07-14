@@ -5,7 +5,9 @@ function VerTurma(){
     return(
         <div>
             <Header></Header>
-            <Sidebar></Sidebar>
+            <div className="turma-container">
+                <Sidebar />
+            </div>
         </div>
     )
 }

@@ -1,1 +1,29 @@
 @import "tailwindcss";
+
+
+.swal2-popup {
+    font-family: 'Poppins', sans-serif;
+}
+
+.swal2-confirm {
+    background-color: #2B83D5 !important;
+    font-family: 'Poppins', sans-serif !important;
+    transition: 0.25s;
+}
+
+.swal2-confirm:hover {
+    background-color: #3d96e9 !important;
+    transform: scale(1.05);
+}
+
+.swal2-cancel {
+    background-color: #2B83D5 !important;
+    font-family: 'Poppins', sans-serif !important;
+    transition: 0.25s;
+}
+
+.swal2-cancel:hover {
+    background-color: #3d96e9 !important;
+    color: white !important;
+    transform: scale(1.05);
+}
