@@ -8,7 +8,15 @@ import Swal from 'sweetalert2'
 import axios from 'axios'
 import { useDropzone } from "react-dropzone";
 import "react-datepicker/dist/react-datepicker.css";
-import DatePicker from 'react-datepicker'
+
+interface IPerfil {
+    img: File | null;
+    name: string;
+    email: string;
+    user: string;
+    contato: string;
+    nascimento: string;
+}
 
 function EditarPerfil(){
     const { edv } = useParams();
@@ -22,16 +30,16 @@ function EditarPerfil(){
         maxFiles: 1,
         onDrop: (acceptedFiles) => {
             if (acceptedFiles.length > 0) {
-            const arquivo = acceptedFiles[0];
-            setNomeArquivo(arquivo.name);
-            setPerfil((prev) => ({
-                ...prev,
-                img: URL.createObjectURL(arquivo),
-            }));
+                const arquivo = acceptedFiles[0];
+                setNomeArquivo(arquivo.name);
+                setPerfil((prev) => ({
+                    ...prev,
+                    img: arquivo,
+                }));
             }
         },
     });
-    const [perfil, setPerfil] = useState({
+    const [perfil, setPerfil] = useState<IPerfil>({
         img: null,
         name: '',
         email: '',
@@ -45,11 +53,11 @@ function EditarPerfil(){
             const User = response.data.response
             setPerfil({
                 name: User.name || '',
-                img: null as File | null,
+                img: null,
                 email: User.email || '',
                 user: User.user || '',
                 contato: User.contato || '',
-                nascimento: User.nascimento || ''
+                nascimento: User.nascimento? new Date(User.nascimento).toLocaleDateString("pt-BR"): ''
             })
         } 
         catch (e) {
@@ -59,14 +67,36 @@ function EditarPerfil(){
     useEffect(() => {
         fetchPerfil();
     }, []);
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setPerfil({
             ...perfil,
             [e.target.name]: e.target.value
         });
     };
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault();
+        const [dia, mes, ano] = perfil.nascimento.split("/");
+        const dataNascimento = new Date(
+            Number(ano),
+            Number(mes) - 1,
+            Number(dia)
+        );
+        const hoje = new Date();
+        let idade = hoje.getFullYear() - dataNascimento.getFullYear();
+        const mesAtual = hoje.getMonth();
+        const diaAtual = hoje.getDate();
+        if (mesAtual < dataNascimento.getMonth() || (mesAtual === dataNascimento.getMonth() && diaAtual < dataNascimento.getDate())) {
+            idade--;
+        }
+
+        if (idade < 15 || idade > 100) {
+            Swal.fire({
+                title: "Idade inválida!",
+                text: "O usuário deve ter entre 15 e 100 anos.",
+                icon: "warning",
+            });
+            return;
+        }
         if (!perfil.name || !perfil.email || !perfil.contato || !perfil.email || !perfil.nascimento) {
             Swal.fire({
                 title: 'Atenção!',
@@ -101,6 +131,39 @@ function EditarPerfil(){
             });
         }
     }
+
+    const handleNascimento = (e: React.ChangeEvent<HTMLInputElement>) => {
+        let value = e.target.value.replace(/\D/g, "");
+        if (value.length > 8) {
+            value = value.slice(0, 8);
+        }
+        if (value.length > 2) {
+            value = value.replace(/^(\d{2})(\d)/, "$1/$2");
+        }
+        if (value.length > 5) {
+            value = value.replace(/^(\d{2})\/(\d{2})(\d)/, "$1/$2/$3");
+        }
+        setPerfil({
+            ...perfil,
+            nascimento: value
+        });
+    };
+
+    const handleContato = (e: React.ChangeEvent<HTMLInputElement>) => {
+        let value = e.target.value.replace(/\D/g, "");
+
+        if (value.length > 11) {
+            value = value.slice(0, 11);
+        }
+
+        value = value.replace(/^(\d{2})(\d)/, "($1) $2");
+        value = value.replace(/(\d{5})(\d)/, "$1-$2");
+
+        setPerfil({
+            ...perfil,
+            contato: value
+        });
+    };
     
     return(
         <div>
@@ -120,13 +183,8 @@ function EditarPerfil(){
                         <input name="name" placeholder="Nome completo" value={perfil.name} onChange={handleChange} className='editar-input'/>
                         <input name="email" placeholder="Email" value={perfil.email} onChange={handleChange} className='editar-input'/>
                         <input name="user" placeholder="UserID" value={perfil.user} onChange={handleChange} className='editar-input'/>
-                        <DatePicker
-                            selected={perfil.nascimento ? new Date(perfil.nascimento) : null}
-                            onChange={(date) =>setPerfil({...perfil, nascimento: date ? date.toISOString().split("T")[0] : "",})}
-                            dateFormat="dd/MM/yyyy"
-                            placeholderText="Data de nascimento"
-                            className='placeholderText'/>
-                        <input name="contato" placeholder="Contato" value={perfil.contato} onChange={handleChange}  type='number'className='editar-input'/>
+                        <input name="nascimento" placeholder="Data de nascimento" inputMode="numeric" value={perfil.nascimento} onChange={handleNascimento} className="editar-input" maxLength={10}/>
+                        <input name="contato" placeholder="Contato" inputMode="numeric" value={perfil.contato || ''} onChange={handleContato} className="editar-input" maxLength={15} />
                         <div className='editar-button'>
                             <button className='editar-salvar' type='submit'>SALVAR MODIFICAÇÃO</button>
                         </div>

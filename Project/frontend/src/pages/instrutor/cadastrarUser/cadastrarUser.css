@@ -100,7 +100,7 @@
 }
  
 .user-input::placeholder {
-    color: #9AA5B1;
+    color: #8a8a8a;
 }
  
 .user-input:focus {
@@ -112,19 +112,37 @@
 .user-select {
     width: 100%;
 }
- 
+
 .user-select .MuiOutlinedInput-root {
-    height: 48px;
-    border-radius: 10px;
+    height: 40px;
+    border-radius: 15px;
     font-family: 'Poppins', sans-serif;
-    font-size: 15px;
+    font-size: 1rem;
+    color: #8a8a8a;
+    transition: 0.25s;
 }
- 
+
+.user-select .MuiSelect-select {
+    display: flex;
+    align-items: center;
+    height: 40px;
+    box-sizing: border-box;
+    padding: 15px ;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    color: #8a8a8a;
+}
+
 .user-select .MuiOutlinedInput-notchedOutline {
+    border: 1px solid #D9D9D9;
+    border-radius: 15px;
+}
+
+.user-select .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
     border-color: #D9D9D9;
 }
- 
-.user-select.Mui-focused .MuiOutlinedInput-notchedOutline {
+
+.user-select .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
     border-color: #2B83D5;
     box-shadow: 0 0 5px rgba(43, 131, 213, .3);
 }
@@ -141,7 +159,7 @@
  
 .user-radio .MuiFormLabel-root {
     font-family: 'Poppins', sans-serif;
-    font-size: 14px;
+    font-size: 1rem;
     color: #52606D;
     margin-right: 12px;
     white-space: nowrap;
@@ -152,7 +170,27 @@
     font-size: 15px;
     color: #1f2933;
 }
- 
+
+.user-senha {
+    position: relative;
+    width: 100%;
+}
+
+.user-senha .user-input {
+    width: 100%;
+    padding-right: 45px;
+}
+
+.user-eye-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}
+
 .user-button {
     display: flex;
     justify-content: center;
@@ -168,7 +206,6 @@
     background-color: #2B83D5;
     color: white;
     font-size: 1rem;
-    font-weight: 600;
     font-family: 'Poppins', sans-serif;
     border: none;
     cursor: pointer;

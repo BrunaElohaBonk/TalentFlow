@@ -96,4 +96,4 @@ function Idade(dataNascimento: Date) {
         idade--;
     }
     return idade;
-}
+}   

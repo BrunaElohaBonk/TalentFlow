@@ -1,6 +1,8 @@
 import { useParams } from "react-router-dom";
 import Header from "../../../components/header";
 import Sidebar from "../../../components/sidebar";
+import icon_olho from '../../../assets/img/icon_olho.png'
+import icon_olho_fechado from '../../../assets/img/icon_olho_fechado.png'
 import './cadastrarUser.css';
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -27,6 +29,7 @@ interface IUser {
 function CadastrarUser() {
     const { id } = useParams();
     const [turmas, setTurmas] = useState<ITurma[]>([]);
+    const [showPassword, setShowPassword] = useState(false)
     const [user, setUser] = useState<IUser>({
         edv: 0,
         name: '',
@@ -85,7 +88,7 @@ function CadastrarUser() {
         }));
     };
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault();
         const [dia, mes, ano] = user.nascimento.split("/");
         const dataNascimento = new Date(
@@ -93,6 +96,22 @@ function CadastrarUser() {
             Number(mes) - 1,
             Number(dia)
         );
+        const hoje = new Date();
+        let idade = hoje.getFullYear() - dataNascimento.getFullYear();
+        const mesAtual = hoje.getMonth();
+        const diaAtual = hoje.getDate();
+        if (mesAtual < dataNascimento.getMonth() || (mesAtual === dataNascimento.getMonth() && diaAtual < dataNascimento.getDate())) {
+            idade--;
+        }
+
+        if (idade < 15 || idade > 100) {
+            Swal.fire({
+                title: "Idade inválida!",
+                text: "O usuário deve ter entre 15 e 100 anos.",
+                icon: "warning",
+            });
+            return;
+        }
         if (!user.edv || !user.name || !user.turma || !user.email || !user.nascimento || !user.contato || !user.senha) {
             Swal.fire({
                 title: 'Atenção!',
@@ -194,8 +213,9 @@ function CadastrarUser() {
                                     )
                                 }
                             </div>
-                            <div className="user-row">
-                                <input name="senha" type="password" placeholder="Senha" value={user.senha} onChange={handleChange} className="user-input" />
+                            <div className="user-senha">
+                                <input name="senha" type={showPassword ? "text" : "password"} placeholder="Senha" value={user.senha} onChange={handleChange} className="user-input" />
+                                <img src={showPassword ? icon_olho_fechado : icon_olho} alt="Visualizar senha" className='user-eye-icon' onClick={() => setShowPassword(!showPassword)}/>
                             </div>
                         </div>
                         <div className="user-button">

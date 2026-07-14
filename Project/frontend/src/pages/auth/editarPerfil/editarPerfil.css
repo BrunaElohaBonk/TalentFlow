@@ -36,7 +36,7 @@
     display: flex;
     flex-direction: column;
     position: relative;
-    height: 75%;
+    height: 80%;
     width: 35%;
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
     border-radius: 15px;
@@ -79,7 +79,7 @@
     height: 40px;
     border-radius: 15px;
     border: 1px solid #D9D9D9;
-    padding-left: 1%;
+    padding-left: 15px;
     margin: 10px;
     margin-top: 2%;
     font-family: 'Poppins', sans-serif;
@@ -87,6 +87,16 @@
     color: #8a8a8a;
     transition: 0.25s;
     display: flex;
+}
+
+.editar-input::placeholder {
+    color: #8a8a8a;
+    margin-left: 10px;
+}
+ 
+.editar-input:focus {
+    border-color: #2B83D5;
+    box-shadow: 0 0 5px rgba(43, 131, 213, .3);
 }
 
 .editar-button {
@@ -108,27 +118,44 @@
     cursor: pointer;
 }
 
-.editar-file{
+.foto-container {
+    width: 70%;
+    height: 40px;
+    border-radius: 15px;
+    border: 1px solid #D9D9D9;
+    padding: 0 15px;
+    margin: 10px;
+    margin-top: 2%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: 0.25s;
+    box-sizing: border-box;
+}
+
+.foto-container:hover {
+    border-color: #2B83D5;
+}
+
+.foto-container:focus-within {
+    border-color: #2B83D5;
+    box-shadow: 0 0 5px rgba(43, 131, 213, .3);
+}
+
+.editar-file {
     color: #8a8a8a;
     font-family: 'Poppins', sans-serif;
     font-size: 1rem;
-    margin: 10px;
-}
-
-.foto-container {
-    display: flex;
-    align-items: center;
-    box-shadow: #b4b4b4 0px 1px 4px;
-    height: 45px;
-    width: 70%;
-    border-radius: 10px;
-    display: flex;
-    margin-top: 5%;
-    padding-right: 10px;
+    margin: 0;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .editar-download {
-    width: 30px;
-    height: 30px;
-    margin-left: auto;
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
 }
