@@ -79,7 +79,7 @@
     display: flex;
     gap: 20px;
     width: 100%;
-    align-items: flex-start;
+    align-items: center;
 }
  
 .user-row > * {
@@ -111,23 +111,8 @@
  
 .user-select {
     width: 100%;
-}
-
-.user-select .MuiOutlinedInput-root {
     height: 40px;
     border-radius: 15px;
-    font-family: 'Poppins', sans-serif;
-    font-size: 1rem;
-    color: #8a8a8a;
-    transition: 0.25s;
-}
-
-.user-select .MuiSelect-select {
-    display: flex;
-    align-items: center;
-    height: 40px;
-    box-sizing: border-box;
-    padding: 15px ;
     font-family: 'Poppins', sans-serif;
     font-size: 1rem;
     color: #8a8a8a;
@@ -138,37 +123,59 @@
     border-radius: 15px;
 }
 
-.user-select .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+.user-select:hover .MuiOutlinedInput-notchedOutline {
     border-color: #D9D9D9;
 }
 
-.user-select .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+.user-select.Mui-focused .MuiOutlinedInput-notchedOutline {
     border-color: #2B83D5;
+}
+
+.user-select.Mui-focused {
     box-shadow: 0 0 5px rgba(43, 131, 213, .3);
+}
+
+.user-select .MuiSelect-select {
+    display: flex;
+    align-items: center;
+    height: 40px;
+    padding: 0 15px !important;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    color: #8a8a8a;
 }
  
 .user-radio {
     width: 100%;
-    height: 48px;
     display: flex;
     align-items: center;
-    padding: 0 15px;
-    border: 1px solid #D9D9D9;
-    border-radius: 10px;
 }
- 
+
 .user-radio .MuiFormLabel-root {
     font-family: 'Poppins', sans-serif;
     font-size: 1rem;
-    color: #52606D;
-    margin-right: 12px;
+    color: #8a8a8a;
     white-space: nowrap;
+    margin: 0;
 }
- 
+
+.user-radio .MuiFormLabel-root.Mui-focused {
+    color: #8a8a8a;
+}
+
+.user-radio .MuiRadioGroup-root {
+    margin: -8;
+}
+
+.user-radio .MuiFormControlLabel-root {
+    margin-right: 12px; 
+}
+
 .user-radio .MuiFormControlLabel-label {
     font-family: 'Poppins', sans-serif;
-    font-size: 15px;
-    color: #1f2933;
+    font-size: 1rem;
+    color: #8a8a8a;
 }
 
 .user-senha {

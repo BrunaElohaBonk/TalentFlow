@@ -1,8 +1,11 @@
 import './sidebar.css'
 import { NavLink } from 'react-router-dom';
 import sair from './../../assets/img/icon_logout.png'
+import Logout from '../logout/logout';
+import { useState } from 'react';
 
 function Sidebar(){
+    const [logout, setLogout] = useState(false)
     return(
         <div className='sidebar-container'>
             <div className='sidebar-corpo'>
@@ -33,10 +36,9 @@ function Sidebar(){
                     </NavLink>
                 </div>
                 <div className='sidebar-logout'>
-                    <NavLink to='/Logout' className='sidebar-link'>
-                        <img src={sair} alt="sair" className='sidebar-img'/>
-                    </NavLink>
+                    <img src={sair} alt="sair" className='sidebar-img' onClick={() => setLogout(true)}/>
                 </div>
+                <Logout visible={logout} setVisible={setLogout}/>
             </div>
         </div>
     );

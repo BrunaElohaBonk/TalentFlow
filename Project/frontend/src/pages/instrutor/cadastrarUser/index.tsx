@@ -200,18 +200,18 @@ function CadastrarUser() {
                                         const tipo = e.target.value;
                                         setUser({ ...user, tipo: tipo as "Instrutor" | "Aprendiz", turma: tipo === "Instrutor" ? "Instrutor" : "" });
                                     }}>
-                                        <FormControlLabel value="Instrutor" control={<Radio sx={{ color: "#4caf50", "&.Mui-checked": { color: "#4caf50" }, "& .MuiSvgIcon-root": { fontSize: 24 } }} />} label="Instrutor" />
-                                        <FormControlLabel value="Aprendiz" control={<Radio sx={{ color: "#4caf50", "&.Mui-checked": { color: "#4caf50" }, "& .MuiSvgIcon-root": { fontSize: 24 } }} />} label="Aprendiz" />
+                                        <FormControlLabel value="Instrutor" control={<Radio sx={{ color: "#2B83D5", "&.Mui-checked": { color: "#2B83D5" }, "& .MuiSvgIcon-root": { fontSize: 24 } }} />} label="Instrutor" />
+                                        <FormControlLabel value="Aprendiz" control={<Radio sx={{ color: "#2B83D5", "&.Mui-checked": { color: "#2B83D5" }, "& .MuiSvgIcon-root": { fontSize: 24 } }} />} label="Aprendiz" />
                                     </RadioGroup>
                                 </FormControl>
                                 {
-                                    user.tipo === "Aprendiz" && (
+                                    user.tipo === "Aprendiz" && (                            
                                         <Select fullWidth displayEmpty value={user.turma} className="user-select" onChange={(e) => setUser({ ...user, turma: e.target.value })}>
                                             <MenuItem value="">Selecione uma turma</MenuItem>
                                             {turmas?.map((turma) => (<MenuItem key={turma._id} value={turma.nome}>{turma.nome}</MenuItem>))}
                                         </Select>
                                     )
-                                }
+                                } 
                             </div>
                             <div className="user-senha">
                                 <input name="senha" type={showPassword ? "text" : "password"} placeholder="Senha" value={user.senha} onChange={handleChange} className="user-input" />
