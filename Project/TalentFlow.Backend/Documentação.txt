@@ -46,3 +46,23 @@ src/
 └── server.ts     1
 
 
+enum NomeSetor {
+  ENGENHARIA
+  BDO
+  TEF
+  BD
+  RH
+  PLANEJAMENTO
+  BICO
+  CRIN
+  LOGISTICA
+  QMM
+  TOTO
+  IMPACT
+  FERRAMENTARIA
+  PRODUÇÃO
+  BPS
+  ETS
+  HSE
+  ESPAÇO SAÚDE
+}
