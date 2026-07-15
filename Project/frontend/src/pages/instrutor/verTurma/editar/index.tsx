@@ -1,6 +1,6 @@
 import './editar.css'
 import { useEffect, useState } from "react";
-import fechar from "../../../../assets/img/icon x.png";
+import fechar from "../../../../assets/img/close.png";
 
 interface ITurma {
     id: number;
