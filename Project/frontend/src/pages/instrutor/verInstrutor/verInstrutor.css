@@ -35,7 +35,7 @@
     display: flex;
     flex-direction: column;
     width: 90%;
-    max-width: 700px;
+    max-width: 600px;
     max-height: 85vh;
     overflow-y: auto;
     padding: clamp(20px, 4vw, 40px);
@@ -84,10 +84,14 @@
 .instrutor-conteudo {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+    width: fit-content;   
+    margin: 0 auto;    
     gap: 15px;
 }
 
 .instrutor-span {
+    width: 400px;
     color: #8a8a8a;
     font-family: 'Poppins', sans-serif;
     font-size: clamp(0.9rem, 2vw, 1.2rem);
