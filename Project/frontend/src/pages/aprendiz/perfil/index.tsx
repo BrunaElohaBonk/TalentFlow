@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import icon_editar from '../../../assets/img/icon_editar.png'
 import icon_user from '../../../assets/img/icon_user.png'
 import icon_olho from '../../../assets/img/icon_olho.png'
+import Logout from '../../../components/logout/logout'
+import SituacaoProfissional from "../../../components/situacao_profissional";
 
 interface Usuario {
     edv: number;
@@ -45,25 +47,28 @@ function formatarTelefone(numero: number) {
 }
 
 function Perfil() {
+
     const [aprendiz, setAprendiz] = useState<Usuario | null>(null)
 
     const navigate = useNavigate()
 
-    const handleNavigateLogin = () => {
-        navigate('/')
-    }
+    const [logout, setLogout] = useState(false)
+    const [situacao, setSituacao] = useState(false)
 
+    // TEMPORÁRIO - REMOVER NA INTEGRAÇÃO COM BACKEND
+    // Os dados do usuário estão sendo recuperados do localStorage.
+    // Após a integração, substituir pela requisição da API.
     useEffect(() => {
 
         const usuario = localStorage.getItem("usuarioLogado")
-    
-        if(usuario){
+
+        if (usuario) {
             setAprendiz(JSON.parse(usuario))
         }
-    
+
     }, [])
 
-    if(!aprendiz){
+    if (!aprendiz) {
         return <h2>Carregando...</h2>
     }
 
@@ -73,33 +78,30 @@ function Perfil() {
                 <Header></Header>
             </div>
 
-            <div className='logout'>
-                <img src={icon_logout} alt="icon_logout" onClick={handleNavigateLogin} />
+            <div className="confirm-logout">
+                <img src={icon_logout} alt="icon_logout" onClick={() => setLogout(true)}/>
             </div>
 
-            <main className="tela">
-                <section className="bloco">
+            <Logout visible={logout} setVisible={setLogout}/>
+            <SituacaoProfissional visible={situacao} setVisible={setSituacao}/>
 
+            <main className="perfil-tela">
+                <section className="perfil-bloco">
+                    <button
+                        className="perfil-btn-editar"
+                        onClick={() => navigate(`/Editar/${aprendiz.edv}`)}
+                    >
+                        <img src={icon_editar} alt="Editar" />
+                    </button>
                     <div className="perfil-topo">
-
-                        <div className="foto-container">
-                            <img src={icon_user} alt="Usuário" className="foto-perfil" />
+                        <div className="perfil-foto-container">
+                            <img src={icon_user} alt="icon_user" />
                         </div>
-
-                        <div className="dados-perfil">
-
-                            <div className="cabecalho-perfil">
+                        <div className="perfil-dados-perfil">
+                            <div className="perfil-cabecalho-perfil">
                                 <h1>{aprendiz.nome}</h1>
-
-                                <button
-                                    className="btn-editar"
-                                    onClick={() => navigate(`/Editar/${aprendiz.edv}`)}
-                                >
-                                    <img src={icon_editar} alt="Editar" />
-                                </button>
                             </div>
-
-                            <div className="informacoes">
+                            <div className="perfil-informacoes">
                                 <span>Email: {aprendiz.email}</span>
                                 <span>EDV: {aprendiz.edv}</span>
                                 <span>User: {aprendiz.user}</span>
@@ -107,80 +109,71 @@ function Perfil() {
                                 <span>Idade: {calcularIdade(converterData(aprendiz.dataNascimento))} anos</span>
                                 <span>Contato: {formatarTelefone(aprendiz.contato)}</span>
                             </div>
-
                         </div>
-
                     </div>
-
-                    <div className="cards-superiores">
-
-                        <div className="card-perfil">
+                    <div className="perfil-cards-superiores">
+                        <div className="perfil-card-perfil">
                             <h3>Situação Profissional</h3>
                             <ul>
                                 <li>Descrição da situação atual e das expectativas para o futuro.</li>
                             </ul>
-                            <button className="btn-visualizar">
+                            <button className="perfil-btn-visualizar" onClick={() => setSituacao(true)}>
                                 <img src={icon_olho} alt="Visualizar" />
                             </button>
                         </div>
-
-                        <div className="card-perfil">
+                        <div className="perfil-card-perfil">
                             <h3>Formação Acadêmica</h3>
                             <ul>
                                 <li>Técnico em Informática</li>
                                 <li>ADS (cursando)</li>
                             </ul>
-                            <button className="btn-visualizar">
+                            <button className="perfil-btn-visualizar">
                                 <img src={icon_olho} alt="Visualizar" />
                             </button>
                         </div>
-
-                        <div className="card-perfil">
+                        <div className="perfil-card-perfil">
                             <h3>Cursos Complementares</h3>
                             <ul>
                                 <li>Power BI</li>
                                 <li>Excel</li>
                             </ul>
-                            <button className="btn-visualizar">
+                            <button className="perfil-btn-visualizar">
                                 <img src={icon_olho} alt="Visualizar" />
                             </button>
                         </div>
-
-                        <div className="card-perfil">
+                        <div className="perfil-card-perfil">
                             <h3>Idiomas</h3>
                             <ul>
                                 <li>Português</li>
                                 <li>Inglês B1</li>
                             </ul>
-                            <button className="btn-visualizar">
+                            <button className="perfil-btn-visualizar">
                                 <img src={icon_olho} alt="Visualizar" />
                             </button>
                         </div>
-
-                        <div className="card-perfil card-largo">
+                    </div>
+                    <div className="perfil-cards-inferiores">
+                        <div className="perfil-card-perfil">
                             <h3>Soft Skills</h3>
                             <ul>
                                 <li>Comunicação</li>
                                 <li>Trabalho em equipe</li>
                             </ul>
-                            <button className="btn-visualizar">
+                            <button className="perfil-btn-visualizar">
                                 <img src={icon_olho} alt="Visualizar" />
                             </button>
                         </div>
-
-                        <div className="card-perfil card-largo">
+                        <div className="perfil-card-perfil">
                             <h3>Competências</h3>
                             <ul>
                                 <li>Análise de dados</li>
                                 <li>Gestão de projetos</li>
                             </ul>
-                            <button className="btn-visualizar">
+                            <button className="perfil-btn-visualizar">
                                 <img src={icon_olho} alt="Visualizar" />
                             </button>
                         </div>
-
                     </div>
-
                 </section>
             </main>
         </>
