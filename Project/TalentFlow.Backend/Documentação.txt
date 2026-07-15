@@ -45,4 +45,15 @@ src/
 ├── config/       4
 └── server.ts     1
 
+PRISMA TEM QUE ESTAR NA 6.19
+
+iniciar com esse comandos 
+npm i
+npx generate
+
+não esqueca do:
+ .env
+
+ http://localhost:8080/api/auth(rounters)/registerUser(auth na router)
+
 
