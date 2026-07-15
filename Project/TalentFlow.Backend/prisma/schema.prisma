@@ -13,6 +13,55 @@ datasource db {
   // url = env("DATABASE_URL")
 }
 
+enum NomeSetor {
+  ENGENHARIA
+  BDO
+  TEF
+  BD
+  RH
+  COMPRAS
+  BICO
+  CRIN
+  LOGISTICA
+  QMM
+  TOTO
+  IMPACT
+  FERRAMENTARIA
+  PRODUÇÃO
+  BPS
+  ETS
+  HSE
+  ESPAÇO_SAÚDE
+}
+
+enum NomeSoftskills {
+  COMUNICACAO
+  TRABALHO_EM_EQUIPE
+  LIDERANCA
+  EMPATIA
+  PROATIVIDADE
+  RESOLUCAO_DE_PROBLEMAS
+  PENSAMENTO_CRITICO
+  GESTAO_DO_TEMPO
+  ORGANIZACAO
+  CRIATIVIDADE
+  NEGOCIACAO
+  RESILIENCIA
+  ESCUTA_ATIVA
+  RESPONSABILIDADE
+  AUTONOMIA
+  APRENDIZADO_CONTINUO
+  INOVACAO
+  ORATORIA
+  COMPROMETIMENTO
+}
+
+enum NivelCompetencia {
+  BÁSICO
+  INTERMEDIARIO
+  AVANÇADO
+}
+
 enum NivelIdioma {
   BASICO
   INTERMEDIARIO
@@ -32,7 +81,7 @@ enum TipoUser {
   INSTRUTOR
 }
 
-enum Idioma                                                                                                                                                                                                                                                                                                       {
+enum Idioma {
   ALEMAO
   ARABE
   COREANO
@@ -44,10 +93,6 @@ enum Idioma                                                                     
   MANDARIM
   RUSSO
   TAILANDES
-}
-enum statusAcademico {
-  CONCLUIDO
-  CURSANDO
 } 
 enum statusCurso {
   CONCLUIDO
@@ -131,7 +176,7 @@ model Formacao_Academica {
   Id_Profile       Int
   profile          Profile       @relation(fields: [Id_Profile], references: [id])
   name_Curso       String
-  status_Academico String // enun
+  status_Academico statusCurso // enun
   nivel_formacao   NivelFormacao
   periodo_Atual    Int
   total_Periodo    Int
@@ -142,7 +187,7 @@ model Idiomas {
   id           Int         @id @default(autoincrement())
   Id_Profile   Int
   profile      Profile     @relation(fields: [Id_Profile], references: [id])
-  nome_Idioma  String // enun
+  nome_Idioma  Idioma 
   nivel_Idioma NivelIdioma
 }
 
@@ -151,7 +196,7 @@ model Cursos {
   Id_Profile     Int
   profile        Profile  @relation(fields: [Id_Profile], references: [id])
   name_Curso     String
-  status_Cursos  String // enun
+  status_Cursos  statusCurso 
   data_Conclusao DateTime
   carga_horaria  Int
 }
