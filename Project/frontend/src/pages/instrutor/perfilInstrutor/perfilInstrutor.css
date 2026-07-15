@@ -20,17 +20,19 @@
 }
 
 .perfil-form {
+    margin-top: 10px;
     display: flex;
     flex-direction: column;
     position: relative;
-    min-height: 45rem;
-    height: auto;
-    width: 50%;
+    width: 90%;
     max-width: 800px;
-    padding: 20px;
-    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
-    border-radius: 15px;
+    min-height: 45rem;
+    max-height: 90vh;
+    padding: clamp(20px, 3vw, 35px);
     background-color: white;
+    border-radius: 15px;
+    overflow-y: auto;
+    box-shadow:rgba(60, 64, 67, 0.3) 0px 1px 2px,rgba(60, 64, 67, 0.15) 0px 2px 6px;
 }
 
 .perfil-form button {
@@ -62,9 +64,10 @@
 .perfil-titulo {
     display: flex;
     align-items: center;
-    font-weight: bold;
-    font-size: 3.5rem;
     font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+    font-size: clamp(1.7rem, 5vw, 3.5rem);
+    word-break: break-word;
 }
 
 .perfil-conteudo {
