@@ -3,6 +3,27 @@ import AprendizService from "../Services/AprendizService.ts";
 
 export default class aprendizController {
 
+    static async criar(req: Request, res: Response) {
+
+    try {
+
+        const aprendiz = await AprendizService.criar(req.body);
+
+        return res.status(201).json({
+            message: "Aprendiz vinculado à turma com sucesso!",
+            data: aprendiz
+        });
+
+    } catch(error) {
+
+        return res.status(500).json({
+            message: error instanceof Error
+                ? error.message
+                : "Erro interno do servidor"
+        });
+
+    }
+}
 
     static async delete(req: Request, res: Response) {
 

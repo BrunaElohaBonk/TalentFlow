@@ -1,6 +1,21 @@
 import { prisma } from "../lib/prisma.js";
 
 export default class AprendizService {
+    static async criar(data: {
+    EDV: number;
+    Id_Turma: number;
+}) {
+    return await prisma.aprendiz.create({
+        data: {
+            EDV: data.EDV,
+            Id_Turma: data.Id_Turma
+        },
+        include: {
+            user: true,
+            turmas: true
+        }
+    });
+}
 
     static async delete(EDV: number) {
         return await prisma.aprendiz.delete({
@@ -333,17 +348,6 @@ static async filtrarTudo(filtros: any) {
                             some: {
                                 name_Curso: {
                                     contains: String(curso)
-                                }
-                            }
-                        }
-                        : undefined,
-
-
-                    idiomas: idioma
-                        ? {
-                            some: {
-                                nome_Idioma: {
-                                    contains: String(idioma)
                                 }
                             }
                         }

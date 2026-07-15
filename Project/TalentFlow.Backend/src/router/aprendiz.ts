@@ -5,6 +5,7 @@ const route = express.Router();
 
 route
     .delete('/deletarAprendiz/:EDV', AprendizController.delete)
+    .post('/associarAprendiz/', AprendizController.criar)
 
     .put('/atualizarPerfil/:EDV/:id', AprendizController.atualizarPerfil)
     .put('/atualizarPerfil/formacaoAcademica/:EDV/:id',AprendizController.atualizarFormacaoAcademica)
