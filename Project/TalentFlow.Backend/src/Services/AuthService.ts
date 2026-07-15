@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import {prisma} from "../lib/prisma.ts";
 import { AdicionarUserDto, EsqueceuSenhaDto, LoginDto, RedefinirSenhaDto } from "../DTO/authDTO.ts";
-import { Prisma } from "../generated/prisma/client.ts";
+import { PrismaClient } from "@prisma/client";
 
 
 export class UserJaExisteError extends Error {
@@ -86,15 +86,13 @@ export class UserService {
           password_login: passwordCrypt,
         },
       });
-    } catch (error) {
-      if (
-        error instanceof Prisma.PrismaClientKnownRequestError &&
-        error.code === "P2002"
-      ) {
-        throw new UserJaExisteError();
-      }
-      throw error;
-    }
+    } catch (error: any) {
+  if (error.code === "P2002") {
+    throw new UserJaExisteError();
+  }
+
+  throw error;
+}
   }
   static async login(data: LoginDto): Promise<LoginResult> {
     const user = await prisma.user.findUnique({ where: { EDV: data.EDV } });

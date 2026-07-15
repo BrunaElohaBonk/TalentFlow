@@ -4,13 +4,12 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "mysql"
-  // url = env("DATABASE_URL")
+  url = env("DATABASE_URL")
 }
 
 enum NomeSetor {
@@ -27,11 +26,11 @@ enum NomeSetor {
   TOTO
   IMPACT
   FERRAMENTARIA
-  PRODUÇÃO
+  PRODUCAO
   BPS
   ETS
   HSE
-  ESPAÇO_SAÚDE
+  ESPAÇO_SAUDE
 }
 
 enum NomeSoftskills {
@@ -57,7 +56,7 @@ enum NomeSoftskills {
 }
 
 enum NivelCompetencia {
-  BÁSICO
+  BASICO
   INTERMEDIARIO
   AVANÇADO
 }

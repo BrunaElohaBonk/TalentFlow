@@ -1,6 +1,4 @@
-import { Prisma } from "@prisma/client"
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import {prisma} from "../lib/prisma.ts";
+import { prisma } from "../lib/prisma.ts";
 import { EditarTurmaDTO } from "../DTO/turmaDTO.ts";
 
 export class TurmaNotFoundError extends Error {
@@ -22,14 +20,20 @@ export class TurmaService {
 
   static async listarTodas() {
     return prisma.turma.findMany({
-      include: { user: true, aprendiz: true },
+      include: {
+        user: true,
+        aprendiz: true,
+      },
     });
   }
 
   static async buscarPorId(id: number) {
     const turma = await prisma.turma.findUnique({
       where: { id },
-      include: { user: true, aprendiz: true },
+      include: {
+        user: true,
+        aprendiz: true,
+      },
     });
 
     if (!turma) {
@@ -39,27 +43,34 @@ export class TurmaService {
     return turma;
   }
 
-  static async atualizar(id: number, data: EditarTurmaDTO ) {
+  static async atualizar(id: number, data: EditarTurmaDTO) {
     try {
-      return await prisma.turma.update({ where: { id }, data:{
-        name_Curso: data.curso
-      } });
-    } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError && error.code === "P2025") {
-        throw new TurmaNotFoundError();
-      }
-      throw error;
-    }
+      return await prisma.turma.update({
+        where: { id },
+        data: {
+          name_Curso: data.curso,
+        },
+      });
+    } catch (error: any) {
+  if (error.code === "P2025") {
+    throw new TurmaNotFoundError();
+  }
+
+  throw error;
+}
   }
 
   static async deletar(id: number): Promise<void> {
     try {
-      await prisma.turma.delete({ where: { id } });
-    } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError && error.code === "P2025") {
-        throw new TurmaNotFoundError();
-      }
-      throw error;
+      await prisma.turma.delete({
+        where: { id },
+      });
+    } catch (error: any) {
+  if (error.code === "P2025") {
+    throw new TurmaNotFoundError();
+  }
+
+  throw error;
     }
   }
 }
