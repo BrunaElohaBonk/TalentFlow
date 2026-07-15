@@ -90,10 +90,10 @@ function CadTurma() {
                     <form onSubmit={handleSubmit} className="cadTurma-form">
                         <span className="cadTurma-titulo">Cadastrar Turma</span>
                         <div className="cadTurma-conteudo">
-                            <input name="name" placeholder="Nome da Turma" value={turma.name} onChange={handleChange} className="editar-input"/>
-                            <input name="course" placeholder="Curso" value={turma.course} onChange={handleChange} className="editar-input"/>
-                            <input name="edvInstrutor" type="number" placeholder="EDV do Instrutor" value={turma.edvInstrutor} onChange={handleChange} className="editar-input"/>
-                            <input name="instrutor" placeholder="Nome do Instrutor" value={turma.instrutor} onChange={handleChange} className="editar-input"/>
+                            <input name="name" placeholder="Nome da Turma" value={turma.name} onChange={handleChange} className="cadTurma-input"/>
+                            <input name="course" placeholder="Curso" value={turma.course} onChange={handleChange} className="cadTurma-input"/>
+                            <input name="edvInstrutor" type="number" placeholder="EDV do Instrutor" value={turma.edvInstrutor} onChange={handleChange} className="cadTurma-input"/>
+                            <input name="instrutor" placeholder="Nome do Instrutor" value={turma.instrutor} onChange={handleChange} className="cadTurma-input"/>
                         </div>
                         <div className="cadTurma-button">
                             <button type="submit" className="cadTurma-salvar">CONFIRMAR</button>

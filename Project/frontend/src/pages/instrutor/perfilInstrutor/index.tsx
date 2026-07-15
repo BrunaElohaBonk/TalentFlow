@@ -1,8 +1,9 @@
 import Header from "../../../components/header"
 import Sidebar from "../../../components/sidebar"
+import EditarPerfil from "../../auth/editarPerfil"
 import "./perfilInstrutor.css"
 import { useNavigate } from "react-router-dom"
-import editar from './../../../assets/img/icon_editar.png'
+import icon_editar from './../../../assets/img/icon_editar.png'
 import user from '../../../assets/img/icon_user.png'
 import { useEffect, useState } from "react"
 import axios from "axios"
@@ -18,7 +19,7 @@ interface IPerfil {
 }
 
 function PerfilInstrutor(){
-
+    const [editar, setEditar] = useState(false)
     const [perfil, setPerfil] = useState<IPerfil>({
         edv: 12345678,
         img: "foto.png",
@@ -52,12 +53,13 @@ function PerfilInstrutor(){
     return(
         <div>
             <Header></Header>
+            <EditarPerfil visible={editar} setVisible={setEditar} edv={perfil.edv}/>
             <div className="perfil-container">
                 <Sidebar></Sidebar>
                 <div className="perfil-body">   
                     <div className="perfil-form">
-                        <button onClick={()=> navigate(`/Editar/${perfil.edv}`)}>
-                            <img src={editar} alt="editar" className="perfil-editar"/>
+                        <button onClick={()=> setEditar(true)}>
+                            <img src={icon_editar} alt="editar" className="perfil-editar"/>
                         </button>
                         <div className="perfil-header">
                             <img src={user} alt="user" className="perfil-user"/>

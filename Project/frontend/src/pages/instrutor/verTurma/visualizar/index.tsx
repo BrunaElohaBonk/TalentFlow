@@ -1,4 +1,5 @@
 import './visualizar.css'
+import fechar from '../../../../assets/img/close.png'
 
 interface ITurma {
     id: number;
@@ -15,52 +16,28 @@ interface Props {
 }
 
 function VisualizarTurma({ visible, setVisible, turma }: Props) {
-
     if (!visible || !turma) return null;
-
     return (
         <div className="visualizar-overlay">
             <div className="visualizar-card">
-
-                <button
-                    className="visualizar-fechar"
-                    onClick={() => setVisible(false)}
-                >
-                    ✕
+                <button className="visualizar-fechar" onClick={() => setVisible(false)}>
+                    <img src={fechar} alt="fechar" />
                 </button>
-
-                <h1 className="visualizar-titulo">
-                    {turma.nome}
-                </h1>
-
+                <h1 className="visualizar-titulo">{turma.nome}</h1>
                 <div className="visualizar-conteudo">
-
                     <div className="visualizar-linha">
-                        <span className="visualizar-label">Curso</span>
-                        <span className="visualizar-valor">{turma.curso}</span>
+                        <span className="visualizar-label">Curso: {turma.curso}</span>
                     </div>
-
                     <div className="visualizar-linha">
-                        <span className="visualizar-label">Instrutor</span>
-                        <span className="visualizar-valor">{turma.instrutorNome}</span>
+                        <span className="visualizar-label">Instrutor: {turma.instrutorNome}</span>
                     </div>
-
                     <div className="visualizar-linha">
-                        <span className="visualizar-label">EDV</span>
-                        <span className="visualizar-valor">{turma.instrutorEdv}</span>
-                    </div>
+                        <span className="visualizar-label">EDV: {turma.instrutorEdv}</span>
 
+                    </div>
                 </div>
-
-                <button
-                    className="visualizar-botao"
-                    onClick={() => setVisible(false)}
-                >
-                    Fechar
-                </button>
-
             </div>
-    </div>
+        </div>
     );
 }
 

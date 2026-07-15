@@ -41,4 +41,11 @@ export const turmas = [
         instrutorEdv: 67890123,
         instrutorNome: "Rafael Henrique Costa",
     },
+    {
+        id: 7,
+        nome: "DTA3 - Turma G",
+        curso: "Soluções Digitais",
+        instrutorEdv: 12345678,
+        instrutorNome: "Maria Joaquina Silveira",
+    }
 ];

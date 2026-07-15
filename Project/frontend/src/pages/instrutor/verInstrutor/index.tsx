@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import Header from "../../../components/header"
 import Sidebar from "../../../components/sidebar"
 import './verInstrutor.css'
-import { useNavigate } from "react-router-dom"
 import axios from "axios"
 import Swal from "sweetalert2"
 import lixeira from '../../../assets/img/lixeira.png'
@@ -13,44 +12,28 @@ import lupa from '../../../assets/img/pesquisar.png'
 import { usuarios } from './users'
 
 function VerInstrutor(){
-    const [busca, setBusca] = useState("");
-    const [instrutor, setInstrutor] = useState(usuarios[0]);
     const [indiceAtual, setIndiceAtual] = useState(0);
-    const pesquisar = () => {
+    const [busca, setBusca] = useState("");
+    const instrutoresFiltrados = usuarios.filter((item) => {
         const termo = busca.toLowerCase().trim();
-        const encontrado = usuarios.find((item) =>
-            item.edv.toString().includes(termo) ||
+        return (
             item.name.toLowerCase().includes(termo) ||
-            item.email.toLowerCase().includes(termo)
+            item.email.toLowerCase().includes(termo) ||
+            item.edv.toString().includes(termo)
         );
-        if (!encontrado) {
-            Swal.fire({
-                title: "Atenção!",
-                text: "Nenhum instrutor encontrado.",
-                icon: "warning",
-            });
-            return;
-        }
-        const novoIndice = usuarios.findIndex(
-            (item) => item.edv === encontrado.edv
-        );
-        setInstrutor(encontrado);
-        setIndiceAtual(novoIndice);
-    };
+    });
+    const instrutor =  instrutoresFiltrados[indiceAtual];
     const proximoInstrutor = () => {
-        if (indiceAtual < usuarios.length - 1) {
-            const novoIndice = indiceAtual + 1;
-            setIndiceAtual(novoIndice);
-            setInstrutor(usuarios[novoIndice]);
-        }
+        if (instrutoresFiltrados.length === 0) return;
+        setIndiceAtual((atual) =>
+            atual === instrutoresFiltrados.length - 1 ? 0 : atual + 1
+        );
     };
-
     const instrutorAnterior = () => {
-        if (indiceAtual > 0) {
-            const novoIndice = indiceAtual - 1;
-            setIndiceAtual(novoIndice);
-            setInstrutor(usuarios[novoIndice]);
-        }
+        if (instrutoresFiltrados.length === 0) return;
+        setIndiceAtual((atual) =>
+            atual === 0 ? instrutoresFiltrados.length - 1 : atual - 1
+        );
     };
 
     // const fetchInstrutor = async () => {
@@ -64,9 +47,6 @@ function VerInstrutor(){
     //         setInstrutor(null);
     //     }
     // };
-    // useEffect(() => {
-    //     fetchInstrutor();
-    // }, []);
 
     const handleDelete = async (edv) => {
         const confirm = await Swal.fire({
@@ -106,30 +86,24 @@ function VerInstrutor(){
                 <div className="instrutor-body">
                     <div className="instrutor-pesquisa">
                         <input type="text" className="instrutor-input" placeholder="Pesquisar..." value={busca} onChange={(e) => setBusca(e.target.value)}/>
-                        <button type="button" className="instrutor-button-pesquisar" onClick={pesquisar}>
-                            <img src={lupa} alt="lupa" className="img-lupa"/>
-                        </button>
+                        <button type="button" className="instrutor-button-pesquisar"><img src={lupa} alt="lupa" className="img-lupa"/></button>
                     </div>
                     <div className="instrutor-card-area">
-                        <button className="instrutor-seta-btn instrutor-esquerda" onClick={instrutorAnterior}>
-                            <img src={esquerda} alt="esquerda" className="instrutor-seta"/>
-                        </button>
-                        <div className="instrutor-modal">
-                            <button className="instrutor-btn-delete" onClick={() => handleDelete(instrutor.edv)}>
-                                <img src={lixeira} alt="deletar" className="instrutor-deletar"/>
-                            </button>
-                            <div className="instrutor-header">
-                                <img src={user} alt="user" className="instrutor-img"/>
-                                <span className="instrutor-titulo">{instrutor?.name}</span>
+                        <button className="instrutor-seta-btn instrutor-esquerda" onClick={instrutorAnterior}><img src={esquerda} alt="esquerda" className="instrutor-seta"/></button>
+                        {instrutor? (
+                            <div className="instrutor-modal">
+                                <button className="instrutor-btn-delete" onClick={() => handleDelete(instrutor.edv)}><img src={lixeira} alt="deletar" className="instrutor-deletar"/></button>
+                                <div className="instrutor-header">
+                                    <img src={user} alt="user" className="instrutor-img"/>
+                                    <span className="instrutor-titulo">{instrutor?.name}</span>
+                                </div>
+                                <div className="instrutor-conteudo">
+                                    <span className="instrutor-span">EDV: {instrutor?.edv}</span>
+                                    <span className="instrutor-span">Email: {instrutor?.email}</span>
+                                </div>
                             </div>
-                            <div className="instrutor-conteudo">
-                                <span className="instrutor-span">EDV: {instrutor?.edv}</span>
-                                <span className="instrutor-span">Email: {instrutor?.email}</span>
-                            </div>
-                        </div>
-                        <button className="instrutor-seta-btn instrutor-direita" onClick={proximoInstrutor}>
-                            <img src={direita} alt="direita" className="instrutor-seta"/>
-                        </button>
+                        ):(<div className="instrutor-titulo"><p>Nenhum instrutor encontrado.</p></div>)}
+                        <button className="instrutor-seta-btn instrutor-direita" onClick={proximoInstrutor}><img src={direita} alt="direita" className="instrutor-seta"/></button>
                     </div>
                 </div>
             </div>
