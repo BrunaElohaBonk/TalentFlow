@@ -17,12 +17,17 @@ function VerTurma(){
     const [editar, setEditar] = useState(false);
     const [turmaSelecionada, setTurmaSelecionada] = useState<any>(null);
     const [busca, setBusca] = useState("");
-    const turmasFiltradas = turmas.filter((item) => {
-        const termo = busca.toLowerCase().trim();
+    const normalizar = (texto: string) =>
+    texto
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase();
+    const filtro = turmas.filter((item) => {
+        const termo = normalizar(busca.trim());
         return (
-            item.nome.toLowerCase().includes(termo) ||
-            item.curso.toLowerCase().includes(termo) ||
-            item.instrutorNome.toLowerCase().includes(termo) ||
+            normalizar(item.nome).includes(termo) ||
+            normalizar(item.curso).includes(termo) ||
+            normalizar(item.instrutorNome).includes(termo) ||
             item.instrutorEdv.toString().includes(termo)
         );
     });
@@ -82,8 +87,8 @@ function VerTurma(){
                         <button type="button"className="turma-button-pesquisar"> <img src={lupa} alt="Pesquisar" className="img-lupa"/></button>
                     </div>
                     <div className="turma-modal">
-                        {turmasFiltradas.length === 0 ? (<p className="turma-vazia">Nenhuma turma encontrada.</p>) : (
-                            turmasFiltradas.map((item) => (
+                        {filtro.length === 0 ? (<p className="turma-vazia">Nenhuma turma encontrada.</p>) : (
+                            filtro.map((item) => (
                                 <div className="turma-item" key={item.id}>
                                     <span className="turma-titulo">{item.nome}</span>
                                     <div className="turma-acoes">

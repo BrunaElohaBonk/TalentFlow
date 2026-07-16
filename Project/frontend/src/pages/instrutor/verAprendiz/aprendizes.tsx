@@ -272,5 +272,59 @@ export const aprendizes = [
       { nome: "AutoCAD", nivel: "Intermediário" },
       { nome: "CLP", nivel: "Básico" }
     ]
-  }
+  },
+  {
+    perfil: {
+        edv: 12345683,
+        img: "leticia.png",
+        nome: "Letícia Burlinski",
+        email: "leticia.burlinski@br.bosch.com",
+        user: "LBU6CT",
+        contato: 41996789012,
+        nascimento: new Date("2008-03-14"),
+        turma: "Automação Industrial - Turma C"
+    },
+    situacaoProfissional: {
+        nomeSetor: "Logística",
+        nomeLider: "Fernanda Oliveira",
+        cumprindoEstagio: true,
+        descricaoEstagio: "Apoio no controle de materiais, organização de estoque e acompanhamento de indicadores logísticos."
+    },
+    formacaoAcademica: [
+        {
+        nomeCurso: "Logística",
+        instituicao: "SENAI CIC",
+        status: true,
+        periodoAtual: 3,
+        totalPeriodos: 4,
+        nivelFormacao: "Técnico",
+        descricaoCurso: "Planejamento, armazenagem, movimentação de materiais e gestão da cadeia de suprimentos."
+        }
+    ],
+    cursosComplementares: [
+        {
+        nomeCurso: "Excel Intermediário",
+        status: true,
+        dataConclusao: new Date("2025-11-20"),
+        cargaHoraria: 30,
+        descricaoCurso: "Funções, tabelas dinâmicas, gráficos e organização de dados.",
+        certificado: "excel_intermediario.pdf"
+        }
+    ],
+    idiomas: [
+        {
+        idioma: "Inglês",
+        nivel: "Intermediário",
+        certificado: "ingles.pdf"
+        }
+    ],
+    softskills: [
+        { nome: "Organização" },
+        { nome: "Comunicação" }
+    ],
+    competencias: [
+        { nome: "Excel", nivel: "Avançado" },
+        { nome: "SAP", nivel: "Básico" }
+    ]
+    }
 ];
