@@ -21,29 +21,23 @@
 }
 
 .instrutor-card-area {
-    position: relative;
     width: 100%;
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(200px, 1fr));
+    gap: 50px;
+    padding: 0 150px;
 }
-
 
 .instrutor-modal {
     position: relative;
-    display: flex;
-    flex-direction: column;
-    width: 90%;
-    max-width: 600px;
-    max-height: 85vh;
-    overflow-y: auto;
-    padding: clamp(20px, 4vw, 40px);
-    background-color: white;
+    width: 100%;
+    max-width: 400px;
+    min-height: 200px;
+    padding: 30px;
+    background: white;
     border-radius: 15px;
-    box-shadow:rgba(60,64,67,0.3) 0px 1px 2px 0px,rgba(60,64,67,0.15) 0px 2px 6px 2px;
+    box-shadow: rgba(60,64,67,.3) 0 1px 2px,rgba(60,64,67,.15) 0 2px 6px;
 }
-
 .instrutor-btn-delete {
     position: absolute;
     top: 20px;
@@ -63,21 +57,21 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin: 20px 0 40px;
-    gap: 15px;
+    margin: 20px 0 10px;
+    gap: 10px;
 }
 
 .instrutor-img {
-    width: clamp(100px, 20vw, 200px);
-    height: clamp(100px, 20vw, 200px);
+    width: clamp(50px, 10vw, 150px);
+    height: clamp(50px, 10vw, 150px);
     border-radius: 50%;
     object-fit: cover;
 }
 
 .instrutor-titulo {
     font-family: 'Poppins', sans-serif;
-    font-size: 2rem;
-    font-weight: 600;
+    font-size: 1.5rem;
+    font-weight: bold;
     text-align: center;
 }
 
@@ -85,39 +79,15 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    width: fit-content;   
-    margin: 0 auto;    
-    gap: 15px;
+    width: fit-content;
+    margin: 0 auto;
+    gap: 5px;
 }
 
 .instrutor-span {
-    width: 400px;
     color: #8a8a8a;
     font-family: 'Poppins', sans-serif;
-    font-size: clamp(0.9rem, 2vw, 1.2rem);
-}
-
-.instrutor-seta-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-}
-
-.instrutor-esquerda {
-    left: 5%;
-}
-
-.instrutor-direita {
-    right: 5%;
-}
-
-.instrutor-seta {
-    width: 50px;
-    height: 50px;
+    font-size: 0.9rem;
 }
 
 .instrutor-input {
@@ -156,4 +126,16 @@
 .img-lupa {
     width: 20px;
     height: 20px;
+}
+
+@media (max-width: 1100px){
+    .instrutor-card-area{
+        grid-template-columns: repeat(2,1fr);
+    }
+}
+
+@media (max-width: 700px){
+    .instrutor-card-area{
+        grid-template-columns: 1fr;
+    }
 }
