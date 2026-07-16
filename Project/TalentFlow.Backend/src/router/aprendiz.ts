@@ -1,33 +1,174 @@
-import express from 'express';
-import AprendizController from '../Controllers/AprendizController.js';
+import express from "express";
+
+import AprendizController from "../Controllers/AprendizController.js";
+
+
+import { authMiddleware } from "../Middlewares/authMiddleware.ts";
+import { roleMiddleware } from "../Middlewares/roleMiddleware.ts";
+import { ownerMiddleware } from "../Middlewares/ownerMiddleware.ts";
+import { notFoundMiddleware } from "../Middlewares/notFoundMiddleware.ts";
+
+
 
 const route = express.Router();
 
-route
-    .delete('/deletarAprendiz/:EDV', AprendizController.delete)
-    .post('/associarAprendiz/', AprendizController.criar)
 
-    .put('/atualizarPerfil/:EDV/:id', AprendizController.atualizarPerfil)
-    .put('/atualizarPerfil/formacaoAcademica/:EDV/:id',AprendizController.atualizarFormacaoAcademica)
-    .put('/atualizarPerfil/situacaoProfissional/:EDV/:id',AprendizController.atualizarSituacaoProfissional)
-    .put('/atualizarPerfil/softskills/:EDV/:id',AprendizController.atualizarSoftskills)
-    .put('/atualizarPerfil/competencias/:EDV/:id',AprendizController.atualizarCompetencias)
-    .put('/atualizarPerfil/idiomas/:EDV/:id',AprendizController.atualizarIdiomas)
-    .put('/atualizarPerfil/cursos/:EDV/:id',AprendizController.atualizarCursos)
 
-    .get('/verPerfil/:EDV/:id',AprendizController.verPerfil)
-    .get('/verPerfil/formacaoAcademica/:EDV/:id',AprendizController.verFormacaoAcademica)
-    .get('/verPerfil/situacaoProfissional/:EDV/:id',AprendizController.verSituacaoProfissional)
-    .get('/verPerfil/softskills/:EDV/:id',AprendizController.verSoftskills)
-    .get('/verPerfil/competencias/:EDV/:id',AprendizController.verCompetencias)
-    .get('/verPerfil/idiomas/:EDV/:id',AprendizController.atualizarIdiomas)
-    .get('/verPerfil/cursos/:EDV/:id',AprendizController.verCursos)
+route.post(
+    "/associarAprendiz",
+    authMiddleware,
+    roleMiddleware("INSTRUTOR"),
+    AprendizController.criar
+    
+);
 
-    .get('/filtrarAprendizes/todos',AprendizController.filtrarApredizDashboart)
-    .get('/filtrarAprendizes/turma',AprendizController.filtrarTudoAprendiz);
+
+
+route.delete(
+    "/deletarAprendiz/:EDV",
+    authMiddleware,
+    roleMiddleware("INSTRUTOR"),
+    AprendizController.delete
+);
+
+
+route.put(
+    "/atualizarPerfil/:EDV/:id",
+    authMiddleware,
+    roleMiddleware("APRENDIZ"),
+    ownerMiddleware,
+    AprendizController.atualizarPerfil
+);
+
+
+route.put(
+    "/atualizarPerfil/formacaoAcademica/:EDV/:id",
+    authMiddleware,
+    roleMiddleware("APRENDIZ"),
+    ownerMiddleware,
+    AprendizController.atualizarFormacaoAcademica
+);
+
+
+route.put(
+    "/atualizarPerfil/situacaoProfissional/:EDV/:id",
+    authMiddleware,
+    roleMiddleware("APRENDIZ"),
+    ownerMiddleware,
+    AprendizController.atualizarSituacaoProfissional
+);
+
+
+route.put(
+    "/atualizarPerfil/softskills/:EDV/:id",
+    authMiddleware,
+    roleMiddleware("APRENDIZ"),
+    ownerMiddleware,
+    AprendizController.atualizarSoftskills
+);
+
+
+route.put(
+    "/atualizarPerfil/competencias/:EDV/:id",
+    authMiddleware,
+    roleMiddleware("APRENDIZ"),
+    ownerMiddleware,
+    AprendizController.atualizarCompetencias
+);
+
+
+route.put(
+    "/atualizarPerfil/idiomas/:EDV/:id",
+    authMiddleware,
+    roleMiddleware("APRENDIZ"),
+    ownerMiddleware,
+    AprendizController.atualizarIdiomas
+);
+
+
+route.put(
+    "/atualizarPerfil/cursos/:EDV/:id",
+    authMiddleware,
+    roleMiddleware("APRENDIZ"),
+    ownerMiddleware,
+    AprendizController.atualizarCursos
+);
+
+
+
+
+
+route.get(
+    "/verPerfil/:EDV/:id",
+    authMiddleware,
+    roleMiddleware("APRENDIZ", "INSTRUTOR"),
+    AprendizController.verPerfil
+);
+
+
+route.get(
+    "/verPerfil/formacaoAcademica/:EDV/:id",
+    authMiddleware,
+    roleMiddleware("APRENDIZ", "INSTRUTOR"),
+    AprendizController.verFormacaoAcademica
+);
+
+
+route.get(
+    "/verPerfil/situacaoProfissional/:EDV/:id",
+    authMiddleware,
+    roleMiddleware("APRENDIZ", "INSTRUTOR"),
+    AprendizController.verSituacaoProfissional
+);
+
+
+route.get(
+    "/verPerfil/softskills/:EDV/:id",
+    authMiddleware,
+    roleMiddleware("APRENDIZ", "INSTRUTOR"),
+    AprendizController.verSoftskills
+);
+
+
+route.get(
+    "/verPerfil/competencias/:EDV/:id",
+    authMiddleware,
+    roleMiddleware("APRENDIZ", "INSTRUTOR"),
+    AprendizController.verCompetencias
+);
+
+
+route.get(
+    "/verPerfil/idiomas/:EDV/:id",
+    authMiddleware,
+    roleMiddleware("APRENDIZ", "INSTRUTOR"),
+    AprendizController.verIdiomas
+);
+
+
+route.get(
+    "/verPerfil/cursos/:EDV/:id",
+    authMiddleware,
+    roleMiddleware("APRENDIZ", "INSTRUTOR"),
+    AprendizController.verCursos
+);
+
+
+route.get(
+    "/filtrarAprendizes/todos",
+    authMiddleware,
+    roleMiddleware("INSTRUTOR"),
+    AprendizController.filtrarApredizDashboart
+);
+
+
+route.get(
+    "/filtrarAprendizes/turma",
+    authMiddleware,
+    roleMiddleware("INSTRUTOR"),
+    AprendizController.filtrarTudoAprendiz
+);
+
 
 export default route;
 
-// localhost:8080/aprendiz/verPerfil/92906822/3
-// 47 aprendiz
-// 59 instrutor
