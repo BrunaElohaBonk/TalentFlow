@@ -37,13 +37,13 @@ GET e PUT para cada informação que compõe o perfil
 
 
 src/
-├── controllers/  3
-├── services/     4
+├── controllers/  3 tem
+├── services/     4 tem
 ├── models/       4
-├── routes/       2
+├── routes/       2 tem
 ├── middlewares/  5 
 ├── config/       4
-└── server.ts     1
+└── server.ts     1 tem
 
 PRISMA TEM QUE ESTAR NA 6.19
 
@@ -57,3 +57,15 @@ não esqueca do:
  http://localhost:8080/api/auth(rounters)/registerUser(auth na router)
 
 
+src/
+├── config/
+│   ├── prisma.ts
+│   ├── env.ts
+│   └── jwt.ts
+├── Controllers/ ok
+├── DTO/ ok
+├── Middlewares/
+├── Routes/ ok
+├── Services/ ok
+├── Utils/
+└── server.ts ok 

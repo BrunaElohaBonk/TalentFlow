@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { AdicionarUserDto } from "../DTO/userDTO.ts";
+import { AdicionarUserDto } from "../DTO/authDTO.ts";
 import InstrutorService from "../Services/InstrutorService.ts";
 
 
