@@ -22,13 +22,13 @@
 .notificacao-modal{
     width: 90%;
     max-width: 700px;
-    height: 80vh; /* tamanho fixo */
+    height: 80vh;
     padding: clamp(20px, 4vw, 40px);
     background: white;
     border-radius: 15px;
-    box-shadow: rgba(60,64,67,.3) 0 1px 2px,
-                rgba(60,64,67,.15) 0 2px 6px;
-    overflow-y: auto;
+    box-shadow: rgba(60,64,67,.3) 0 1px 2px, rgba(60,64,67,.15) 0 2px 6px;
+    display: flex;
+    flex-direction: column;
 }
 
 .notificacao-titulo{
@@ -36,12 +36,19 @@
     font-size: 2rem;
     font-weight: bold;
     text-align: center;
-    margin-bottom: 3%;
+    margin-bottom: 20px;
+    flex-shrink: 0;
+}
+
+.notificacao-lista{
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 5px;
 }
 
 .notificacao-card{
     display: flex;
-    flex-direction: column; /* coloca um embaixo do outro */
+    flex-direction: column; 
     gap: 8px;
     width: 100%;
     padding: 15px;

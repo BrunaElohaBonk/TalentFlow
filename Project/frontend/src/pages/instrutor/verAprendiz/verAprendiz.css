@@ -1,0 +1,165 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+.aprendiz-container {
+    display: flex;
+    min-height: 94vh;
+}
+
+.aprendiz-body {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+}
+
+.aprendiz-pesquisa {
+    position: relative;
+    width: 90%;
+    margin-bottom: 40px;
+}
+
+.aprendiz-card-area {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(200px, 1fr));
+    gap: 50px;
+    padding: 0 150px;
+}
+
+.aprendiz-modal {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    min-height: 200px;
+    padding: 20px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: rgba(60,64,67,.3) 0 1px 2px,rgba(60,64,67,.15) 0 2px 6px;
+}
+
+.aprendiz-btn-delete {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.aprendiz-deletar {
+    width: 20px;
+    height: 20px;
+}
+
+.aprendiz-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0 10px;
+    gap: 10px;
+}
+
+.aprendiz-img {
+    width: clamp(50px, 10vw, 150px);
+    height: clamp(50px, 10vw, 150px);
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.aprendiz-titulo {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.aprendiz-conteudo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: fit-content;
+    margin: 0 auto;
+    gap: 5px;
+}
+
+.aprendiz-span {
+    color: #8a8a8a;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+}
+
+.aprendiz-input {
+    width: 100%;
+    height: 40px;
+    border-radius: 15px;
+    border: 1px solid #D9D9D9;
+    padding: 0 45px 0 15px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    color: #8a8a8a;
+    transition: 0.25s;
+}
+
+.aprendiz-input::placeholder {
+    color: #8a8a8a;
+}
+
+.aprendiz-input:focus {
+    outline: none;
+    border-color: #2B83D5;
+    box-shadow: 0 0 5px rgba(43, 131, 213, .3);
+}
+
+.aprendiz-button-pesquisar {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.img-lupa {
+    width: 20px;
+    height: 20px;
+}
+
+.aprendiz-button {
+    width: 90%;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    margin-top: 5px;
+    align-self: center;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: .2s;
+    background: #2B83D5;
+    color: white;
+}
+
+.aprendiz-button:hover{
+    background:#3d96e9;
+    transform:scale(1.03);
+}
+
+@media (max-width: 1100px){
+    .aprendiz-card-area{
+        grid-template-columns: repeat(2,1fr);
+    }
+}
+
+@media (max-width: 700px){
+    .aprendiz-card-area{
+        grid-template-columns: 1fr;
+    }
+}
