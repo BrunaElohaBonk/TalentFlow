@@ -113,7 +113,7 @@ function EditarSituacaoProfissional({ visible, setVisible, edv }: Props) {
                             onChange={handleChange}
                         />
                     </div>
-                    <div className="editarSituacao-grupo">
+                    <div className="editarSituacao-grupo editarSituacao-radioGrupo">
                         <label className="editarSituacao-label">
                             Cumprindo estágio?
                         </label>
@@ -174,23 +174,13 @@ function EditarSituacaoProfissional({ visible, setVisible, edv }: Props) {
                         />
 
                     </div>
-
-
                     <div className="editarSituacao-botoes">
-
-                        <button 
-                            type="submit"
-                            className="editarSituacao-salvar"
-                        >
+                        <button type="submit" className="editarSituacao-salvar">
                             SALVAR MODIFICAÇÃO
                         </button>
-
                     </div>
-
                 </div>
-
             </form>
-
         </div>
     )
 }
