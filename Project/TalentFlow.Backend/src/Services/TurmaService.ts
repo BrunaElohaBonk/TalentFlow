@@ -1,5 +1,5 @@
 import { prisma } from "../lib/prisma.ts";
-import { EditarTurmaDTO } from "../DTO/turmaDTO.ts";
+import { CriarTurmaDTO, EditarTurmaDTO } from "../DTO/turmaDTO.ts";
 
 export class TurmaNotFoundError extends Error {
   constructor(message = "Turma não encontrada.") {
@@ -8,14 +8,9 @@ export class TurmaNotFoundError extends Error {
   }
 }
 
-interface CriarTurmaDto {
-  EDV_Instrutor: number;
-  name_Curso: string;
-}
-
 export class TurmaService {
-  static async criar(data: CriarTurmaDto) {
-    return prisma.turma.create({ data });
+  static async criar(data: CriarTurmaDTO) {
+    return prisma.turma.create({ data, });
   }
 
   static async listarTodas() {
@@ -48,7 +43,7 @@ export class TurmaService {
       return await prisma.turma.update({
         where: { id },
         data: {
-          name_Curso: data.curso,
+          name_Curso: data.name_Curso,
         },
       });
     } catch (error: any) {

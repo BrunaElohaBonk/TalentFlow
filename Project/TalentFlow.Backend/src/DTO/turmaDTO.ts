@@ -1,13 +1,13 @@
 export interface CriarTurmaDTO {
     nomeTurma:string;
-    curso:string;
-    edvInstrutor: number;
+    name_Curso:string;
+    EDV_Instrutor: number;
     nomeInstrutor: string;
 }
 
 export interface EditarTurmaDTO {
     nomeTurma:string;
-    curso:string;
-    edvInstrutor: number;
+    name_Curso:string;
+    EDV_Instrutor: number;
     nomeInstrutor: string;
 }

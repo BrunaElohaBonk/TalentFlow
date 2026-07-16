@@ -15,10 +15,10 @@ function handleTurmaError(error: unknown, res: Response) {
 export default class turmaController {
 
     static async criarTurma(req: Request, res: Response): Promise<void> {
-        const { EDV_Instrutor, name_Curso } = req.body;
+        const { EDV_Instrutor, name_Curso, nomeTurma,nomeInstrutor } = req.body;
     
         try {
-          const turma = await TurmaService.criar({ EDV_Instrutor, name_Curso });
+          const turma = await TurmaService.criar({ nomeTurma, name_Curso, nomeInstrutor, EDV_Instrutor  });
           res.status(201).json({ message: "Turma criada com sucesso!", turma });
         } catch (error) {
           handleTurmaError(error, res);
