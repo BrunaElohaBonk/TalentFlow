@@ -43,7 +43,7 @@ function VerTurma(){
     const handleDelete = async () => {
         const confirm = await Swal.fire({
             title: 'Tem certeza?',
-            text: 'A turma será deletado!',
+            text: 'A turma será deletada!',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Sim, deletar!',
@@ -54,7 +54,7 @@ function VerTurma(){
             try {
                 await axios.delete(`link backend/`)
                 Swal.fire({
-                    title: 'Deletado!',
+                    title: 'Deletada!',
                     text: 'Turma removida com sucesso!',
                     icon: 'success'
                 })
@@ -64,7 +64,7 @@ function VerTurma(){
                 console.error('Erro ao deletar:', error)
                 Swal.fire({
                     title: 'Erro!',
-                    text: 'Erro ao deletar instrutor',
+                    text: 'Erro ao deletar turma',
                     icon: 'error'
                 })
             }

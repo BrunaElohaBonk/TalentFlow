@@ -9,6 +9,7 @@ import Logout from '../../../components/logout/logout'
 import SituacaoProfissional from "../../../components/situacao_profissional";
 import EditarPerfil from '../../../components/editarPerfil'
 import EditarSituacaoProfissional from "../../../components/situacao_profissional/editar";
+import FormacaoAcademica from "../../../components/formacao_academica";
 
 interface Usuario {
     edv: number;
@@ -54,6 +55,7 @@ function Perfil() {
     const [situacao, setSituacao] = useState(false)
     const [editar, setEditar] = useState(false)
     const [editarSituacao, setEditarSituacao] = useState(false)
+    const [formacao_academica, setFormacaoAcademica] = useState(false)
 
     // TEMPORÁRIO - REMOVER NA INTEGRAÇÃO COM BACKEND
     // Os dados do usuário estão sendo recuperados do localStorage.
@@ -84,8 +86,9 @@ function Perfil() {
 
             <Logout visible={logout} setVisible={setLogout}/>
             <SituacaoProfissional visible={situacao} setVisible={setSituacao} setEditarSituacao={setEditarSituacao}/>
-            <EditarPerfil visible={editar} setVisible={setEditar}/>
+            <EditarPerfil visible={editar} setVisible={setEditar} edv={aprendiz.edv}/>
             <EditarSituacaoProfissional visible={editarSituacao} setVisible={setEditarSituacao} edv={aprendiz.edv}/>
+            <FormacaoAcademica visible={formacao_academica} setVisible={setFormacaoAcademica}/>
 
             <main className="perfil-tela">
                 <section className="perfil-bloco">
@@ -129,7 +132,7 @@ function Perfil() {
                                 <li>Técnico em Informática</li>
                                 <li>ADS (cursando)</li>
                             </ul>
-                            <button className="perfil-btn-visualizar">
+                            <button className="perfil-btn-visualizar" onClick={() => setFormacaoAcademica(true)}>
                                 <img src={icon_olho} alt="Visualizar" />
                             </button>
                         </div>
