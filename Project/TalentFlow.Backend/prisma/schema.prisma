@@ -116,9 +116,11 @@ model User {
 
 model Turma {
   id            Int        @id @default(autoincrement())
+  nomeTurma String
   EDV_Instrutor Int
   user          User       @relation(fields: [EDV_Instrutor], references: [EDV])
   name_Curso    String
+  nomeInstrutor  String
   aprendiz      Aprendiz[]
 }
 

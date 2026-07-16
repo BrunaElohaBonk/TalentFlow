@@ -49,7 +49,7 @@ PRISMA TEM QUE ESTAR NA 6.19
 
 iniciar com esse comandos 
 npm i
-npx generate
+npx prisma generate
 
 não esqueca do:
  .env
