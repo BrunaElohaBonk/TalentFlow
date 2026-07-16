@@ -19,7 +19,7 @@ route
         roleMiddleware("INSTRUTOR"),
 
         turmaController.criarTurma
-    )
+    ) // funcionou no postman sem middleware
 
 
 
@@ -31,7 +31,8 @@ route
         roleMiddleware("INSTRUTOR"),
 
         turmaController.verTurmas
-    )
+    ) // funcionou no postman sem middleware
+
 
 
 
@@ -43,7 +44,8 @@ route
         roleMiddleware("INSTRUTOR"),
 
         turmaController.buscarTurma
-    )
+    ) // funcionou no postman sem middleware
+
 
 
 
@@ -55,7 +57,7 @@ route
         roleMiddleware("INSTRUTOR"),
 
         turmaController.atualizarTurma
-    )
+    ) // funcionou no postman sem middleware
 
 
 
@@ -67,7 +69,7 @@ route
         roleMiddleware("INSTRUTOR"),
 
         turmaController.deletarTurma
-    )
+    ) // funcionou no postman sem middleware
 
 
 
