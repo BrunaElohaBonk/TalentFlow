@@ -53,10 +53,12 @@ function VerAprendiz(){
                 <Sidebar/>
                 <div className="aprendiz-body">
                     <div className="aprendiz-pesquisa">
-                        <input type="text" className="aprendiz-input" placeholder="Pesquisar..." value={busca} onChange={(e) => setBusca(e.target.value)}/>
-                        <button type="button" className="aprendiz-button-pesquisar"><img src={lupa} alt="lupa" className="img-lupa"/></button>
+                        <div className="aprendiz-input-area">
+                            <input type="text" className="aprendiz-input" placeholder="Pesquisar..." value={busca} onChange={(e) => setBusca(e.target.value)}/>
+                            <button type="button" className="aprendiz-button-pesquisar"><img src={lupa} alt="lupa" className="img-lupa"/></button>
+                        </div>
+                        <button type="button" className="aprendiz-button-filtro"><img src={filter} alt="filtro" className="img-filter"/></button>
                     </div>
-                        <button type="button" className="aprendiz-button-pesquisar"><img src={filter} alt="lupa" className="img-filter"/></button>
                     <div className="aprendiz-card-area">
                         {filtro.length > 0 ? (
                             filtro.map((aprendizes) => (

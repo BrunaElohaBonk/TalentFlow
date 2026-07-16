@@ -14,9 +14,10 @@
     padding: 30px;
 }
 
-.aprendiz-pesquisa {
+.aprendiz-pesquisa{
     position: relative;
-    width: 81%;
+    width: 100%;
+    padding: 0 150px;
     margin-bottom: 40px;
 }
 
@@ -103,6 +104,11 @@
     transition: 0.25s;
 }
 
+.aprendiz-input-area{
+    position: relative;
+    width: 100%;
+}
+
 .aprendiz-input::placeholder {
     color: #8a8a8a;
 }
@@ -155,6 +161,22 @@
 .aprendiz-button:hover{
     background:#3d96e9;
     transform:scale(1.03);
+}
+
+.aprendiz-button-filtro{
+    position: absolute;
+    right: 50px;   
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+.aprendiz-button-filtro:hover{
+    background: #f5f5f5;
 }
 
 @media (max-width: 1100px){
