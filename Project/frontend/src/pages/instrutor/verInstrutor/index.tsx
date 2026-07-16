@@ -11,13 +11,17 @@ import { usuarios } from './users'
 
 function VerInstrutor(){
     const [busca, setBusca] = useState("");
-    const instrutoresFiltrados = usuarios
+    const normalizar = (texto: string) =>
+    texto
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase();
+    const filtro = usuarios
     .filter((item) => {
-        const termo = busca.toLowerCase().trim();
-
+        const termo = normalizar(busca.trim());
         return (
-            item.name.toLowerCase().includes(termo) ||
-            item.email.toLowerCase().includes(termo) ||
+            normalizar(item.name).includes(termo) ||
+            normalizar(item.email).includes(termo) ||
             item.edv.toString().includes(termo)
         );
     })
@@ -76,8 +80,8 @@ function VerInstrutor(){
                         <button type="button" className="instrutor-button-pesquisar"><img src={lupa} alt="lupa" className="img-lupa"/></button>
                     </div>
                    <div className="instrutor-card-area">
-                        {instrutoresFiltrados.length > 0 ? (
-                            instrutoresFiltrados.map((instrutor) => (
+                        {filtro.length > 0 ? (
+                            filtro.map((instrutor) => (
                                 <div className="instrutor-modal" key={instrutor.edv}>
                                     <button className="instrutor-btn-delete" onClick={() => handleDelete(instrutor.edv)}><img src={lixeira} alt="deletar" className="instrutor-deletar"/></button>
                                     <div className="instrutor-header">

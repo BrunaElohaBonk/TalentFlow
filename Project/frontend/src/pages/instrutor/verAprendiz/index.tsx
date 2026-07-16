@@ -4,59 +4,35 @@ import Sidebar from "../../../components/sidebar"
 import './verAprendiz.css'
 import user from '../../../assets/img/icon_user.png'
 import lupa from '../../../assets/img/pesquisar.png'
+import filter from '../../../assets/img/filter.png'
 import { aprendizes } from "./aprendizes";
 import { useNavigate } from "react-router-dom";
 
 function VerAprendiz(){
     const [busca, setBusca] = useState("");
     const navigate = useNavigate()
+    const normalizar = (texto: string) =>
+    texto
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase();
     const filtro = aprendizes
-        .filter((item) => {
-            const termo = busca.toLowerCase().trim();
-            if (termo === "") return true;
-            return (
-                item.perfil.nome.toLowerCase().includes(termo) ||
-                item.perfil.email.toLowerCase().includes(termo) ||
-                item.perfil.user.toLowerCase().includes(termo) ||
-                item.perfil.turma.toLowerCase().includes(termo) ||
-                item.perfil.edv.toString().includes(termo) ||
-                item.perfil.contato.toString().includes(termo) ||
-                item.perfil.nascimento.toLocaleDateString("pt-BR").includes(termo) ||
-                item.situacaoProfissional.nomeSetor.toLowerCase().includes(termo) ||
-                item.situacaoProfissional.nomeLider.toLowerCase().includes(termo) ||
-                item.situacaoProfissional.descricaoEstagio.toLowerCase().includes(termo) ||
-                (item.situacaoProfissional.cumprindoEstagio ? "sim" : "não").includes(termo) ||
-                item.formacaoAcademica.some((curso) =>
-                    curso.nomeCurso.toLowerCase().includes(termo) ||
-                    curso.instituicao.toLowerCase().includes(termo) ||
-                    curso.nivelFormacao.toLowerCase().includes(termo) ||
-                    curso.descricaoCurso.toLowerCase().includes(termo) ||
-                    curso.periodoAtual.toString().includes(termo) ||
-                    curso.totalPeriodos.toString().includes(termo) ||
-                    (curso.status ? "cursando" : "concluído").includes(termo)
-                ) ||
-                item.cursosComplementares.some((curso) =>
-                    curso.nomeCurso.toLowerCase().includes(termo) ||
-                    curso.descricaoCurso.toLowerCase().includes(termo) ||
-                    curso.cargaHoraria.toString().includes(termo) ||
-                    curso.dataConclusao.toLocaleDateString("pt-BR").includes(termo) ||
-                    (curso.status ? "concluído" : "cursando").includes(termo)
-                ) ||
-                item.idiomas.some((idioma) =>
-                    idioma.idioma.toLowerCase().includes(termo) ||
-                    idioma.nivel.toLowerCase().includes(termo)
-                ) ||
-                item.softskills.some((softskill) =>
-                    softskill.nome.toLowerCase().includes(termo)
-                ) ||
-                item.competencias.some((competencia) =>
-                    competencia.nome.toLowerCase().includes(termo) ||
-                    competencia.nivel.toLowerCase().includes(termo)
-                )
-            );
-        })
-        .sort((a, b) =>
-            a.perfil.nome.localeCompare(b.perfil.nome, "pt-BR"));
+    .filter((item) => {
+        const termo = normalizar(busca.trim());
+        if (termo === "") return true;
+        return (
+            normalizar(item.perfil.nome).includes(termo) ||
+            normalizar(item.perfil.email).includes(termo) ||
+            normalizar(item.perfil.user).includes(termo) ||
+            normalizar(item.perfil.turma).includes(termo) ||
+            item.perfil.edv.toString().includes(termo) ||
+            item.perfil.contato.toString().includes(termo) ||
+            item.perfil.nascimento.toLocaleDateString("pt-BR").includes(termo)
+        );
+    })
+    .sort((a, b) =>
+        a.perfil.nome.localeCompare(b.perfil.nome, "pt-BR")
+    );
         
     // const fetchInstrutor = async () => {
     //     try {
@@ -69,7 +45,7 @@ function VerAprendiz(){
     //         setInstrutor(null);
     //     }
     // };
-    
+
     return(
         <div>
             <Header></Header>
@@ -80,6 +56,7 @@ function VerAprendiz(){
                         <input type="text" className="aprendiz-input" placeholder="Pesquisar..." value={busca} onChange={(e) => setBusca(e.target.value)}/>
                         <button type="button" className="aprendiz-button-pesquisar"><img src={lupa} alt="lupa" className="img-lupa"/></button>
                     </div>
+                        <button type="button" className="aprendiz-button-pesquisar"><img src={filter} alt="lupa" className="img-filter"/></button>
                     <div className="aprendiz-card-area">
                         {filtro.length > 0 ? (
                             filtro.map((aprendizes) => (

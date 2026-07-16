@@ -16,7 +16,7 @@
 
 .aprendiz-pesquisa {
     position: relative;
-    width: 90%;
+    width: 81%;
     margin-bottom: 40px;
 }
 
@@ -127,6 +127,11 @@
 .img-lupa {
     width: 20px;
     height: 20px;
+}
+
+.img-filter{
+    width: 30px;
+    height: 30px;
 }
 
 .aprendiz-button {

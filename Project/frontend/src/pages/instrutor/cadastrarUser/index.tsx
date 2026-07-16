@@ -8,10 +8,14 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { FormControl, FormControlLabel, FormLabel, MenuItem, Radio, RadioGroup, Select } from "@mui/material";
+import { turmas as turmasMock } from "../verTurma/turma";
 
 interface ITurma {
-    _id: string;
+    id: number;
     nome: string;
+    curso: string;
+    instrutorEdv: number;
+    instrutorNome: string;
 }
 
 interface IUser {
@@ -29,11 +33,12 @@ interface IUser {
 function CadastrarUser() {
     const { id } = useParams();
     const [turmas, setTurmas] = useState<ITurma[]>([]);
+    const [selectTurma, setSelectTurma] = useState(turmasMock);
     const [showPassword, setShowPassword] = useState(false)
     const [user, setUser] = useState<IUser>({
         edv: 0,
         name: '',
-        turma: '',
+        turma: '',  
         email: '',
         user: '',
         nascimento: '',
@@ -77,6 +82,7 @@ function CadastrarUser() {
         if (id) {
             fetchUser();
         }
+        setSelectTurma(turmasMock);
         fetchTurmas();
     }, []);
 
@@ -112,7 +118,7 @@ function CadastrarUser() {
             });
             return;
         }
-        if (!user.edv || !user.name || !user.turma || !user.email || !user.nascimento || !user.contato || !user.senha) {
+        if (!user.edv || !user.name || !user.turma || !user.email || !user.nascimento || !user.contato || !user.senha || (user.tipo === "Aprendiz" && !user.turma)) {
             Swal.fire({
                 title: 'Atenção!',
                 text: 'Preencha os campos obrigatórios!',
@@ -204,14 +210,12 @@ function CadastrarUser() {
                                         <FormControlLabel value="Aprendiz" control={<Radio sx={{ color: "#2B83D5", "&.Mui-checked": { color: "#2B83D5" }, "& .MuiSvgIcon-root": { fontSize: 24 } }} />} label="Aprendiz" />
                                     </RadioGroup>
                                 </FormControl>
-                                {
-                                    user.tipo === "Aprendiz" && (                            
-                                        <Select fullWidth displayEmpty value={user.turma} className="user-select" onChange={(e) => setUser({ ...user, turma: e.target.value })}>
-                                            <MenuItem value="">Selecione uma turma</MenuItem>
-                                            {turmas?.map((turma) => (<MenuItem key={turma._id} value={turma.nome}>{turma.nome}</MenuItem>))}
-                                        </Select>
-                                    )
-                                } 
+                                {user.tipo === "Aprendiz" && (
+                                    <Select fullWidth displayEmpty value={user.turma} className="user-select" onChange={(e) =>setUser({ ...user, turma: e.target.value })}>
+                                        <MenuItem value="" disabled>Selecione uma turma</MenuItem>
+                                        {selectTurma.map((turma) => (<MenuItem key={turma.id} value={turma.nome}>{turma.nome}</MenuItem>))}
+                                    </Select>
+                                )}
                             </div>
                             <div className="user-senha">
                                 <input name="senha" type={showPassword ? "text" : "password"} placeholder="Senha" value={user.senha} onChange={handleChange} className="user-input" />
