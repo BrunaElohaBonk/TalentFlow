@@ -1,6 +1,5 @@
 import Header from "../../../components/header"
 import icon_logout from '../../../assets/img/icon_logout.png'
-import { useNavigate } from "react-router-dom"
 import './perfil.css'
 import { useEffect, useState } from "react";
 import icon_editar from '../../../assets/img/icon_editar.png'
@@ -8,6 +7,8 @@ import icon_user from '../../../assets/img/icon_user.png'
 import icon_olho from '../../../assets/img/icon_olho.png'
 import Logout from '../../../components/logout/logout'
 import SituacaoProfissional from "../../../components/situacao_profissional";
+import EditarPerfil from '../../../components/editarPerfil'
+import EditarSituacaoProfissional from "../../../components/situacao_profissional/editar";
 
 interface Usuario {
     edv: number;
@@ -49,11 +50,10 @@ function formatarTelefone(numero: number) {
 function Perfil() {
 
     const [aprendiz, setAprendiz] = useState<Usuario | null>(null)
-
-    const navigate = useNavigate()
-
     const [logout, setLogout] = useState(false)
     const [situacao, setSituacao] = useState(false)
+    const [editar, setEditar] = useState(false)
+    const [editarSituacao, setEditarSituacao] = useState(false)
 
     // TEMPORÁRIO - REMOVER NA INTEGRAÇÃO COM BACKEND
     // Os dados do usuário estão sendo recuperados do localStorage.
@@ -83,13 +83,15 @@ function Perfil() {
             </div>
 
             <Logout visible={logout} setVisible={setLogout}/>
-            <SituacaoProfissional visible={situacao} setVisible={setSituacao}/>
+            <SituacaoProfissional visible={situacao} setVisible={setSituacao} setEditarSituacao={setEditarSituacao}/>
+            <EditarPerfil visible={editar} setVisible={setEditar}/>
+            <EditarSituacaoProfissional visible={editarSituacao} setVisible={setEditarSituacao} edv={aprendiz.edv}/>
 
             <main className="perfil-tela">
                 <section className="perfil-bloco">
                     <button
                         className="perfil-btn-editar"
-                        onClick={() => navigate(`/Editar/${aprendiz.edv}`)}
+                        onClick={() => setEditar(true)}
                     >
                         <img src={icon_editar} alt="Editar" />
                     </button>

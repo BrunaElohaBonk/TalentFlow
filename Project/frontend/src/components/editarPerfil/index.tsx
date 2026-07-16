@@ -1,6 +1,6 @@
 import './editarPerfil.css'
-import sair from '../../../assets/img/close.png'
-import download from '../../../assets/img/icon download.png'
+import sair from '../../assets/img/close.png'
+import download from '../../assets/img/icon download.png'
 import { useEffect, useState } from 'react'
 import Swal from 'sweetalert2'
 import axios from 'axios'

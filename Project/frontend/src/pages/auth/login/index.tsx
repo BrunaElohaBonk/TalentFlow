@@ -42,33 +42,74 @@ const usuario = [
 
   const navigate = useNavigate() 
 
-  const handleLogin = async () => {
-    // TEMPORÁRIO - REMOVER NA INTEGRAÇÃO COM BACKEND
+  const validarLogin = () => {
+    if (edv === "") {
+      return "Informe o EDV."
+    }
+    if (password === "") {
+      return "Informe a senha."
+    }
     const usuarioEncontrado = usuario.find(
       (usuario) => usuario.edv === edv && usuario.senha === password
     )
-    if (usuarioEncontrado) {
+    if (!usuarioEncontrado) {
+      return "EDV ou senha inválidos."
+    }
+    return null
+  }
 
+  const handleLogin = async () => {
+    // TEMPORÁRIO - REMOVER NA INTEGRAÇÃO COM BACKEND
+    if (edv === "") {
+      Swal.fire({
+        icon: "error",
+        title: "Erro",
+        text: "Informe o EDV.",
+        confirmButtonColor: "#2B83D5",
+        confirmButtonText: "OK"
+      })
+      return
+    }
+    if (password === "") {
+      Swal.fire({
+        icon: "error",
+        title: "Erro",
+        text: "Informe a senha.",
+        confirmButtonColor: "#2B83D5",
+        confirmButtonText: "OK"
+      })
+      return
+    }
+    const usuarioEncontrado = usuario.find(
+      (usuario) => usuario.edv === edv && usuario.senha === password
+    )
+    if (!usuarioEncontrado) {
+      Swal.fire({
+        icon: "error",
+        title: "Erro",
+        text: "EDV ou senha inválidos.",
+        confirmButtonColor: "#2B83D5",
+        confirmButtonText: "OK"
+      })
+      return
+    }
+    if (usuarioEncontrado) {
       localStorage.setItem(
         "usuarioLogado",
         JSON.stringify(usuarioEncontrado)
       )
-    
       if (password === usuarioEncontrado.dataNascimento) {
         navigate('/Confirm_login')
         return
       }
-    
       if (usuarioEncontrado.tipo === "aprendiz") {
         navigate('/Perfil')
         return
       }
-    
       if (usuarioEncontrado.tipo === "instrutor") {
         navigate('/Home')
         return
       }
-    
     }
   }
 
@@ -77,34 +118,28 @@ const usuario = [
     <div>
       <Header></Header>
     </div>
-
     <div className='body'>
       <div className='container'>
-
           <div className='titulo'>
             <span className='span'>Seja bem-vindo(a)!</span>
           </div>
-
           <div className='edv'>
             <div className='img_icon'>
               <img src={icon_user} alt="icon_user" className='icon'/>
             </div>
-            <input type='text' inputMode='numeric' maxLength={8} placeholder="EDV" className='input_login' value={edv} onChange={(e) => setEdv(e.target.value.replace(/[^0-9]/g, ""))}></input>
+            <input type='text' onKeyDown={(e) => {if (e.key === "Enter"){handleLogin()}}} inputMode='numeric' maxLength={8} placeholder="EDV" className='input_login' value={edv} onChange={(e) => setEdv(e.target.value.replace(/[^0-9]/g, ""))}></input>
           </div>
-
           <div className='password'>
             <div className='img_icon'>
               <img src={icon_cadeado} alt="icon_cadeado" className='icon'/>
             </div>
-            <input type={showPassword ? "text" : "password"} placeholder="Password" className='input_login' value={password} onChange={(e) => setPassword(e.target.value)}></input>
+            <input type={showPassword ? "text" : "password"} onKeyDown={(e) => {if(e.key === "Enter"){handleLogin()}}} placeholder="Password" className='input_login' value={password} onChange={(e) => setPassword(e.target.value)}></input>
             <img src={showPassword ? icon_olho_fechado : icon_olho} alt="Visualizar senha" className='eye-icon' onClick={() => setShowPassword(!showPassword)}/>
           </div>
-
           <div className="forgot-password">
             <span>Esqueceu a senha? </span>
             <span className="forgot-link">Clique aqui</span>
           </div>
-
           <div className='button'>
             <button className='entrar' onClick={handleLogin}>
               ENTRAR

@@ -1,6 +1,6 @@
 import Header from "../../../components/header"
 import Sidebar from "../../../components/sidebar"
-import EditarPerfil from "../../auth/editarPerfil"
+import EditarPerfil from "../../../components/editarPerfil"
 import "./perfilInstrutor.css"
 import { useNavigate } from "react-router-dom"
 import icon_editar from './../../../assets/img/icon_editar.png'

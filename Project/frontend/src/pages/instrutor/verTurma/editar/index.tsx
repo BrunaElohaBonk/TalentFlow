@@ -1,12 +1,8 @@
 import './editar.css'
 import { useEffect, useState } from "react";
 import fechar from "../../../../assets/img/close.png";
-<<<<<<< HEAD
-=======
 import Swal from 'sweetalert2';
 import axios from 'axios';
->>>>>>> 37a472378fb9f6a82c224da54695a4afabff5534
-
 interface ITurma {
     id: number;
     nome: string;

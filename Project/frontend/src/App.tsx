@@ -10,7 +10,7 @@ import VerAprendiz from "./pages/instrutor/verAprendiz"
 import VerInstrutor from "./pages/instrutor/verInstrutor"
 import VerTurma from "./pages/instrutor/verTurma" 
 import Confirm_login from "./pages/auth/confirm_login"
-import EditarPerfil from "./pages/auth/editarPerfil"
+import EditarPerfil from "./components/editarPerfil"
 import CadastrarUser from "./pages/instrutor/cadastrarUser"
 
 function App() {

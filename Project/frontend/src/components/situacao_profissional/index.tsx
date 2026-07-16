@@ -2,7 +2,7 @@ import './situacao_profissional.css'
 import icon_editar from '../../assets/img/icon_editar.png'
 import icon_fechar from '../../assets/img/close.png'
 
-function SituacaoProfissional({visible, setVisible}: any) {
+function SituacaoProfissional({visible, setVisible, setEditarSituacao}: any) {
 
     if (!visible) {
         return null
@@ -28,7 +28,13 @@ function SituacaoProfissional({visible, setVisible}: any) {
                             Situação Profissional
                         </h2>
                         <div className="situacao-acoes">
-                            <button className="situacao-editar">
+                            <button 
+                                className="situacao-editar" 
+                                onClick={() => {
+                                    setVisible(false)
+                                    setEditarSituacao(true)
+                                }}
+                            >
                                 <img src={icon_editar} alt="Editar" />
                             </button>
                             <button 
