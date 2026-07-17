@@ -3,6 +3,7 @@ import {roleMiddleware} from "../Middlewares/roleMiddleware.ts"
 import {authMiddleware} from "../Middlewares/authMiddleware.ts"
 import AuthController from "../Controllers/authController.ts";
 import { validationMiddleware } from "../Middlewares/validationMiddleware.ts";
+import { loginRateLimit } from "../Middlewares/ratelimitMiddleware.ts";
 
 
 import {
@@ -24,12 +25,10 @@ route.post(
     AuthController.register
 );
 
-
 route.post(
     "/login",
-
+    loginRateLimit,
     validationMiddleware(loginSchema),
-
     AuthController.login
 );
 
