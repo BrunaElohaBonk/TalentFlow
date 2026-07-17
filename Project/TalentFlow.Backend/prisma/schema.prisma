@@ -107,6 +107,7 @@ model User {
   email_bosch     String   @unique
   contato         String
   password_login  String
+  Ativo Boolean
 
   aprendiz Aprendiz?
 
@@ -121,6 +122,7 @@ model Turma {
   user          User       @relation(fields: [EDV_Instrutor], references: [EDV])
   name_Curso    String
   nomeInstrutor  String
+  Ativo Boolean
   aprendiz      Aprendiz[]
 }
 
@@ -145,6 +147,7 @@ model Profile {
   formacao_Academica    Formacao_Academica[]
   idiomas               Idiomas[]
   cursos                Cursos[]
+  historico             PerfilHistorico[]
 }
 
 model Situacao_profissional {
@@ -210,4 +213,14 @@ model TokenRecuperacaoSenha {
   user      User?     @relation(fields: [EDV], references: [EDV])
   createdAt DateTime  @default(now())
   usedAt    DateTime?
+}
+
+model PerfilHistorico {
+  Id Int @id @default(autoincrement())
+  Id_Profile Int 
+  profile Profile @relation(fields: [Id_Profile], references: [id])
+  dados Json 
+  EDVAlteradoPor Int?
+  DataAlteracao DateTime @default(now())
+
 }
