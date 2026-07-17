@@ -103,38 +103,33 @@ model User {
   tipoUser        TipoUser
   name            String
   data_nascimento DateTime
-  user_bosch      String   @unique
-  email_bosch     String   @unique
+  user_bosch      String?   @unique
+  email_bosch     String?   @unique
   contato         String
   password_login  String
-  Ativo Boolean
-
-  aprendiz Aprendiz?
-
-  turmas      Turma[]
-  resetTokens TokenRecuperacaoSenha[]
+  Ativo           Boolean  @default(true)
+  aprendiz        Aprendiz?
+  turmas          Turma[]
+  resetTokens     TokenRecuperacaoSenha[]
 }
 
 model Turma {
-  id            Int        @id @default(autoincrement())
-  nomeTurma String
-  EDV_Instrutor Int
-  user          User       @relation(fields: [EDV_Instrutor], references: [EDV])
-  name_Curso    String
-  nomeInstrutor  String
-  Ativo Boolean
-  aprendiz      Aprendiz[]
+  id               Int      @id @default(autoincrement())
+  nomeTurma        String
+  EDV_Instrutor    Int
+  user             User     @relation(fields: [EDV_Instrutor], references: [EDV])
+  name_Curso       String
+  nomeInstrutor    String
+  Ativo            Boolean  @default(true)
+  aprendiz         Aprendiz[]
 }
 
 model Aprendiz {
-  EDV Int @id
-
-  user User @relation(fields: [EDV], references: [EDV])
-
-  Id_Turma Int
-  turmas Turma @relation(fields: [Id_Turma], references: [id])
-
-  profile Profile?
+  EDV             Int     @id
+  user            User    @relation(fields: [EDV], references: [EDV])
+  Id_Turma        Int
+  turmas          Turma   @relation(fields: [Id_Turma], references: [id])
+  profile         Profile?
 }
 
 model Profile {
@@ -154,9 +149,9 @@ model Situacao_profissional {
   id               Int     @id @default(autoincrement())
   Id_Profile       Int
   profile          Profile @relation(fields: [Id_Profile], references: [id])
-  nome_Setor       String // enun
-  nome_Lider       String
-  cumprido_Estagio Boolean
+  nome_Setor       String? // enun
+  nome_Lider       String?
+  cumprido_Estagio Boolean @default(false)
   bio_profissional String?
 }
 
@@ -216,11 +211,11 @@ model TokenRecuperacaoSenha {
 }
 
 model PerfilHistorico {
-  Id Int @id @default(autoincrement())
-  Id_Profile Int 
-  profile Profile @relation(fields: [Id_Profile], references: [id])
-  dados Json 
-  EDVAlteradoPor Int?
-  DataAlteracao DateTime @default(now())
+  Id               Int      @id @default(autoincrement())
+  Id_Profile       Int 
+  profile          Profile  @relation(fields: [Id_Profile], references: [id])
+  dados            Json 
+  EDVAlteradoPor   Int?
+  DataAlteracao    DateTime @default(now())
 
 }

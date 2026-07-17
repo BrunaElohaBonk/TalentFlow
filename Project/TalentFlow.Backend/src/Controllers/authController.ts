@@ -76,11 +76,6 @@ class AuthController {
 
   }
 
-
-
-
-
-
   static async redefinirSenha(
     req: Request,
     res: Response,
@@ -111,12 +106,6 @@ class AuthController {
 
   }
 
-
-
-
-
-
-
   static async esqueceuSenha(
     req: Request,
     res: Response,
@@ -146,11 +135,6 @@ class AuthController {
     }
 
   }
-
-
-
-
-
 
   static async logout(
     req: Request,

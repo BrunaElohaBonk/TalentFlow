@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { TurmaService } from "../Services/TurmaService.ts";
+import {CriarTurmaDTO} from "../DTO/turmaDTO.ts"
 
 
 export default class turmaController {
@@ -13,20 +14,13 @@ export default class turmaController {
 
         try {
 
-            const {
-                EDV_Instrutor,
-                name_Curso,
-                nomeTurma,
-                nomeInstrutor
-            } = req.body;
-
-
+            const data : CriarTurmaDTO = req.body;
             const turma =
                 await TurmaService.criar({
-                    nomeTurma,
-                    name_Curso,
-                    nomeInstrutor,
-                    EDV_Instrutor
+                    nomeTurma : data.nomeTurma,
+                    name_Curso : data.name_Curso,
+                    nomeInstrutor : data.nomeInstrutor,
+                    EDV_Instrutor :data.EDV_Instrutor
                 });
 
 
@@ -152,13 +146,6 @@ export default class turmaController {
         }
 
     }
-
-
-
-
-
-
-
 
     static async deletarTurma(
         req: Request,
