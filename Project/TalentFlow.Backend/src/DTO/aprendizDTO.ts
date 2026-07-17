@@ -13,57 +13,66 @@ export type NivelIdioma =
 
 export interface AtualizarPerfilDto {
     fotoAprendiz: File;
-    nomeAprendiz:string;
     email: string;
     user?: string;
-    dataNascimento:string;
     EDV:number;
     contato:string;
+    name:string;
+    data_nascimento:string;
 }
 
 export interface AtualizarSituacaoProfissionalDto {
-    nomeSetor?:string;
-    nomeLider?:string;
-    cumprindoEstagio?:boolean;
-    bio:string
+
+    nome_Setor?: string;
+    nome_Lider?: string;
+    cumprido_Estagio?: boolean;
+    bio_profissional?: string;
+
 }
 
 export interface AtualizarFormacaoAcademicaDto {
-    id: number;
-    nomeCurso:string;
-    nomeInstituicao:string;
-    formacaoConcluida:boolean;
-    periodoAtual:number;
-    totalPeriodos:number;
-    nivelFormacao:NivelFormacao;
-    descricaoCurso:string;
-    certificado?:File;
+
+    id:number;
+    name_Curso:string;
+    nome_Institucao:string;
+    status_Academico:
+    "CONCLUIDO" | "CURSANDO";
+    periodo_Atual:number;
+    total_Periodo:number;
+    nivel_formacao:NivelFormacao;
+
 }
 
 export interface AtualizarCursosComplementaresDto {
-    id: number;
-    nomeCurso:string;
-    cursoConcluido:boolean;
-    dataConclusao?:string
-    cargaHoraria:number;
-    descricaoCurso:string;
-    certificado?:File;
+
+    id:number;
+    name_Curso:string;
+    status_Cursos:
+    "CONCLUIDO" | "CURSANDO";
+    data_Conclusao:string;
+    carga_horaria:number;
+
 }
 
 export interface AtualizarIdiomasDto {
-    id: number;
-    nomeIdioma?:string;
-    nivelIdioma?:NivelIdioma;
-    certificado?:File;
+
+    id:number;
+    nome_Idioma:NivelIdioma;
+    nivel_Idioma:NivelIdioma;
+
 }
 
 export interface AtualizarSoftSkillsDto {
-    id: number;
-    nomeSoftskills:string[];
+
+    id:number;
+    nome_SoftSkills:string[];
+
 }
 
 export interface AtualizarCompetenciasDto {
-    id: number;
-    nomeCompetencia:string;
-    nivelCompetencia:string;
+
+    id:number;
+    nome_Competencia:string;
+    nivel_Competencia:string;
+
 }

@@ -4,57 +4,57 @@ import instrutorController from "../Controllers/InstrutorController.ts";
 
 import { authMiddleware } from "../Middlewares/authMiddleware.ts";
 import { roleMiddleware } from "../Middlewares/roleMiddleware.ts";
-import { ownerMiddleware } from "../Middlewares/ownerMiddleware.ts";
+import { validationMiddleware } from "../Middlewares/validationMiddleware.ts";
+
+import {
+    criarInstrutorSchema,
+    editarInstrutorSchema
+} from "../DTO/schemas/instrutorSchema.ts";
 
 
 const route = express.Router();
 
 
 
+route
 
-route.post(
-    "/criarInstrutor",
+    .post(
+        "/criarInstrutor",
 
-    authMiddleware,
+        authMiddleware,
 
-    roleMiddleware("INSTRUTOR"),
+        roleMiddleware("INSTRUTOR"),
 
-    instrutorController.criarInstrutor
-);
+        validationMiddleware(criarInstrutorSchema),
 
-
-
-
-
-
-route.put(
-    "/editarInstrutor/:EDV/:id",
-
-    authMiddleware,
-
-    roleMiddleware("INSTRUTOR"),
-
-    ownerMiddleware,
-
-    instrutorController.editarInstrutor
-);
+        instrutorController.criarInstrutor
+    )
 
 
 
+    .put(
+        "/editarInstrutor/:EDV",
+
+        authMiddleware,
+
+        roleMiddleware("INSTRUTOR"),
+
+        validationMiddleware(editarInstrutorSchema),
+
+        instrutorController.editarInstrutor
+    )
 
 
 
-route.delete(
-    "/excluirInstrutor/:EDV/:id",
+    .delete(
+        "/deletarInstrutor/:EDV",
 
-    authMiddleware,
+        authMiddleware,
 
-    roleMiddleware("INSTRUTOR"),
+        roleMiddleware("INSTRUTOR"),
 
-    ownerMiddleware,
-
-    instrutorController.DeletarInstrutor
-);
+        instrutorController.DeletarInstrutor
+    )
 
 
 
