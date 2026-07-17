@@ -14,6 +14,7 @@ PRISMA TEM QUE ESTAR NA 6.19
 iniciar com esse comandos 
 npm i
 npx prisma generate
+npm install zod
 
 não esqueca do:
  .env
