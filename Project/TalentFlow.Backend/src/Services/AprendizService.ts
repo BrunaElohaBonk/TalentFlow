@@ -8,11 +8,15 @@ export default class AprendizService {
     return await prisma.aprendiz.create({
         data: {
             EDV: data.EDV,
-            Id_Turma: data.Id_Turma
+            Id_Turma: data.Id_Turma,
+            profile: {
+                create: {} 
+            }
         },
         include: {
             user: true,
-            turmas: true
+            turmas: true,
+            profile: true
         }
     });
 }
