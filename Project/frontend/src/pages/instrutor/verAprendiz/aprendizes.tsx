@@ -11,7 +11,7 @@ export const aprendizes = [
       turma: "Automação Industrial - Turma A"
     },
     situacaoProfissional: {
-      nomeSetor: "Engenharia de Manufatura",
+      nomeSetor: "TEF",
       nomeLider: "Carlos Eduardo Martins",
       cumprindoEstagio: true,
       descricaoEstagio: "Atuação no desenvolvimento de sistemas para automação industrial."
@@ -39,7 +39,7 @@ export const aprendizes = [
     ],
     idiomas: [
       {
-        idioma: "Inglês",
+        idioma: "Russo",
         nivel: "Intermediário",
         certificado: "ingles.pdf"
       }
@@ -66,7 +66,7 @@ export const aprendizes = [
       turma: "Automação Industrial - Turma A"
     },
     situacaoProfissional: {
-      nomeSetor: "Qualidade",
+      nomeSetor: "Engenharia",
       nomeLider: "Fernanda Oliveira",
       cumprindoEstagio: true,
       descricaoEstagio: "Auxílio em auditorias internas e controle de qualidade."
@@ -94,7 +94,7 @@ export const aprendizes = [
     ],
     idiomas: [
       {
-        idioma: "Inglês",
+        idioma: "Francês",
         nivel: "Avançado",
         certificado: "ingles.pdf"
       }
@@ -121,7 +121,7 @@ export const aprendizes = [
       turma: "Mecânica Industrial - Turma B"
     },
     situacaoProfissional: {
-      nomeSetor: "Logística",
+      nomeSetor: "CRIN",
       nomeLider: "Ricardo Almeida",
       cumprindoEstagio: false,
       descricaoEstagio: "Aguardando início das atividades."
@@ -176,7 +176,7 @@ export const aprendizes = [
       turma: "Programação CNC - Turma C"
     },
     situacaoProfissional: {
-      nomeSetor: "TI",
+      nomeSetor: "RH",
       nomeLider: "Marcos Vinicius",
       cumprindoEstagio: true,
       descricaoEstagio: "Desenvolvimento de aplicações internas."
@@ -204,7 +204,7 @@ export const aprendizes = [
     ],
     idiomas: [
       {
-        idioma: "Inglês",
+        idioma: "Italiano",
         nivel: "Fluente",
         certificado: "ingles.pdf"
       }
@@ -231,7 +231,7 @@ export const aprendizes = [
       turma: "Automação Industrial - Turma D"
     },
     situacaoProfissional: {
-      nomeSetor: "Manutenção",
+      nomeSetor: "BDO",
       nomeLider: "Roberto Lima",
       cumprindoEstagio: true,
       descricaoEstagio: "Suporte às atividades de manutenção preventiva."
@@ -285,7 +285,7 @@ export const aprendizes = [
         turma: "Automação Industrial - Turma C"
     },
     situacaoProfissional: {
-        nomeSetor: "Logística",
+        nomeSetor: "BD",
         nomeLider: "Fernanda Oliveira",
         cumprindoEstagio: true,
         descricaoEstagio: "Apoio no controle de materiais, organização de estoque e acompanhamento de indicadores logísticos."
@@ -313,7 +313,7 @@ export const aprendizes = [
     ],
     idiomas: [
         {
-        idioma: "Inglês",
+        idioma: "Alemão",
         nivel: "Intermediário",
         certificado: "ingles.pdf"
         }

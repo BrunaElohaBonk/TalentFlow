@@ -86,11 +86,11 @@ function VerInstrutor(){
                                     <button className="instrutor-btn-delete" onClick={() => handleDelete(instrutor.edv)}><img src={lixeira} alt="deletar" className="instrutor-deletar"/></button>
                                     <div className="instrutor-header">
                                         <img src={user} alt="user" className="instrutor-img"/>
-                                        <span className="instrutor-titulo">{instrutor.name}</span>
+                                        <span className="instrutor-titulo" title={instrutor.name}>{instrutor.name}</span>
                                     </div>
                                     <div className="instrutor-conteudo">
                                         <span className="instrutor-span">EDV: {instrutor.edv}</span>
-                                        <span className="instrutor-span">Email: {instrutor.email}</span>
+                                        <span className="instrutor-span" title={instrutor.email}>Email: {instrutor.email}</span>
                                     </div>
                                 </div>
                             ))

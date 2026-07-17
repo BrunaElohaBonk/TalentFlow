@@ -75,6 +75,11 @@
     font-size: 2rem;
     font-weight: bold;
     text-align: center;
+    max-width: 85%;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .turma-item{

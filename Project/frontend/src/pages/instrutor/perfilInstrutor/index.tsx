@@ -63,15 +63,15 @@ function PerfilInstrutor(){
                         </button>
                         <div className="perfil-header">
                             <img src={user} alt="user" className="perfil-user"/>
-                            <span className="perfil-titulo">{perfil.name}</span>
+                            <span className="perfil-titulo" title={perfil.name}>{perfil.name}</span>
                         </div>
                         <div className="perfil-conteudo">
-                            <span className="perfil-span">EDV: {perfil.edv}</span>
-                            <span className="perfil-span">User: {perfil.user}</span>
-                            <span className="perfil-span">Email: {perfil.email}</span>
-                            <span className="perfil-span">Data de Nascimento: {perfil.nascimento.toLocaleDateString("pt-BR")}</span>
-                            <span className="perfil-span">Idade: {Idade(perfil.nascimento)}</span>
-                            <span className="perfil-span">Contato: {Telefone(perfil.contato)}</span>
+                            <span className="perfil-span" title={perfil.edv.toString()}>EDV: {perfil.edv}</span>
+                            <span className="perfil-span" title={Telefone(perfil.contato)}>Contato: {Telefone(perfil.contato)}</span>
+                            <span className="perfil-span" title={perfil.user}>User: {perfil.user}</span>
+                            <span className="perfil-span" title={perfil.nascimento.toLocaleDateString("pt-BR")}>Data de Nascimento: {perfil.nascimento.toLocaleDateString("pt-BR")}</span>
+                            <span className="perfil-span" title={perfil.email}>Email: {perfil.email}</span>
+                            <span className="perfil-span" title={Idade(perfil.nascimento).toString()}>Idade: {Idade(perfil.nascimento)}</span>
                         </div>
                     </div>
                 </div>

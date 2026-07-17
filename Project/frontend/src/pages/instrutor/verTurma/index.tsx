@@ -90,7 +90,7 @@ function VerTurma(){
                         {filtro.length === 0 ? (<p className="turma-vazia">Nenhuma turma encontrada.</p>) : (
                             filtro.map((item) => (
                                 <div className="turma-item" key={item.id}>
-                                    <span className="turma-titulo">{item.nome}</span>
+                                    <span className="turma-titulo" title={item.nome}>{item.nome}</span>
                                     <div className="turma-acoes">
                                         <button className="btn-acao" onClick={() => { setTurmaSelecionada(item); setVisualizar(true);}}><img src={olho} alt="Visualizar" className="turma-visualizar"/></button>
                                         <button className="btn-acao" onClick={() => { setTurmaSelecionada(item); setEditar(true);}}><img src={icon_editar} alt="Editar" /></button>

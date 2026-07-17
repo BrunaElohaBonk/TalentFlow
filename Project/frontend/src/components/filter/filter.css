@@ -1,0 +1,145 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+.filtro-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.35);
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    z-index: 9999;
+}
+
+.filtro-checkbox {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.filtro-checkbox .MuiFormLabel-root {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    color: #8a8a8a;
+    margin-bottom: 5px;
+}
+
+.filtro-checkbox .MuiFormGroup-root {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.filtro-checkbox .MuiFormControlLabel-root {
+    margin: 0;
+}
+
+.filtro-checkbox .MuiCheckbox-root {
+    color: #D9D9D9;
+    padding: 5px;
+}
+
+.filtro-checkbox .MuiCheckbox-root:hover {
+    background-color: rgba(43, 131, 213, .08);
+}
+
+.filtro-checkbox .MuiCheckbox-root.Mui-checked {
+    color: #2B83D5;
+}
+
+.MuiPopover-root {
+    z-index: 10000 !important;
+}
+
+.MuiMenu-root {
+    z-index: 10000 !important;
+}
+
+.filtro-checkbox .MuiFormControlLabel-label {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    color: #8a8a8a;
+}
+
+.filtro-modal {
+    width: 25rem;
+    max-width: 90%;
+    max-height: 80vh;
+    background-color: #FFFFFF;
+    border-radius: 20px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-family: 'Poppins', sans-serif;
+    overflow-y: auto;
+}
+
+.filtro-titulo {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.filtro-idade {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
+.filtro-input {
+    width: 100%;
+    height: 40px;
+
+    border-radius: 15px;
+    border: 1px solid #D9D9D9;
+
+    padding: 0 15px;
+
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    color: #8a8a8a;
+}
+
+
+.filtro-input:focus {
+    outline: none;
+    border-color: #2B83D5;
+    box-shadow: 0 0 5px rgba(43,131,213,.3);
+}
+
+.filtro-conteudo {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.filtro-botoes {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.filtro-button {
+    height: 40px;
+    border-radius: 15px !important;
+    padding: 0 25px !important;
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 1rem !important;
+    text-transform: none !important;
+}
+
+.filtro-button.primary {
+    background-color: #2B83D5 !important;
+    color: white !important;
+}
+
+.filtro-button.primary:hover {
+    background-color: #236daf !important;
+}
+
+.filtro-button.secondary {
+    border: 1px solid #D9D9D9 !important;
+    color: #8a8a8a !important;
+}
