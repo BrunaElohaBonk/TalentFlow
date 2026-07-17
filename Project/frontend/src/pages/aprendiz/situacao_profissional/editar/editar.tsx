@@ -1,9 +1,9 @@
 import './editar.css'
-import sair from '../../assets/img/close.png'
+import sair from '../../../../assets/img/close.png'
 import { useState } from 'react'
 import Swal from 'sweetalert2'
 import axios from 'axios'
-import { FormControl, FormControlLabel, FormLabel, MenuItem, Radio, RadioGroup, Select } from "@mui/material";
+import { FormControl, FormControlLabel, Radio, RadioGroup } from "@mui/material";
 
 interface ISituacao {
     setor: string;

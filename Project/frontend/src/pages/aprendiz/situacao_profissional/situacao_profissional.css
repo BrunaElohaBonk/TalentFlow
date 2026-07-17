@@ -11,9 +11,9 @@
 }
 
 .situacao-card {
-    width: 550px;
-    min-height: 300px;
-    background-color: white;
+    width: 600px;
+    min-height: 350px;
+    background: white;
     border-radius: 20px;
     box-shadow: rgba(0,0,0,.3) 0px 4px 10px;
     padding: 30px;
@@ -32,6 +32,7 @@
     margin: 0;
     font-size: 25px;
     font-weight: 600;
+    color: #333;
 }
 
 .situacao-acoes {
@@ -49,6 +50,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 0;
 }
 
 .situacao-editar img {
@@ -56,31 +58,41 @@
     transition: .2s;
 }
 
-.situacao-editar:hover img {
-    transform: scale(1.1);
-}
-
 .situacao-fechar img {
     width: 32px;
     transition: .2s;
 }
 
+.situacao-editar:hover img,
 .situacao-fechar:hover img {
     transform: scale(1.1);
 }
 
 .situacao-conteudo {
     margin-top: 35px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
 }
 
-.situacao-conteudo p {
-    font-family: 'Poppins', sans-serif;
-    font-size: 15px;
-    color: #6a6a6a;
-    margin-bottom: 15px;
+.situacao-item {
+    padding: 0;
 }
 
-.situacao-conteudo strong {
-    color: black;
+.situacao-item span {
+    display: block;
+    font-size: .9rem;
     font-weight: 600;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.situacao-item p {
+    margin: 0;
+    font-size: .9rem;
+    color: #6a6a6a;
+}
+
+.situacao-descricao {
+    min-height: 70px;
 }

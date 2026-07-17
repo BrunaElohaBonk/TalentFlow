@@ -6,10 +6,15 @@ import icon_editar from '../../../assets/img/icon_editar.png'
 import icon_user from '../../../assets/img/icon_user.png'
 import icon_olho from '../../../assets/img/icon_olho.png'
 import Logout from '../../../components/logout/logout'
-import SituacaoProfissional from "../../../components/situacao_profissional";
+import SituacaoProfissional from "../situacao_profissional";
 import EditarPerfil from '../../../components/editarPerfil'
-import EditarSituacaoProfissional from "../../../components/situacao_profissional/editar";
-import FormacaoAcademica from "../../../components/formacao_academica";
+import EditarSituacaoProfissional from "../situacao_profissional/editar/editar";
+import FormacaoAcademica from "../formacao_academica";
+import CursoComplementar from "../curso_complementar";
+import Idioma from "../idioma";
+import SoftSkill from "../soft_skill";
+import Competencia from "../competencias";
+import EditarFormacaoAcademica from "../formacao_academica/editar/editar";
 
 interface Usuario {
     edv: number;
@@ -53,9 +58,14 @@ function Perfil() {
     const [aprendiz, setAprendiz] = useState<Usuario | null>(null)
     const [logout, setLogout] = useState(false)
     const [situacao, setSituacao] = useState(false)
+    const [formacao_academica, setFormacaoAcademica] = useState(false)
+    const [curso_complementar, setCursoComplementar] = useState(false)
+    const [idioma, setIdioma] = useState(false)
+    const [soft_skill, setSoftSkill] = useState(false)
+    const [competencia, setCompetencia] = useState(false)
     const [editar, setEditar] = useState(false)
     const [editarSituacao, setEditarSituacao] = useState(false)
-    const [formacao_academica, setFormacaoAcademica] = useState(false)
+    const [editarFormacao, setEditarFormacao] = useState(false)
 
     // TEMPORÁRIO - REMOVER NA INTEGRAÇÃO COM BACKEND
     // Os dados do usuário estão sendo recuperados do localStorage.
@@ -86,9 +96,14 @@ function Perfil() {
 
             <Logout visible={logout} setVisible={setLogout}/>
             <SituacaoProfissional visible={situacao} setVisible={setSituacao} setEditarSituacao={setEditarSituacao}/>
+            <FormacaoAcademica visible={formacao_academica} setVisible={setFormacaoAcademica} setEditarFormacao={setEditarFormacao}/>
+            <CursoComplementar visible={curso_complementar} setVisible={setCursoComplementar}/>
+            <Idioma visible={idioma} setVisible={setIdioma}/>
+            <SoftSkill visible={soft_skill} setVisible={setSoftSkill}/>
+            <Competencia visible={competencia} setVisible={setCompetencia}/>
             <EditarPerfil visible={editar} setVisible={setEditar} edv={aprendiz.edv}/>
             <EditarSituacaoProfissional visible={editarSituacao} setVisible={setEditarSituacao} edv={aprendiz.edv}/>
-            <FormacaoAcademica visible={formacao_academica} setVisible={setFormacaoAcademica}/>
+            <EditarFormacaoAcademica visible={editarFormacao} setVisible={setEditarFormacao}/>
 
             <main className="perfil-tela">
                 <section className="perfil-bloco">
@@ -142,7 +157,7 @@ function Perfil() {
                                 <li>Power BI</li>
                                 <li>Excel</li>
                             </ul>
-                            <button className="perfil-btn-visualizar">
+                            <button className="perfil-btn-visualizar" onClick={() => setCursoComplementar(true)}>
                                 <img src={icon_olho} alt="Visualizar" />
                             </button>
                         </div>
@@ -152,7 +167,7 @@ function Perfil() {
                                 <li>Português</li>
                                 <li>Inglês B1</li>
                             </ul>
-                            <button className="perfil-btn-visualizar">
+                            <button className="perfil-btn-visualizar" onClick={() => setIdioma(true)}>
                                 <img src={icon_olho} alt="Visualizar" />
                             </button>
                         </div>
@@ -164,7 +179,7 @@ function Perfil() {
                                 <li>Comunicação</li>
                                 <li>Trabalho em equipe</li>
                             </ul>
-                            <button className="perfil-btn-visualizar">
+                            <button className="perfil-btn-visualizar" onClick={() => setSoftSkill(true)}>
                                 <img src={icon_olho} alt="Visualizar" />
                             </button>
                         </div>
@@ -174,7 +189,7 @@ function Perfil() {
                                 <li>Análise de dados</li>
                                 <li>Gestão de projetos</li>
                             </ul>
-                            <button className="perfil-btn-visualizar">
+                            <button className="perfil-btn-visualizar" onClick={() => setCompetencia(true)}>
                                 <img src={icon_olho} alt="Visualizar" />
                             </button>
                         </div>
