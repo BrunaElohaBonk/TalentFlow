@@ -35,46 +35,6 @@ export default class aprendizController {
 
     }
 
-
-
-
-
-    static async delete(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ) {
-
-        try {
-
-            const { EDV } = req.params;
-
-
-            await AprendizService.delete(
-                Number(EDV)
-            );
-
-
-            return res.status(200).json({
-
-                message:
-                    "Aprendiz deletado com sucesso!"
-
-            });
-
-
-        } catch(error) {
-
-            next(error);
-
-        }
-
-    }
-
-
-
-
-
     static async atualizarPerfil(
         req: Request,
         res: Response,

@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import { AdicionarUserDto } from "../DTO/authDTO.ts";
 import InstrutorService from "../Services/InstrutorService.ts";
 
 
@@ -40,39 +39,5 @@ export default class instrutorController {
         }
 
     }
-
-    static async DeletarInstrutor(
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ) {
-
-
-        try {
-
-            const { EDV } = req.params;
-
-
-            await InstrutorService.deletar(
-                Number(EDV)
-            );
-
-
-            return res.status(200).send({
-
-                response:
-                    "Sucesso ao Deletar Instrutor!"
-
-            });
-
-
-        } catch(error) {
-
-            next(error);
-
-        }
-
-    }
-
 
 }

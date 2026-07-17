@@ -10,6 +10,7 @@ import {
 import {
   UserService
 } from "../Services/AuthService.ts";
+import InstrutorService from "../Services/InstrutorService.ts";
 
 
 class AuthController {
@@ -46,6 +47,38 @@ class AuthController {
     }
 
   }
+  static async DeletarUser(
+    req: Request,
+    res: Response,
+    next: NextFunction
+) {
+
+
+    try {
+
+        const { EDV } = req.params;
+
+
+        await InstrutorService.deletar(
+            Number(EDV)
+        );
+
+
+        return res.status(200).send({
+
+            response:
+                "Sucesso ao Deletar Instrutor!"
+
+        });
+
+
+    } catch(error) {
+
+        next(error);
+
+    }
+
+}
 
 
 
