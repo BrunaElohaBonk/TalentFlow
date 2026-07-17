@@ -25,8 +25,8 @@
     flex-direction: column;
     position: relative;
     width: 95%;
-    max-width: 60rem;
-    min-height: 20rem;
+    max-width: 50rem;
+    min-height: 25rem;
     max-height: 80vh;
     padding: clamp(20px, 3vw, 35px);
     background-color: white;
@@ -77,8 +77,6 @@
 
 .perfil-conteudo {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px 32px;
     margin-left: 8%;
 }
 

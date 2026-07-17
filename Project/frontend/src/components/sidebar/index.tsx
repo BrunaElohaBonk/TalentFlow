@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import sair from './../../assets/img/icon_logout.png'
 import Logout from '../logout/logout';
 import { useState } from 'react';
+import { Badge } from '@mui/material';
 
 function Sidebar(){
     const [logout, setLogout] = useState(false)
@@ -16,8 +17,17 @@ function Sidebar(){
                     <NavLink to='/PerfilInstrutor' className='sidebar-link'>
                         <span className='sidebar-routes'>Perfil</span>
                     </NavLink>
-                    <NavLink to='/Notificações' className='sidebar-link'>
-                        <span className='sidebar-routes'>Histórico de Atualização</span>
+                    <NavLink to="/Notificações" className="sidebar-link">
+                        <Badge
+                            color="error"
+                            variant="dot"
+                          
+                            className="sidebar-badge"
+                        >
+                            <span className="sidebar-routes">
+                                Histórico de Atualização
+                            </span>
+                        </Badge>
                     </NavLink>
                     <NavLink to='/Aprendiz' className='sidebar-link'>
                         <span className='sidebar-routes'>Aprendizes</span>

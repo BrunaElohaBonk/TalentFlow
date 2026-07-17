@@ -67,11 +67,11 @@ function PerfilInstrutor(){
                         </div>
                         <div className="perfil-conteudo">
                             <span className="perfil-span" title={perfil.edv.toString()}>EDV: {perfil.edv}</span>
-                            <span className="perfil-span" title={Telefone(perfil.contato)}>Contato: {Telefone(perfil.contato)}</span>
                             <span className="perfil-span" title={perfil.user}>User: {perfil.user}</span>
-                            <span className="perfil-span" title={perfil.nascimento.toLocaleDateString("pt-BR")}>Data de Nascimento: {perfil.nascimento.toLocaleDateString("pt-BR")}</span>
                             <span className="perfil-span" title={perfil.email}>Email: {perfil.email}</span>
+                            <span className="perfil-span" title={perfil.nascimento.toLocaleDateString("pt-BR")}>Data de Nascimento: {perfil.nascimento.toLocaleDateString("pt-BR")}</span>
                             <span className="perfil-span" title={Idade(perfil.nascimento).toString()}>Idade: {Idade(perfil.nascimento)}</span>
+                            <span className="perfil-span" title={Telefone(perfil.contato)}>Contato: {Telefone(perfil.contato)}</span>
                         </div>
                     </div>
                 </div>
