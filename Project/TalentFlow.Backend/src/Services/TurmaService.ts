@@ -57,8 +57,9 @@ export class TurmaService {
 
   static async deletar(id: number): Promise<void> {
     try {
-      await prisma.turma.delete({
+      await prisma.turma.update({
         where: { id },
+        data: { Ativo: false }
       });
     } catch (error: any) {
   if (error.code === "P2025") {

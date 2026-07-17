@@ -55,25 +55,4 @@ export default class InstrutorService {
         });
 
     }
-
-
-
-
-    static async deletar(
-        EDV: number
-    ) {
-
-        return await prisma.user.delete({
-
-            where: {
-
-                EDV
-
-            }
-
-        });
-
-    }
-
-
 }

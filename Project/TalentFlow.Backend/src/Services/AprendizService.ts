@@ -21,14 +21,6 @@ export default class AprendizService {
     });
 }
 
-    static async delete(EDV: number) {
-        return await prisma.aprendiz.delete({
-            where: {
-                EDV
-            }
-        });
-    }
-
     static async atualizarPerfil(idPerfil: number, data: any) {
         return await prisma.profile.updateMany({
             where: {

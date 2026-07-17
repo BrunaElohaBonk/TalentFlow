@@ -49,7 +49,7 @@ class AuthController {
         const { EDV } = req.params;
 
 
-        await InstrutorService.deletar(
+        await UserService.deletar(
             Number(EDV)
         );
 

@@ -10,8 +10,6 @@ import {
   RedefinirSenhaDto
 } from "../DTO/authDTO.ts";
 
-
-
 export class UserJaExisteError extends Error {
   constructor(message = "EDV ou e-mail já cadastrado") {
     super(message);
@@ -19,88 +17,68 @@ export class UserJaExisteError extends Error {
   }
 }
 
-
 export class UserNotFoundError extends Error {
   constructor(message = "Usuário não encontrado") {
     super(message);
     this.name = "UserNotFoundError";
   }
 }
-
-
 export class InvalidCredentialsError extends Error {
   constructor(message = "Email e/ou senha incorreta") {
     super(message);
     this.name = "InvalidCredentialsError";
   }
 }
-
-
 export class ServerConfigError extends Error {
   constructor(message = "Erro de configuração do servidor") {
     super(message);
     this.name = "ServerConfigError";
   }
 }
-
-
 export class InvalidTokenError extends Error {
   constructor(message = "Token inválido ou expirado") {
     super(message);
     this.name = "InvalidTokenError";
   }
 }
-
-
 export class PasswordMismatchError extends Error {
   constructor(message = "Senhas não coincidem") {
     super(message);
     this.name = "PasswordMismatchError";
   }
 }
-
-
-
 interface JWTPayload {
 
-  EDV:number;
+  EDV: number;
 
   tipoUser:
-    | "APRENDIZ"
-    | "INSTRUTOR";
+  | "APRENDIZ"
+  | "INSTRUTOR";
 
-  name:string;
+  name: string;
 
 }
-
-
-
 type LoginResult =
   | {
-      primeiroAcesso:true;
-      redirectTo:string;
-    }
+    primeiroAcesso: true;
+    redirectTo: string;
+  }
   | {
-      token:string;
+    token: string;
 
-      user:{
-        EDV:number;
-        name:string;
-        tipoUser:string;
-      };
+    user: {
+      EDV: number;
+      name: string;
+      tipoUser: string;
     };
-
-
-
+  };
 export class UserService {
 
-
-
-  private static getSecret(){
+  private static getSecret() {
 
     const secret = process.env.SECRET;
 
-    if(!secret){
+    if (!secret) {
       throw new ServerConfigError();
     }
 
@@ -110,7 +88,7 @@ export class UserService {
 
 
 
-  static converterDataBR(dataString:string):Date {
+  static converterDataBR(dataString: string): Date {
 
     const [dia, mes, ano] = dataString.split("/");
 
@@ -120,16 +98,16 @@ export class UserService {
 
 
 
-  private static formatarDataBR(data:Date):string {
+  private static formatarDataBR(data: Date): string {
 
     const dia =
       String(data.getDate())
-      .padStart(2,"0");
+        .padStart(2, "0");
 
 
     const mes =
-      String(data.getMonth()+1)
-      .padStart(2,"0");
+      String(data.getMonth() + 1)
+        .padStart(2, "0");
 
 
     const ano =
@@ -140,11 +118,7 @@ export class UserService {
 
   }
 
-
-
-
-
-  static async register(data:AdicionarUserDto){
+  static async register(data: AdicionarUserDto) {
 
 
     const passwordCrypt =
@@ -159,16 +133,16 @@ export class UserService {
 
       return await prisma.user.create({
 
-        data:{
+        data: {
 
 
-          EDV:data.EDV,
+          EDV: data.EDV,
 
 
-          tipoUser:data.tipoUser,
+          tipoUser: data.tipoUser,
 
 
-          name:data.name,
+          name: data.name,
 
 
           data_nascimento:
@@ -198,10 +172,10 @@ export class UserService {
 
 
 
-    }catch(error:any){
+    } catch (error: any) {
 
 
-      if(error.code === "P2002"){
+      if (error.code === "P2002") {
 
         throw new UserJaExisteError();
 
@@ -215,28 +189,37 @@ export class UserService {
 
   }
 
+  static async deletar(
+    EDV: number
+  ) {
 
+    return await prisma.user.update({
 
+      where: { EDV },
+      data: { Ativo: false }
 
+    });
+
+  }
 
   static async login(
-    data:LoginDto
-  ):Promise<LoginResult>{
+    data: LoginDto
+  ): Promise<LoginResult> {
 
 
 
     const user =
       await prisma.user.findUnique({
 
-        where:{
-          EDV:data.EDV
+        where: {
+          EDV: data.EDV
         }
 
       });
 
 
 
-    if(!user){
+    if (!user) {
 
       throw new UserNotFoundError();
 
@@ -252,14 +235,14 @@ export class UserService {
 
 
 
-    if(data.password === primeiroAcesso){
+    if (data.password === primeiroAcesso) {
 
 
       return {
 
-        primeiroAcesso:true,
+        primeiroAcesso: true,
 
-        redirectTo:"/trocar-senha"
+        redirectTo: "/trocar-senha"
 
       };
 
@@ -280,7 +263,7 @@ export class UserService {
 
 
 
-    if(!senhaValida){
+    if (!senhaValida) {
 
       throw new InvalidCredentialsError();
 
@@ -296,13 +279,13 @@ export class UserService {
 
         {
 
-          EDV:user.EDV,
+          EDV: user.EDV,
 
 
-          tipoUser:user.tipoUser,
+          tipoUser: user.tipoUser,
 
 
-          name:user.name
+          name: user.name
 
 
         },
@@ -313,7 +296,7 @@ export class UserService {
 
         {
 
-          expiresIn:"2d"
+          expiresIn: "2d"
 
         }
 
@@ -331,16 +314,16 @@ export class UserService {
       token,
 
 
-      user:{
+      user: {
 
 
-        EDV:user.EDV,
+        EDV: user.EDV,
 
 
-        name:user.name,
+        name: user.name,
 
 
-        tipoUser:user.tipoUser
+        tipoUser: user.tipoUser
 
 
       }
@@ -357,16 +340,16 @@ export class UserService {
 
 
   static async redefinirSenha(
-    data:RedefinirSenhaDto
-  ):Promise<void>{
+    data: RedefinirSenhaDto
+  ): Promise<void> {
 
 
 
-    if(
+    if (
       !data.token ||
       !data.password ||
       !data.confirmPassword
-    ){
+    ) {
 
       throw new Error(
         "Campos obrigatórios ausentes"
@@ -377,10 +360,10 @@ export class UserService {
 
 
 
-    if(
+    if (
       data.password !==
       data.confirmPassword
-    ){
+    ) {
 
       throw new PasswordMismatchError();
 
@@ -389,11 +372,11 @@ export class UserService {
 
 
 
-    let decoded:JWTPayload;
+    let decoded: JWTPayload;
 
 
 
-    try{
+    try {
 
 
       decoded =
@@ -407,7 +390,7 @@ export class UserService {
 
 
 
-    }catch{
+    } catch {
 
 
       throw new InvalidTokenError();
@@ -422,8 +405,8 @@ export class UserService {
     const user =
       await prisma.user.findUnique({
 
-        where:{
-          EDV:decoded.EDV
+        where: {
+          EDV: decoded.EDV
         }
 
       });
@@ -432,7 +415,7 @@ export class UserService {
 
 
 
-    if(!user){
+    if (!user) {
 
       throw new UserNotFoundError();
 
@@ -454,12 +437,12 @@ export class UserService {
 
     await prisma.user.update({
 
-      where:{
-        EDV:decoded.EDV
+      where: {
+        EDV: decoded.EDV
       },
 
 
-      data:{
+      data: {
 
         password_login:
           senhaCrypt
@@ -478,16 +461,16 @@ export class UserService {
 
 
   static async esqueceuSenha(
-    data:EsqueceuSenhaDto
-  ):Promise<void>{
+    data: EsqueceuSenhaDto
+  ): Promise<void> {
 
 
 
     const user =
       await prisma.user.findUnique({
 
-        where:{
-          email_bosch:data.email
+        where: {
+          email_bosch: data.email
         }
 
       });
@@ -495,7 +478,7 @@ export class UserService {
 
 
 
-    if(!user){
+    if (!user) {
 
       return;
 
@@ -510,7 +493,7 @@ export class UserService {
 
         {
 
-          EDV:user.EDV
+          EDV: user.EDV
 
         },
 
@@ -518,7 +501,7 @@ export class UserService {
 
         {
 
-          expiresIn:"1h"
+          expiresIn: "1h"
 
         }
 
@@ -529,26 +512,21 @@ export class UserService {
 
     await enviarEmailRedefinicao(
 
-      user.email_bosch,
+      user.user_bosch!,
 
       resetToken
 
     );
-
-
 
   }
 
 
 }
 
-
-
-
 async function enviarEmailRedefinicao(
-  email:string,
-  token:string
-){
+  email: string,
+  token: string
+) {
 
   console.log(
     "Enviar email para:",
