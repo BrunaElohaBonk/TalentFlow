@@ -1,60 +1,90 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import AprendizService from "../Services/AprendizService.ts";
+
 
 export default class aprendizController {
 
-    static async criar(req: Request, res: Response) {
 
-    try {
+    static async criar(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) {
 
-        const aprendiz = await AprendizService.criar(req.body);
+        try {
 
-        return res.status(201).json({
-            message: "Aprendiz vinculado à turma com sucesso!",
-            data: aprendiz
-        });
+            const aprendiz =
+                await AprendizService.criar(req.body);
 
-    } catch(error) {
 
-        return res.status(500).json({
-            message: error instanceof Error
-                ? error.message
-                : "Erro interno do servidor"
-        });
+            return res.status(201).json({
+
+                message:
+                    "Aprendiz vinculado à turma com sucesso!",
+
+                data: aprendiz
+
+            });
+
+
+        } catch(error) {
+
+            next(error);
+
+        }
 
     }
-}
 
-    static async delete(req: Request, res: Response) {
+
+
+
+
+    static async delete(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) {
 
         try {
 
             const { EDV } = req.params;
 
-            await AprendizService.delete(Number(EDV));
+
+            await AprendizService.delete(
+                Number(EDV)
+            );
 
 
             return res.status(200).json({
-                message: "Aprendiz deletado com sucesso!"
+
+                message:
+                    "Aprendiz deletado com sucesso!"
+
             });
 
 
-        } catch (error) {
+        } catch(error) {
 
-            return res.status(500).json({
-                message: error instanceof Error
-                    ? error.message
-                    : "Erro interno do servidor"
-            });
+            next(error);
 
         }
+
     }
 
-    static async atualizarPerfil(req: Request, res: Response) {
+
+
+
+
+    static async atualizarPerfil(
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ) {
 
         try {
 
             const { idPerfil } = req.params;
+
 
             const perfilAtualizado =
                 await AprendizService.atualizarPerfil(
@@ -64,25 +94,33 @@ export default class aprendizController {
 
 
             return res.status(200).json({
-                response: "Perfil atualizado com sucesso!",
-                perfil: perfilAtualizado
+
+                response:
+                    "Perfil atualizado com sucesso!",
+
+                perfil:
+                    perfilAtualizado
+
             });
 
 
-        } catch (error) {
+        } catch(error) {
 
-            return res.status(500).json({
-                message: error instanceof Error
-                    ? error.message
-                    : error
-            });
+            next(error);
 
         }
+
     }
+
+
+
+
+
 
     static async atualizarFormacaoAcademica(
         req: Request,
-        res: Response
+        res: Response,
+        next: NextFunction
     ) {
 
         try {
@@ -99,25 +137,33 @@ export default class aprendizController {
 
 
             return res.status(200).json({
-                response: "Formação acadêmica atualizada com sucesso!",
-                data: formacaoAtualizada
+
+                response:
+                    "Formação acadêmica atualizada com sucesso!",
+
+                data:
+                    formacaoAtualizada
+
             });
 
 
-        } catch (error) {
+        } catch(error) {
 
-            return res.status(500).json({
-                message: error instanceof Error
-                    ? error.message
-                    : error
-            });
+            next(error);
 
         }
+
     }
+
+
+
+
+
 
     static async atualizarSituacaoProfissional(
         req: Request,
-        res: Response
+        res: Response,
+        next: NextFunction
     ) {
 
         try {
@@ -134,25 +180,33 @@ export default class aprendizController {
 
 
             return res.status(200).json({
-                response: "Situação profissional atualizada com sucesso!",
-                data: situacaoAtualizada
+
+                response:
+                    "Situação profissional atualizada com sucesso!",
+
+                data:
+                    situacaoAtualizada
+
             });
 
 
         } catch(error) {
 
-            return res.status(500).json({
-                message: error instanceof Error
-                    ? error.message
-                    : error
-            });
+            next(error);
 
         }
+
     }
+
+
+
+
+
 
     static async atualizarSoftskills(
         req: Request,
-        res: Response
+        res: Response,
+        next: NextFunction
     ) {
 
         try {
@@ -169,25 +223,27 @@ export default class aprendizController {
 
 
             return res.status(200).json({
-                response: "Soft Skill atualizada com sucesso!",
-                data: softskill
+
+                response:
+                    "Soft Skill atualizada com sucesso!",
+
+                data:
+                    softskill
+
             });
 
 
         } catch(error) {
 
-            return res.status(500).json({
-                mensagem: error instanceof Error
-                    ? error.message
-                    : error
-            });
+            next(error);
 
         }
-    }
 
+    }
     static async atualizarCompetencias(
         req: Request,
-        res: Response
+        res: Response,
+        next: NextFunction
     ) {
 
         try {
@@ -204,24 +260,32 @@ export default class aprendizController {
 
 
             return res.status(200).json({
-                response: "Competência atualizada com sucesso!",
-                data: competencia
+
+                response:
+                    "Competência atualizada com sucesso!",
+
+                data:
+                    competencia
+
             });
 
 
         } catch(error) {
 
-            return res.status(500).json({
-                mensagem: error instanceof Error
-                    ? error.message
-                    : error
-            });
+            next(error);
 
         }
+
     }
-        static async atualizarIdiomas(
+
+
+
+
+
+    static async atualizarIdiomas(
         req: Request,
-        res: Response
+        res: Response,
+        next: NextFunction
     ) {
 
         try {
@@ -238,25 +302,32 @@ export default class aprendizController {
 
 
             return res.status(200).json({
-                response: "Idioma atualizado com sucesso!",
-                data: idioma
+
+                response:
+                    "Idioma atualizado com sucesso!",
+
+                data:
+                    idioma
+
             });
 
 
         } catch(error) {
 
-            return res.status(500).json({
-                mensagem: error instanceof Error
-                    ? error.message
-                    : error
-            });
+            next(error);
 
         }
+
     }
+
+
+
+
 
     static async atualizarCursos(
         req: Request,
-        res: Response
+        res: Response,
+        next: NextFunction
     ) {
 
         try {
@@ -273,25 +344,32 @@ export default class aprendizController {
 
 
             return res.status(200).json({
-                response: "Curso atualizado com sucesso!",
-                data: curso
+
+                response:
+                    "Curso atualizado com sucesso!",
+
+                data:
+                    curso
+
             });
 
 
         } catch(error) {
 
-            return res.status(500).json({
-                mensagem: error instanceof Error
-                    ? error.message
-                    : error
-            });
+            next(error);
 
         }
+
     }
+
+
+
+
 
     static async verPerfil(
         req: Request,
-        res: Response
+        res: Response,
+        next: NextFunction
     ) {
 
         try {
@@ -308,32 +386,38 @@ export default class aprendizController {
 
             if (!perfil) {
 
-                return res.status(404).json({
-                    message: "Perfil não encontrado"
-                });
+                throw new Error(
+                    "Perfil não encontrado"
+                );
 
             }
 
 
             return res.status(200).json({
-                data: perfil
+
+                data:
+                    perfil
+
             });
 
 
         } catch(error) {
 
-            return res.status(500).json({
-                mensagem: error instanceof Error
-                    ? error.message
-                    : error
-            });
+            next(error);
 
         }
+
     }
+
+
+
+
+
 
     static async verFormacaoAcademica(
         req: Request,
-        res: Response
+        res: Response,
+        next: NextFunction
     ) {
 
         try {
@@ -349,27 +433,30 @@ export default class aprendizController {
 
 
             return res.status(200).json({
-                data: formacao
+
+                data:
+                    formacao
+
             });
 
 
         } catch(error) {
 
-            return res.status(500).json({
-                mensagem: error instanceof Error
-                    ? error.message
-                    : error
-            });
+            next(error);
 
         }
+
     }
+
+
 
 
 
 
     static async verSituacaoProfissional(
         req: Request,
-        res: Response
+        res: Response,
+        next: NextFunction
     ) {
 
         try {
@@ -385,27 +472,30 @@ export default class aprendizController {
 
 
             return res.status(200).json({
-                data: situacao
+
+                data:
+                    situacao
+
             });
 
 
         } catch(error) {
 
-            return res.status(500).json({
-                mensagem: error instanceof Error
-                    ? error.message
-                    : error
-            });
+            next(error);
 
         }
+
     }
+
+
 
 
 
 
     static async verSoftskills(
         req: Request,
-        res: Response
+        res: Response,
+        next: NextFunction
     ) {
 
         try {
@@ -421,27 +511,24 @@ export default class aprendizController {
 
 
             return res.status(200).json({
-                data: softskills
+
+                data:
+                    softskills
+
             });
 
 
         } catch(error) {
 
-            return res.status(500).json({
-                mensagem: error instanceof Error
-                    ? error.message
-                    : error
-            });
+            next(error);
 
         }
+
     }
-
-
-
-
     static async verCompetencias(
         req: Request,
-        res: Response
+        res: Response,
+        next: NextFunction
     ) {
 
         try {
@@ -457,23 +544,29 @@ export default class aprendizController {
 
 
             return res.status(200).json({
-                data: competencias
+
+                data:
+                    competencias
+
             });
 
 
         } catch(error) {
 
-            return res.status(500).json({
-                mensagem: error instanceof Error
-                    ? error.message
-                    : error
-            });
+            next(error);
 
         }
+
     }
+
+
+
+
+
     static async verIdiomas(
         req: Request,
-        res: Response
+        res: Response,
+        next: NextFunction
     ) {
 
         try {
@@ -489,24 +582,29 @@ export default class aprendizController {
 
 
             return res.status(200).json({
-                data: idiomas
+
+                data:
+                    idiomas
+
             });
 
 
         } catch(error) {
 
-            return res.status(500).json({
-                mensagem: error instanceof Error
-                    ? error.message
-                    : error
-            });
+            next(error);
 
         }
+
     }
+
+
+
+
 
     static async verCursos(
         req: Request,
-        res: Response
+        res: Response,
+        next: NextFunction
     ) {
 
         try {
@@ -522,19 +620,19 @@ export default class aprendizController {
 
 
             return res.status(200).json({
-                data: cursos
+
+                data:
+                    cursos
+
             });
 
 
         } catch(error) {
 
-            return res.status(500).json({
-                mensagem: error instanceof Error
-                    ? error.message
-                    : error
-            });
+            next(error);
 
         }
+
     }
 
 
@@ -543,7 +641,8 @@ export default class aprendizController {
 
     static async filtrarApredizDashboart(
         req: Request,
-        res: Response
+        res: Response,
+        next: NextFunction
     ) {
 
         try {
@@ -552,25 +651,25 @@ export default class aprendizController {
                 await AprendizService.filtrarApredizDashboart();
 
 
-            return res.status(200).json(
-                dashboard
-            );
+            return res.status(200).json(dashboard);
 
 
         } catch(error) {
 
-            return res.status(500).json({
-                mensagem: error instanceof Error
-                    ? error.message
-                    : error
-            });
+            next(error);
 
         }
+
     }
+
+
+
+
 
     static async filtrarTudoAprendiz(
         req: Request,
-        res: Response
+        res: Response,
+        next: NextFunction
     ) {
 
         try {
@@ -581,20 +680,15 @@ export default class aprendizController {
                 );
 
 
-            return res.status(200).json(
-                aprendizes
-            );
+            return res.status(200).json(aprendizes);
 
 
         } catch(error) {
 
-            return res.status(500).json({
-                message: error instanceof Error
-                    ? error.message
-                    : error
-            });
+            next(error);
 
         }
+
     }
 
 
