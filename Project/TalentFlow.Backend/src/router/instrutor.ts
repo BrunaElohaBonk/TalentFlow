@@ -7,9 +7,10 @@ import { roleMiddleware } from "../Middlewares/roleMiddleware.ts";
 import { validationMiddleware } from "../Middlewares/validationMiddleware.ts";
 
 import {
-    criarInstrutorSchema,
+    criarUserSchema,
     editarInstrutorSchema
 } from "../DTO/schemas/instrutorSchema.ts";
+import AuthController from "../Controllers/authController.ts";
 
 
 const route = express.Router();
@@ -25,9 +26,9 @@ route
 
         roleMiddleware("INSTRUTOR"),
 
-        validationMiddleware(criarInstrutorSchema),
+        validationMiddleware(criarUserSchema),
 
-        instrutorController.criarInstrutor
+        AuthController.register
     )
 
 
@@ -43,19 +44,5 @@ route
 
         instrutorController.editarInstrutor
     )
-
-
-
-    .delete(
-        "/deletarInstrutor/:EDV",
-
-        authMiddleware,
-
-        roleMiddleware("INSTRUTOR"),
-
-        instrutorController.DeletarInstrutor
-    )
-
-
 
 export default route;

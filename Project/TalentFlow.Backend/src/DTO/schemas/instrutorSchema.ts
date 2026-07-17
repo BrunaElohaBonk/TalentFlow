@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 
-export const criarInstrutorSchema = z.object({
+export const criarUserSchema = z.object({
 
     EDV: z.coerce.number()
         .refine(

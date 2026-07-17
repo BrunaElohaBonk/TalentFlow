@@ -9,34 +9,24 @@ export default class instrutorController {
         next: NextFunction
     ) {
 
-
-        try {
-
-            const { EDV } = req.params;
+        const { EDV } = req.params;
 
 
-            const instrutor =
-                await InstrutorService.editar(
-                    Number(EDV),
-                    req.body
-                );
+        const instrutor =
+            await InstrutorService.editar(
+                Number(EDV),
+                req.body
+            );
 
 
-            return res.status(200).send({
+        return res.status(200).send({
 
-                response:
-                    "Sucesso ao editar Instrutor!",
+            response:
+                "Sucesso ao editar Instrutor!",
 
-                data: instrutor
+            data: instrutor
 
-            });
-
-
-        } catch(error) {
-
-            next(error);
-
-        }
+        });
 
     }
 

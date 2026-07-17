@@ -22,7 +22,6 @@ class AuthController {
     next: NextFunction
   ): Promise<void> {
 
-    try {
 
       const data: AdicionarUserDto = req.body;
 
@@ -40,21 +39,12 @@ class AuthController {
       });
 
 
-    } catch(error) {
-
-      next(error);
-
-    }
-
   }
   static async DeletarUser(
     req: Request,
     res: Response,
     next: NextFunction
 ) {
-
-
-    try {
 
         const { EDV } = req.params;
 
@@ -72,24 +62,13 @@ class AuthController {
         });
 
 
-    } catch(error) {
-
-        next(error);
-
-    }
-
 }
-
-
-
 
   static async login(
     req: Request,
     res: Response,
     next: NextFunction
   ): Promise<void> {
-
-    try {
 
       const data: LoginDto = req.body;
 
@@ -100,13 +79,6 @@ class AuthController {
 
       res.status(200).json(result);
 
-
-    } catch(error) {
-
-      next(error);
-
-    }
-
   }
 
   static async redefinirSenha(
@@ -114,8 +86,6 @@ class AuthController {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-
-    try {
 
       const data: RedefinirSenhaDto = req.body;
 
@@ -130,13 +100,6 @@ class AuthController {
 
       });
 
-
-    } catch(error) {
-
-      next(error);
-
-    }
-
   }
 
   static async esqueceuSenha(
@@ -144,8 +107,6 @@ class AuthController {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-
-    try {
 
       const data: EsqueceuSenhaDto = req.body;
 
@@ -159,13 +120,6 @@ class AuthController {
           "Se o e-mail existir, um link de redefinição foi enviado"
 
       });
-
-
-    } catch(error) {
-
-      next(error);
-
-    }
 
   }
 
@@ -186,6 +140,5 @@ class AuthController {
 
 
 }
-
 
 export default AuthController;

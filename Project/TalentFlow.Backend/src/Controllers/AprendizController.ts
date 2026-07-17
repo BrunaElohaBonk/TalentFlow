@@ -4,34 +4,23 @@ import AprendizService from "../Services/AprendizService.ts";
 
 export default class aprendizController {
 
-
     static async criar(
         req: Request,
         res: Response,
         next: NextFunction
     ) {
-
-        try {
-
-            const aprendiz =
-                await AprendizService.criar(req.body);
+        const aprendiz =
+            await AprendizService.criar(req.body);
 
 
-            return res.status(201).json({
+        return res.status(201).json({
 
-                message:
-                    "Aprendiz vinculado à turma com sucesso!",
+            message:
+                "Aprendiz vinculado à turma com sucesso!",
 
-                data: aprendiz
+            data: aprendiz
 
-            });
-
-
-        } catch(error) {
-
-            next(error);
-
-        }
+        });
 
     }
 
@@ -40,449 +29,289 @@ export default class aprendizController {
         res: Response,
         next: NextFunction
     ) {
-
-        try {
-
-            const { idPerfil } = req.params;
+        const { idPerfil } = req.params;
 
 
-            const perfilAtualizado =
-                await AprendizService.atualizarPerfil(
-                    Number(idPerfil),
-                    req.body
-                );
+        const perfilAtualizado =
+            await AprendizService.atualizarPerfil(
+                Number(idPerfil),
+                req.body
+            );
 
 
-            return res.status(200).json({
+        return res.status(200).json({
 
-                response:
-                    "Perfil atualizado com sucesso!",
+            response:
+                "Perfil atualizado com sucesso!",
 
-                perfil:
-                    perfilAtualizado
+            perfil:
+                perfilAtualizado
 
-            });
-
-
-        } catch(error) {
-
-            next(error);
-
-        }
+        });
 
     }
-
-
-
-
-
 
     static async atualizarFormacaoAcademica(
         req: Request,
         res: Response,
         next: NextFunction
     ) {
-
-        try {
-
-            const { EDV, id } = req.params;
+        const { EDV, id } = req.params;
 
 
-            const formacaoAtualizada =
-                await AprendizService.atualizarFormacaoAcademica(
-                    Number(EDV),
-                    Number(id),
-                    req.body
-                );
+        const formacaoAtualizada =
+            await AprendizService.atualizarFormacaoAcademica(
+                Number(EDV),
+                Number(id),
+                req.body
+            );
 
 
-            return res.status(200).json({
+        return res.status(200).json({
 
-                response:
-                    "Formação acadêmica atualizada com sucesso!",
+            response:
+                "Formação acadêmica atualizada com sucesso!",
 
-                data:
-                    formacaoAtualizada
+            data:
+                formacaoAtualizada
 
-            });
-
-
-        } catch(error) {
-
-            next(error);
-
-        }
+        });
 
     }
-
-
-
-
-
 
     static async atualizarSituacaoProfissional(
         req: Request,
         res: Response,
         next: NextFunction
     ) {
-
-        try {
-
-            const { EDV, id } = req.params;
+        const { EDV, id } = req.params;
 
 
-            const situacaoAtualizada =
-                await AprendizService.atualizarSituacaoProfissional(
-                    Number(EDV),
-                    Number(id),
-                    req.body
-                );
+        const situacaoAtualizada =
+            await AprendizService.atualizarSituacaoProfissional(
+                Number(EDV),
+                Number(id),
+                req.body
+            );
 
 
-            return res.status(200).json({
+        return res.status(200).json({
 
-                response:
-                    "Situação profissional atualizada com sucesso!",
+            response:
+                "Situação profissional atualizada com sucesso!",
 
-                data:
-                    situacaoAtualizada
+            data:
+                situacaoAtualizada
 
-            });
-
-
-        } catch(error) {
-
-            next(error);
-
-        }
+        });
 
     }
-
-
-
-
-
-
     static async atualizarSoftskills(
         req: Request,
         res: Response,
         next: NextFunction
     ) {
-
-        try {
-
-            const { id, EDV } = req.params;
+        const { id, EDV } = req.params;
 
 
-            const softskill =
-                await AprendizService.atualizarSoftskills(
-                    Number(EDV),
-                    Number(id),
-                    req.body
-                );
+        const softskill =
+            await AprendizService.atualizarSoftskills(
+                Number(EDV),
+                Number(id),
+                req.body
+            );
 
 
-            return res.status(200).json({
+        return res.status(200).json({
 
-                response:
-                    "Soft Skill atualizada com sucesso!",
+            response:
+                "Soft Skill atualizada com sucesso!",
 
-                data:
-                    softskill
+            data:
+                softskill
 
-            });
-
-
-        } catch(error) {
-
-            next(error);
-
-        }
-
+        });
     }
     static async atualizarCompetencias(
         req: Request,
         res: Response,
         next: NextFunction
     ) {
-
-        try {
-
-            const { id, EDV } = req.params;
+        const { id, EDV } = req.params;
 
 
-            const competencia =
-                await AprendizService.atualizarCompetencias(
-                    Number(EDV),
-                    Number(id),
-                    req.body
-                );
+        const competencia =
+            await AprendizService.atualizarCompetencias(
+                Number(EDV),
+                Number(id),
+                req.body
+            );
 
 
-            return res.status(200).json({
+        return res.status(200).json({
 
-                response:
-                    "Competência atualizada com sucesso!",
+            response:
+                "Competência atualizada com sucesso!",
 
-                data:
-                    competencia
+            data:
+                competencia
 
-            });
-
-
-        } catch(error) {
-
-            next(error);
-
-        }
+        });
 
     }
-
-
-
-
 
     static async atualizarIdiomas(
         req: Request,
         res: Response,
         next: NextFunction
     ) {
-
-        try {
-
-            const { id, EDV } = req.params;
+        const { id, EDV } = req.params;
 
 
-            const idioma =
-                await AprendizService.atualizarIdiomas(
-                    Number(EDV),
-                    Number(id),
-                    req.body
-                );
+        const idioma =
+            await AprendizService.atualizarIdiomas(
+                Number(EDV),
+                Number(id),
+                req.body
+            );
 
 
-            return res.status(200).json({
+        return res.status(200).json({
 
-                response:
-                    "Idioma atualizado com sucesso!",
+            response:
+                "Idioma atualizado com sucesso!",
 
-                data:
-                    idioma
+            data:
+                idioma
 
-            });
-
-
-        } catch(error) {
-
-            next(error);
-
-        }
+        });
 
     }
-
-
-
-
-
     static async atualizarCursos(
         req: Request,
         res: Response,
         next: NextFunction
     ) {
-
-        try {
-
-            const { id, EDV } = req.params;
+        const { id, EDV } = req.params;
 
 
-            const curso =
-                await AprendizService.atualizarCursos(
-                    Number(EDV),
-                    Number(id),
-                    req.body
-                );
+        const curso =
+            await AprendizService.atualizarCursos(
+                Number(EDV),
+                Number(id),
+                req.body
+            );
 
+        return res.status(200).json({
 
-            return res.status(200).json({
+            response:
+                "Curso atualizado com sucesso!",
 
-                response:
-                    "Curso atualizado com sucesso!",
+            data:
+                curso
 
-                data:
-                    curso
-
-            });
-
-
-        } catch(error) {
-
-            next(error);
-
-        }
+        });
 
     }
-
-
-
-
-
     static async verPerfil(
         req: Request,
         res: Response,
         next: NextFunction
     ) {
-
-        try {
-
-            const { EDV, id } = req.params;
+        const { EDV, id } = req.params;
 
 
-            const perfil =
-                await AprendizService.verPerfil(
-                    Number(EDV),
-                    Number(id)
-                );
+        const perfil =
+            await AprendizService.verPerfil(
+                Number(EDV),
+                Number(id)
+            );
 
 
-            if (!perfil) {
+        if (!perfil) {
 
-                throw new Error(
-                    "Perfil não encontrado"
-                );
-
-            }
-
-
-            return res.status(200).json({
-
-                data:
-                    perfil
-
-            });
-
-
-        } catch(error) {
-
-            next(error);
+            throw new Error(
+                "Perfil não encontrado"
+            );
 
         }
 
+        return res.status(200).json({
+
+            data:
+                perfil
+
+        });
+
     }
-
-
-
-
-
-
     static async verFormacaoAcademica(
         req: Request,
         res: Response,
         next: NextFunction
     ) {
-
-        try {
-
-            const { EDV, id } = req.params;
+        const { EDV, id } = req.params;
 
 
-            const formacao =
-                await AprendizService.verFormacaoAcademica(
-                    Number(EDV),
-                    Number(id)
-                );
+        const formacao =
+            await AprendizService.verFormacaoAcademica(
+                Number(EDV),
+                Number(id)
+            );
 
 
-            return res.status(200).json({
+        return res.status(200).json({
 
-                data:
-                    formacao
+            data:
+                formacao
 
-            });
-
-
-        } catch(error) {
-
-            next(error);
-
-        }
+        });
 
     }
-
-
-
-
-
-
     static async verSituacaoProfissional(
         req: Request,
         res: Response,
         next: NextFunction
     ) {
-
-        try {
-
-            const { EDV, id } = req.params;
+        const { EDV, id } = req.params;
 
 
-            const situacao =
-                await AprendizService.verSituacaoProfissional(
-                    Number(EDV),
-                    Number(id)
-                );
+        const situacao =
+            await AprendizService.verSituacaoProfissional(
+                Number(EDV),
+                Number(id)
+            );
 
 
-            return res.status(200).json({
+        return res.status(200).json({
 
-                data:
-                    situacao
+            data:
+                situacao
 
-            });
-
-
-        } catch(error) {
-
-            next(error);
-
-        }
+        });
 
     }
-
-
-
-
-
 
     static async verSoftskills(
         req: Request,
         res: Response,
         next: NextFunction
     ) {
-
-        try {
-
-            const { EDV, id } = req.params;
+        const { EDV, id } = req.params;
 
 
-            const softskills =
-                await AprendizService.verSoftskills(
-                    Number(EDV),
-                    Number(id)
-                );
+        const softskills =
+            await AprendizService.verSoftskills(
+                Number(EDV),
+                Number(id)
+            );
 
 
-            return res.status(200).json({
+        return res.status(200).json({
 
-                data:
-                    softskills
+            data:
+                softskills
 
-            });
-
-
-        } catch(error) {
-
-            next(error);
-
-        }
+        });
 
     }
     static async verCompetencias(
@@ -490,165 +319,93 @@ export default class aprendizController {
         res: Response,
         next: NextFunction
     ) {
-
-        try {
-
-            const { EDV, id } = req.params;
+        const { EDV, id } = req.params;
 
 
-            const competencias =
-                await AprendizService.verCompetencias(
-                    Number(EDV),
-                    Number(id)
-                );
+        const competencias =
+            await AprendizService.verCompetencias(
+                Number(EDV),
+                Number(id)
+            );
 
 
-            return res.status(200).json({
+        return res.status(200).json({
 
-                data:
-                    competencias
+            data:
+                competencias
 
-            });
-
-
-        } catch(error) {
-
-            next(error);
-
-        }
+        });
 
     }
-
-
-
-
-
     static async verIdiomas(
         req: Request,
         res: Response,
         next: NextFunction
     ) {
-
-        try {
-
-            const { EDV, id } = req.params;
+        const { EDV, id } = req.params;
 
 
-            const idiomas =
-                await AprendizService.verIdiomas(
-                    Number(EDV),
-                    Number(id)
-                );
+        const idiomas =
+            await AprendizService.verIdiomas(
+                Number(EDV),
+                Number(id)
+            );
 
 
-            return res.status(200).json({
+        return res.status(200).json({
 
-                data:
-                    idiomas
+            data:
+                idiomas
 
-            });
-
-
-        } catch(error) {
-
-            next(error);
-
-        }
+        });
 
     }
-
-
-
-
-
     static async verCursos(
         req: Request,
         res: Response,
         next: NextFunction
     ) {
-
-        try {
-
-            const { EDV, id } = req.params;
+        const { EDV, id } = req.params;
 
 
-            const cursos =
-                await AprendizService.verCursos(
-                    Number(EDV),
-                    Number(id)
-                );
+        const cursos =
+            await AprendizService.verCursos(
+                Number(EDV),
+                Number(id)
+            );
 
 
-            return res.status(200).json({
+        return res.status(200).json({
 
-                data:
-                    cursos
+            data:
+                cursos
 
-            });
-
-
-        } catch(error) {
-
-            next(error);
-
-        }
+        });
 
     }
-
-
-
-
-
     static async filtrarApredizDashboart(
         req: Request,
         res: Response,
         next: NextFunction
     ) {
-
-        try {
-
-            const dashboard =
-                await AprendizService.filtrarApredizDashboart();
+        const dashboard =
+            await AprendizService.filtrarApredizDashboart();
 
 
-            return res.status(200).json(dashboard);
-
-
-        } catch(error) {
-
-            next(error);
-
-        }
-
+        return res.status(200).json(dashboard);
     }
-
-
-
-
-
     static async filtrarTudoAprendiz(
         req: Request,
         res: Response,
         next: NextFunction
     ) {
-
-        try {
-
-            const aprendizes =
-                await AprendizService.filtrarTudo(
-                    req.query
-                );
+        const aprendizes =
+            await AprendizService.filtrarTudo(
+                req.query
+            );
 
 
-            return res.status(200).json(aprendizes);
-
-
-        } catch(error) {
-
-            next(error);
-
-        }
-
+        return res.status(200).json(aprendizes);
     }
 
 

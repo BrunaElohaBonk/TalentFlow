@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { TurmaService } from "../Services/TurmaService.ts";
-import {CriarTurmaDTO} from "../DTO/turmaDTO.ts"
+import { CriarTurmaDTO } from "../DTO/turmaDTO.ts"
 
 
 export default class turmaController {
@@ -12,39 +12,25 @@ export default class turmaController {
         next: NextFunction
     ): Promise<void> {
 
-        try {
-
-            const data : CriarTurmaDTO = req.body;
-            const turma =
-                await TurmaService.criar({
-                    nomeTurma : data.nomeTurma,
-                    name_Curso : data.name_Curso,
-                    nomeInstrutor : data.nomeInstrutor,
-                    EDV_Instrutor :data.EDV_Instrutor
-                });
-
-
-            res.status(201).json({
-
-                message:
-                    "Turma criada com sucesso!",
-
-                turma
-
+        const data: CriarTurmaDTO = req.body;
+        const turma =
+            await TurmaService.criar({
+                nomeTurma: data.nomeTurma,
+                name_Curso: data.name_Curso,
+                nomeInstrutor: data.nomeInstrutor,
+                EDV_Instrutor: data.EDV_Instrutor
             });
 
 
-        } catch(error) {
+        res.status(201).json({
 
-            next(error);
+            message:
+                "Turma criada com sucesso!",
 
-        }
+            turma
 
+        });
     }
-
-
-
-
 
     static async verTurmas(
         req: Request,
@@ -53,27 +39,13 @@ export default class turmaController {
     ): Promise<void> {
 
 
-        try {
-
-            const turmas =
-                await TurmaService.listarTodas();
+        const turmas =
+            await TurmaService.listarTodas();
 
 
-            res.status(200).json(turmas);
-
-
-        } catch(error) {
-
-            next(error);
-
-        }
+        res.status(200).json(turmas);
 
     }
-
-
-
-
-
 
     static async buscarTurma(
         req: Request,
@@ -81,33 +53,18 @@ export default class turmaController {
         next: NextFunction
     ): Promise<void> {
 
-
-        try {
-
-            const { id } = req.params;
+        const { id } = req.params;
 
 
-            const turma =
-                await TurmaService.buscarPorId(
-                    Number(id)
-                );
+        const turma =
+            await TurmaService.buscarPorId(
+                Number(id)
+            );
 
 
-            res.status(200).json(turma);
-
-
-        } catch(error) {
-
-            next(error);
-
-        }
+        res.status(200).json(turma);
 
     }
-
-
-
-
-
 
 
     static async atualizarTurma(
@@ -116,34 +73,24 @@ export default class turmaController {
         next: NextFunction
     ): Promise<void> {
 
-
-        try {
-
-            const { id } = req.params;
+        const { id } = req.params;
 
 
-            const turma =
-                await TurmaService.atualizar(
-                    Number(id),
-                    req.body
-                );
+        const turma =
+            await TurmaService.atualizar(
+                Number(id),
+                req.body
+            );
 
 
-            res.status(200).json({
+        res.status(200).json({
 
-                message:
-                    "Turma atualizada com sucesso!",
+            message:
+                "Turma atualizada com sucesso!",
 
-                turma
+            turma
 
-            });
-
-
-        } catch(error) {
-
-            next(error);
-
-        }
+        });
 
     }
 
@@ -153,32 +100,20 @@ export default class turmaController {
         next: NextFunction
     ): Promise<void> {
 
-
-        try {
-
-            const { id } = req.params;
+        const { id } = req.params;
 
 
-            await TurmaService.deletar(
-                Number(id)
-            );
+        await TurmaService.deletar(
+            Number(id)
+        );
 
 
-            res.status(200).json({
+        res.status(200).json({
 
-                message:
-                    "Turma deletada com sucesso!"
+            message:
+                "Turma deletada com sucesso!"
 
-            });
-
-
-        } catch(error) {
-
-            next(error);
-
-        }
+        });
 
     }
-
-
 }
