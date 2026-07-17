@@ -118,8 +118,8 @@ export class UserService {
 
   }
 
-  static async register(data: AdicionarUserDto) {
 
+  static async register(data: AdicionarUserDto) {
 
     const passwordCrypt =
       await bcrypt.hash(
@@ -164,7 +164,7 @@ export class UserService {
 
 
           password_login:
-            passwordCrypt
+            passwordCrypt,
 
         }
 
