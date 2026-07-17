@@ -4,6 +4,8 @@ import { useState } from 'react'
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import { FormControl, FormControlLabel, Radio, RadioGroup } from "@mui/material";
+import { useDropzone } from "react-dropzone";
+import download from '../../../../assets/img/icon download.png'
 
 interface IFormacao {
     curso: string;
@@ -19,6 +21,7 @@ interface IFormacao {
 interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    id: number;
 }
 
 function EditarFormacaoAcademica({ visible, setVisible, id }: Props) {
@@ -33,6 +36,32 @@ function EditarFormacaoAcademica({ visible, setVisible, id }: Props) {
         descricao: '',
         certificado: null
     })
+
+    const [nomeCertificado, setNomeCertificado] = useState("");
+
+    const { getRootProps, getInputProps } = useDropzone({
+        accept: {
+            "image/*": [],
+        },
+        multiple: false,
+        maxFiles: 1,
+        onDrop: (acceptedFiles) => {
+
+            if (acceptedFiles.length > 0) {
+
+                const arquivo = acceptedFiles[0];
+
+                setNomeCertificado(arquivo.name);
+
+                setFormacao((prev) => ({
+                    ...prev,
+                    certificado: arquivo
+                }));
+
+            }
+
+        },
+    });
 
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -155,13 +184,12 @@ function EditarFormacaoAcademica({ visible, setVisible, id }: Props) {
         return null
     }
 
-    console.log("EDITAR FORMULAÇÃO ABERTO")
 
     return (
 
         <div className="editarFormacao-overlay">
 
-            <form 
+            <form
                 onSubmit={handleSubmit}
                 className="editarFormacao-card"
             >
@@ -172,7 +200,7 @@ function EditarFormacaoAcademica({ visible, setVisible, id }: Props) {
                     onClick={() => setVisible(false)}
                 >
 
-                    <img src={sair} alt="Fechar"/>
+                    <img src={sair} alt="Fechar" />
 
                 </button>
 
@@ -187,9 +215,13 @@ function EditarFormacaoAcademica({ visible, setVisible, id }: Props) {
 
                     <div className="editarFormacao-grupo">
 
+                        <label className="editarFormacao-label">
+                            Nome do Curso
+                        </label>
+
+
                         <input
                             name="curso"
-                            placeholder="Nome do Curso"
                             className="editarFormacao-input"
                             value={formacao.curso}
                             onChange={handleChange}
@@ -200,9 +232,13 @@ function EditarFormacaoAcademica({ visible, setVisible, id }: Props) {
 
                     <div className="editarFormacao-grupo">
 
+                        <label className="editarFormacao-label">
+                            Nome da Instituição
+                        </label>
+
+
                         <input
                             name="instituicao"
-                            placeholder="Nome da Instituição"
                             className="editarFormacao-input"
                             value={formacao.instituicao}
                             onChange={handleChange}
@@ -211,132 +247,217 @@ function EditarFormacaoAcademica({ visible, setVisible, id }: Props) {
                     </div>
 
 
-                    <div className="editarFormacao-periodo">
+                    <div className="editarFormacao-grupo">
+
+                        <label className="editarFormacao-label">
+                            Situação
+                        </label>
 
 
-                        <FormControl className="editarFormacao-radio">
-
-                            <RadioGroup
-                                row
-                                value={formacao.situacao}
-                                onChange={handleSituacao}
-                            >
-
-                                <FormControlLabel
-                                    value="Concluído"
-                                    control={
-                                        <Radio
-                                            sx={{
-                                                color:"#2B83D5",
-                                                "&.Mui-checked":{
-                                                    color:"#2B83D5"
-                                                }
-                                            }}
-                                        />
-                                    }
-                                    label="Concluído"
-                                />
+                        <div className="editarFormacao-situacaoContainer">
 
 
-                                <FormControlLabel
-                                    value="Cursando"
-                                    control={
-                                        <Radio
-                                            sx={{
-                                                color:"#2B83D5",
-                                                "&.Mui-checked":{
-                                                    color:"#2B83D5"
-                                                }
-                                            }}
-                                        />
-                                    }
-                                    label="Cursando"
-                                />
+                            <FormControl className="editarFormacao-radio">
 
-                            </RadioGroup>
-
-                        </FormControl>
+                                <RadioGroup
+                                    row
+                                    name="situacao"
+                                    value={formacao.situacao}
+                                    onChange={handleSituacao}
+                                >
 
 
+                                    <FormControlLabel
+                                        value="Concluído"
+                                        sx={{
+                                            "& .MuiFormControlLabel-label": {
+                                                fontFamily: "'Poppins', sans-serif",
+                                                fontSize: "1rem",
+                                                color: "#6a6a6a"
+                                            }
+                                        }}
+                                        control={
+                                            <Radio
+                                                sx={{
+                                                    color: "#2B83D5",
+                                                    "&.Mui-checked": { color: "#2B83D5" },
+                                                    "& .MuiSvgIcon-root": { fontSize: 24 }
+                                                }}
+                                            />
+                                        }
+                                        label="Concluído"
+                                    />
 
-                        <div className="editarFormacao-periodos">
 
-                            <input
-                                name="periodoAtual"
-                                placeholder="Período Atual"
-                                className={
-                                    formacao.situacao === "Concluído"
-                                    ?
-                                    "editarFormacao-input periodo-disabled"
-                                    :
-                                    "editarFormacao-input"
-                                }
-                                value={formacao.periodoAtual}
-                                disabled={formacao.situacao === "Concluído"}
-                                onChange={handleChange}
-                            />
+                                    <FormControlLabel
+                                        value="Cursando"
+                                        sx={{
+                                            "& .MuiFormControlLabel-label": {
+                                                fontFamily: "'Poppins', sans-serif",
+                                                fontSize: "1rem",
+                                                color: "#6a6a6a"
+                                            }
+                                        }}
+                                        control={
+                                            <Radio
+                                                sx={{
+                                                    color: "#2B83D5",
+                                                    "&.Mui-checked": { color: "#2B83D5" },
+                                                    "& .MuiSvgIcon-root": { fontSize: 24 }
+                                                }}
+                                            />
+                                        }
+                                        label="Cursando"
+                                    />
 
 
-                            <input
-                                name="totalPeriodos"
-                                placeholder="Total de Períodos"
-                                className="editarFormacao-input"
-                                value={formacao.totalPeriodos}
-                                onChange={handleChange}
-                            />
+                                </RadioGroup>
+
+
+                            </FormControl>
+
+
+                            <div className="editarFormacao-periodos">
+
+
+                                <div className="editarFormacao-periodoGrupo">
+
+                                    <label className="editarFormacao-label">
+                                        Período Atual
+                                    </label>
+
+
+                                    <input
+                                        name="periodoAtual"
+                                        className={
+                                            formacao.situacao === "Cursando"
+                                                ?
+                                                "editarFormacao-input"
+                                                :
+                                                "editarFormacao-input periodo-disabled"
+                                        }
+                                        value={formacao.periodoAtual}
+                                        disabled={formacao.situacao !== "Cursando"}
+                                        onChange={handleChange}
+                                    />
+
+                                </div>
+
+
+
+                                <div className="editarFormacao-periodoGrupo">
+
+                                    <label className="editarFormacao-label">
+                                        Total de Períodos
+                                    </label>
+
+
+                                    <input
+                                        name="totalPeriodos"
+                                        className="editarFormacao-input"
+                                        value={formacao.totalPeriodos}
+                                        onChange={handleChange}
+                                    />
+
+                                </div>
+
+
+                            </div>
+
 
                         </div>
 
 
                     </div>
+                    <div className="editarFormacao-grupo">
 
+                        <label className="editarFormacao-label">
+                            Nível de Formação
+                        </label>
 
-                    <input
-                        name="nivelFormacao"
-                        placeholder="Nível de Formação"
-                        className="editarFormacao-input"
-                        value={formacao.nivelFormacao}
-                        onChange={handleChange}
-                    />
-
-
-                    <textarea
-                        name="descricao"
-                        placeholder="Descrição do curso"
-                        className="editarFormacao-textarea"
-                        value={formacao.descricao}
-                        onChange={handleChange}
-                    />
-
-
-                    <label className="editarFormacao-certificado">
-
-                        Certificado
 
                         <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleCertificado}
+                            name="nivelFormacao"
+                            className="editarFormacao-input"
+                            value={formacao.nivelFormacao}
+                            onChange={handleChange}
                         />
 
-                    </label>
+                    </div>
 
 
 
-                    <button
-                        type="submit"
-                        className="editarFormacao-salvar"
-                    >
+                    <div className="editarFormacao-grupo">
 
-                        SALVAR MODIFICAÇÃO
+                        <label className="editarFormacao-label">
+                            Descrição
+                        </label>
 
-                    </button>
+
+                        <textarea
+                            name="descricao"
+                            className="editarFormacao-textarea"
+                            value={formacao.descricao}
+                            onChange={handleChange}
+                        />
+
+
+                    </div>
+
+
+
+                    <div className="editarFormacao-grupo">
+
+                        <label className="editarFormacao-label">
+                            Certificado
+                        </label>
+
+
+                        <div
+                            className="certificado-container"
+                            {...getRootProps()}
+                        >
+
+                            <input {...getInputProps()} name="certificado" />
+
+                            <p className="certificado-file">
+                                {nomeCertificado}
+                            </p>
+
+
+                            <img
+                                src={download}
+                                alt="upload"
+                                className="certificado-upload"
+                            />
+
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div className="editarFormacao-botoes">
+
+                        <button
+                            type="submit"
+                            className="editarFormacao-salvar"
+                        >
+
+                            SALVAR MODIFICAÇÃO
+
+                        </button>
+
+
+                    </div>
 
 
                 </div>
 
 
             </form>
+
 
         </div>
 

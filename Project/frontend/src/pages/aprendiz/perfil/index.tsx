@@ -1,6 +1,5 @@
 import Header from "../../../components/header"
 import icon_logout from '../../../assets/img/icon_logout.png'
-import './perfil.css'
 import { useEffect, useState } from "react";
 import icon_editar from '../../../assets/img/icon_editar.png'
 import icon_user from '../../../assets/img/icon_user.png'
@@ -14,7 +13,8 @@ import CursoComplementar from "../curso_complementar";
 import Idioma from "../idioma";
 import SoftSkill from "../soft_skill";
 import Competencia from "../competencias";
-import EditarFormacaoAcademica from "../formacao_academica/editar/editar";
+import EditarFormacaoAcademica from '../formacao_academica/editar/editar'
+import './perfil.css'
 
 interface Usuario {
     edv: number;
@@ -25,6 +25,17 @@ interface Usuario {
     contato: number;
     dataNascimento: string;
     tipo: string;
+}
+
+interface FormacaoAcademica {
+    id: number;
+    nomeCurso: string;
+    instituicao: string;
+    situacao: string;
+    periodoAtual: number;
+    totalPeriodos: number;
+    nivel: string;
+    descricao: string;
 }
 
 function converterData(data: string) {
@@ -67,17 +78,11 @@ function Perfil() {
     const [editarSituacao, setEditarSituacao] = useState(false)
     const [editarFormacao, setEditarFormacao] = useState(false)
 
-    // TEMPORÁRIO - REMOVER NA INTEGRAÇÃO COM BACKEND
-    // Os dados do usuário estão sendo recuperados do localStorage.
-    // Após a integração, substituir pela requisição da API.
     useEffect(() => {
-
         const usuario = localStorage.getItem("usuarioLogado")
-
         if (usuario) {
             setAprendiz(JSON.parse(usuario))
         }
-
     }, [])
 
     if (!aprendiz) {
@@ -86,24 +91,24 @@ function Perfil() {
 
     return (
         <>
-            <div>
-                <Header></Header>
-            </div>
+        <div>
+            <Header></Header>
+        </div>
 
-            <div className="confirm-logout">
-                <img src={icon_logout} alt="icon_logout" onClick={() => setLogout(true)}/>
-            </div>
+        <div className="confirm-logout">
+            <img src={icon_logout} alt="icon_logout" onClick={() => setLogout(true)}/>
+        </div>
 
-            <Logout visible={logout} setVisible={setLogout}/>
-            <SituacaoProfissional visible={situacao} setVisible={setSituacao} setEditarSituacao={setEditarSituacao}/>
-            <FormacaoAcademica visible={formacao_academica} setVisible={setFormacaoAcademica} setEditarFormacao={setEditarFormacao}/>
-            <CursoComplementar visible={curso_complementar} setVisible={setCursoComplementar}/>
-            <Idioma visible={idioma} setVisible={setIdioma}/>
-            <SoftSkill visible={soft_skill} setVisible={setSoftSkill}/>
-            <Competencia visible={competencia} setVisible={setCompetencia}/>
-            <EditarPerfil visible={editar} setVisible={setEditar} edv={aprendiz.edv}/>
-            <EditarSituacaoProfissional visible={editarSituacao} setVisible={setEditarSituacao} edv={aprendiz.edv}/>
-            <EditarFormacaoAcademica visible={editarFormacao} setVisible={setEditarFormacao}/>
+        <Logout visible={logout} setVisible={setLogout}/>
+        <SituacaoProfissional visible={situacao} setVisible={setSituacao} setEditarSituacao={setEditarSituacao}/>
+        <FormacaoAcademica visible={formacao_academica} setVisible={setFormacaoAcademica} setEditarFormacao={setEditarFormacao}/>
+        <CursoComplementar visible={curso_complementar} setVisible={setCursoComplementar}/>
+        <Idioma visible={idioma} setVisible={setIdioma}/>
+        <SoftSkill visible={soft_skill} setVisible={setSoftSkill}/>
+        <Competencia visible={competencia} setVisible={setCompetencia}/>
+        <EditarPerfil visible={editar} setVisible={setEditar} edv={aprendiz.edv}/>
+        <EditarSituacaoProfissional visible={editarSituacao} setVisible={setEditarSituacao} edv={aprendiz.edv}/>
+        <EditarFormacaoAcademica visible={editarFormacao} setVisible={setEditarFormacao} />
 
             <main className="perfil-tela">
                 <section className="perfil-bloco">

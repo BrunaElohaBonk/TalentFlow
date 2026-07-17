@@ -16,19 +16,15 @@ function Confirm_login() {
   const [edv, setEdv] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
-
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-
   const [logout, setLogout] = useState(false)
 
-  // TEMPORÁRIO - REMOVER NA INTEGRAÇÃO COM BACKEND
   const usuario = {
     nome: "Bruna",
     dataNascimento: "21/08/2006"
   }
 
-  // AQUI VAI O BACKEND
   const validarSenha = () => {
     const temMaiuscula = /[A-Z]/.test(password)
     const temMinuscula = /[a-z]/.test(password)
@@ -98,10 +94,6 @@ function Confirm_login() {
     }).then(() => {
       navigate('/Perfil')
     })
-
-    // AQUI VAI O BACKEND
-    // Enviar EDV e nova senha para o banco de dados.
-
     navigate('/Perfil')
   }
 

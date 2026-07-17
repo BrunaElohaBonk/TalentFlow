@@ -88,7 +88,7 @@ function EditarSituacaoProfissional({ visible, setVisible, edv }: Props) {
                     <img src={sair} alt="Fechar" />
                 </button>
                 <span className="editarSituacao-titulo">
-                    Situação Profissional
+                    Editar Situação Profissional
                 </span>
                 <div className="editarSituacao-container">
                     <div className="editarSituacao-grupo">

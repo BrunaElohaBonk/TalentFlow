@@ -5,6 +5,8 @@ import olho from '../../../assets/img/icon_olho.png'
 import icon_editar from '../../../assets/img/icon_editar.png'
 import adicionar from '../../../assets/img/icon adicionar.png'
 import fechar from '../../../assets/img/close.png'
+import { useState } from "react";
+import FormacaoAcademicaVisualizar from "./ver/ver";
 import './formacao_academica.css'
 
 interface Props {
@@ -14,6 +16,9 @@ interface Props {
 }
 
 function FormacaoAcademica({ visible, setVisible, setEditarFormacao }: Props) {
+
+    const [visualizarFormacao, setVisualizarFormacao] = useState(false)
+    const [formacaoSelecionada, setFormacaoSelecionada] = useState<any>(null)
 
     if (!visible) {
         return null
@@ -28,7 +33,8 @@ function FormacaoAcademica({ visible, setVisible, setEditarFormacao }: Props) {
             periodoAtual: 6,
             totalPeriodos: 10,
             nivelFormacao: "Superior",
-            descricao: "Graduação voltada para automação industrial."
+            descricao: "Graduação voltada para automação industrial.",
+            certificado: null
         },
         {
             id: 2,
@@ -38,7 +44,8 @@ function FormacaoAcademica({ visible, setVisible, setEditarFormacao }: Props) {
             periodoAtual: 4,
             totalPeriodos: 4,
             nivelFormacao: "Técnico",
-            descricao: "Formação técnica em automação."
+            descricao: "Formação técnica em automação.",
+            certificado: null
         }
     ];
 
@@ -58,9 +65,7 @@ function FormacaoAcademica({ visible, setVisible, setEditarFormacao }: Props) {
         }
 
         try{
-
             await axios.delete(`link backend/${id}`)
-
             Swal.fire({
                 title:'Deletada!',
                 text:'Formação removida com sucesso!',
@@ -68,84 +73,121 @@ function FormacaoAcademica({ visible, setVisible, setEditarFormacao }: Props) {
             })
 
         }catch(error){
-
             console.error(error)
-
             Swal.fire({
                 title:'Erro!',
                 text:'Erro ao deletar formação.',
                 icon:'error'
             })
-
         }
-
     }
 
     return(
         <div className="formacao-container">
-
             <div className="formacao-body">
-
                 <div className="formacao-header">
-
-                    <button
-                        type="button"
-                        className="btn-header"
-                    >
+                    <button type="button" className="btn-header">
                         <img src={adicionar} alt="Adicionar"/>
                     </button>
-
                     <button
                         type="button"
                         className="btn-header"
                         onClick={() => setVisible(false)}
                     >
-                        <img src={fechar} alt="Fechar" className="icon-fechar-img"/>
+
+                        <img 
+                            src={fechar} 
+                            alt="Fechar"
+                            className="icon-fechar-img"
+                        />
+
                     </button>
+
 
                 </div>
 
 
+
+
+
                 <div className="formacao-modal">
+
 
                     {
                         formacoes.map((item)=>(
 
-                            <div className="formacao-item" key={item.id}>
+
+                            <div 
+                                className="formacao-item" 
+                                key={item.id}
+                            >
+
+
 
                                 <span className="formacao-titulo">
+
                                     {item.curso}
+
                                 </span>
+
+
 
 
                                 <div className="formacao-acoes">
 
 
+
+
+
                                     <button
                                         type="button"
                                         className="btn-acao"
+                                        onClick={() => {
+
+                                            setFormacaoSelecionada(item)
+
+                                            setVisualizarFormacao(true)
+
+                                        }}
                                     >
+
                                         <img 
                                             src={olho}
                                             alt="Visualizar"
                                             className="icon-olho"
                                         />
+
                                     </button>
+
+
+
+
+
 
 
                                     <button
                                         type="button"
                                         className="btn-acao"
                                         onClick={()=>{
+
                                             setVisible(false)
+
                                             setEditarFormacao(true)
+
                                         }}
                                     >
+
                                         <img
                                             src={icon_editar}
                                             alt="Editar"
                                         />
+
                                     </button>
+
+
+
+
+
 
 
                                     <button
@@ -153,26 +195,69 @@ function FormacaoAcademica({ visible, setVisible, setEditarFormacao }: Props) {
                                         className="btn-acao"
                                         onClick={()=>handleDelete(item.id)}
                                     >
+
                                         <img
                                             src={lixeira}
                                             alt="Excluir"
                                         />
+
                                     </button>
+
+
+
 
 
                                 </div>
 
+
+
+
                             </div>
+
+
 
                         ))
                     }
 
+
                 </div>
+
+
+
+
+
+                {
+                    visualizarFormacao &&
+
+                    formacaoSelecionada &&
+
+
+                    <FormacaoAcademicaVisualizar
+
+                        visible={visualizarFormacao}
+
+                        setVisible={setVisualizarFormacao}
+
+                        setEditarFormacao={setEditarFormacao}
+
+                        formacao={formacaoSelecionada}
+
+                    />
+
+                }
+
+
+
 
             </div>
 
+
+
         </div>
+
     )
+
 }
+
 
 export default FormacaoAcademica

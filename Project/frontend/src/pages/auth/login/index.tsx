@@ -42,24 +42,7 @@ const usuario = [
 
   const navigate = useNavigate() 
 
-  const validarLogin = () => {
-    if (edv === "") {
-      return "Informe o EDV."
-    }
-    if (password === "") {
-      return "Informe a senha."
-    }
-    const usuarioEncontrado = usuario.find(
-      (usuario) => usuario.edv === edv && usuario.senha === password
-    )
-    if (!usuarioEncontrado) {
-      return "EDV ou senha inválidos."
-    }
-    return null
-  }
-
   const handleLogin = async () => {
-    // TEMPORÁRIO - REMOVER NA INTEGRAÇÃO COM BACKEND
     if (edv === "") {
       Swal.fire({
         icon: "error",
