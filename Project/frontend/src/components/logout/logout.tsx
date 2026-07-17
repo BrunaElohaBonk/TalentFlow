@@ -2,14 +2,21 @@ import icon_logout from '../../assets/img/icon_logout.png'
 import './logout.css'
 import { useNavigate } from "react-router-dom"
 import { useState } from "react"
+import { useAuth } from "../../context/authContext";
 
-function Logout({visible, setVisible}: any) {
+interface LogoutProps {
+    visible:boolean;
+    setVisible:(value:boolean)=>void;
+}
 
+function Logout({visible, setVisible}: LogoutProps) {
+  const { logout } = useAuth();
   const navigate = useNavigate()
-
   const handleLogout = () => {
-    navigate('/')
-  }
+    console.log("clicou sair");
+    logout();
+    navigate('/', { replace: true });
+}
 
   return (
     <>

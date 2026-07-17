@@ -2,6 +2,8 @@ import Header from "../../../components/header"
 import Sidebar from "../../../components/sidebar"
 import './notificacao.css'
 import { notificacoes } from './notificacao'
+import { useEffect } from "react";
+import { useNotificacao } from "../../../context/notificacaoContext";
 
 interface INotificacao {
     id: number;
@@ -11,6 +13,10 @@ interface INotificacao {
 }
 
 function Notificacao(){
+    const { marcarComoLida } = useNotificacao();
+    useEffect(() => {
+        marcarComoLida();
+    }, []);
     // const [notificacoes, setNotificacoes] = useState<INotificacao[]>([]);
     // const fetchNotif = async () => {
     //     try {

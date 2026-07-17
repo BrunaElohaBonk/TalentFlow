@@ -7,16 +7,30 @@ import Swal from 'sweetalert2'
 import './login.css'
 import { useNavigate } from "react-router-dom"
 import { useState } from 'react'
+import { useAuth } from "../../../context/authContext";
+
+interface Usuario {
+    edv: string;
+    img: string;
+    nome: string;
+    email: string;
+    user: string;
+    contato: number;
+    dataNascimento: string;
+    tipo: "instrutor" | "aprendiz";
+    senha: string;
+}
 
 function Login() {
   const [edv, setEdv] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
+  const { login } = useAuth();
 
   // EXCLUIR AQUI NO BACKEND
   // Esses dados vão vir do banco de dados através da API
   // TEMPORÁRIO - REMOVER NA INTEGRAÇÃO COM BACKEND
-const usuario = [
+const usuario: Usuario[] = [
   {
     edv: "92906829",
     img: "",
@@ -36,7 +50,8 @@ const usuario = [
     contato: 41995325493,
     dataNascimento: "08/01/2008",
     tipo: "instrutor",
-    senha: "123"
+    senha: "123",
+    img: ""
   }
 ]
 
@@ -94,18 +109,18 @@ const usuario = [
       return
     }
     if (usuarioEncontrado) {
-      localStorage.setItem(
-        "usuarioLogado",
-        JSON.stringify(usuarioEncontrado)
-      )
+      login(usuarioEncontrado);
+
       if (password === usuarioEncontrado.dataNascimento) {
         navigate('/Confirm_login')
         return
       }
+
       if (usuarioEncontrado.tipo === "aprendiz") {
         navigate('/Perfil')
         return
       }
+
       if (usuarioEncontrado.tipo === "instrutor") {
         navigate('/Home')
         return

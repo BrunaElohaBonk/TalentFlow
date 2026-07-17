@@ -87,3 +87,11 @@ html, body, #root {
 .sidebar-routes{
     padding: 12px;
 }
+
+.sidebar-badge .MuiBadge-badge {
+    width: 10px;
+    height: 10px;
+    min-width: 10px;
+    border-radius: 50%;
+    top: 3px;
+}
