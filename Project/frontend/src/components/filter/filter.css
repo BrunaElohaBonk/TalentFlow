@@ -75,11 +75,36 @@
 }
 
 .filtro-titulo {
-    font-family: 'Poppins', sans-serif;
-    font-size: 2rem;
-    font-weight: bold;
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 1rem !important;
+    color: #8a8a8a !important;
 }
 
+.filtro-select {
+    width: 100%;
+    font-family: 'Poppins', sans-serif;
+}
+
+.filtro-select .MuiOutlinedInput-root {
+    height: 40px;
+    border-radius: 15px;
+}
+
+.filtro-select .MuiOutlinedInput-notchedOutline {
+    border-radius: 15px;
+    border: 1px solid #D9D9D9;
+}
+
+.filtro-select .MuiSelect-select {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: 0 14px !important;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    color: #8a8a8a;
+}
 .filtro-idade {
     display: flex;
     align-items: center;
@@ -90,12 +115,9 @@
 .filtro-input {
     width: 100%;
     height: 40px;
-
     border-radius: 15px;
     border: 1px solid #D9D9D9;
-
     padding: 0 15px;
-
     font-family: 'Poppins', sans-serif;
     font-size: 1rem;
     color: #8a8a8a;
@@ -106,6 +128,25 @@
     outline: none;
     border-color: #2B83D5;
     box-shadow: 0 0 5px rgba(43,131,213,.3);
+}
+
+.filtro-idade .MuiFormLabel-root {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    color: #8a8a8a;
+    margin-bottom: 5px;
+    align-self: flex-start;
+    text-align: left;
+}
+
+.filtro-idade .MuiFormLabel-root.Mui-focused {
+    color: #8a8a8a;
+}
+
+.filtro-idade-inputs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .filtro-conteudo {
@@ -142,4 +183,50 @@
 .filtro-button.secondary {
     border: 1px solid #D9D9D9 !important;
     color: #8a8a8a !important;
+}
+
+.filtro-fechar {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.filtro-fechar-button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.filtro-img-fechar {
+    width: 25px;
+    height: 25px;
+}
+
+.filtro-titulo-expansivel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #000;
+    padding: 15px 0;
+    border-bottom: 1px solid #D9D9D9;
+    cursor: pointer;
+}
+
+.filtro-titulo-img {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+.filtro-expansao {
+    display: none;
+    padding: 15px 0;
+}
+
+.filtro-expansao.mostrar {
+    display: block;
 }

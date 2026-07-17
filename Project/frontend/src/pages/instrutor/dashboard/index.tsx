@@ -5,7 +5,12 @@ function Dashboard(){
     return(
         <div>
             <Header></Header>
-            <Sidebar></Sidebar>
+            <div className="home-container">
+                <Sidebar/>
+                <div className="home-body">
+                    
+                </div>
+            </div>
         </div>
     )
 }
