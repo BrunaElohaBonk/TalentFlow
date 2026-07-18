@@ -179,7 +179,7 @@ function CadastrarUser() {
     };
 
     return (
-        <div>
+        <div className="user">
             <Header />
             <div className="user-container">
                 <Sidebar />

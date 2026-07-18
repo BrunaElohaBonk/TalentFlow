@@ -1,20 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+.dashboard{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
 }
 
-.home-container {
+.dashboard-content{
     display: flex;
-    min-height: 94vh;
+    flex: 1;
+    overflow: hidden;
 }
 
-.home-body {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    padding: 20px;
+.home-body{
+    flex: 1;
+    overflow: auto;
 }

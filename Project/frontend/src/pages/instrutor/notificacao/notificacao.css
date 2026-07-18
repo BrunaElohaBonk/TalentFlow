@@ -1,14 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+.notificacao{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
 }
+
 
 .notificacao-container {
     display: flex;
-    min-height: 94vh;
+    flex: 1;
+    overflow: hidden;
 }
 
 .notificacao-body {
@@ -17,6 +19,8 @@
     justify-content: center;
     width: 100%;
     padding: 20px;
+    flex: 1;
+    overflow: auto;
 }
 
 .notificacao-modal{

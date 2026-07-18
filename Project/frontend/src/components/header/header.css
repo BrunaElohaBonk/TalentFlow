@@ -1,15 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
-html, body, #root {
-    height: 6vh;
-    width: 100%;
-    margin: 0;
-}
-
-.header-body{
-    height: 6vh;
-}
-
 .header-position{
     display: flex;
     justify-content: right;
@@ -28,7 +18,7 @@ html, body, #root {
 }
 
 .header-final{
-    height: 0.01rem;
+    height: 1.3px;
     width: 100%;
     background-color: rgb(190, 190, 190);
 }

@@ -51,7 +51,7 @@ function PerfilInstrutor(){
     // }, [])
 
     return(
-        <div>
+        <div className="perfil">
             <Header></Header>
             <EditarPerfil visible={editar} setVisible={setEditar} edv={perfil.edv}/>
             <div className="perfil-container">

@@ -1,11 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
- 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
- 
+
 .react-datepicker-wrapper {
     width: 70%;
 }
@@ -28,10 +22,16 @@
     box-shadow: 0 0 5px rgba(43, 131, 213, .3);
 }
  
+.user{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
 .user-container {
     display: flex;
-    min-height: 94vh;
-    width: 100%;
+    flex: 1;
+    overflow: hidden;
 }
  
 .user-body {
@@ -40,6 +40,8 @@
     justify-content: center;
     width: 100%;
     padding: 20px;
+    flex: 1;
+    overflow: auto;
 }
  
 .user-form {

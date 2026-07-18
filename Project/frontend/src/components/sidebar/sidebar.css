@@ -8,28 +8,25 @@
 
 .app {
     display: flex;
-    min-height: 94vh;
-}
-
-html, body, #root {
-    height: 94vh;
-    width: 100%;
-    margin: 0;
+    /* min-height: 94vh; */
 }
 
 .sidebar-container{
     display: flex;
     justify-content: left;
     align-items: flex-end;
-    height: 94vh;
-    width: 13vw;
+    /* height: 94vh; */
+    width: 240px;
+    flex-shrink: 0;
 }
 
-.sidebar-corpo {
-    width: 13vw;
-    height: 92.4vh;
+.sidebar-container,.sidebar-corpo {
+    width: 250px;
+    min-width: 250px;
+    height: 100%;
     background: #fff;
-    border: 0.01rem solid rgb(190, 190, 190);
+    border: 1px solid rgb(190, 190, 190);
+    border-top: none;
     display: flex;
     flex-direction: column;
 }
@@ -38,21 +35,21 @@ html, body, #root {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    flex: 1;
 }
 
 .sidebar-link{
     display: flex;
     align-items: center;
-    gap: 20px;
+    width: 100%;
     text-decoration: none;
     background: transparent;
     border: none;
     color: rgb(160, 160, 160);
-    font-size: 15px;
     cursor: pointer;
     transition: 0.2s;
     font-family: 'Poppins', sans-serif;
-    font-size: 1rem;
+    font-size: 1rem
 }
 
 .sidebar-link:hover {
@@ -80,12 +77,17 @@ html, body, #root {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 120%;
-    padding-bottom: 20px;
+    margin-top: auto;
+    margin-bottom: 20px;
 }
 
 .sidebar-routes{
     padding: 12px;
+    white-space: normal;     
+    word-break: break-word;  
+    overflow-wrap: break-word;
+    line-height: 1.3;
+    flex: 1;
 }
 
 .sidebar-badge .MuiBadge-badge {

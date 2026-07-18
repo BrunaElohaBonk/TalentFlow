@@ -143,7 +143,7 @@ function VerAprendiz(){
 
 
     return(
-        <div>
+        <div className="aprendiz">
             <Header></Header>
             <Filtro visible={filtro} setVisible={setFiltro} filtros={filtros} setFiltros={setFiltros}/>
             <div className="aprendiz-container">

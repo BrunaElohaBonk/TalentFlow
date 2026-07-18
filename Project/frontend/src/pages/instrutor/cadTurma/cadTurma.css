@@ -1,8 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
+.cadTurma{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
 .cadTurma-container {
     display: flex;
-    min-height: 94vh;
+    flex: 1;
+    overflow: hidden;
 }
 
 .cadTurma-body {
@@ -11,6 +18,8 @@
     justify-content: center;
     width: 100%;
     padding: 20px;
+    flex: 1;
+    overflow: auto;
 }
 
 .cadTurma-form {

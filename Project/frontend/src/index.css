@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+html,
+body,
+#root {
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+}
 
 .swal2-popup {
     font-family: 'Poppins', sans-serif;

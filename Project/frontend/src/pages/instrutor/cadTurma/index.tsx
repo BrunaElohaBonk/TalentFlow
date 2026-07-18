@@ -82,7 +82,7 @@ function CadTurma() {
         }
     };
     return (
-        <div>
+        <div className="cadTurma">
             <Header />
             <div className="cadTurma-container">
                 <Sidebar />

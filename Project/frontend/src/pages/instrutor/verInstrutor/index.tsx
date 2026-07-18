@@ -70,7 +70,7 @@ function VerInstrutor(){
     }
 
     return(
-        <div>
+        <div className="instrutor">
             <Header></Header>
             <div className="instrutor-container">
                 <Sidebar />

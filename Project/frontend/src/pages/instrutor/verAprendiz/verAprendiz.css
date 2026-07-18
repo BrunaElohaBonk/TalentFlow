@@ -1,13 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
+.aprendiz{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
 .aprendiz-container {
     display: flex;
-    min-height: 94vh;
+    flex: 1;
+    overflow: hidden;
 }
 
 .aprendiz-body {
     position: relative;
     flex: 1;
+    overflow: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -85,21 +93,45 @@
 .aprendiz-conteudo {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    width: fit-content;
+    align-items: center; 
+    width: 90%;
     margin: 0 auto;
-    gap: 5px;
+    gap: 10px;
 }
 
 .aprendiz-span {
+    width: 100%;
+    min-width: 0;
     color: #8a8a8a;
     font-family: 'Poppins', sans-serif;
     font-size: 1rem;
-    max-width: 100%; 
-    display: inline-block;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-align: left; 
+}
+
+.aprendiz-button {
+    width: 90%;
+    max-width: 250px; 
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5px;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: .2s;
+    background: #2B83D5;
+    color: white;
+}
+
+.aprendiz-button:hover {
+    background: #3d96e9;
+    transform: scale(1.03);
 }
 
 .aprendiz-input {
@@ -148,29 +180,6 @@
 .img-filter{
     width: 30px;
     height: 30px;
-}
-
-.aprendiz-button {
-    width: 90%;
-    height: 35px;
-    display: flex;
-    justify-content: center;
-    align-items: center; 
-    margin-top: 5px;
-    align-self: center;
-    border: none;
-    border-radius: 10px;
-    font-family: 'Poppins', sans-serif;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: .2s;
-    background: #2B83D5;
-    color: white;
-}
-
-.aprendiz-button:hover{
-    background:#3d96e9;
-    transform:scale(1.03);
 }
 
 .aprendiz-button-filtro{

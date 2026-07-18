@@ -36,7 +36,7 @@ function Notificacao(){
     // }, []);
 
     return(
-        <div>
+        <div className="notificacao">
             <Header></Header>
             <div className="notificacao-container">
                 <Sidebar/>
