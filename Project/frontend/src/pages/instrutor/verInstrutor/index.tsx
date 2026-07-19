@@ -94,7 +94,7 @@ function VerInstrutor(){
                                     </div>
                                 </div>
                             ))
-                        ) : (<p className="instrutor-titulo">Nenhum instrutor encontrado.</p>)}
+                        ) : (<p className="instrutor-aviso">Nenhum instrutor encontrado.</p>)}
                     </div>
                 </div>
             </div>

@@ -171,7 +171,7 @@ function VerAprendiz(){
                                     </div>
                                 </div>
                             ))
-                        ) : (<p className="aprendiz-titulo">Nenhum aprendiz encontrado.</p>)}
+                        ) : (<p className="aprendiz-aviso">Nenhum aprendiz encontrado.</p>)}
                     </div>
                 </div>
             </div>

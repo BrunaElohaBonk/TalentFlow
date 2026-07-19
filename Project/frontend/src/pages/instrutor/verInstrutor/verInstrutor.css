@@ -77,6 +77,14 @@
     object-fit: cover;
 }
 
+.instrutor-aviso {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2rem;
+    font-weight: bold;
+    grid-column: span 3;
+    text-align: center;
+}
+
 .instrutor-titulo {
     font-family: 'Poppins', sans-serif;
     font-size: 1.5rem;
