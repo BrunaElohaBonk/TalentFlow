@@ -7,25 +7,23 @@ import adicionar from '../../../assets/img/icon adicionar.png'
 import fechar from '../../../assets/img/close.png'
 import { useState } from "react";
 import CursoComplementarVisualizar from "./ver/ver_curso";
+import EditarCursoComplementar from "./editar/editar_curso";
 import './curso_complementar.css'
-
 
 interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-
 function CursoComplementar({ visible, setVisible }: Props) {
-
+ 
     const [visualizarCurso, setVisualizarCurso] = useState(false);
+    const [editarCurso, setEditarCurso] = useState(false);
     const [cursoSelecionado, setCursoSelecionado] = useState<any>(null);
-
 
     if (!visible) {
         return null
     }
-
 
     const cursosComplementares = [
         {
@@ -84,9 +82,7 @@ function CursoComplementar({ visible, setVisible }: Props) {
         }
     ];
 
-
     const handleDelete = async (id: number) => {
-
         const confirm = await Swal.fire({
             title: 'Tem certeza?',
             text: 'O Curso Complementar será deletado!',
@@ -96,30 +92,21 @@ function CursoComplementar({ visible, setVisible }: Props) {
             cancelButtonText: 'Cancelar'
         })
 
-
         if (!confirm.isConfirmed) {
             return
         }
 
-
         try {
-
             await axios.delete(`link backend/${id}`)
-
-
             Swal.fire({
                 title: 'Deletado!',
                 text: 'Curso Complementar removido com sucesso!',
                 icon: 'success'
             })
-
         }
 
         catch (error) {
-
             console.error('Erro ao deletar:', error)
-
-
             Swal.fire({
                 title: 'Erro!',
                 text: 'Erro ao deletar Curso Complementar',
@@ -128,140 +115,48 @@ function CursoComplementar({ visible, setVisible }: Props) {
         }
     }
 
-
     return (
-
         <div className="formacao-container">
-
             <div className="formacao-body">
-
-
                 <div className="formacao-header">
-
-                    <button
-                        type="button"
-                        className="btn-header"
-                    >
-                        <img 
-                            src={adicionar} 
-                            alt="adicionar" 
-                        />
+                    <button type="button" className="btn-header">
+                        <img src={adicionar} alt="adicionar" />
                     </button>
-
-
-                    <button
-                        type="button"
-                        className="btn-header"
-                        onClick={() => setVisible(false)}
-                    >
-
-                        <img 
-                            src={fechar} 
-                            alt="fechar" 
-                            className="icon-fechar-img" 
-                        />
-
+                    <button type="button" className="btn-header" onClick={() => setVisible(false)}>
+                        <img src={fechar} alt="fechar" className="icon-fechar-img" />
                     </button>
-
                 </div>
-
-
-
-
                 <div className="formacao-modal">
-
-
                     {
                         cursosComplementares.length === 0 ?
-
-                            <p className="formacao-vazia">
-                                Nenhum curso complementar encontrado.
-                            </p>
-
+                            <p className="formacao-vazia">Nenhum curso complementar encontrado.</p>
                         :
-
                         cursosComplementares.map((item) => (
-
-                            <div
-                                className="formacao-item"
-                                key={item.id}
-                            >
-
-                                <span className="formacao-titulo">
-
-                                    {item.nomeCurso}
-
-                                </span>
-
-
-
+                            <div className="formacao-item" key={item.id}>
+                                <span className="formacao-titulo">{item.nomeCurso}</span>
                                 <div className="formacao-acoes">
-
-
-                                    <button
-                                        type="button"
-                                        className="btn-acao"
+                                    <button type="button" className="btn-acao"
                                         onClick={() => {
                                             setCursoSelecionado(item);
                                             setVisualizarCurso(true);
                                         }}
                                     >
-
-                                        <img
-                                            src={olho}
-                                            alt="Visualizar"
-                                            className="icon-olho"
-                                        />
-
+                                        <img src={olho} alt="Visualizar" className="icon-olho"/>
                                     </button>
-
-
-
-
-                                    <button
-                                        type="button"
-                                        className="btn-acao"
-                                        onClick={() => console.log(item)}
-                                    >
-
-                                        <img
-                                            src={icon_editar}
-                                            alt="Editar"
-                                        />
-
+                                    <button type="button" className="btn-acao" onClick={() => {
+                                        setCursoSelecionado(item);
+                                        setEditarCurso(true);
+                                    }}>
+                                        <img src={icon_editar} alt="Editar"/>
                                     </button>
-
-
-
-
-                                    <button
-                                        type="button"
-                                        className="btn-acao"
-                                        onClick={() => handleDelete(item.id)}
-                                    >
-
-                                        <img
-                                            src={lixeira}
-                                            alt="Excluir"
-                                        />
-
+                                    <button type="button" className="btn-acao" onClick={() => handleDelete(item.id)}>
+                                        <img src={lixeira} alt="Excluir"/>
                                     </button>
-
-
                                 </div>
-
-
                             </div>
-
                         ))
-
                     }
-
-
                 </div>
-
-
-
                 {
                     visualizarCurso &&
                     cursoSelecionado &&
@@ -272,15 +167,18 @@ function CursoComplementar({ visible, setVisible }: Props) {
                         curso={cursoSelecionado}
                     />
                 }
-
-
+                {
+                    editarCurso && cursoSelecionado && (
+                        <EditarCursoComplementar
+                            visible={editarCurso}
+                            setVisible={setEditarCurso}
+                            id={cursoSelecionado.id}
+                        />
+                    )
+                }
             </div>
-
         </div>
-
     )
-
 }
-
 
 export default CursoComplementar;

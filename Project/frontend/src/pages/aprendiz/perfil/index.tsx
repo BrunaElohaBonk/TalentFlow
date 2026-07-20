@@ -13,7 +13,7 @@ import CursoComplementar from "../curso_complementar";
 import Idioma from "../idioma";
 import SoftSkill from "../soft_skill";
 import Competencia from "../competencias";
-import EditarFormacaoAcademica from '../formacao_academica/editar/editar'
+import EditarFormacaoAcademica from '../formacao_academica/editar/editar_formacao'
 import AdicionarFormacaoAcademica from "../formacao_academica/adicionar/adicionar";
 import './perfil.css'
 
