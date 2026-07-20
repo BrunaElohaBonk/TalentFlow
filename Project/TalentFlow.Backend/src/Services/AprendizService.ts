@@ -385,7 +385,7 @@ export default class AprendizService {
         });
 
 
-        const idades = aprendizes.map((aprendiz) => {
+        const idades = aprendizes.map((aprendiz:any) => {
 
             const nascimento = new Date(
                 aprendiz.user.data_nascimento

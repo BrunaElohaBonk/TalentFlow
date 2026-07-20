@@ -1,27 +1,23 @@
 import express from "express";
-import {roleMiddleware} from "../Middlewares/roleMiddleware.ts"
-import {authMiddleware} from "../Middlewares/authMiddleware.ts"
+import { roleMiddleware } from "../Middlewares/roleMiddleware.ts"
+import { authMiddleware } from "../Middlewares/authMiddleware.ts"
 import AuthController from "../Controllers/authController.ts";
 import { validationMiddleware } from "../Middlewares/validationMiddleware.ts";
 import { loginRateLimit } from "../Middlewares/ratelimitMiddleware.ts";
-
+import { criarUserSchema } from "../DTO/schemas/instrutorSchema.ts"
 
 import {
-    loginSchema, 
+    loginSchema,
     redefinirSenhaSchema,
-    esqueceuSenhaSchema
+    esqueceuSenhaSchema,
+    primeiroAcessoSchema
 } from "../DTO/schemas/authSchema.ts";
-import{criarUserSchema} from "../DTO/schemas/instrutorSchema.ts"
-
 
 const route = express.Router();
 
-
 route.post(
     "/register",
-
     validationMiddleware(criarUserSchema),
-
     AuthController.register
 );
 
@@ -32,40 +28,36 @@ route.post(
     AuthController.login
 );
 
-
 route.post(
     "/redefinirSenha",
-
     validationMiddleware(redefinirSenhaSchema),
-
     AuthController.redefinirSenha
 );
 
-
 route.post(
     "/esqueceuSenha",
-
     validationMiddleware(esqueceuSenhaSchema),
-
     AuthController.esqueceuSenha
 );
 
 
 route.post(
     "/logout",
-
     AuthController.logout
 );
 
 
 route.put(
-        "/deletarUser/:EDV",
+    "/deletarUser/:EDV",
+    authMiddleware,
+    roleMiddleware("INSTRUTOR"),
+    AuthController.DeletarUser
+)
 
-        authMiddleware,
-
-        roleMiddleware("INSTRUTOR"),
-
-        AuthController.DeletarUser
-    )
+route.post(
+    "/primeiroAcesso",
+    validationMiddleware(primeiroAcessoSchema),
+    AuthController.primeiroAcesso
+);
 
 export default route;

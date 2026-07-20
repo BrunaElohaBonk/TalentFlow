@@ -12,6 +12,8 @@ iniciar com esse comandos
 npm i
 npx prisma generate
 npm install zod
+npm install nodemailer
+npm install -D @types/nodemailer
 
 não esqueca do:
  .env
