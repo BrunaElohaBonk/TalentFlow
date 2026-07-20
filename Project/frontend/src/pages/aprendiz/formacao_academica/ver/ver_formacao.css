@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+.formacaoVisualizar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.35);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+}
+
+.formacaoVisualizar-card {
+    width:600px;
+    background:white;
+    border-radius:20px;
+    box-shadow:rgba(0,0,0,.3) 0px 4px 10px;
+    padding:30px;
+    box-sizing:border-box;
+    font-family:'Poppins', sans-serif;
+}
+
+.formacaoVisualizar-header {
+    position:relative;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.formacaoVisualizar-header h2 {
+    margin:0;
+    font-size:25px;
+    font-weight:600;
+    color:#333;
+}
+
+.formacaoVisualizar-acoes {
+    position:absolute;
+    right:0;
+    top:-10px;
+    display:flex;
+    gap:2px;
+}
+
+.formacaoVisualizar-acoes button {
+    border:none;
+    background:transparent;
+    cursor:pointer;
+    padding:0;
+    display:flex;
+    align-items:center;
+}
+
+.formacaoVisualizar-fechar img {
+    width:32px;
+}
+
+.formacaoVisualizar-acoes img:hover {
+    transform:scale(1.1);
+}
+
+.formacaoVisualizar-conteudo {
+    margin-top:35px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+}
+
+.formacaoVisualizar-item {
+    display:flex;
+    flex-direction:column;
+}
+
+.formacaoVisualizar-item span {
+    font-size:.9rem;
+    font-weight:600;
+    color:#333;
+    margin-bottom:3px;
+}
+
+.formacaoVisualizar-item p {
+    margin:0;
+    font-size:.9rem;
+    color:#6a6a6a;
+}
+
+.formacaoVisualizar-descricao {
+    min-height:0;
+}
+
+.certificado-item {
+    margin-top:0;
+}
+
+.certificado-img {
+    width:40px;
+    height:40px;
+    object-fit:contain;
+    opacity:.75;
+    display:block;
+}
+
+.certificado-img:hover {
+    transform:scale(1.1);
+    opacity:1;
+}
+
+@media(max-width:768px){
+
+    .formacaoVisualizar-card {
+        width:90%;
+        padding:25px;
+    }
+
+    .formacaoVisualizar-header h2 {
+        font-size:22px;
+    }
+
+}

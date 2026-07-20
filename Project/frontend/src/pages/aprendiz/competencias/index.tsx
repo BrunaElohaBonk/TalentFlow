@@ -5,7 +5,9 @@ import olho from '../../../assets/img/icon_olho.png'
 import icon_editar from '../../../assets/img/icon_editar.png'
 import adicionar from '../../../assets/img/icon adicionar.png'
 import fechar from '../../../assets/img/close.png'
+import CompetenciaVisualizar from "./ver/ver_competencia";
 import './competencias.css'
+import { useState } from "react";
 
 interface Props {
     visible: boolean;
@@ -13,6 +15,9 @@ interface Props {
 }
 
 function Competencia({ visible, setVisible }: Props) {
+
+    const [visualizarCompetencia, setVisualizarCompetencia] = useState(false);
+const [competenciaSelecionada, setCompetenciaSelecionada] = useState<any>(null);
 
     if (!visible) {
         return null
@@ -80,7 +85,6 @@ function Competencia({ visible, setVisible }: Props) {
                 text: 'Curso Complementar removido com sucesso!',
                 icon: 'success'
             })
-            // Buscar novamente as formações
         }
 
         catch (error) {
@@ -132,7 +136,10 @@ function Competencia({ visible, setVisible }: Props) {
                                         <button
                                             type="button"
                                             className="btn-acao"
-                                            onClick={() => console.log(item)}
+                                            onClick={() => {
+                                                setCompetenciaSelecionada(item);
+                                                setVisualizarCompetencia(true);
+                                            }}
                                         >
                                             <img
                                                 src={olho}
@@ -165,6 +172,15 @@ function Competencia({ visible, setVisible }: Props) {
                             ))
                     }
                 </div>
+                {
+                    visualizarCompetencia && competenciaSelecionada && (
+                    <CompetenciaVisualizar
+                        visible={visualizarCompetencia}
+                        setVisible={setVisualizarCompetencia}
+                        competencia={competenciaSelecionada}
+                    />
+                    )
+                }
             </div>
         </div>
     )

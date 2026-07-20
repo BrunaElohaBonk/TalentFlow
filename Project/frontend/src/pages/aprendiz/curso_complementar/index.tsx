@@ -5,18 +5,27 @@ import olho from '../../../assets/img/icon_olho.png'
 import icon_editar from '../../../assets/img/icon_editar.png'
 import adicionar from '../../../assets/img/icon adicionar.png'
 import fechar from '../../../assets/img/close.png'
+import { useState } from "react";
+import CursoComplementarVisualizar from "./ver/ver_curso";
 import './curso_complementar.css'
+
 
 interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+
 function CursoComplementar({ visible, setVisible }: Props) {
+
+    const [visualizarCurso, setVisualizarCurso] = useState(false);
+    const [cursoSelecionado, setCursoSelecionado] = useState<any>(null);
+
 
     if (!visible) {
         return null
     }
+
 
     const cursosComplementares = [
         {
@@ -26,7 +35,7 @@ function CursoComplementar({ visible, setVisible }: Props) {
             dataConclusao: "15/03/2025",
             cargaHoraria: "40 horas",
             descricaoCurso: "Curso voltado para criação de dashboards, tratamento de dados, criação de indicadores e análise de informações utilizando Power BI.",
-            certificado: "certificado_powerbi.png"
+            certificado: null
         },
         {
             id: 2,
@@ -35,7 +44,7 @@ function CursoComplementar({ visible, setVisible }: Props) {
             dataConclusao: "20/08/2024",
             cargaHoraria: "30 horas",
             descricaoCurso: "Aperfeiçoamento em fórmulas avançadas, tabelas dinâmicas, gráficos, automações e análise de dados no Microsoft Excel.",
-            certificado: "certificado_excel.png"
+            certificado: null
         },
         {
             id: 3,
@@ -44,7 +53,7 @@ function CursoComplementar({ visible, setVisible }: Props) {
             dataConclusao: "",
             cargaHoraria: "60 horas",
             descricaoCurso: "Curso de fundamentos da programação utilizando Python, abordando lógica, estruturas de dados, funções e automação de tarefas.",
-            certificado: "certificado_python.png"
+            certificado: null
         },
         {
             id: 4,
@@ -53,7 +62,7 @@ function CursoComplementar({ visible, setVisible }: Props) {
             dataConclusao: "10/11/2024",
             cargaHoraria: "20 horas",
             descricaoCurso: "Curso sobre planejamento, organização, acompanhamento de projetos, definição de metas e gerenciamento de recursos.",
-            certificado: "certificado_gestao_projetos.png"
+            certificado: null
         },
         {
             id: 5,
@@ -62,7 +71,7 @@ function CursoComplementar({ visible, setVisible }: Props) {
             dataConclusao: "05/06/2025",
             cargaHoraria: "15 horas",
             descricaoCurso: "Desenvolvimento de habilidades de comunicação profissional, apresentações, escrita corporativa e relacionamento interpessoal.",
-            certificado: "certificado_comunicacao.png"
+            certificado: null
         },
         {
             id: 6,
@@ -71,9 +80,10 @@ function CursoComplementar({ visible, setVisible }: Props) {
             dataConclusao: "",
             cargaHoraria: "45 horas",
             descricaoCurso: "Curso sobre conceitos de segurança digital, proteção de dados, ameaças virtuais e boas práticas de segurança da informação.",
-            certificado: "certificado_seguranca.png"
+            certificado: null
         }
     ];
+
 
     const handleDelete = async (id: number) => {
 
@@ -86,24 +96,29 @@ function CursoComplementar({ visible, setVisible }: Props) {
             cancelButtonText: 'Cancelar'
         })
 
+
         if (!confirm.isConfirmed) {
             return
         }
 
+
         try {
 
             await axios.delete(`link backend/${id}`)
+
 
             Swal.fire({
                 title: 'Deletado!',
                 text: 'Curso Complementar removido com sucesso!',
                 icon: 'success'
             })
-            // Buscar novamente as formações
+
         }
 
         catch (error) {
+
             console.error('Erro ao deletar:', error)
+
 
             Swal.fire({
                 title: 'Erro!',
@@ -113,80 +128,159 @@ function CursoComplementar({ visible, setVisible }: Props) {
         }
     }
 
+
     return (
 
         <div className="formacao-container">
+
             <div className="formacao-body">
+
+
                 <div className="formacao-header">
+
                     <button
                         type="button"
                         className="btn-header"
                     >
-                        <img src={adicionar} alt="adicionar" />
+                        <img 
+                            src={adicionar} 
+                            alt="adicionar" 
+                        />
                     </button>
+
+
                     <button
                         type="button"
                         className="btn-header"
                         onClick={() => setVisible(false)}
                     >
-                        <img src={fechar} alt="fechar" className="icon-fechar-img" />
+
+                        <img 
+                            src={fechar} 
+                            alt="fechar" 
+                            className="icon-fechar-img" 
+                        />
+
                     </button>
+
                 </div>
+
+
+
+
                 <div className="formacao-modal">
+
+
                     {
                         cursosComplementares.length === 0 ?
+
                             <p className="formacao-vazia">
-                                Nenhuma formação acadêmica encontrada.
+                                Nenhum curso complementar encontrado.
                             </p>
-                            :
-                            cursosComplementares.map((item) => (
-                                <div
-                                    className="formacao-item"
-                                    key={item.id}
-                                >
-                                    <span className="formacao-titulo">
-                                        {item.nomeCurso}
-                                    </span>
-                                    <div className="formacao-acoes">
-                                        <button
-                                            type="button"
-                                            className="btn-acao"
-                                            onClick={() => console.log(item)}
-                                        >
-                                            <img
-                                                src={olho}
-                                                alt="Visualizar"
-                                                className="icon-olho"
-                                            />
-                                        </button>
-                                        <button
-                                            type="button"
-                                            className="btn-acao"
-                                            onClick={() => console.log(item)}
-                                        >
-                                            <img
-                                                src={icon_editar}
-                                                alt="Editar"
-                                            />
-                                        </button>
-                                        <button
-                                            type="button"
-                                            className="btn-acao"
-                                            onClick={() => handleDelete(item.id)}
-                                        >
-                                            <img
-                                                src={lixeira}
-                                                alt="Excluir"
-                                            />
-                                        </button>
-                                    </div>
+
+                        :
+
+                        cursosComplementares.map((item) => (
+
+                            <div
+                                className="formacao-item"
+                                key={item.id}
+                            >
+
+                                <span className="formacao-titulo">
+
+                                    {item.nomeCurso}
+
+                                </span>
+
+
+
+                                <div className="formacao-acoes">
+
+
+                                    <button
+                                        type="button"
+                                        className="btn-acao"
+                                        onClick={() => {
+                                            setCursoSelecionado(item);
+                                            setVisualizarCurso(true);
+                                        }}
+                                    >
+
+                                        <img
+                                            src={olho}
+                                            alt="Visualizar"
+                                            className="icon-olho"
+                                        />
+
+                                    </button>
+
+
+
+
+                                    <button
+                                        type="button"
+                                        className="btn-acao"
+                                        onClick={() => console.log(item)}
+                                    >
+
+                                        <img
+                                            src={icon_editar}
+                                            alt="Editar"
+                                        />
+
+                                    </button>
+
+
+
+
+                                    <button
+                                        type="button"
+                                        className="btn-acao"
+                                        onClick={() => handleDelete(item.id)}
+                                    >
+
+                                        <img
+                                            src={lixeira}
+                                            alt="Excluir"
+                                        />
+
+                                    </button>
+
+
                                 </div>
-                            ))
+
+
+                            </div>
+
+                        ))
+
                     }
+
+
                 </div>
+
+
+
+                {
+                    visualizarCurso &&
+                    cursoSelecionado &&
+
+                    <CursoComplementarVisualizar
+                        visible={visualizarCurso}
+                        setVisible={setVisualizarCurso}
+                        curso={cursoSelecionado}
+                    />
+                }
+
+
             </div>
+
         </div>
+
     )
+
 }
 
-export default CursoComplementar
+
+export default CursoComplementar;

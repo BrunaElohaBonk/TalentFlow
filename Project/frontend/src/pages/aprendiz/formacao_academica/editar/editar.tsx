@@ -21,10 +21,11 @@ interface IFormacao {
 interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    setFormacaoAcademica: React.Dispatch<React.SetStateAction<boolean>>;
     id: number;
 }
 
-function EditarFormacaoAcademica({ visible, setVisible, id }: Props) {
+function EditarFormacaoAcademica({ visible, setVisible, setFormacaoAcademica, id }: Props) {
 
     const [formacao, setFormacao] = useState<IFormacao>({
         curso: '',
@@ -197,7 +198,10 @@ function EditarFormacaoAcademica({ visible, setVisible, id }: Props) {
                 <button
                     type="button"
                     className="editarFormacao-fechar"
-                    onClick={() => setVisible(false)}
+                    onClick={() => {
+                        setVisible(false)
+                        setFormacaoAcademica(true)
+                    }}
                 >
 
                     <img src={sair} alt="Fechar" />

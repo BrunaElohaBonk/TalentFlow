@@ -1,4 +1,4 @@
-import './ver.css'
+import './ver_formacao.css'
 import icon_fechar from '../../../../assets/img/close.png'
 
 interface Props {

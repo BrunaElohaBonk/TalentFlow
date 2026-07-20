@@ -14,6 +14,7 @@ import Idioma from "../idioma";
 import SoftSkill from "../soft_skill";
 import Competencia from "../competencias";
 import EditarFormacaoAcademica from '../formacao_academica/editar/editar'
+import AdicionarFormacaoAcademica from "../formacao_academica/adicionar/adicionar";
 import './perfil.css'
 
 interface Usuario {
@@ -77,9 +78,10 @@ function Perfil() {
     const [editar, setEditar] = useState(false)
     const [editarSituacao, setEditarSituacao] = useState(false)
     const [editarFormacao, setEditarFormacao] = useState(false)
+    const [adicionarFormacao, setAdicionarFormacao] = useState(false)
 
     useEffect(() => {
-        const usuario = localStorage.getItem("usuario")
+        const usuario:any = localStorage.getItem("usuario")
         const aprendizLogado = JSON.parse(usuario)
         console.log(aprendizLogado)
         setAprendiz(aprendizLogado)
@@ -101,14 +103,15 @@ function Perfil() {
 
             <Logout visible={logout} setVisible={setLogout}/>
         <SituacaoProfissional visible={situacao} setVisible={setSituacao} setEditarSituacao={setEditarSituacao}/>
-        <FormacaoAcademica visible={formacao_academica} setVisible={setFormacaoAcademica} setEditarFormacao={setEditarFormacao}/>
+        <FormacaoAcademica visible={formacao_academica} setVisible={setFormacaoAcademica} setEditarFormacao={setEditarFormacao} setAdicionarFormacao={setAdicionarFormacao}/>
         <CursoComplementar visible={curso_complementar} setVisible={setCursoComplementar}/>
         <Idioma visible={idioma} setVisible={setIdioma}/>
         <SoftSkill visible={soft_skill} setVisible={setSoftSkill}/>
         <Competencia visible={competencia} setVisible={setCompetencia}/>
         <EditarPerfil visible={editar} setVisible={setEditar} edv={aprendiz.edv}/>
-        <EditarSituacaoProfissional visible={editarSituacao} setVisible={setEditarSituacao} edv={aprendiz.edv}/>
-        <EditarFormacaoAcademica visible={editarFormacao} setVisible={setEditarFormacao} id={1} />
+        <EditarSituacaoProfissional visible={editarSituacao} setVisible={setEditarSituacao} setSituacaoProfissional={setSituacao} edv={aprendiz.edv}/>
+        <EditarFormacaoAcademica visible={editarFormacao} setVisible={setEditarFormacao} setFormacaoAcademica={setFormacaoAcademica} id={1} />
+        <AdicionarFormacaoAcademica visible={adicionarFormacao} setVisible={setAdicionarFormacao} setFormacaoAcademica={setFormacaoAcademica}/>
 
             <main className="perfil-tela">
                 <section className="perfil-bloco">

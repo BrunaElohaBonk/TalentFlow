@@ -5,6 +5,8 @@ import olho from '../../../assets/img/icon_olho.png'
 import icon_editar from '../../../assets/img/icon_editar.png'
 import adicionar from '../../../assets/img/icon adicionar.png'
 import fechar from '../../../assets/img/close.png'
+import IdiomaVisualizar from "./ver/ver_idioma";
+import { useState } from "react";
 import './idioma.css'
 
 interface Props {
@@ -13,6 +15,9 @@ interface Props {
 }
 
 function Idioma({ visible, setVisible }: Props) {
+
+    const [visualizarIdioma, setVisualizarIdioma] = useState(false);
+    const [idiomaSelecionado, setIdiomaSelecionado] = useState<any>(null);
 
     if (!visible) {
         return null
@@ -28,7 +33,7 @@ function Idioma({ visible, setVisible }: Props) {
             dataInicio: "10/02/2025",
             dataConclusao: "",
             descricao: "Curso de inglês com foco em conversação, compreensão auditiva, leitura e escrita para situações profissionais e acadêmicas.",
-            certificado: "certificado_ingles.png"
+            certificado: null
         },
         {
             id: 2,
@@ -39,7 +44,7 @@ function Idioma({ visible, setVisible }: Props) {
             dataInicio: "05/03/2024",
             dataConclusao: "15/12/2024",
             descricao: "Curso de espanhol abordando vocabulário, gramática, interpretação de textos e comunicação em situações do cotidiano.",
-            certificado: "certificado_espanhol.png"
+            certificado: null
         },
         {
             id: 3,
@@ -50,7 +55,7 @@ function Idioma({ visible, setVisible }: Props) {
             dataInicio: "20/01/2025",
             dataConclusao: "",
             descricao: "Curso introdutório de alemão com foco em fundamentos da língua, pronúncia, vocabulário básico e comunicação inicial.",
-            certificado: "certificado_alemao.png"
+            certificado: null
         }
     ];
 
@@ -78,7 +83,6 @@ function Idioma({ visible, setVisible }: Props) {
                 text: 'Formação Acadêmica removida com sucesso!',
                 icon: 'success'
             })
-            // Buscar novamente as formações
         }
 
         catch (error) {
@@ -130,7 +134,10 @@ function Idioma({ visible, setVisible }: Props) {
                                         <button
                                             type="button"
                                             className="btn-acao"
-                                            onClick={() => console.log(item)}
+                                            onClick={() => {
+                                                setIdiomaSelecionado(item);
+                                                setVisualizarIdioma(true);
+                                            }}
                                         >
                                             <img
                                                 src={olho}
@@ -163,6 +170,15 @@ function Idioma({ visible, setVisible }: Props) {
                             ))
                     }
                 </div>
+                {
+                    visualizarIdioma && idiomaSelecionado && (
+                    <IdiomaVisualizar
+                        visible={visualizarIdioma}
+                        setVisible={setVisualizarIdioma}
+                        idioma={idiomaSelecionado}
+                    />
+                    )
+                }
             </div>
         </div>
     )

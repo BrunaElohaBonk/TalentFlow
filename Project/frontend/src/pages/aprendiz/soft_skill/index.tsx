@@ -136,17 +136,6 @@ function SoftSkill({ visible, setVisible }: Props) {
                                         <button
                                             type="button"
                                             className="btn-acao"
-                                            onClick={() => console.log(item)}
-                                        >
-                                            <img
-                                                src={olho}
-                                                alt="Visualizar"
-                                                className="icon-olho"
-                                            />
-                                        </button>
-                                        <button
-                                            type="button"
-                                            className="btn-acao"
                                             onClick={() => handleDelete(item.id)}
                                         >
                                             <img

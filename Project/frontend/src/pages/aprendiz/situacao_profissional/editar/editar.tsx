@@ -15,10 +15,11 @@ interface ISituacao {
 interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    setSituacaoProfissional: React.Dispatch<React.SetStateAction<boolean>>;
     edv: number;
 }
 
-function EditarSituacaoProfissional({ visible, setVisible, edv }: Props) {
+function EditarSituacaoProfissional({ visible, setVisible, setSituacaoProfissional, edv }: Props) {
     const [situacao, setSituacao] = useState<ISituacao>({
         setor: '',
         lider: '',
@@ -82,7 +83,10 @@ function EditarSituacaoProfissional({ visible, setVisible, edv }: Props) {
             <form onSubmit={handleSubmit} className="editarSituacao-card">
                 <button 
                     type="button" 
-                    onClick={() => setVisible(false)} 
+                    onClick={() => {
+                        setVisible(false)
+                        setSituacaoProfissional(true)
+                    }} 
                     className="editarSituacao-fechar"
                 >
                     <img src={sair} alt="Fechar" />
