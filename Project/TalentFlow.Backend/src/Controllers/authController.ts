@@ -57,7 +57,7 @@ class AuthController {
         return res.status(200).send({
 
             response:
-                "Sucesso ao Deletar Instrutor!"
+                "Sucesso ao Deletar User!"
 
         });
 

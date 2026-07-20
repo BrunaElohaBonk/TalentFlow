@@ -59,7 +59,7 @@ route.post(
 
 
 route.put(
-        "/deletarInstrutor/:EDV",
+        "/deletarUser/:EDV",
 
         authMiddleware,
 
