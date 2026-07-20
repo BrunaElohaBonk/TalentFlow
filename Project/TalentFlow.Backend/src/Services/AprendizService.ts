@@ -2,112 +2,169 @@ import { prisma } from "../lib/prisma.js";
 
 export default class AprendizService {
     static async criar(data: {
-    EDV: number;
-    Id_Turma: number;
-}) {
-    return await prisma.aprendiz.create({
-        data: {
-            EDV: data.EDV,
-            Id_Turma: data.Id_Turma,
-            profile: {
-                create: {} 
-            }
-        },
-        include: {
-            user: true,
-            turma: false,
-            profile: true
-        }
-    });
-}
-
-   static async atualizarPerfil(
-    idPerfil: number,
-    data: any,
-    usuarioLogado: {
         EDV: number;
-        name: string;
-    }
-) {
-    return await prisma.$transaction(async (tx: any) => {
-
-        const perfilAntigo = await tx.profile.findUnique({
-            where: {
-                id: idPerfil
-            }
-        });
-
-        if (!perfilAntigo) {
-            throw new Error("Perfil não encontrado.");
-        }
-
-        const perfilAtualizado = await tx.profile.update({
-            where: {
-                id: idPerfil
-            },
-            data
-        });
-
-        await tx.perfilhistorico.create({
+        Id_Turma: number;
+    }) {
+        return await prisma.aprendiz.create({
             data: {
-                Id_Profile: idPerfil,
-                EDVAlteradoPor: usuarioLogado.EDV,
-                dados: {
-                    mensagem: `${usuarioLogado.name} editou o perfil`,
-                    antes: perfilAntigo,
-                    depois: perfilAtualizado
+                EDV: data.EDV,
+                Id_Turma: data.Id_Turma,
+                profile: {
+                    create: {}
                 }
+            },
+            include: {
+                user: true,
+                turma: false,
+                profile: true
             }
         });
+    }
 
-        return perfilAtualizado;
-    });
-}
+    static async atualizarPerfil(
+        idPerfil: number,
+        data: any,
+        usuarioLogado: {
+            EDV: number;
+            name: string;
+        }
+    ) {
+        return await prisma.$transaction(async (tx: any) => {
+
+            const perfilAntigo = await tx.profile.findUnique({
+                where: { id: idPerfil}
+            });
+
+            if (!perfilAntigo) {
+                throw new Error("Perfil não encontrado.");
+            }
+
+            const perfilAtualizado = await tx.profile.update({
+                where: {
+                    id: idPerfil
+                },
+                data
+            });
+
+            await tx.perfilhistorico.create({
+                data: {
+                    Id_Profile: idPerfil,
+                    EDVAlteradoPor: usuarioLogado.EDV,
+                    dados: {
+                        mensagem: `${usuarioLogado.name} editou o perfil`,
+                        antes: perfilAntigo,
+                        depois: perfilAtualizado
+                    }
+                }
+            });
+
+            return perfilAtualizado;
+        });
+    }
 
     static async atualizarFormacaoAcademica(
         EDV: number,
         id: number,
-        data: any
+        data: any,
+        usuarioLogado: {
+            EDV: number;
+            name: string;
+        }
     ) {
-        return await prisma.formacao_academica.updateMany({
-            where: {
-                id,
-                profile: {
-                    EDV_Aprendiz: EDV
+        return await prisma.$transaction(async (tx: any) => {
+            const FAantigo = await tx.profile.findUnique({
+
+                where: {
+                    id: id,
+                    profile: { EDV_Aprendiz: EDV}
+                },
+            });
+
+            if (!FAantigo) {
+                throw new Error("Perfil não encontrado.");
+            }
+            const FAatualizado = await tx.profile.update({
+                where: {
+                    id: id
+                },
+                data
+            });
+            //abreviação de Formacao Academica = FAantigo = FAatualizado
+            await tx.perfilhistorico.create({
+                data: {
+                    Id_Profile: id,
+                    EDVAlteradoPor: usuarioLogado.EDV,
+                    dados: {
+                        mensagem: `${usuarioLogado.name} editou o perfil`,
+                        antes: FAantigo,
+                        depois: FAatualizado
+                    }
                 }
-            },
-            data
+            });
+
+            return FAatualizado;
         });
     }
 
     static async atualizarSituacaoProfissional(
         EDV: number,
         id: number,
-        data: any
+        data: any,
+        usuarioLogado: {
+            EDV: number;
+            name: string;
+        }
     ) {
-        return await prisma.situacao_profissional.updateMany({
-            where: {
-                id,
-                profile: {
-                    EDV_Aprendiz: EDV
+        return await prisma.$transaction(async (tx: any) => {
+            const SPantigo = await tx.profile.findUnique({
+                where: {
+                    id,
+                    profile: { EDV_Aprendiz: EDV }
                 }
-            },
-            data
+            });
+
+            if (!SPantigo){
+                throw new Error("Perfil não encontrado.");  
+            }
+            const SPatualizado = await tx.profile.findUnique({
+                where: {
+                    id,
+                    profile: { EDV_Aprendiz: EDV }
+                },
+                data
+            });
+            await tx.perfilhistorico.create({
+                data: {
+                    Id_Profile: id,
+                    EDVAlteradoPor: usuarioLogado.EDV,
+                    dados: {
+                        mensagem: `${usuarioLogado.name} editou o perfil`,
+                        antes: SPantigo,
+                        depois: SPatualizado
+                    }
+                }
+            });
+    
+            return SPatualizado;
         });
     }
 
     static async atualizarSoftskills(
         EDV: number,
         id: number,
-        data: any
+        data: any,
+        usuarioLogado: {
+            EDV: number;
+            name: string;
+        }
     ) {
-        return await prisma.soft_skills.updateMany({
-            where: {
-                id,
-                profile: {
-                    EDV_Aprendiz: EDV
-                }
-            },
+        return await prisma.$transaction(async (tx: any) =>{
+            const SSantigo = await tx.profile.findUnique({
+                where: {
+                    id,
+                    profile: { EDV_Aprendiz: EDV }
+                },
+            })
             data
         });
     }
@@ -160,294 +217,295 @@ export default class AprendizService {
         });
     }
 
-static async verPerfil(EDV: number, id: number) {
-    return await prisma.profile.findFirst({
-        where: {
-            id,
-            EDV_Aprendiz: EDV
-        },
-        include: {
-            situacao_profissional: true,
-            soft_skills: true,
-            competencia: true,
-            formacao_academica: true,
-            idiomas: true,
-            cursos: true
-        }
-    });
-}
-
-
-static async verFormacaoAcademica(EDV: number, id: number) {
-    return await prisma.formacao_academica.findMany({
-        where: {
-            Id_Profile: id,
-            profile: {
-                EDV_Aprendiz: EDV
-            }
-        }
-    });
-}
-
-
-static async verSituacaoProfissional(EDV: number, id: number) {
-    return await prisma.situacao_profissional.findMany({
-        where: {
-            Id_Profile: id,
-            profile: {
-                EDV_Aprendiz: EDV
-            }
-        }
-    });
-}
-
-
-static async verSoftskills(EDV: number, id: number) {
-    return await prisma.soft_skills.findMany({
-        where: {
-            Id_Profile: id,
-            profile: {
-                EDV_Aprendiz: EDV
-            }
-        }
-    });
-}
-
-
-static async verCompetencias(EDV: number, id: number) {
-    return await prisma.competencia.findMany({
-        where: {
-            Id_Profile: id,
-            profile: {
-                EDV_Aprendiz: EDV
-            }
-        }
-    });
-}
-
-
-static async verIdiomas(EDV: number, id: number) {
-    return await prisma.idiomas.findMany({
-        where: {
-            Id_Profile: id,
-            profile: {
-                EDV_Aprendiz: EDV
-            }
-        }
-    });
-}
-
-
-static async verCursos(EDV: number, id: number) {
-    return await prisma.cursos.findMany({
-        where: {
-            Id_Profile: id,
-            profile: {
-                EDV_Aprendiz: EDV
-            }
-        }
-    });
-}
-static async filtrarApredizDashboart() {
-
-    const aprendizesEstagio = await prisma.situacao_profissional.count({
-        where: {
-            cumprido_Estagio: true
-        }
-    });
-
-
-    const aprendizes = await prisma.aprendiz.findMany({
-        include: {
-            user: true
-        }
-    });
-
-
-    const idades = aprendizes.map((aprendiz) => {
-
-        const nascimento = new Date(
-            aprendiz.user.data_nascimento
-        );
-
-        const hoje = new Date();
-
-        let idade =
-            hoje.getFullYear() -
-            nascimento.getFullYear();
-
-        const mes =
-            hoje.getMonth() -
-            nascimento.getMonth();
-
-
-        if (
-            mes < 0 ||
-            (mes === 0 &&
-                hoje.getDate() < nascimento.getDate())
-        ) {
-            idade--;
-        }
-
-        return idade;
-
-    });
-
-
-    const aprendizesIdioma = await prisma.idiomas.findMany({
-        distinct: [
-            "Id_Profile"
-        ]
-    });
-
-
-    const aprendizesMaisQueMedio =
-        await prisma.formacao_academica.count({
+    static async verPerfil(EDV: number, id: number) {
+        return await prisma.profile.findFirst({
             where: {
-                nivel_formacao: {
-                    in: [
-                        "TECNICO",
-                        "GRADUACAO",
-                        "POS_GRADUACAO"
-                    ]
+                id,
+                EDV_Aprendiz: EDV
+            },
+            include: {
+                situacao_profissional: true,
+                soft_skills: true,
+                competencia: true,
+                formacao_academica: true,
+                idiomas: true,
+                cursos: true
+            }
+        });
+    }
+
+
+    static async verFormacaoAcademica(EDV: number, id: number) {
+        return await prisma.formacao_academica.findMany({
+            where: {
+                Id_Profile: id,
+                profile: {
+                    EDV_Aprendiz: EDV
                 }
+            }
+        });
+    }
+
+
+    static async verSituacaoProfissional(EDV: number, id: number) {
+        return await prisma.situacao_profissional.findMany({
+            where: {
+                Id_Profile: id,
+                profile: {
+                    EDV_Aprendiz: EDV
+                }
+            }
+        });
+    }
+
+
+    static async verSoftskills(EDV: number, id: number) {
+        return await prisma.soft_skills.findMany({
+            where: {
+                Id_Profile: id,
+                profile: {
+                    EDV_Aprendiz: EDV
+                }
+            }
+        });
+    }
+
+
+    static async verCompetencias(EDV: number, id: number) {
+        return await prisma.competencia.findMany({
+            where: {
+                Id_Profile: id,
+                profile: {
+                    EDV_Aprendiz: EDV
+                }
+            }
+        });
+    }
+
+
+    static async verIdiomas(EDV: number, id: number) {
+        return await prisma.idiomas.findMany({
+            where: {
+                Id_Profile: id,
+                profile: {
+                    EDV_Aprendiz: EDV
+                }
+            }
+        });
+    }
+
+
+    static async verCursos(EDV: number, id: number) {
+        return await prisma.cursos.findMany({
+            where: {
+                Id_Profile: id,
+                profile: {
+                    EDV_Aprendiz: EDV
+                }
+            }
+        });
+    }
+    static async filtrarApredizDashboart() {
+
+        const aprendizesEstagio = await prisma.situacao_profissional.count({
+            where: {
+                cumprido_Estagio: true
             }
         });
 
 
-    return {
-
-        estagio: {
-            quantidade: aprendizesEstagio
-        },
-
-        idade: {
-            idades
-        },
-
-        idiomas: {
-            quantidade: aprendizesIdioma.length
-        },
-
-        formacao: {
-            acimaEnsinoMedio: aprendizesMaisQueMedio
-        }
-
-    };
-}
+        const aprendizes = await prisma.aprendiz.findMany({
+            include: {
+                user: true
+            }
+        });
 
 
+        const idades = aprendizes.map((aprendiz) => {
 
-static async filtrarTudo(filtros: any) {
+            const nascimento = new Date(
+                aprendiz.user.data_nascimento
+            );
 
-    const {
-        nome,
-        turma,
-        curso,
-        idioma,
-        competencia,
-        softskill,
-        setor
-    } = filtros;
+            const hoje = new Date();
+
+            let idade =
+                hoje.getFullYear() -
+                nascimento.getFullYear();
+
+            const mes =
+                hoje.getMonth() -
+                nascimento.getMonth();
 
 
-    return await prisma.aprendiz.findMany({
+            if (
+                mes < 0 ||
+                (mes === 0 &&
+                    hoje.getDate() < nascimento.getDate())
+            ) {
+                idade--;
+            }
 
-        where: {
+            return idade;
 
-            user: nome
-                ? {
-                    name: {
-                        contains: String(nome)
+        });
+
+
+        const aprendizesIdioma = await prisma.idiomas.findMany({
+            distinct: [
+                "Id_Profile"
+            ]
+        });
+
+
+        const aprendizesMaisQueMedio =
+            await prisma.formacao_academica.count({
+                where: {
+                    nivel_formacao: {
+                        in: [
+                            "TECNICO",
+                            "GRADUACAO",
+                            "POS_GRADUACAO"
+                        ]
                     }
                 }
-                : undefined,
+            });
 
 
-            Id_Turma: turma
-                ? Number(turma)
-                : undefined,
+        return {
+
+            estagio: {
+                quantidade: aprendizesEstagio
+            },
+
+            idade: {
+                idades
+            },
+
+            idiomas: {
+                quantidade: aprendizesIdioma.length
+            },
+
+            formacao: {
+                acimaEnsinoMedio: aprendizesMaisQueMedio
+            }
+
+        };
+    }
 
 
-            profile: {
 
-                is: {
+    static async filtrarTudo(filtros: any) {
 
-                    formacao_academica: curso
-                        ? {
-                            some: {
-                                name_Curso: {
-                                    contains: String(curso)
+        const {
+            nome,
+            turma,
+            curso,
+            idioma,
+            competencia,
+            softskill,
+            setor
+        } = filtros;
+
+
+        return await prisma.aprendiz.findMany({
+
+            where: {
+
+                user: nome
+                    ? {
+                        name: {
+                            contains: String(nome)
+                        }
+                    }
+                    : undefined,
+
+
+                Id_Turma: turma
+                    ? Number(turma)
+                    : undefined,
+
+
+                profile: {
+
+                    is: {
+
+                        formacao_academica: curso
+                            ? {
+                                some: {
+                                    name_Curso: {
+                                        contains: String(curso)
+                                    }
                                 }
                             }
-                        }
-                        : undefined,
+                            : undefined,
 
 
-                    competencia: competencia
-                        ? {
-                            some: {
-                                nome_Competencia: {
-                                    contains: String(competencia)
+                        competencia: competencia
+                            ? {
+                                some: {
+                                    nome_Competencia: {
+                                        contains: String(competencia)
+                                    }
                                 }
                             }
-                        }
-                        : undefined,
+                            : undefined,
 
 
-                    soft_skills: softskill
-                        ? {
-                            some: {
-                                nome_SoftSkills: {
-                                    contains: String(softskill)
+                        soft_skills: softskill
+                            ? {
+                                some: {
+                                    nome_SoftSkills: {
+                                        contains: String(softskill)
+                                    }
                                 }
                             }
-                        }
-                        : undefined,
+                            : undefined,
 
 
-                    situacao_profissional: setor
-                        ? {
-                            some: {
-                                nome_Setor: {
-                                    contains: String(setor)
+                        situacao_profissional: setor
+                            ? {
+                                some: {
+                                    nome_Setor: {
+                                        contains: String(setor)
+                                    }
                                 }
                             }
-                        }
-                        : undefined
+                            : undefined
+
+                    }
 
                 }
 
-            }
-
-        },
+            },
 
 
-        include: {
+            include: {
 
-            user: true,
+                user: true,
 
-            turma: false,
+                turma: false,
 
-            profile: {
+                profile: {
 
-                include: {
+                    include: {
 
-                    formacao_academica: true,
+                        formacao_academica: true,
 
-                    idiomas: true,
+                        idiomas: true,
 
-                    competencia: true,
+                        competencia: true,
 
-                    soft_skills: true,
+                        soft_skills: true,
 
-                    situacao_profissional: true,
+                        situacao_profissional: true,
 
-                    cursos: true
+                        cursos: true
+                    }
                 }
             }
-        }
 
-    });
+        });
 
-}}
+    }
+}
