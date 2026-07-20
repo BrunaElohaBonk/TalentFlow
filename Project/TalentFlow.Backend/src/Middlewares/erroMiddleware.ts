@@ -44,8 +44,6 @@ export function errorMiddleware(
     }
 
 
-
-
     if(error instanceof UserJaExisteError){
 
         return res.status(409).json({
@@ -71,9 +69,6 @@ export function errorMiddleware(
 
     }
 
-
-
-
     if(error instanceof InvalidCredentialsError){
 
         return res.status(401).json({
@@ -86,9 +81,6 @@ export function errorMiddleware(
 
     }
 
-
-
-
     if(error instanceof InvalidTokenError){
 
         return res.status(401).json({
@@ -100,10 +92,6 @@ export function errorMiddleware(
         });
 
     }
-
-
-
-
     if(error instanceof PasswordMismatchError){
 
         return res.status(400).json({
@@ -115,9 +103,6 @@ export function errorMiddleware(
         });
 
     }
-
-
-
 
     if(error instanceof ServerConfigError){
 
@@ -131,9 +116,6 @@ export function errorMiddleware(
 
     }
 
-
-
-
     if(error instanceof TurmaNotFoundError){
 
         return res.status(404).json({
@@ -145,10 +127,6 @@ export function errorMiddleware(
         });
 
     }
-
-
-
-
 
     // Erros do Prisma
 
@@ -176,9 +154,7 @@ export function errorMiddleware(
             });
 
         }
-
-
-
+        
         if(prismaError.code === "P2025"){
 
             return res.status(404).json({

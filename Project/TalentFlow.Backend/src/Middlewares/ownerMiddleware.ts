@@ -12,9 +12,6 @@ export function ownerMiddleware(
     next: NextFunction
 
 ) {
-
-
-
     if(!req.user){
 
 
@@ -28,15 +25,8 @@ export function ownerMiddleware(
 
     }
 
-
-
-
-
     const EDV =
         Number(req.params.EDV);
-
-
-
 
 
     if(
@@ -53,10 +43,6 @@ export function ownerMiddleware(
 
 
     }
-
-
-
-
     next();
 
 

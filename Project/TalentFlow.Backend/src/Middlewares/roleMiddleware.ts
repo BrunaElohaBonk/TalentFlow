@@ -5,15 +5,9 @@ import { AuthRequest } from "./authMiddleware.ts";
 type Role =
     | "APRENDIZ"
     | "INSTRUTOR";
-
-
-
-
 export function roleMiddleware(
     ...roles: Role[]
 ) {
-
-
     return (
 
         req: AuthRequest,
@@ -39,9 +33,6 @@ export function roleMiddleware(
 
         }
 
-
-
-
         if (
             !roles.includes(
                 req.user.tipoUser
@@ -58,13 +49,7 @@ export function roleMiddleware(
 
 
         }
-
-
-
-
         next();
-
-
     };
 
 

@@ -37,12 +37,7 @@ export function validationMiddleware(
             });
 
         }
-
-
-
         req.body = resultado.data;
-
-
         next();
 
     };

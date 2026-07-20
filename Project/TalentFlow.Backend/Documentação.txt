@@ -1,12 +1,9 @@
-
-
 src/
 ├── controllers/  3 tem
 ├── services/     4 tem
 ├── models/       4
 ├── routes/       2 tem
-├── middlewares/  5 
-├── config/       4
+├── middlewares/  5 é
 └── server.ts     1 tem
 
 PRISMA TEM QUE ESTAR NA 6.19
@@ -23,17 +20,12 @@ não esqueca do:
 
 
 src/
-├── config/
-│   ├── prisma.ts
-│   ├── env.ts
-│   └── jwt.ts
 ├── Controllers/ ok
 ├── DTO/ ok
-├── Middlewares/
+├── Middlewares/ ok 
 ├── Routes/ ok
 ├── Services/ ok
-├── Utils/
+├── Utils/ -> quero usar pra fazer as notificações
 └── server.ts ok 
 
 
-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJFRFYiOjg3NjU0MzIxLCJ0aXBvVXNlciI6IkFQUkVORElaIiwibmFtZSI6IkFwcmVuZGl6IFRlc3RlIiwiaWF0IjoxNzg0MzExNTYyLCJleHAiOjE3ODQ0ODQzNjJ9.g6iylT3hRa9UVc_wP2cO84Ok6zinL1F-1bbEIO1cG44

@@ -17,22 +17,14 @@ const tokenSchema = z.object({
 
 });
 
-
-
 type TokenPayload =
     z.infer<typeof tokenSchema>;
-
-
 
 export interface AuthRequest extends Request {
 
     user?: TokenPayload;
 
 }
-
-
-
-
 
 export function authMiddleware(
     req: AuthRequest,
@@ -46,7 +38,7 @@ export function authMiddleware(
 
 
 
-    if(!authHeader){
+    if (!authHeader) {
 
         return res.status(401).json({
 
@@ -57,18 +49,10 @@ export function authMiddleware(
 
     }
 
-
-
-
-
     const [, token] =
         authHeader.split(" ");
 
-
-
-
-
-    if(!token){
+    if (!token) {
 
         return res.status(401).json({
 
@@ -79,11 +63,6 @@ export function authMiddleware(
 
     }
 
-
-
-
-
-
     try {
 
 
@@ -92,7 +71,7 @@ export function authMiddleware(
 
 
 
-        if(!secret){
+        if (!secret) {
 
             return res.status(500).json({
 
@@ -103,27 +82,16 @@ export function authMiddleware(
 
         }
 
-
-
-
-
         const decoded =
             jwt.verify(
                 token,
                 secret
             );
 
-
-
-
-
         const usuario =
             tokenSchema.safeParse(decoded);
 
-
-
-
-        if(!usuario.success){
+        if (!usuario.success) {
 
             return res.status(401).json({
 
@@ -133,11 +101,6 @@ export function authMiddleware(
             });
 
         }
-
-
-
-
-
         req.user =
             usuario.data;
 
@@ -145,10 +108,7 @@ export function authMiddleware(
 
         next();
 
-
-
-
-    } catch(error){
+    } catch (error) {
 
 
         return res.status(401).json({
