@@ -7,7 +7,7 @@ export default class InstrutorService {
 
     static async editar(
         EDV: number,
-        data: InstrutorDto
+        data: InstrutorDto,
     ) {
 
         const dadosAtualizados = {

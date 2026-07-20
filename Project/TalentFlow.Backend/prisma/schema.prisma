@@ -146,6 +146,7 @@ model user {
   aprendiz              aprendiz?
   tokenrecuperacaosenha tokenrecuperacaosenha[]
   turma                 turma[]
+
 }
 
 enum user_tipoUser {
