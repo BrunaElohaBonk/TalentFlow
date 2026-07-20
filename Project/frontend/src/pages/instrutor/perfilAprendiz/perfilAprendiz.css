@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+.dadosAprendiz{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.dadosAprendiz-container {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.dadosAprendiz-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 20px;
+    flex: 1;
+    overflow: auto;
+}

@@ -4,9 +4,14 @@ import './perfilAprendiz.css'
 
 function PerfilAprendiz(){
     return(
-        <div>
+        <div className="dadosAprendiz">
             <Header></Header>
-            <Sidebar></Sidebar>
+            <div className="dadosAprendiz-container">
+                <Sidebar></Sidebar>
+                <div className="dadosAprendiz-body">
+                
+                </div>
+            </div>
         </div>
     )
 }
