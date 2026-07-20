@@ -21,14 +21,48 @@ export default class AprendizService {
     });
 }
 
-    static async atualizarPerfil(idPerfil: number, data: any) {
-        return await prisma.profile.updateMany({
+   static async atualizarPerfil(
+    idPerfil: number,
+    data: any,
+    usuarioLogado: {
+        EDV: number;
+        name: string;
+    }
+) {
+    return await prisma.$transaction(async (tx: any) => {
+
+        const perfilAntigo = await tx.profile.findUnique({
+            where: {
+                id: idPerfil
+            }
+        });
+
+        if (!perfilAntigo) {
+            throw new Error("Perfil não encontrado.");
+        }
+
+        const perfilAtualizado = await tx.profile.update({
             where: {
                 id: idPerfil
             },
             data
         });
-    }
+
+        await tx.perfilhistorico.create({
+            data: {
+                Id_Profile: idPerfil,
+                EDVAlteradoPor: usuarioLogado.EDV,
+                dados: {
+                    mensagem: `${usuarioLogado.name} editou o perfil`,
+                    antes: perfilAntigo,
+                    depois: perfilAtualizado
+                }
+            }
+        });
+
+        return perfilAtualizado;
+    });
+}
 
     static async atualizarFormacaoAcademica(
         EDV: number,

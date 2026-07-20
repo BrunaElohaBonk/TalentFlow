@@ -11,12 +11,7 @@ import auth from "./auth.ts";
 
 export default function routes(app: Express) {
 
-
-
     app.use(express.json());
-
-
-
 
     app.use(
         "/api/auth",
@@ -24,20 +19,15 @@ export default function routes(app: Express) {
         
     );
 
-
-
-
     app.use(
         "/api/aprendiz",
         aprendiz
     );
 
-
     app.use(
         "/api/instrutor",
         instrutor
     );
-
 
     app.use(
         "/api/turma",
