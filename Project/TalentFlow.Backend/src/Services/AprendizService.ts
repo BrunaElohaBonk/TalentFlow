@@ -15,7 +15,7 @@ export default class AprendizService {
         },
         include: {
             user: true,
-            turmas: false,
+            turma: false,
             profile: true
         }
     });
@@ -393,7 +393,7 @@ static async filtrarTudo(filtros: any) {
 
             user: true,
 
-            turmas: true,
+            turma: false,
 
             profile: {
 
