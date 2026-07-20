@@ -79,10 +79,10 @@ function Perfil() {
     const [editarFormacao, setEditarFormacao] = useState(false)
 
     useEffect(() => {
-        const usuario = localStorage.getItem("usuarioLogado")
-        if (usuario) {
-            setAprendiz(JSON.parse(usuario))
-        }
+        const usuario = localStorage.getItem("usuario")
+        const aprendizLogado = JSON.parse(usuario)
+        console.log(aprendizLogado)
+        setAprendiz(aprendizLogado)
     }, [])
 
     if (!aprendiz) {
@@ -91,15 +91,15 @@ function Perfil() {
 
     return (
         <>
-        <div>
-            <Header></Header>
-        </div>
+            <div>
+                <Header></Header>
+            </div>
 
-        <div className="confirm-logout">
-            <img src={icon_logout} alt="icon_logout" onClick={() => setLogout(true)}/>
-        </div>
+            <div className="confirm-logout">
+                <img src={icon_logout} alt="icon_logout" onClick={() => setLogout(true)} />
+            </div>
 
-        <Logout visible={logout} setVisible={setLogout}/>
+            <Logout visible={logout} setVisible={setLogout}/>
         <SituacaoProfissional visible={situacao} setVisible={setSituacao} setEditarSituacao={setEditarSituacao}/>
         <FormacaoAcademica visible={formacao_academica} setVisible={setFormacaoAcademica} setEditarFormacao={setEditarFormacao}/>
         <CursoComplementar visible={curso_complementar} setVisible={setCursoComplementar}/>
@@ -108,7 +108,7 @@ function Perfil() {
         <Competencia visible={competencia} setVisible={setCompetencia}/>
         <EditarPerfil visible={editar} setVisible={setEditar} edv={aprendiz.edv}/>
         <EditarSituacaoProfissional visible={editarSituacao} setVisible={setEditarSituacao} edv={aprendiz.edv}/>
-        <EditarFormacaoAcademica visible={editarFormacao} setVisible={setEditarFormacao} />
+        <EditarFormacaoAcademica visible={editarFormacao} setVisible={setEditarFormacao} id={1} />
 
             <main className="perfil-tela">
                 <section className="perfil-bloco">

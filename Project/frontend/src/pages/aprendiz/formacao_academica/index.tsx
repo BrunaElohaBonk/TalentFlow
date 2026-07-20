@@ -233,15 +233,10 @@ function FormacaoAcademica({ visible, setVisible, setEditarFormacao }: Props) {
 
 
                     <FormacaoAcademicaVisualizar
-
                         visible={visualizarFormacao}
-
                         setVisible={setVisualizarFormacao}
-
-                        setEditarFormacao={setEditarFormacao}
-
+                        // setEditarFormacao={setEditarFormacao}
                         formacao={formacaoSelecionada}
-
                     />
 
                 }
