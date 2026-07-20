@@ -47,12 +47,12 @@ export class TurmaService {
         },
       });
     } catch (error: any) {
-  if (error.code === "P2025") {
-    throw new TurmaNotFoundError();
-  }
+      if (error.code === "P2025") {
+        throw new TurmaNotFoundError();
+      }
 
-  throw error;
-}
+      throw error;
+    }
   }
 
   static async deletar(id: number): Promise<void> {
@@ -62,11 +62,11 @@ export class TurmaService {
         data: { Ativo: false }
       });
     } catch (error: any) {
-  if (error.code === "P2025") {
-    throw new TurmaNotFoundError();
-  }
+      if (error.code === "P2025") {
+        throw new TurmaNotFoundError();
+      }
 
-  throw error;
+      throw error;
     }
   }
 }

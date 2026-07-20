@@ -2,18 +2,15 @@ export type User =
     | "APRENDIZ"
     | "INSTRUTOR";
 
-
 export interface LoginDto {
     EDV: number;
     password: string;
 }
 
-
 export interface EsqueceuSenhaDto {
     EDV: number;
     email: string;
 }
-
 
 export interface RedefinirSenhaDto {
     token: string;
@@ -21,7 +18,6 @@ export interface RedefinirSenhaDto {
     password: string;
     confirmPassword: string;
 }
-
 
 export interface AdicionarUserDto {
     EDV: number;
@@ -34,7 +30,6 @@ export interface AdicionarUserDto {
     password_login: string;
 }
 
-
 export interface EditarInstrutorDto {
     name?: string;
     email_bosch?: string;
@@ -42,4 +37,15 @@ export interface EditarInstrutorDto {
     data_nascimento?: string;
     contato?: string;
     password_login?: string;
+}
+export interface PrimeiroAcessoDto {
+
+    EDV: number;
+
+    email: string;
+
+    password: string;
+
+    confirmPassword: string;
+
 }
