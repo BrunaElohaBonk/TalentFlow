@@ -5,27 +5,6 @@ import {AdicionarUserDto} from "../DTO/authDTO.ts";
 
 export default class InstrutorService {
 
-
-    static async create(data: AdicionarUserDto) {
-
-        return await prisma.user.create({
-
-            data: {
-
-                ...data,
-
-                tipoUser: "INSTRUTOR",
-
-                data_nascimento: new Date(
-                    data.data_nascimento
-                )
-
-            }
-
-        });
-
-    }
-
     static async editar(
         EDV: number,
         data: InstrutorDto

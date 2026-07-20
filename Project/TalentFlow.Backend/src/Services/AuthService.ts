@@ -196,7 +196,7 @@ export class UserService {
     return await prisma.user.update({
 
       where: { EDV },
-      data: { }
+      data: { Ativo:false }
 
     });
 

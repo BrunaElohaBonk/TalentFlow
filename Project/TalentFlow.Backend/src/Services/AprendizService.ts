@@ -15,7 +15,7 @@ export default class AprendizService {
         },
         include: {
             user: true,
-            turmas: true,
+            turma: false,
             profile: true
         }
     });
@@ -35,7 +35,7 @@ export default class AprendizService {
         id: number,
         data: any
     ) {
-        return await prisma.formacao_Academica.updateMany({
+        return await prisma.formacao_academica.updateMany({
             where: {
                 id,
                 profile: {
@@ -67,7 +67,7 @@ export default class AprendizService {
         id: number,
         data: any
     ) {
-        return await prisma.soft_Skills.updateMany({
+        return await prisma.soft_skills.updateMany({
             where: {
                 id,
                 profile: {
@@ -134,9 +134,9 @@ static async verPerfil(EDV: number, id: number) {
         },
         include: {
             situacao_profissional: true,
-            soft_Skills: true,
+            soft_skills: true,
             competencia: true,
-            formacao_Academica: true,
+            formacao_academica: true,
             idiomas: true,
             cursos: true
         }
@@ -145,7 +145,7 @@ static async verPerfil(EDV: number, id: number) {
 
 
 static async verFormacaoAcademica(EDV: number, id: number) {
-    return await prisma.formacao_Academica.findMany({
+    return await prisma.formacao_academica.findMany({
         where: {
             Id_Profile: id,
             profile: {
@@ -169,7 +169,7 @@ static async verSituacaoProfissional(EDV: number, id: number) {
 
 
 static async verSoftskills(EDV: number, id: number) {
-    return await prisma.soft_Skills.findMany({
+    return await prisma.soft_skills.findMany({
         where: {
             Id_Profile: id,
             profile: {
@@ -268,7 +268,7 @@ static async filtrarApredizDashboart() {
 
 
     const aprendizesMaisQueMedio =
-        await prisma.formacao_Academica.count({
+        await prisma.formacao_academica.count({
             where: {
                 nivel_formacao: {
                     in: [
@@ -339,7 +339,7 @@ static async filtrarTudo(filtros: any) {
 
                 is: {
 
-                    formacao_Academica: curso
+                    formacao_academica: curso
                         ? {
                             some: {
                                 name_Curso: {
@@ -361,7 +361,7 @@ static async filtrarTudo(filtros: any) {
                         : undefined,
 
 
-                    soft_Skills: softskill
+                    soft_skills: softskill
                         ? {
                             some: {
                                 nome_SoftSkills: {
@@ -393,19 +393,19 @@ static async filtrarTudo(filtros: any) {
 
             user: true,
 
-            turmas: true,
+            turma: false,
 
             profile: {
 
                 include: {
 
-                    formacao_Academica: true,
+                    formacao_academica: true,
 
                     idiomas: true,
 
                     competencia: true,
 
-                    soft_Skills: true,
+                    soft_skills: true,
 
                     situacao_profissional: true,
 
