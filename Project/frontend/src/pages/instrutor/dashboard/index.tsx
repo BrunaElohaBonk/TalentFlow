@@ -104,26 +104,36 @@ function Dashboard() {
                         <button type="button" className="dashboard-button-filtro"><img src={filter} alt="filtro" className="img-filter" onClick={() => setFiltro(true)}/></button>
                     </div>
                     <div className="dashboard-graficos">
-                        <div className="dashboard-card">
-                            <h3 className="grafico-titulo">Distribuição por Setor</h3>
-                            <GraficoSetor aprendizes={pesquisar}/>
-                        </div>
-                        <div className="dashboard-card">
-                            <h3 className="grafico-titulo">Percentual em Estágio</h3>
-                            <GraficoEstagio aprendizes={pesquisar}/>
-                        </div>
-                        <div className="dashboard-card">
-                            <h3 className="grafico-titulo">Aprendizes Curdando Ensino Superior</h3>
-                            <GraficoSuperior aprendizes={pesquisar}/>
-                        </div>
-                        <div className="dashboard-card">
-                            <h3 className="grafico-titulo">Competências</h3>
-                            <GraficoCompetencias aprendizes={pesquisar}/>
-                        </div>
-                        <div className="dashboard-card">
-                            <h3 className="grafico-titulo">Idiomas</h3>
-                            <GraficoIdiomas aprendizes={pesquisar}/>
-                        </div>
+                        {pesquisar.length === 0 ? (
+                            <div className="dashboard-aviso">Nenhum resultado encontrado</div>
+                        ) : (
+                            <>
+                                <div className="dashboard-card">
+                                    <h3 className="grafico-titulo">Distribuição por Setor</h3>
+                                    <GraficoSetor aprendizes={pesquisar}/>
+                                </div>
+
+                                <div className="dashboard-card">
+                                    <h3 className="grafico-titulo">Percentual em Estágio</h3>
+                                    <GraficoEstagio aprendizes={pesquisar}/>
+                                </div>
+
+                                <div className="dashboard-card">
+                                    <h3 className="grafico-titulo">Aprendizes Cursando Ensino Superior</h3>
+                                    <GraficoSuperior aprendizes={pesquisar}/>
+                                </div>
+
+                                <div className="dashboard-card">
+                                    <h3 className="grafico-titulo">Competências</h3>
+                                    <GraficoCompetencias aprendizes={pesquisar}/>
+                                </div>
+
+                                <div className="dashboard-card">
+                                    <h3 className="grafico-titulo">Idiomas</h3>
+                                    <GraficoIdiomas aprendizes={pesquisar}/>
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
             </div>

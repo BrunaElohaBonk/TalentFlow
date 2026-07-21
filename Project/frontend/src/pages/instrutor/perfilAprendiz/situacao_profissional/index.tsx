@@ -41,7 +41,6 @@ function SituacaoProfissional({visible, setVisible, situacao}: Props) {
 
                     </div>
 
-
                     <div className="situacao-conteudo">
 
                         <div className="situacao-item">

@@ -101,7 +101,7 @@ function CursoComplementar({ visible, setVisible, cursoComplementar }: Props) {
 
 
 
-
+                <span className="formacao-lista-titulo">Cursos Complementares</span>
                 <div className="formacao-modal">
 
 

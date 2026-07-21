@@ -69,6 +69,7 @@ function SoftSkill({ visible, setVisible, softSkills }: Props) {
                         <img src={fechar} alt="fechar" className="icon-fechar-img" />
                     </button>
                 </div>
+                <span className="formacao-lista-titulo">Soft Skills</span>
                 <div className="formacao-modal">
                     {
                         softSkills.length === 0 ?

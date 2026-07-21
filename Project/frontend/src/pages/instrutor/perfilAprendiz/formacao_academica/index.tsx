@@ -76,7 +76,7 @@ function FormacaoAcademica({
                         />
                     </button>
                 </div>
-
+                <span className="formacao-lista-titulo">Formação Acadêmica</span>
                 <div className="formacao-modal">
                     {formacaoAcademica.map((item, index) => (
                         <div className="formacao-item" key={index}>

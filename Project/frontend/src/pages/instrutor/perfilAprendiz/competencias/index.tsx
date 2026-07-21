@@ -74,6 +74,7 @@ function Competencia({ visible, setVisible, competencias }: Props) {
                         <img src={fechar} alt="fechar" className="icon-fechar-img" />
                     </button>
                 </div>
+                <span className="formacao-lista-titulo">Competências</span>
                 <div className="formacao-modal" >
                     {
                         competencias.length === 0 ?

@@ -74,6 +74,7 @@ function Idioma({ visible, setVisible, idiomas }: Props) {
                         <img src={fechar} alt="fechar" className="icon-fechar-img" />
                     </button>
                 </div>
+                <span className="formacao-lista-titulo">Idiomas</span>
                 <div className="formacao-modal">
                     {
                         idiomas.length === 0 ?

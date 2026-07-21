@@ -85,3 +85,14 @@
     margin-bottom: 5px;
     color: #8a8a8a;
 }
+
+.dashboard-aviso{
+    font-family: 'Poppins', sans-serif;
+    font-size: 2rem;
+    font-weight: bold;
+    grid-column: span 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
