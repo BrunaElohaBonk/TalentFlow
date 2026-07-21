@@ -95,7 +95,7 @@ model profile {
 model situacao_profissional {
   id               Int     @id @default(autoincrement())
   Id_Profile       Int
-  nome_Setor       String?
+  nome_Setor       NomeSetor?
   nome_Lider       String?
   cumprido_Estagio Boolean @default(false)
   bio_profissional String?
@@ -107,7 +107,7 @@ model situacao_profissional {
 model soft_skills {
   id              Int     @id @default(autoincrement())
   Id_Profile      Int
-  nome_SoftSkills String
+  nome_SoftSkills NomeSoftskills
   profile         profile @relation(fields: [Id_Profile], references: [id], map: "Soft_Skills_Id_Profile_fkey")
 
   @@index([Id_Profile], map: "Soft_Skills_Id_Profile_fkey")
@@ -136,6 +136,7 @@ model turma {
   user          user       @relation(fields: [EDV_Instrutor], references: [EDV], map: "Turma_EDV_Instrutor_fkey")
 
   @@index([EDV_Instrutor], map: "Turma_EDV_Instrutor_fkey")
+  turmahistorico turmahistorico[]
 }
 
 model user {
@@ -159,6 +160,48 @@ enum user_tipoUser {
   INSTRUTOR
 }
 
+enum NomeSetor {
+  ENGENHARIA
+  BDO
+  TEF
+  BD
+  RH
+  COMPRAS
+  BICO
+  CRIN
+  LOGISTICA
+  QMM
+  TOTO
+  IMPACT
+  FERRAMENTARIA
+  PRODUCAO
+  BPS
+  ETS
+  HSE
+  ESPAÇO_SAUDE
+}
+
+enum NomeSoftskills {
+  COMUNICACAO
+  TRABALHO_EM_EQUIPE
+  LIDERANCA
+  EMPATIA
+  PROATIVIDADE
+  RESOLUCAO_DE_PROBLEMAS
+  PENSAMENTO_CRITICO
+  GESTAO_DO_TEMPO
+  ORGANIZACAO
+  CRIATIVIDADE
+  NEGOCIACAO
+  RESILIENCIA
+  ESCUTA_ATIVA
+  RESPONSABILIDADE
+  AUTONOMIA
+  APRENDIZADO_CONTINUO
+  INOVACAO
+  ORATORIA
+  COMPROMETIMENTO
+}
 enum idiomas_nome_Idioma {
   ALEMAO
   ARABE
@@ -207,3 +250,16 @@ enum TipoHistorico {
   SITUACAO_PROFISSIONAL
   IDIOMA
 }
+model turmahistorico {
+  Id             Int             @id @default(autoincrement())
+  Id_Turma       Int?
+  acao           String
+  EDVAlteradoPor Int?
+  dados          Json
+  dataAlteracao  DateTime        @default(now())
+
+  turmas turma? @relation(fields: [Id_Turma], references: [id])
+
+  @@index([Id_Turma])
+}
+

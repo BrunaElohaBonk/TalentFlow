@@ -9,6 +9,7 @@ import {
   LoginDto,
   RedefinirSenhaDto
 } from "../DTO/authDTO.ts";
+import { Prisma, TipoHistorico } from "@prisma/client";
 export class UserJaExisteError extends Error {
   constructor(message = "EDV ou e-mail já cadastrado") {
     super(message);
@@ -102,7 +103,8 @@ export class UserService {
 
   }
 
-  static async register(data: AdicionarUserDto) {
+  static async register(data: AdicionarUserDto,  usuarioLogado: { EDV: number;name: string;}) 
+  {
     const passwordCrypt =
       await bcrypt.hash(
         data.password_login,
@@ -110,7 +112,8 @@ export class UserService {
       );
 
     try {
-      return await prisma.user.create({
+      return await prisma.$transaction(async (tx) => {
+      const user = await prisma.user.create({
         data: {
           EDV: data.EDV,
           tipoUser: data.tipoUser,
@@ -129,6 +132,20 @@ export class UserService {
             passwordCrypt,
         }
       });
+      await tx.perfilhistorico.create({
+        data: {
+            Id_Profile: null,
+            Tipo: TipoHistorico.DADOS_INSTRUTOR,
+            IdRegistro: user.EDV,
+            Acao: "CREATE",
+            EDVAlteradoPor: usuarioLogado.EDV,
+            Dados: {
+                user:null
+            }
+          }});     
+
+    return user;
+});
     } catch (error: any) {
       if (error.code === "P2002") {
         throw new UserJaExisteError();
@@ -138,12 +155,28 @@ export class UserService {
   }
 
   static async deletar(
-    EDV: number
+    EDV: number,
+    usuarioLogado: { EDV: number;name: string;}
   ) {
-    return await prisma.user.update({
-      where: { EDV },
-      data: { Ativo: false }
-    });
+    return await prisma.$transaction(async (tx) => {
+    const user = await prisma.user.update({
+        where: { EDV },
+        data: { Ativo: false }
+      });
+
+    await tx.perfilhistorico.create({
+      data: {
+          Id_Profile: null,
+          Tipo: TipoHistorico.DADOS_INSTRUTOR,
+          IdRegistro: user.EDV,
+          Acao: "DELETE",
+          EDVAlteradoPor: usuarioLogado.EDV,
+          Dados: {
+              user
+          }
+        }}); 
+      return user;
+    }); 
   }
 
   static async login(

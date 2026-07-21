@@ -9,8 +9,23 @@ export class TurmaNotFoundError extends Error {
 }
 
 export class TurmaService {
-  static async criar(data: CriarTurmaDTO) {
-    return prisma.turma.create({ data, });
+  static async criar(data: CriarTurmaDTO, id_turma: number, usuarioLogado: { EDV: number; name: string; }) {
+    return await prisma.$transaction(async (tx) => {
+
+      const turma = await prisma.turma.create({ data, });
+      await tx.turmahistorico.create({
+        data: {
+          Id_Turma: id_turma,
+          acao: "CREATE",
+          EDVAlteradoPor: usuarioLogado.EDV,
+          dados: {
+            turma: null
+          }
+
+        }
+      })
+      return turma;
+    });
   }
 
   static async listarTodas() {
@@ -19,6 +34,7 @@ export class TurmaService {
         user: true,
         aprendiz: true,
       },
+
     });
   }
 
@@ -38,35 +54,70 @@ export class TurmaService {
     return turma;
   }
 
-  static async atualizar(id: number, data: EditarTurmaDTO) {
-    try {
-      return await prisma.turma.update({
-        where: { id },
-        data: {
-          name_Curso: data.name_Curso,
-        },
-      });
-    } catch (error: any) {
-      if (error.code === "P2025") {
-        throw new TurmaNotFoundError();
-      }
+  static async atualizar(id: number, data: EditarTurmaDTO, usuarioLogado: { EDV: number; name: string; }) {
+    return await prisma.$transaction(async (tx) => {
+      try {
+        const turmaAntigo = await tx.turma.findUnique({ where: { id } });
 
-      throw error;
-    }
+        if (!turmaAntigo) {
+          throw new Error("turma não encontrado.");
+        }
+        const autalizadoturma = await prisma.turma.update({
+          where: { id },
+          data: {
+            name_Curso: data.name_Curso,
+          },
+        });
+        await tx.turmahistorico.create({
+          data: {
+            Id_Turma: id,
+            acao: "UPDATE",
+            EDVAlteradoPor: usuarioLogado.EDV,
+            dados: {
+              turmaAntigo,
+              autalizadoturma
+            }
+
+          }
+        })
+        return autalizadoturma;
+
+      } catch (error: any) {
+        if (error.code === "P2025") {
+          throw new TurmaNotFoundError();
+        }
+
+        throw error;
+      }
+    });
   }
 
-  static async deletar(id: number): Promise<void> {
-    try {
-      await prisma.turma.update({
-        where: { id },
-        data: { Ativo: false }
-      });
-    } catch (error: any) {
-      if (error.code === "P2025") {
-        throw new TurmaNotFoundError();
-      }
+  static async deletar(id: number, usuarioLogado: { EDV: number; name: string; }): Promise<any> {
+    return await prisma.$transaction(async (tx) => {
+      try {
+        const turma = await prisma.turma.update({
+          where: { id },
+          data: { Ativo: false }
+        });
+        await tx.turmahistorico.create({
+          data: {
+            Id_Turma: id,
+            acao: "DELETE",
+            EDVAlteradoPor: usuarioLogado.EDV,
+            dados: {
+              turma
+            }
 
-      throw error;
-    }
+          }
+        })
+        return turma;
+      } catch (error: any) {
+        if (error.code === "P2025") {
+          throw new TurmaNotFoundError();
+        }
+
+        throw error;
+      }
+    });
   }
 }
