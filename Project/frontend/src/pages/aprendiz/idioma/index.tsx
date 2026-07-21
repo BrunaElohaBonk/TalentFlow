@@ -7,6 +7,8 @@ import adicionar from '../../../assets/img/icon adicionar.png'
 import fechar from '../../../assets/img/close.png'
 import IdiomaVisualizar from "./ver/ver_idioma";
 import { useState } from "react";
+import EditarIdioma from "./editar/editar_idioma";
+import AdicionarIdioma from "./adicionar/adicionar_idioma";
 import './idioma.css'
 
 interface Props {
@@ -17,6 +19,8 @@ interface Props {
 function Idioma({ visible, setVisible }: Props) {
 
     const [visualizarIdioma, setVisualizarIdioma] = useState(false);
+    const [editarIdioma, setEditarIdioma] = useState(false);
+    const [adicionarIdioma, setAdicionarIdioma] = useState(false);
     const [idiomaSelecionado, setIdiomaSelecionado] = useState<any>(null);
 
     if (!visible) {
@@ -75,19 +79,15 @@ function Idioma({ visible, setVisible }: Props) {
         }
 
         try {
-
             await axios.delete(`link backend/${id}`)
-
             Swal.fire({
                 title: 'Deletada!',
                 text: 'Formação Acadêmica removida com sucesso!',
                 icon: 'success'
             })
         }
-
         catch (error) {
             console.error('Erro ao deletar:', error)
-
             Swal.fire({
                 title: 'Erro!',
                 text: 'Erro ao deletar Formação Acadêmica',
@@ -97,73 +97,42 @@ function Idioma({ visible, setVisible }: Props) {
     }
 
     return (
-
-        <div className="formacao-container">
-            <div className="formacao-body">
-                <div className="formacao-header">
-                    <button
-                        type="button"
-                        className="btn-header"
-                    >
+        <div className="idioma-container" onClick={() => setVisible(false)}>
+            <div className="idioma-body" onClick={(e) => e.stopPropagation()}>
+                <div className="idioma-header">
+                    <button type="button" className="btn-header" onClick={() => setAdicionarIdioma(true)}>
                         <img src={adicionar} alt="adicionar" />
                     </button>
-                    <button
-                        type="button"
-                        className="btn-header"
-                        onClick={() => setVisible(false)}
-                    >
+                    <button className="btn-header" onClick={() => setVisible(false)}>
                         <img src={fechar} alt="fechar" className="icon-fechar-img" />
                     </button>
                 </div>
-                <div className="formacao-modal">
+                <span className="idioma-lista-titulo">Idiomas</span>
+                <div className="idioma-modal">
                     {
                         idiomas.length === 0 ?
-                            <p className="formacao-vazia">
-                                Nenhuma formação acadêmica encontrada.
-                            </p>
+                            <p className="idioma-vazia">Nenhuma formação acadêmica encontrada.</p>
                             :
                             idiomas.map((item) => (
-                                <div
-                                    className="formacao-item"
-                                    key={item.id}
-                                >
-                                    <span className="formacao-titulo">
-                                        {item.nomeIdioma}
-                                    </span>
-                                    <div className="formacao-acoes">
-                                        <button
-                                            type="button"
-                                            className="btn-acao"
-                                            onClick={() => {
+                                <div className="idioma-item" key={item.id}>
+                                    <span className="idioma-titulo">{item.nomeIdioma}</span>
+                                    <div className="idioma-acoes">
+                                        <button type="button" className="btn-acao" onClick={() => {
                                                 setIdiomaSelecionado(item);
                                                 setVisualizarIdioma(true);
                                             }}
                                         >
-                                            <img
-                                                src={olho}
-                                                alt="Visualizar"
-                                                className="icon-olho"
-                                            />
+                                            <img src={olho} alt="Visualizar" className="icon-olho"/>
                                         </button>
-                                        <button
-                                            type="button"
-                                            className="btn-acao"
-                                            onClick={() => console.log(item)}
+                                        <button type="button" className="btn-acao" onClick={() => {
+                                                setIdiomaSelecionado(item);
+                                                setEditarIdioma(true);
+                                            }}
                                         >
-                                            <img
-                                                src={icon_editar}
-                                                alt="Editar"
-                                            />
+                                            <img src={icon_editar} alt="Editar"/>
                                         </button>
-                                        <button
-                                            type="button"
-                                            className="btn-acao"
-                                            onClick={() => handleDelete(item.id)}
-                                        >
-                                            <img
-                                                src={lixeira}
-                                                alt="Excluir"
-                                            />
+                                        <button type="button" className="btn-acao" onClick={() => handleDelete(item.id)}>
+                                            <img src={lixeira} alt="Excluir"/>
                                         </button>
                                     </div>
                                 </div>
@@ -177,6 +146,25 @@ function Idioma({ visible, setVisible }: Props) {
                         setVisible={setVisualizarIdioma}
                         idioma={idiomaSelecionado}
                     />
+                    )
+                }
+                {
+                    editarIdioma && idiomaSelecionado && (
+                        <EditarIdioma
+                            visible={editarIdioma}
+                            setVisible={setEditarIdioma}
+                            setIdioma={setVisible}
+                            id={idiomaSelecionado.id}
+                        />
+                    )
+                }
+                {
+                    adicionarIdioma && (
+                        <AdicionarIdioma
+                            visible={adicionarIdioma}
+                            setVisible={setAdicionarIdioma}
+                            setIdioma={setVisible}
+                        />
                     )
                 }
             </div>

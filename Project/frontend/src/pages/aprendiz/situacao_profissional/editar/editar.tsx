@@ -79,8 +79,8 @@ function EditarSituacaoProfissional({ visible, setVisible, setSituacaoProfission
     if (!visible) return null;
 
     return (
-        <div className="editarSituacao-overlay">
-            <form onSubmit={handleSubmit} className="editarSituacao-card">
+        <div className="editarSituacao-overlay" onClick={() => setVisible(false)}>
+            <form onSubmit={handleSubmit} className="editarSituacao-card" onClick={(e) => e.stopPropagation()}>
                 <button 
                     type="button" 
                     onClick={() => {

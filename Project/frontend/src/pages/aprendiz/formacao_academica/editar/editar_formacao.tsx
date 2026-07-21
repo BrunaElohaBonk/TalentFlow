@@ -149,8 +149,8 @@ function EditarFormacaoAcademica({ visible, setVisible, setFormacaoAcademica, id
     }
 
     return (
-        <div className="editarFormacao-overlay">
-            <form onSubmit={handleSubmit} className="editarFormacao-card">
+        <div className="editarFormacao-overlay" onClick={() => setVisible(false)}>
+            <form onSubmit={handleSubmit} className="editarFormacao-card" onClick={(e) => e.stopPropagation()}>
                 <button type="button" className="editarFormacao-fechar" onClick={() => {
                         setVisible(false)
                         setFormacaoAcademica(true)
