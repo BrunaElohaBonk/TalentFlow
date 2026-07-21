@@ -155,6 +155,12 @@ select.editarIdioma-input {
     flex-shrink: 0;
 }
 
+.editarIdioma-input:disabled {
+    background-color: #eeeeee;
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
 .editarIdioma-radio {
     width: auto;
     transform: translateY(-5px);

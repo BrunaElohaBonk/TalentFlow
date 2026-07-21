@@ -31,6 +31,20 @@ function AdicionarIdioma({
         certificado: null
     })
 
+    const idiomas = [
+        "Alemão",
+        "Árabe",
+        "Coreano",
+        "Espanhol",
+        "Francês",
+        "Inglês",
+        "Italiano",
+        "Japonês",
+        "Mandarim",
+        "Russo",
+        "Tailandês"
+    ];
+
     const [nomeCertificado, setNomeCertificado] = useState("");
 
     const { getRootProps, getInputProps } = useDropzone({
@@ -125,10 +139,19 @@ function AdicionarIdioma({
                 </button>
                 <span className="adicionarIdioma-titulo">Idioma</span>
                 <div className="adicionarIdioma-container">
-                    <div className="adicionarIdioma-grupo">
-                        <label className="adicionarIdioma-label">Nome do Idioma</label>
-                        <input name="nomeIdioma" className="adicionarIdioma-input" value={idioma.nomeIdioma} onChange={handleChange}/>
-                    </div>
+                <div className="adicionarIdioma-grupo">
+                    <label className="adicionarIdioma-label">Nome do Idioma</label>
+                    <select name="nomeIdioma" className="adicionarIdioma-input" value={idioma.nomeIdioma} onChange={handleChange}>
+                        <option value="">Selecione o idioma</option>
+                        {
+                            idiomas.map((item) => (
+                                <option key={item} value={item}>
+                                    {item}
+                                </option>
+                            ))
+                        }
+                    </select>
+                </div>
                     <div className="adicionarIdioma-grupo">
                         <label className="adicionarIdioma-label">Nível</label>
                         <FormControl className="adicionarIdioma-radio">

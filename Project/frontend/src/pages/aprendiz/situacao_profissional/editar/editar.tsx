@@ -27,6 +27,27 @@ function EditarSituacaoProfissional({ visible, setVisible, setSituacaoProfission
         descricao: ''
     })
 
+    const setores = [
+        "Engenharia",
+        "BDO",
+        "TEF",
+        "BD",
+        "RH",
+        "Compras",
+        "Bico",
+        "Crin",
+        "Logística",
+        "QMM",
+        "Toto",
+        "Impact",
+        "Ferramentaria",
+        "Produção",
+        "BPS",
+        "ETS",
+        "HSE",
+        "Espaço Saúde"
+    ];    
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setSituacao({
             ...situacao,
@@ -99,12 +120,14 @@ function EditarSituacaoProfissional({ visible, setVisible, setSituacaoProfission
                         <label className="editarSituacao-label">
                             Nome do Setor
                         </label>
-                        <input 
-                            name="setor"
-                            className="editarSituacao-input"
-                            value={situacao.setor}
-                            onChange={handleChange}
-                        />
+                        <select name="setor" className="editarSituacao-input" value={situacao.setor} onChange={handleChange}>
+                            <option value="">Selecione o setor</option>
+                            {
+                                setores.map((item) => (
+                                    <option key={item} value={item}>{item}</option>
+                                ))
+                            }
+                        </select>
                     </div>
                     <div className="editarSituacao-grupo">
                         <label className="editarSituacao-label">

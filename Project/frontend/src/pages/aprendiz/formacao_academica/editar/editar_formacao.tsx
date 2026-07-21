@@ -38,6 +38,14 @@ function EditarFormacaoAcademica({ visible, setVisible, setFormacaoAcademica, id
         certificado: null
     })
 
+    const niveisFormacao = [
+        "Ensino Médio",
+        "Técnico",
+        "Graduação",
+        "Pós Graduação"
+    ];
+    
+
     const [nomeCertificado, setNomeCertificado] = useState("");
 
     const { getRootProps, getInputProps } = useDropzone({
@@ -59,7 +67,7 @@ function EditarFormacaoAcademica({ visible, setVisible, setFormacaoAcademica, id
         },
     });
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         setFormacao({
             ...formacao,
             [e.target.name]: e.target.value
@@ -234,7 +242,14 @@ function EditarFormacaoAcademica({ visible, setVisible, setFormacaoAcademica, id
                     </div>
                     <div className="editarFormacao-grupo">
                         <label className="editarFormacao-label">Nível de Formação</label>
-                        <input name="nivelFormacao" className="editarFormacao-input" value={formacao.nivelFormacao} onChange={handleChange}/>
+                        <select name="nivelFormacao" className="editarFormacao-input" value={formacao.nivelFormacao} onChange={handleChange}>
+                            <option value="">Selecione o nível</option>
+                            {
+                                niveisFormacao.map((item) => (
+                                    <option key={item} value={item}>{item}</option>
+                                ))
+                            }
+                        </select>
                     </div>
                     <div className="editarFormacao-grupo">
                         <label className="editarFormacao-label">Descrição</label>

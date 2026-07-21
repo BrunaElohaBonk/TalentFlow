@@ -130,7 +130,7 @@ function EditarIdioma({
                 <div className="editarIdioma-container">
                     <div className="editarIdioma-grupo">
                         <label className="editarIdioma-label">Nome do Idioma</label>
-                        <input name="nomeIdioma" className="editarIdioma-input" value={idioma.nomeIdioma} onChange={handleChange}/>
+                        <input name="nomeIdioma" className="editarIdioma-input" value={idioma.nomeIdioma} disabled/>
                     </div>
                     <div className="editarIdioma-grupo">
                         <label className="editarIdioma-label">Nível</label>
