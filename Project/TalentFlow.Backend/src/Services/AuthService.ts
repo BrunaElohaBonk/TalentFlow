@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { EmailService } from "./EmailService.ts";
 
 import { prisma } from "../lib/prisma.ts";
 import {
@@ -82,15 +83,23 @@ export class UserService {
   }
 
   private static formatarDataBR(data: Date): string {
+
     const dia =
-      String(data.getDate())
+      String(data.getUTCDate())
         .padStart(2, "0");
+
+
     const mes =
-      String(data.getMonth() + 1)
+      String(data.getUTCMonth() + 1)
         .padStart(2, "0");
+
+
     const ano =
-      data.getFullYear();
+      data.getUTCFullYear();
+
+
     return `${dia}/${mes}/${ano}`;
+
   }
 
   static async register(data: AdicionarUserDto) {
@@ -303,23 +312,14 @@ export class UserService {
           expiresIn: "1h"
         }
       );
-    await enviarEmailRedefinicao(
-      user.user_bosch!,
-      resetToken
+    console.log("TOKEN GERADO:", resetToken);
+    const linkReset =
+      `http://localhost:3000/redefinir-senha?token=${resetToken}`;
+
+    await EmailService.enviarEmail(
+      data.email,
+      linkReset
     );
   }
 }
 
-async function enviarEmailRedefinicao(
-  email: string,
-  token: string
-) {
-  console.log(
-    "Enviar email para:",
-    email
-  );
-  console.log(
-    "Token:",
-    token
-  );
-}
