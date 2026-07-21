@@ -26,8 +26,8 @@ function CursoComplementarVisualizar({
     }
 
     return (
-        <div className="cursoVisualizar-overlay">
-            <div className="cursoVisualizar-card">
+        <div className="cursoVisualizar-overlay" onClick={() => setVisible(false)}>
+            <div className="cursoVisualizar-card" onClick={(e) => e.stopPropagation()}>
                 <div className="cursoVisualizar-header">
                     <h2>Curso Complementar</h2>
                     <div className="cursoVisualizar-acoes">

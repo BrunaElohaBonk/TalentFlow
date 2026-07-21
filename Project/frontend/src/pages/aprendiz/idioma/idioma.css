@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
-.formacao-container {
+.idioma-container {
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,.35);
@@ -10,7 +10,7 @@
     z-index: 9999;
 }
 
-.formacao-body {
+.idioma-body {
     width: 700px;
     max-width: 90%;
     max-height: 80vh;
@@ -22,13 +22,25 @@
     font-family: 'Poppins', sans-serif;
 }
 
-.formacao-header {
+.idioma-lista-titulo {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+    margin-top: -35px;
+    margin-bottom: 10px;
+}
+
+.idioma-header {
     position: relative;
     display: flex;
     justify-content: flex-end;
     align-items: center;
     gap: 2px;
-    margin-bottom: 25px;
+    margin-bottom: 5px;
 }
 
 .btn-header {
@@ -59,21 +71,21 @@
     transform: scale(1.1);
 }
 
-.formacao-modal {
+.idioma-modal {
     max-height: 450px;
     overflow-y: auto;
 }
 
-.formacao-modal::-webkit-scrollbar {
+.idioma-modal::-webkit-scrollbar {
     width: 6px;
 }
 
-.formacao-modal::-webkit-scrollbar-thumb {
+.idioma-modal::-webkit-scrollbar-thumb {
     background: #d9d9d9;
     border-radius: 10px;
 }
 
-.formacao-item {
+.idioma-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -81,18 +93,18 @@
     border-bottom: 1px solid #d9d9d9;
 }
 
-.formacao-item:last-child {
+.idioma-item:last-child {
     border-bottom: none;
 }
 
-.formacao-titulo {
+.idioma-titulo {
     font-family: 'Poppins', sans-serif;
     font-size: 1rem;
     font-weight: 600;
     color: #333;
 }
 
-.formacao-acoes {
+.idioma-acoes {
     display: flex;
     align-items: center;
     gap: 15px;
@@ -126,7 +138,7 @@
     transform: scale(1.1);
 }
 
-.formacao-vazia {
+.idioma-vazia {
     font-family: 'Poppins', sans-serif;
     font-size: 1.3rem;
     font-weight: 600;
@@ -137,22 +149,22 @@
 
 @media(max-width:768px) {
 
-    .formacao-body {
+    .idioma-body {
         width: 90%;
         padding: 20px;
     }
 
-    .formacao-item {
+    .idioma-item {
         flex-direction: column;
         align-items: flex-start;
         gap: 15px;
     }
 
-    .formacao-acoes {
+    .idioma-acoes {
         align-self: flex-end;
     }
 
-    .formacao-titulo {
+    .idioma-titulo {
         font-size: 1rem;
     }
 

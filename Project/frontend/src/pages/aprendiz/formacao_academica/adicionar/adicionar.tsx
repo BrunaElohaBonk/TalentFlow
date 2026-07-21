@@ -191,10 +191,11 @@ function AdicionarFormacaoAcademica({
     if (!visible) return null;
 
     return (
-        <div className="adicionarFormacao-overlay">
+        <div className="adicionarFormacao-overlay" onClick={() => setVisible(false)}>
             <form
                 onSubmit={handleSubmit}
                 className="adicionarFormacao-card"
+                onClick={(e) => e.stopPropagation()}
             >
                 <button
                     type="button"

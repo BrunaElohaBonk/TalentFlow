@@ -23,8 +23,8 @@ function IdiomaVisualizar({
     }
 
     return (
-        <div className="idiomaVisualizar-overlay">
-            <div className="idiomaVisualizar-card">
+        <div className="idiomaVisualizar-overlay" onClick={() => setVisible(false)}>
+            <div className="idiomaVisualizar-card" onClick={(e) => e.stopPropagation()}>
                 <div className="idiomaVisualizar-header">
                     <h2>Idioma</h2>
                     <div className="idiomaVisualizar-acoes">

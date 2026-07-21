@@ -22,13 +22,25 @@
     font-family: 'Poppins', sans-serif;
 }
 
+.formacao-lista-titulo {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+    margin-top: -35px;
+    margin-bottom: 10px;
+}
+
 .formacao-header {
     position: relative;
     display: flex;
     justify-content: flex-end;
     align-items: center;
     gap: 2px;
-    margin-bottom: 25px;
+    margin-bottom: 5px;
 }
 
 .btn-header {

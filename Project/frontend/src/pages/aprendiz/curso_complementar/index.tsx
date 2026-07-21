@@ -8,6 +8,7 @@ import fechar from '../../../assets/img/close.png'
 import { useState } from "react";
 import CursoComplementarVisualizar from "./ver/ver_curso";
 import EditarCursoComplementar from "./editar/editar_curso";
+import AdicionarCursoComplementar from "./adicionar/adicionar_curso";
 import './curso_complementar.css'
 
 interface Props {
@@ -20,6 +21,7 @@ function CursoComplementar({ visible, setVisible }: Props) {
     const [visualizarCurso, setVisualizarCurso] = useState(false);
     const [editarCurso, setEditarCurso] = useState(false);
     const [cursoSelecionado, setCursoSelecionado] = useState<any>(null);
+    const [adicionarCurso, setAdicionarCurso] = useState(false);
 
     if (!visible) {
         return null
@@ -116,25 +118,26 @@ function CursoComplementar({ visible, setVisible }: Props) {
     }
 
     return (
-        <div className="formacao-container">
-            <div className="formacao-body">
-                <div className="formacao-header">
-                    <button type="button" className="btn-header">
+        <div className="curso-container" onClick={() => setVisible(false)}>
+            <div className="curso-body" onClick={(e) => e.stopPropagation()}>
+                <div className="curso-header">
+                    <button type="button" className="btn-header" onClick={() => setAdicionarCurso(true)}>
                         <img src={adicionar} alt="adicionar" />
                     </button>
                     <button type="button" className="btn-header" onClick={() => setVisible(false)}>
                         <img src={fechar} alt="fechar" className="icon-fechar-img" />
                     </button>
                 </div>
-                <div className="formacao-modal">
+                <span className="curso-lista-titulo">Cursos Complementares</span>
+                <div className="curso-modal">
                     {
                         cursosComplementares.length === 0 ?
-                            <p className="formacao-vazia">Nenhum curso complementar encontrado.</p>
+                            <p className="curso-vazia">Nenhum curso complementar encontrado.</p>
                         :
                         cursosComplementares.map((item) => (
-                            <div className="formacao-item" key={item.id}>
-                                <span className="formacao-titulo">{item.nomeCurso}</span>
-                                <div className="formacao-acoes">
+                            <div className="curso-item" key={item.id}>
+                                <span className="curso-titulo">{item.nomeCurso}</span>
+                                <div className="curso-acoes">
                                     <button type="button" className="btn-acao"
                                         onClick={() => {
                                             setCursoSelecionado(item);
@@ -173,6 +176,15 @@ function CursoComplementar({ visible, setVisible }: Props) {
                             visible={editarCurso}
                             setVisible={setEditarCurso}
                             id={cursoSelecionado.id}
+                        />
+                    )
+                }
+                {
+                    adicionarCurso && (
+                        <AdicionarCursoComplementar
+                            visible={adicionarCurso}
+                            setVisible={setAdicionarCurso}
+                            setCursoComplementar={setVisible}
                         />
                     )
                 }

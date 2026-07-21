@@ -7,6 +7,8 @@ import adicionar from '../../../assets/img/icon adicionar.png'
 import fechar from '../../../assets/img/close.png'
 import CompetenciaVisualizar from "./ver/ver_competencia";
 import './competencias.css'
+import EditarCompetencia from "./editar/editar_competencia";
+import AdicionarCompetencia from "./adicionar/adicionar_competencia";
 import { useState } from "react";
 
 interface Props {
@@ -17,7 +19,9 @@ interface Props {
 function Competencia({ visible, setVisible }: Props) {
 
     const [visualizarCompetencia, setVisualizarCompetencia] = useState(false);
-const [competenciaSelecionada, setCompetenciaSelecionada] = useState<any>(null);
+    const [competenciaSelecionada, setCompetenciaSelecionada] = useState<any>(null);
+    const [editarCompetencia, setEditarCompetencia] = useState(false);
+    const [adicionarCompetencia, setAdicionarCompetencia] = useState(false);
 
     if (!visible) {
         return null
@@ -77,19 +81,15 @@ const [competenciaSelecionada, setCompetenciaSelecionada] = useState<any>(null);
         }
 
         try {
-
             await axios.delete(`link backend/${id}`)
-
             Swal.fire({
                 title: 'Deletado!',
                 text: 'Curso Complementar removido com sucesso!',
                 icon: 'success'
             })
         }
-
         catch (error) {
             console.error('Erro ao deletar:', error)
-
             Swal.fire({
                 title: 'Erro!',
                 text: 'Erro ao deletar Curso Complementar',
@@ -99,73 +99,42 @@ const [competenciaSelecionada, setCompetenciaSelecionada] = useState<any>(null);
     }
 
     return (
-
-        <div className="formacao-container">
-            <div className="formacao-body">
-                <div className="formacao-header">
-                    <button
-                        type="button"
-                        className="btn-header"
-                    >
+        <div className="competencia-container" onClick={() => setVisible(false)}>
+            <div className="competencia-body" onClick={(e) => e.stopPropagation()}>
+                <div className="competencia-header">
+                    <button type="button" className="btn-header" onClick={() => setAdicionarCompetencia(true)}>
                         <img src={adicionar} alt="adicionar" />
                     </button>
-                    <button
-                        type="button"
-                        className="btn-header"
-                        onClick={() => setVisible(false)}
-                    >
+                    <button type="button" className="btn-header" onClick={() => setVisible(false)}>
                         <img src={fechar} alt="fechar" className="icon-fechar-img" />
                     </button>
                 </div>
-                <div className="formacao-modal">
+                <span className="competencia-lista-titulo">Competências</span>
+                <div className="competencia-modal">
                     {
                         competencias.length === 0 ?
-                            <p className="formacao-vazia">
-                                Nenhuma formação acadêmica encontrada.
-                            </p>
+                            <p className="competencia-vazia">Nenhuma formação acadêmica encontrada.</p>
                             :
                             competencias.map((item) => (
-                                <div
-                                    className="formacao-item"
-                                    key={item.id}
-                                >
-                                    <span className="formacao-titulo">
-                                        {item.nome}
-                                    </span>
-                                    <div className="formacao-acoes">
-                                        <button
-                                            type="button"
-                                            className="btn-acao"
-                                            onClick={() => {
+                                <div className="competencia-item" key={item.id}>
+                                    <span className="competencia-titulo">{item.nome}</span>
+                                    <div className="competencia-acoes">
+                                        <button type="button" className="btn-acao" onClick={() => {
                                                 setCompetenciaSelecionada(item);
                                                 setVisualizarCompetencia(true);
                                             }}
                                         >
-                                            <img
-                                                src={olho}
-                                                alt="Visualizar"
-                                                className="icon-olho"
-                                            />
+                                            <img src={olho} alt="Visualizar" className="icon-olho"/>
                                         </button>
-                                        <button
-                                            type="button"
-                                            className="btn-acao"
-                                            onClick={() => console.log(item)}
+                                        <button type="button" className="btn-acao" onClick={() => {
+                                                setCompetenciaSelecionada(item);
+                                                setEditarCompetencia(true);
+                                            }}
                                         >
-                                            <img
-                                                src={icon_editar}
-                                                alt="Editar"
-                                            />
+                                            <img src={icon_editar} alt="Editar"/>
                                         </button>
-                                        <button
-                                            type="button"
-                                            className="btn-acao"
-                                            onClick={() => handleDelete(item.id)}
-                                        >
-                                            <img
-                                                src={lixeira}
-                                                alt="Excluir"
-                                            />
+                                        <button type="button" className="btn-acao" onClick={() => handleDelete(item.id)}>
+                                            <img src={lixeira} alt="Excluir"/>
                                         </button>
                                     </div>
                                 </div>
@@ -179,6 +148,25 @@ const [competenciaSelecionada, setCompetenciaSelecionada] = useState<any>(null);
                         setVisible={setVisualizarCompetencia}
                         competencia={competenciaSelecionada}
                     />
+                    )
+                }
+                {
+                    editarCompetencia && competenciaSelecionada && (
+                        <EditarCompetencia
+                            visible={editarCompetencia}
+                            setVisible={setEditarCompetencia}
+                            setCompetencia={setVisible}
+                            id={competenciaSelecionada.id}
+                        />
+                    )
+                }
+                {
+                    adicionarCompetencia && (
+                        <AdicionarCompetencia
+                            visible={adicionarCompetencia}
+                            setVisible={setAdicionarCompetencia}
+                            setCompetencia={setVisible}
+                        />
                     )
                 }
             </div>
