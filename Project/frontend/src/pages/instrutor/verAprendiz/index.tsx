@@ -54,14 +54,29 @@ function VerAprendiz(){
         }
         if (filtros.idadeMin !== "" || filtros.idadeMax !== "") {
             const idade = Idade(item.perfil.nascimento);
-            if (filtros.idadeMin !== "" && filtros.idadeMax === "" && idade !== Number(filtros.idadeMin)) {
-                return false;
+            const idadeMin = filtros.idadeMin !== "" ? Number(filtros.idadeMin) : null;
+            const idadeMax = filtros.idadeMax !== "" ? Number(filtros.idadeMax) : null;
+            if (idadeMin !== null && idadeMax === null) {
+                if (idade !== idadeMin) {
+                    return false;
+                }
             }
-            if (filtros.idadeMin !== "" && filtros.idadeMax !== "" && (idade < Number(filtros.idadeMin) || idade > Number(filtros.idadeMax))) {
-                return false;
+            if (idadeMin === null && idadeMax !== null) {
+                if (idade > idadeMax) {
+                    return false;
+                }
             }
-            if (filtros.idadeMin === "" && filtros.idadeMax !== "" && idade > Number(filtros.idadeMax)) {
-                return false;
+            if (idadeMin !== null && idadeMax !== null) {
+                if (idadeMin === idadeMax) {
+                    if (idade !== idadeMin) {
+                        return false;
+                    }
+                } 
+                else {
+                    if (idade < idadeMin || idade > idadeMax) {
+                        return false;
+                    }
+                }
             }
         }
         if (filtros.idiomas.length > 0) {
