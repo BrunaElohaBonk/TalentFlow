@@ -1,15 +1,15 @@
 import './ver_idioma.css'
 import icon_fechar from '../../../../../assets/img/close.png'
 
+interface IIdiomas{
+     idioma: string;
+    nivel: string;
+    certificado: string | null;
+}
 interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
-    idioma: {
-        id: number;
-        nomeIdioma: string;
-        nivel: string;
-        certificado: File | null;
-    };
+    idioma: IIdiomas
 }
 
 function IdiomaVisualizar({
@@ -36,7 +36,7 @@ function IdiomaVisualizar({
                 <div className="idiomaVisualizar-conteudo">
                     <div className="idiomaVisualizar-item">
                         <span>Nome do Idioma</span>
-                        <p>{idioma.nomeIdioma || "Não informado."}</p>
+                        <p>{idioma.idioma || "Não informado."}</p>
                     </div>
                     <div className="idiomaVisualizar-item">
                         <span>Nível</span>
@@ -44,7 +44,8 @@ function IdiomaVisualizar({
                     </div>
                     <div className="idiomaVisualizar-item certificado-item">
                         <span>Certificado</span>
-                        {
+                        <p>{idioma.certificado || "Não incluído"}</p>
+                        {/* {
                             idioma.certificado ? (
                                 <p>
                                     <img src={URL.createObjectURL(idioma.certificado)} alt="Certificado" className="certificado-img"/>
@@ -52,7 +53,7 @@ function IdiomaVisualizar({
                             ) : (
                                 <p>Não incluído</p>
                             )
-                        }
+                        } */}
                     </div>
                 </div>
             </div>

@@ -6,12 +6,16 @@ import IdiomaVisualizar from "./ver/ver_idioma";
 import { useState } from "react";
 import './idioma.css'
 
+interface IIdiomas{
+    idioma: string
+}
 interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    idiomas: IIdiomas[]
 }
 
-function Idioma({ visible, setVisible }: Props) {
+function Idioma({ visible, setVisible, idiomas }: Props) {
 
     const [visualizarIdioma, setVisualizarIdioma] = useState(false);
     const [idiomaSelecionado, setIdiomaSelecionado] = useState<any>(null);
@@ -19,42 +23,6 @@ function Idioma({ visible, setVisible }: Props) {
     if (!visible) {
         return null
     }
-
-    const idiomas = [
-        {
-            id: 1,
-            nomeIdioma: "Inglês",
-            nivel: "Intermediário (B1)",
-            situacao: "Cursando",
-            instituicao: "Wizard",
-            dataInicio: "10/02/2025",
-            dataConclusao: "",
-            descricao: "Curso de inglês com foco em conversação, compreensão auditiva, leitura e escrita para situações profissionais e acadêmicas.",
-            certificado: null
-        },
-        {
-            id: 2,
-            nomeIdioma: "Espanhol",
-            nivel: "Básico (A2)",
-            situacao: "Concluído",
-            instituicao: "Centro de Idiomas",
-            dataInicio: "05/03/2024",
-            dataConclusao: "15/12/2024",
-            descricao: "Curso de espanhol abordando vocabulário, gramática, interpretação de textos e comunicação em situações do cotidiano.",
-            certificado: null
-        },
-        {
-            id: 3,
-            nomeIdioma: "Alemão",
-            nivel: "Iniciante (A1)",
-            situacao: "Cursando",
-            instituicao: "Goethe-Institut",
-            dataInicio: "20/01/2025",
-            dataConclusao: "",
-            descricao: "Curso introdutório de alemão com foco em fundamentos da língua, pronúncia, vocabulário básico e comunicação inicial.",
-            certificado: null
-        }
-    ];
 
     const handleDelete = async (id: number) => {
 
@@ -113,13 +81,13 @@ function Idioma({ visible, setVisible }: Props) {
                                 Nenhuma formação acadêmica encontrada.
                             </p>
                             :
-                            idiomas.map((item) => (
+                            idiomas.map((item, index) => (
                                 <div
                                     className="formacao-item"
-                                    key={item.id}
+                                    key={index}
                                 >
                                     <span className="formacao-titulo">
-                                        {item.nomeIdioma}
+                                        {item.idioma}
                                     </span>
                                     <div className="formacao-acoes">
                                         <button

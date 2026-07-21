@@ -3,59 +3,20 @@ import axios from "axios";
 import fechar from '../../../../assets/img/close.png'
 import './soft_skill.css'
 
+interface ISoft{
+    nome: string
+}
 interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    softSkills: ISoft[]
 }
 
-function SoftSkill({ visible, setVisible }: Props) {
+function SoftSkill({ visible, setVisible, softSkills }: Props) {
 
     if (!visible) {
         return null
     }
-
-    const softSkills = [
-        {
-            id: 1,
-            nome: "Comunicação"
-        },
-        {
-            id: 2,
-            nome: "Trabalho em equipe"
-        },
-        {
-            id: 3,
-            nome: "Resolução de problemas"
-        },
-        {
-            id: 4,
-            nome: "Proatividade"
-        },
-        {
-            id: 5,
-            nome: "Organização"
-        },
-        {
-            id: 6,
-            nome: "Adaptabilidade"
-        },
-        {
-            id: 7,
-            nome: "Liderança"
-        },
-        {
-            id: 8,
-            nome: "Pensamento crítico"
-        },
-        {
-            id: 9,
-            nome: "Gestão do tempo"
-        },
-        {
-            id: 10,
-            nome: "Inteligência emocional"
-        }
-    ];
 
     const handleDelete = async (id: number) => {
 
@@ -115,10 +76,10 @@ function SoftSkill({ visible, setVisible }: Props) {
                                 Nenhuma formação acadêmica encontrada.
                             </p>
                             :
-                            softSkills.map((item) => (
+                            softSkills.map((item, index) => (
                                 <div
                                     className="formacao-item"
-                                    key={item.id}
+                                    key={index}
                                 >
                                     <span className="formacao-titulo">
                                         {item.nome}

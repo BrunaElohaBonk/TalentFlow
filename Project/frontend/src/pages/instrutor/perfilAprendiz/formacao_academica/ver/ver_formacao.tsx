@@ -5,14 +5,13 @@ interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
     formacao: {
-        id: number;
-        curso: string;
+        nomeCurso: string;
         instituicao: string;
-        situacao: string;
+        status: boolean;
         periodoAtual: number;
         totalPeriodos: number;
         nivelFormacao: string;
-        descricao: string;
+        descricaoCurso: string;
         certificado: File | null;
     };
 }
@@ -41,7 +40,7 @@ function FormacaoAcademicaVisualizar({
                 <div className="formacaoVisualizar-conteudo">
                     <div className="formacaoVisualizar-item">
                         <span>Nome do Curso</span>
-                        <p>{formacao.curso || "Não informado."}</p>
+                        <p>{formacao.nomeCurso || "Não informado."}</p>
                     </div>
                     <div className="formacaoVisualizar-item">
                         <span>Nome da Instituição</span>
@@ -49,10 +48,10 @@ function FormacaoAcademicaVisualizar({
                     </div>
                     <div className="formacaoVisualizar-item">
                         <span>Situação</span>
-                        <p>{formacao.situacao || "Não informado."}</p>
+                        <p>{formacao.status ? "Concluído" : "Cursando"}</p>
                     </div>
                     {
-                        formacao.situacao === "Cursando" && (
+                        formacao.status && (
                             <div className="formacaoVisualizar-item">
                                 <span>Período Atual</span>
                                 <p>{formacao.periodoAtual || "Não informado."}</p>
@@ -69,7 +68,7 @@ function FormacaoAcademicaVisualizar({
                     </div>
                     <div className="formacaoVisualizar-item formacaoVisualizar-descricao">
                         <span>Descrição</span>
-                        <p>{formacao.descricao || "Não informado."}</p>
+                        <p>{formacao.descricaoCurso || "Não informado."}</p>
                     </div>
                     <div className="formacaoVisualizar-item certificado-item">
                         <span>Certificado</span>

@@ -1,19 +1,24 @@
 import './situacao_profissional.css'
 import icon_fechar from '../../../../assets/img/close.png'
 
-function SituacaoProfissional({visible, setVisible}: any) {
+interface ISituacao {
+    nomeSetor: string;
+    nomeLider: string;
+    cumprindoEstagio: boolean;
+    descricaoEstagio: string;
+}
+
+interface Props {
+    visible: boolean;
+    setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    situacao: ISituacao;
+}
+
+function SituacaoProfissional({visible, setVisible, situacao}: Props) {
 
     if (!visible) {
         return null
     }
-
-    const situacao = {
-        setor: "",
-        lider: "",
-        estagio: "",
-        descricao: ""
-    }
-
     return (
         <>
             <div className="situacao-overlay" onClick={() => setVisible(false)}>
@@ -44,7 +49,7 @@ function SituacaoProfissional({visible, setVisible}: any) {
                                 Nome do Setor
                             </span>
                             <p>
-                                {situacao.setor || "Não informado."}
+                                {situacao.nomeSetor || "Não informado."}
                             </p>
                         </div>
 
@@ -54,7 +59,7 @@ function SituacaoProfissional({visible, setVisible}: any) {
                                 Nome do Líder
                             </span>
                             <p>
-                                {situacao.lider || "Não informado."}
+                                {situacao.nomeLider || "Não informado."}
                             </p>
                         </div>
 
@@ -64,7 +69,7 @@ function SituacaoProfissional({visible, setVisible}: any) {
                                 Cumprindo Estágio?
                             </span>
                             <p>
-                                {situacao.estagio || "Não informado."}
+                                {situacao.cumprindoEstagio ? "Sim" : "Não"}
                             </p>
                         </div>
 
@@ -76,7 +81,7 @@ function SituacaoProfissional({visible, setVisible}: any) {
                             </span>
 
                             <p>
-                                {situacao.descricao || "Não informado."}
+                                {situacao.descricaoEstagio || "Não informado."}
                             </p>
 
                         </div>

@@ -6,14 +6,19 @@ import { useState } from "react";
 import FormacaoAcademicaVisualizar from "./ver/ver_formacao";
 import "./formacao_academica.css";
 
+interface IFormacao {
+    nomeCurso: string,
+}
 interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    formacaoAcademica: IFormacao[]
 }
 
 function FormacaoAcademica({
     visible,
     setVisible,
+    formacaoAcademica
 }: Props) {
     const [visualizarFormacao, setVisualizarFormacao] = useState(false);
     const [formacaoSelecionada, setFormacaoSelecionada] = useState<any>(null);
@@ -21,31 +26,6 @@ function FormacaoAcademica({
     if (!visible) {
         return null;
     }
-
-    const formacoes = [
-        {
-            id: 1,
-            curso: "Engenharia de Controle e Automação",
-            instituicao: "Universidade Tecnológica Federal do Paraná",
-            situacao: "Cursando",
-            periodoAtual: 6,
-            totalPeriodos: 10,
-            nivelFormacao: "Superior",
-            descricao: "Graduação voltada para automação industrial.",
-            certificado: null,
-        },
-        {
-            id: 2,
-            curso: "Técnico em Automação Industrial",
-            instituicao: "SENAI",
-            situacao: "Concluído",
-            periodoAtual: 4,
-            totalPeriodos: 4,
-            nivelFormacao: "Técnico",
-            descricao: "Formação técnica em automação.",
-            certificado: null,
-        },
-    ];
 
     const handleDelete = async (id: number) => {
         const confirm = await Swal.fire({
@@ -98,10 +78,10 @@ function FormacaoAcademica({
                 </div>
 
                 <div className="formacao-modal">
-                    {formacoes.map((item) => (
-                        <div className="formacao-item" key={item.id}>
+                    {formacaoAcademica.map((item, index) => (
+                        <div className="formacao-item" key={index}>
                             <span className="formacao-titulo">
-                                {item.curso}
+                                {item.nomeCurso}
                             </span>
 
                             <div className="formacao-acoes">

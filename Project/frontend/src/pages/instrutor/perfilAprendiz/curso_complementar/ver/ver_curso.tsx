@@ -4,21 +4,20 @@ import icon_fechar from '../../../../../assets/img/close.png'
 interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
-    curso: {
-        id: number;
-        curso: string;
-        situacao: string;
-        dataConclusao: string;
-        cargaHoraria: string;
-        descricao: string;
-        certificado: File | null;
+    cursosComplementares: {
+        nomeCurso: string;
+        status: boolean;
+        dataConclusao: Date | string | null;
+        cargaHoraria: number;
+        descricaoCurso: string;
+        certificado: string | null;
     };
 }
 
 function CursoComplementarVisualizar({
     visible,
     setVisible,
-    curso
+    cursosComplementares
 }: Props) {
 
     if (!visible) {
@@ -39,37 +38,39 @@ function CursoComplementarVisualizar({
                 <div className="cursoVisualizar-conteudo">
                     <div className="cursoVisualizar-item">
                         <span>Nome do Curso</span>
-                        <p>{curso.curso || "Não informado."}</p>
+                        <p>{cursosComplementares.nomeCurso || "Não informado."}</p>
                     </div>
                     <div className="cursoVisualizar-item">
                         <span>Situação</span>
-                        <p>{curso.situacao || "Não informado."}</p>
+                        <p>{cursosComplementares.status ? "Concluído" : "Cursando"}</p>
                     </div>
+
                     {
-                        curso.situacao === "Concluído" && (
+                        cursosComplementares.status && (
                             <div className="cursoVisualizar-item">
                                 <span>Data de Conclusão</span>
-                                <p>{curso.dataConclusao || "Não informado."}</p>
+                                <p>{cursosComplementares.dataConclusao  ? new Date(cursosComplementares.dataConclusao).toLocaleDateString("pt-BR"):"Não informado."}</p>
                             </div>
                         )
                     }
                     <div className="cursoVisualizar-item">
                         <span>Carga Horária</span>
-                        <p>{curso.cargaHoraria || "Não informado."}</p>
+                        <p>{cursosComplementares.cargaHoraria || "Não informado."}</p>
                     </div>
                     <div className="cursoVisualizar-item cursoVisualizar-descricao">
                         <span>Descrição</span>
-                        <p>{curso.descricao || "Não informado."}</p>
+                        <p>{cursosComplementares.descricaoCurso || "Não informado."}</p>
                     </div>
                     <div className="cursoVisualizar-item certificado-item">
                         <span>Certificado</span>
-                        {
-                            curso.certificado ? (
+                        <p>{cursosComplementares.certificado || "Não informado"}</p>
+                        {/* {
+                            cursosComplementares.certificado ? (
                                 <p><img alt="Certificado" className="certificado-img"/></p>
                             ) : (
                                 <p>Não incluído</p>
                             )
-                        }
+                        } */}
                     </div>
                 </div>
             </div>

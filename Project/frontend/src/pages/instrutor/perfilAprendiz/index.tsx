@@ -10,11 +10,13 @@ import SoftSkill from "./soft_skill";
 import Competencia from "./competencias";
 import icon_olho from '../../../assets/img/icon_olho.png'
 import icon_user from '../../../assets/img/icon_user.png'
-import { useParams } from "react-router-dom";
+import voltar from '../../../assets/img/voltar.png'
+import { useNavigate, useParams } from "react-router-dom";
 import { aprendizes } from "../verAprendiz/aprendizes";
 
 
 function PerfilAprendiz(){
+    const navigate = useNavigate()
     const { edv } = useParams();
     type Aprendiz = (typeof aprendizes)[number];
     const [aprendiz, setAprendiz] = useState<Aprendiz | null>(null)
@@ -40,11 +42,11 @@ function PerfilAprendiz(){
     return(
         <div className="dadosAprendiz">
             <Header></Header>
-            <SituacaoProfissional visible={situacao} setVisible={setSituacao}/>
-            <FormacaoAcademica visible={formacao_academica} setVisible={setFormacaoAcademica}/>
-            <CursoComplementar visible={curso_complementar} setVisible={setCursoComplementar}/>
-            <Idioma visible={idioma} setVisible={setIdioma}/>
-            <SoftSkill visible={soft_skill} setVisible={setSoftSkill}/>
+            <SituacaoProfissional visible={situacao} setVisible={setSituacao} situacao={aprendiz.situacaoProfissional}/>
+            <FormacaoAcademica visible={formacao_academica} setVisible={setFormacaoAcademica} formacaoAcademica={aprendiz.formacaoAcademica}/>
+            <CursoComplementar visible={curso_complementar} setVisible={setCursoComplementar} cursoComplementar={aprendiz.cursosComplementares}/>
+            <Idioma visible={idioma} setVisible={setIdioma} idiomas={aprendiz.idiomas}/>
+            <SoftSkill visible={soft_skill} setVisible={setSoftSkill} softSkills={aprendiz.softskills}/>
             <Competencia visible={competencia} setVisible={setCompetencia} competencias={aprendiz.competencias}/>
         
             <div className="dadosAprendiz-container">
@@ -52,6 +54,9 @@ function PerfilAprendiz(){
                 <div className="dadosAprendiz-body">
                     <main className="dadosAprendiz-tela">
                         <section className="dadosAprendiz-bloco">
+                            <div className="dadosAprendiz-voltar">
+                                <button onClick={() => navigate('/Aprendiz')}><img src={voltar} alt="voltar" /></button>
+                            </div>
                             <div className="dadosAprendiz-topo">
                                 <div className="dadosAprendiz-foto-container"><img src={icon_user} alt="icon_user" /></div>
                                 <div className="dadosAprendiz-dados-perfil">
@@ -69,34 +74,44 @@ function PerfilAprendiz(){
                             <div className="dadosAprendiz-cards-superiores">
                                 <div className="dadosAprendiz-card-perfil">
                                     <h3>Situação Profissional</h3>
-                                    <ul><li>Descrição da situação atual e das expectativas para o futuro.</li></ul>
+                                    <ul><li>{aprendiz.situacaoProfissional.descricaoEstagio}</li></ul>
                                     <button className="dadosAprendiz-btn-visualizar" onClick={() => setSituacao(true)}><img src={icon_olho} alt="Visualizar" /></button>
                                 </div>
                                 <div className="dadosAprendiz-card-perfil">
                                     <h3>Formação Acadêmica</h3>
-                                    <ul><li>Técnico em Informática</li><li>ADS (cursando)</li></ul>
+                                    <ul><li>{aprendiz.formacaoAcademica.map((formacao, index) => (
+                                        <li key={index} title={formacao.nomeCurso}>{formacao.nomeCurso}</li>))
+                                    }</li></ul>
                                     <button className="dadosAprendiz-btn-visualizar" onClick={() => setFormacaoAcademica(true)}><img src={icon_olho} alt="Visualizar" /></button>
                                 </div>
                                 <div className="dadosAprendiz-card-perfil">
                                     <h3>Cursos Complementares</h3>
-                                    <ul><li>Power BI</li><li>Excel</li></ul>
+                                    <ul>{aprendiz.cursosComplementares.map((curso, index) => (
+                                        <li key={index} title={curso.nomeCurso}>{curso.nomeCurso}</li>))
+                                    }</ul>
                                     <button className="dadosAprendiz-btn-visualizar" onClick={() => setCursoComplementar(true)}><img src={icon_olho} alt="Visualizar" /></button>
                                 </div>
                                 <div className="dadosAprendiz-card-perfil">
                                     <h3>Idiomas</h3>
-                                    <ul><li>Português</li><li>Inglês B1</li></ul>
+                                    <ul> {aprendiz.idiomas.map((idioma, index) => (
+                                        <li key={index} title={idioma.idioma}>{idioma.idioma} - {idioma.nivel}</li>))
+                                    }</ul>
                                     <button className="dadosAprendiz-btn-visualizar" onClick={() => setIdioma(true)}><img src={icon_olho} alt="Visualizar" /></button>
                                 </div>
                             </div>
                             <div className="dadosAprendiz-cards-inferiores">
                                 <div className="dadosAprendiz-card-perfil">
                                     <h3>Soft Skills</h3>
-                                    <ul><li>Comunicação</li><li>Trabalho em equipe</li></ul>
+                                    <ul>{aprendiz.softskills.map((skill, index) => (
+                                        <li key={index} title={skill.nome}>{skill.nome}</li>))
+                                    }</ul>
                                     <button className="dadosAprendiz-btn-visualizar" onClick={() => setSoftSkill(true)}><img src={icon_olho} alt="Visualizar" /></button>
                                 </div>
                                 <div className="dadosAprendiz-card-perfil">
                                     <h3>Competências</h3>
-                                    <ul><li>Análise de dados</li><li>Gestão de projetos</li></ul>
+                                    <ul>{aprendiz.competencias.map((competencia, index) => (
+                                        <li key={index} title={`${competencia.nome} - ${competencia.nivel}`}>{competencia.nome} - {competencia.nivel}</li>))
+                                    }</ul>
                                     <button className="dadosAprendiz-btn-visualizar" onClick={() => setCompetencia(true)}><img src={icon_olho} alt="Visualizar" /></button>
                                 </div>
                             </div>
