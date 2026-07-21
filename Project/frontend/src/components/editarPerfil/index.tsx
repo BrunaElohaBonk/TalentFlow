@@ -1,7 +1,7 @@
 import './editarPerfil.css'
 import sair from '../../assets/img/close.png'
 import download from '../../assets/img/icon download.png'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import { useDropzone } from "react-dropzone";
@@ -22,6 +22,17 @@ interface Props {
 }
 
 function EditarPerfil({ visible, setVisible, edv }: Props){
+    const nomeRef = useRef<HTMLInputElement>(null);
+    const emailRef = useRef<HTMLInputElement>(null);
+    const userRef = useRef<HTMLInputElement>(null);
+    const nascimentoRef = useRef<HTMLInputElement>(null);
+    const contatoRef = useRef<HTMLInputElement>(null);
+    const salvarRef = useRef<HTMLButtonElement>(null);
+    const proximoCampo = (e: React.KeyboardEvent<HTMLInputElement>, proximo: React.RefObject<HTMLElement | null>) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            proximo.current?.focus();
+        }};
     const [nomeArquivo, setNomeArquivo] = useState("");
     const { getRootProps, getInputProps } = useDropzone({
         accept: {
@@ -168,8 +179,8 @@ function EditarPerfil({ visible, setVisible, edv }: Props){
 
     if (!visible) return null;
     return (
-        <div className="editarPerfil-overlay">
-            <form onSubmit={handleSubmit} className="editarPerfil-card">
+        <div className="editarPerfil-overlay" onClick={() => setVisible(false)}>
+            <form onSubmit={handleSubmit} className="editarPerfil-card" onClick={(e) => e.stopPropagation()}>
                 <button type="button" onClick={() => setVisible(false)} className="editarPerfil-fechar"><img src={sair} alt="Fechar" /></button>
                 <span className="editarPerfil-titulo">Editar Perfil</span>
                 <div className="editarPerfil-container">
@@ -183,26 +194,26 @@ function EditarPerfil({ visible, setVisible, edv }: Props){
                     </div>
                     <div className="editarPerfil-grupo">
                         <label className="editarPerfil-label">Nome Completo</label>
-                        <input name="name" className="editarPerfil-input" value={perfil.name} onChange={handleChange}/>
+                        <input ref={nomeRef} name="name" className="editarPerfil-input" value={perfil.name} onChange={handleChange} onKeyDown={(e) => proximoCampo(e, emailRef)}/>
                     </div>
                     <div className="editarPerfil-grupo">
                         <label className="editarPerfil-label">Email</label>
-                        <input name="email" className="editarPerfil-input" value={perfil.email} onChange={handleChange}/>
+                        <input ref={emailRef} name="email" className="editarPerfil-input" value={perfil.email} onChange={handleChange} onKeyDown={(e) => proximoCampo(e, userRef)}/>
                     </div>
                     <div className="editarPerfil-grupo">
                         <label className="editarPerfil-label">UserID</label>
-                        <input name="user" className="editarPerfil-input" value={perfil.user} onChange={handleChange}/>
+                        <input ref={userRef} name="user" className="editarPerfil-input" value={perfil.user} onChange={handleChange} onKeyDown={(e) => proximoCampo(e, nascimentoRef)}/>
                     </div>
                     <div className="editarPerfil-grupo">
                         <label className="editarPerfil-label">Data de nascimento</label>
-                        <input name="nascimento" className="editarPerfil-input" inputMode="numeric" value={perfil.nascimento} onChange={handleNascimento} maxLength={10}/>
+                        <input ref={nascimentoRef} name="nascimento" className="editarPerfil-input" inputMode="numeric" value={perfil.nascimento} onChange={handleNascimento} maxLength={10} onKeyDown={(e) => proximoCampo(e, contatoRef)}/>
                     </div>
                     <div className="editarPerfil-grupo">
                         <label className="editarPerfil-label">Contato</label>
-                        <input name="contato" className="editarPerfil-input" inputMode="numeric" value={perfil.contato || ''} onChange={handleContato} maxLength={15}/>
+                        <input ref={contatoRef} name="contato" className="editarPerfil-input" inputMode="numeric" value={perfil.contato || ''} onChange={handleContato} maxLength={15} onKeyDown={(e) => proximoCampo(e, salvarRef)}/>
                     </div>
                     <div className="editarPerfil-botoes">
-                        <button className="editarPerfil-salvar" type="submit">SALVAR MODIFICAÇÃO</button>
+                        <button ref={salvarRef} className="editarPerfil-salvar" type="submit">SALVAR MODIFICAÇÃO</button>
                     </div>
                 </div>
             </form>

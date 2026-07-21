@@ -28,8 +28,8 @@ function FormacaoAcademicaVisualizar({
     }
 
     return (
-        <div className="formacaoVisualizar-overlay">
-            <div className="formacaoVisualizar-card">
+        <div className="formacaoVisualizar-overlay" onClick={() => setVisible(false)}>
+            <div className="formacaoVisualizar-card" onClick={(e) => e.stopPropagation()}>
                 <div className="formacaoVisualizar-header">
                     <h2>Formação Acadêmica</h2>
                     <div className="formacaoVisualizar-acoes">

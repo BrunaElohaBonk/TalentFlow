@@ -23,7 +23,7 @@ function App() {
         <Route path='/CadastrarTurma' element={<PrivateRoute tipo="instrutor"><CadTurma/></PrivateRoute>} />
         <Route path='/Home' element={<PrivateRoute tipo="instrutor"><Dashboard/></PrivateRoute>} />
         <Route path='/Notificações' element={<PrivateRoute tipo="instrutor"><Notificacao/></PrivateRoute>} />
-        <Route path='/PerfilAprendiz' element={<PrivateRoute tipo="instrutor"><PerfilAprendiz/></PrivateRoute>} />
+        <Route path='/PerfilAprendiz:edv' element={<PrivateRoute tipo="instrutor"><PerfilAprendiz/></PrivateRoute>} />
         <Route path='/PerfilInstrutor' element={<PrivateRoute tipo="instrutor"><PerfilInstrutor/></PrivateRoute>} />
         <Route path='/Aprendiz' element={<PrivateRoute tipo="instrutor"><VerAprendiz/></PrivateRoute>} />
         <Route path='/Instrutor' element={<PrivateRoute tipo="instrutor"><VerInstrutor/></PrivateRoute>} />

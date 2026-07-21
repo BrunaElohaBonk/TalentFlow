@@ -128,9 +128,9 @@ function CursoComplementar({ visible, setVisible }: Props) {
 
     return (
 
-        <div className="formacao-container">
+        <div className="formacao-container" onClick={() => setVisible(false)}>
 
-            <div className="formacao-body">
+            <div className="formacao-body" onClick={(e) => e.stopPropagation()}>
 
 
                 <div className="formacao-header">

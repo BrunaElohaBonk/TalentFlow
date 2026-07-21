@@ -21,8 +21,8 @@ function Logout({visible, setVisible}: LogoutProps) {
   return (
     <>
     {visible && (
-      <div className="logout-overlay">
-        <div className="logout-card">
+      <div className="logout-overlay" onClick={() => setVisible(false)}>
+        <div className="logout-card" onClick={(e) => e.stopPropagation()}>
 
           <span className="logout-title">
             Deseja realizar o logout?

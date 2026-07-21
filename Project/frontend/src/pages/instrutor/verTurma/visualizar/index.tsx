@@ -18,8 +18,8 @@ interface Props {
 function VisualizarTurma({ visible, setVisible, turma }: Props) {
     if (!visible || !turma) return null;
     return (
-        <div className="visualizar-overlay">
-            <div className="visualizar-card">
+        <div className="visualizar-overlay" onClick={() => setVisible(false)}>
+            <div className="visualizar-card" onClick={(e) => e.stopPropagation()}>
                 <button className="visualizar-fechar" onClick={() => setVisible(false)}>
                     <img src={fechar} alt="fechar" />
                 </button>

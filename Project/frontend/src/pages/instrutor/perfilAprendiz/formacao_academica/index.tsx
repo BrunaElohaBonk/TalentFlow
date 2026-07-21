@@ -9,15 +9,11 @@ import "./formacao_academica.css";
 interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
-    setEditarFormacao: React.Dispatch<React.SetStateAction<boolean>>;
-    setAdicionarFormacao: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function FormacaoAcademica({
     visible,
     setVisible,
-    setEditarFormacao,
-    setAdicionarFormacao,
 }: Props) {
     const [visualizarFormacao, setVisualizarFormacao] = useState(false);
     const [formacaoSelecionada, setFormacaoSelecionada] = useState<any>(null);
@@ -85,8 +81,8 @@ function FormacaoAcademica({
     };
 
     return (
-        <div className="formacao-container">
-            <div className="formacao-body">
+        <div className="formacao-container" onClick={() => setVisible(false)}>
+            <div className="formacao-body" onClick={(e) => e.stopPropagation()}>
                 <div className="formacao-header">
                     <button
                         type="button"

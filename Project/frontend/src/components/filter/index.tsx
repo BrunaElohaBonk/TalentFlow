@@ -51,8 +51,8 @@ function Filtro({ visible, setVisible, filtros, setFiltros }){
 
     if (!visible) return null;
     return(
-        <div className='filtro-overlay'>
-            <div className="filtro-modal">
+        <div className='filtro-overlay' onClick={() => setVisible(false)}>
+            <div className="filtro-modal" onClick={(e) => e.stopPropagation()}>
                 <div className='filtro-fechar'>
                     <button type="button" onClick={() => {setVisible(false); limparFiltros();}} className='filtro-fechar-button'><img src={fechar} alt="fechar" className='filtro-img-fechar'/></button>
                 </div>

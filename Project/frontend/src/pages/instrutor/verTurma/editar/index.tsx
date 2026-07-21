@@ -67,11 +67,11 @@ function EditarTurma({ visible, setVisible, turma }: Props) {
     };
 
     return (
-        <div className="editarTurma-overlay">
+        <div className="editarTurma-overlay" onClick={() => setVisible(false)}>
             <div className="editarTurma-card">
                 <button className="editarTurma-fechar" onClick={() => setVisible(false)}><img src={fechar} alt="Fechar" /></button>
                 <h1 className="editarTurma-titulo">Editar Turma</h1>
-                <form className="editarTurma-form" onSubmit={handleSubmit}>
+                <form className="editarTurma-form" onSubmit={handleSubmit} onClick={(e) => e.stopPropagation()}>
                     <div className="editarTurma-grupo">
                         <label className="editarTurma-label">Nome da Turma</label>
                         <input className="editarTurma-input" value={nome} onChange={(e) => setNome(e.target.value)}/>

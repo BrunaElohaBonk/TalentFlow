@@ -4,7 +4,7 @@ import Sidebar from "../../../components/sidebar";
 import icon_olho from '../../../assets/img/icon_olho.png'
 import icon_olho_fechado from '../../../assets/img/icon_olho_fechado.png'
 import './cadastrarUser.css';
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { FormControl, FormControlLabel, FormLabel, MenuItem, Radio, RadioGroup, Select } from "@mui/material";
@@ -32,9 +32,22 @@ interface IUser {
 
 function CadastrarUser() {
     const { id } = useParams();
+    const edvRef = useRef<HTMLInputElement>(null);
+    const nameRef = useRef<HTMLInputElement>(null);
+    const emailRef = useRef<HTMLInputElement>(null);
+    const userRef = useRef<HTMLInputElement>(null);
+    const nascimentoRef = useRef<HTMLInputElement>(null);
+    const contatoRef = useRef<HTMLInputElement>(null);
+    const senhaRef = useRef<HTMLInputElement>(null);
+    const salvarRef = useRef<HTMLButtonElement>(null);
     const [turmas, setTurmas] = useState<ITurma[]>([]);
     const [selectTurma, setSelectTurma] = useState(turmasMock);
     const [showPassword, setShowPassword] = useState(false)
+    const proximoCampo = (e: React.KeyboardEvent<HTMLInputElement>, proximo: React.RefObject<HTMLElement | null>) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            proximo.current?.focus();
+        }};
     const [user, setUser] = useState<IUser>({
         edv: 0,
         name: '',
@@ -188,16 +201,16 @@ function CadastrarUser() {
                         <span className="user-titulo">Cadastrar Usuário</span>
                         <div className="user-conteudo">
                             <div className="user-row">
-                                <input name="edv" type="number" placeholder="EDV" value={user.edv || ''} onChange={handleChange} className="user-input" />
-                                <input name="name" placeholder="Nome Completo" value={user.name} onChange={handleChange} className="user-input" />
+                                <input ref={edvRef} name="edv" type="number" placeholder="EDV" value={user.edv || ''} onChange={handleChange} className="user-input" onKeyDown={(e) => proximoCampo(e, nameRef)}/>
+                                <input ref={nameRef} name="name" placeholder="Nome Completo" value={user.name} onChange={handleChange} className="user-input" onKeyDown={(e) => proximoCampo(e, userRef)}/>
                             </div>
                             <div className="user-row">
-                                <input name="user" placeholder="User" value={user.user} onChange={handleChange} className="user-input" />
-                                <input name="email" placeholder="Email" value={user.email} onChange={handleChange} className="user-input" />
+                                <input ref={userRef} name="user" placeholder="User" value={user.user} onChange={handleChange} className="user-input" onKeyDown={(e) => proximoCampo(e, emailRef)}/>
+                                <input ref={emailRef} name="email" placeholder="Email" value={user.email} onChange={handleChange} className="user-input" onKeyDown={(e) => proximoCampo(e, nascimentoRef)}/>
                             </div>
                             <div className="user-row">
-                                <input name="nascimento" placeholder="Data de nascimento" inputMode="numeric" value={user.nascimento} onChange={handleNascimento} className="user-input" maxLength={10}/>
-                                <input name="contato" placeholder="Contato" inputMode="numeric" value={user.contato || ''} onChange={handleContato} className="user-input" maxLength={15} />
+                                <input ref={nascimentoRef} name="nascimento" placeholder="Data de nascimento" inputMode="numeric" value={user.nascimento} onChange={handleNascimento} className="user-input" maxLength={10} onKeyDown={(e) => proximoCampo(e, contatoRef)}/>
+                                <input ref={contatoRef} name="contato" placeholder="Contato" inputMode="numeric" value={user.contato || ''} onChange={handleContato} className="user-input" maxLength={15} onKeyDown={(e) => proximoCampo(e, senhaRef)}/>
                             </div>
                             <div className="user-row">
                                 <FormControl className="user-radio">
@@ -218,12 +231,12 @@ function CadastrarUser() {
                                 )}
                             </div>
                             <div className="user-senha">
-                                <input name="senha" type={showPassword ? "text" : "password"} placeholder="Senha" value={user.senha} onChange={handleChange} className="user-input" />
+                                <input ref={senhaRef} name="senha" type={showPassword ? "text" : "password"} placeholder="Senha" value={user.senha} onChange={handleChange} className="user-input" onKeyDown={(e) => proximoCampo(e, salvarRef)}/>
                                 <img src={showPassword ? icon_olho_fechado : icon_olho} alt="Visualizar senha" className='user-eye-icon' onClick={() => setShowPassword(!showPassword)}/>
                             </div>
                         </div>
                         <div className="user-button">
-                            <button type="submit" className="user-salvar">CONFIRMAR</button>
+                            <button ref={salvarRef} type="submit" className="user-salvar">CONFIRMAR</button>
                         </div>
                     </form>
                 </div>

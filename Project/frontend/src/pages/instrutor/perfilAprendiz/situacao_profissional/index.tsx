@@ -1,7 +1,7 @@
 import './situacao_profissional.css'
 import icon_fechar from '../../../../assets/img/close.png'
 
-function SituacaoProfissional({visible, setVisible, setEditarSituacao}: any) {
+function SituacaoProfissional({visible, setVisible}: any) {
 
     if (!visible) {
         return null
@@ -16,8 +16,8 @@ function SituacaoProfissional({visible, setVisible, setEditarSituacao}: any) {
 
     return (
         <>
-            <div className="situacao-overlay">
-                <div className="situacao-card">
+            <div className="situacao-overlay" onClick={() => setVisible(false)}>
+                <div className="situacao-card" onClick={(e) => e.stopPropagation()}>
 
                     <div className="situacao-header">
                         <h2>

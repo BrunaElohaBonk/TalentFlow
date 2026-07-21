@@ -167,7 +167,7 @@ function VerAprendiz(){
                                     </div>
                                     <div className="aprendiz-conteudo">
                                         <span className="aprendiz-span" title={aprendizes.perfil.turma}>{aprendizes.perfil.turma}</span>
-                                        <button onClick={() => navigate('/PerfilAprendiz')} className="aprendiz-button">Ver Dados do Aprendiz</button>
+                                        <button onClick={() => navigate(`/PerfilAprendiz/${aprendizes.perfil.edv}`)} className="aprendiz-button">Ver Dados do Aprendiz</button>
                                     </div>
                                 </div>
                             ))

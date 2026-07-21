@@ -22,8 +22,8 @@ function CompetenciaVisualizar({
     }
 
     return (
-        <div className="competenciaVisualizar-overlay">
-            <div className="competenciaVisualizar-card">
+        <div className="competenciaVisualizar-overlay" onClick={() => setVisible(false)}>
+            <div className="competenciaVisualizar-card" onClick={(e) => e.stopPropagation()}>
                 <div className="competenciaVisualizar-header">
                     <h2>Competência</h2>
                     <div className="competenciaVisualizar-acoes">

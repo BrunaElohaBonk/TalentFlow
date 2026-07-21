@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import Header from "../../../components/header";
 import Sidebar from "../../../components/sidebar";
 import './cadTurma.css';
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 
@@ -16,6 +16,16 @@ interface ITurma {
 
 function CadTurma() {
     const { id } = useParams();
+    const nameRef = useRef<HTMLInputElement>(null);
+    const courseRef = useRef<HTMLInputElement>(null);
+    const edvInstrutorRef = useRef<HTMLInputElement>(null);
+    const instrutorRef = useRef<HTMLInputElement>(null);
+    const salvarRef = useRef<HTMLButtonElement>(null);
+    const proximoCampo = (e: React.KeyboardEvent<HTMLInputElement>, proximo: React.RefObject<HTMLElement | null>) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            proximo.current?.focus();
+        }};
     const [turma, setTurma] = useState<ITurma>({
         name: '',
         course: '',
@@ -90,13 +100,13 @@ function CadTurma() {
                     <form onSubmit={handleSubmit} className="cadTurma-form">
                         <span className="cadTurma-titulo">Cadastrar Turma</span>
                         <div className="cadTurma-conteudo">
-                            <input name="name" placeholder="Nome da Turma" value={turma.name} onChange={handleChange} className="cadTurma-input"/>
-                            <input name="course" placeholder="Curso" value={turma.course} onChange={handleChange} className="cadTurma-input"/>
-                            <input name="edvInstrutor" type="number" placeholder="EDV do Instrutor" value={turma.edvInstrutor} onChange={handleChange} className="cadTurma-input"/>
-                            <input name="instrutor" placeholder="Nome do Instrutor" value={turma.instrutor} onChange={handleChange} className="cadTurma-input"/>
+                            <input ref={nameRef} name="name" placeholder="Nome da Turma" value={turma.name} onChange={handleChange} className="cadTurma-input" onKeyDown={(e) => proximoCampo(e, courseRef)}/>
+                            <input ref={courseRef} name="course" placeholder="Curso" value={turma.course} onChange={handleChange} className="cadTurma-input" onKeyDown={(e) => proximoCampo(e, edvInstrutorRef)}/>
+                            <input ref={edvInstrutorRef} name="edvInstrutor" type="number" placeholder="EDV do Instrutor" value={turma.edvInstrutor} onChange={handleChange} className="cadTurma-input" onKeyDown={(e) => proximoCampo(e, instrutorRef)}/>
+                            <input ref={instrutorRef} name="instrutor" placeholder="Nome do Instrutor" value={turma.instrutor} onChange={handleChange} className="cadTurma-input" onKeyDown={(e) => proximoCampo(e, salvarRef)}/>
                         </div>
                         <div className="cadTurma-button">
-                            <button type="submit" className="cadTurma-salvar">CONFIRMAR</button>
+                            <button ref={salvarRef} type="submit" className="cadTurma-salvar">CONFIRMAR</button>
                         </div>
                     </form>
                 </div>

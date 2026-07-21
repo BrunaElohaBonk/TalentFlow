@@ -6,57 +6,23 @@ import CompetenciaVisualizar from "./ver/ver_competencia";
 import './competencias.css'
 import { useState } from "react";
 
+interface ICompetencia {
+    nome: string;
+    nivel: string;
+}
+
 interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    competencias: ICompetencia[];
 }
 
-function Competencia({ visible, setVisible }: Props) {
-
+function Competencia({ visible, setVisible, competencias }: Props) {
     const [visualizarCompetencia, setVisualizarCompetencia] = useState(false);
-const [competenciaSelecionada, setCompetenciaSelecionada] = useState<any>(null);
-
+    const [competenciaSelecionada, setCompetenciaSelecionada] = useState<any>(null);
     if (!visible) {
         return null
     }
-
-    const competencias = [
-        {
-            id: 1,
-            nome: "Programação",
-            nivel: "Avançado"
-        },
-        {
-            id: 2,
-            nome: "Análise de Dados",
-            nivel: "Intermediário"
-        },
-        {
-            id: 3,
-            nome: "Banco de Dados",
-            nivel: "Intermediário"
-        },
-        {
-            id: 4,
-            nome: "Desenvolvimento Web",
-            nivel: "Avançado"
-        },
-        {
-            id: 5,
-            nome: "Gestão de Projetos",
-            nivel: "Básico"
-        },
-        {
-            id: 6,
-            nome: "Pacote Office",
-            nivel: "Avançado"
-        },
-        {
-            id: 7,
-            nome: "Automação de Processos",
-            nivel: "Intermediário"
-        }
-    ];
 
     const handleDelete = async (id: number) => {
 
@@ -97,9 +63,9 @@ const [competenciaSelecionada, setCompetenciaSelecionada] = useState<any>(null);
 
     return (
 
-        <div className="formacao-container">
-            <div className="formacao-body">
-                <div className="formacao-header">
+        <div className="formacao-container" onClick={() => setVisible(false)}>
+            <div className="formacao-body" onClick={(e) => e.stopPropagation()}>
+                <div className="formacao-header" >
                     <button
                         type="button"
                         className="btn-header"
@@ -108,17 +74,17 @@ const [competenciaSelecionada, setCompetenciaSelecionada] = useState<any>(null);
                         <img src={fechar} alt="fechar" className="icon-fechar-img" />
                     </button>
                 </div>
-                <div className="formacao-modal">
+                <div className="formacao-modal" >
                     {
                         competencias.length === 0 ?
                             <p className="formacao-vazia">
                                 Nenhuma formação acadêmica encontrada.
                             </p>
                             :
-                            competencias.map((item) => (
+                            competencias.map((item, index) => (
                                 <div
                                     className="formacao-item"
-                                    key={item.id}
+                                    key={index}
                                 >
                                     <span className="formacao-titulo">
                                         {item.nome}
