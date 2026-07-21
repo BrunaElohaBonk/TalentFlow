@@ -64,14 +64,19 @@ model idiomas {
 }
 
 model perfilhistorico {
-  Id             Int      @id @default(autoincrement())
-  Id_Profile     Int
-  dados          Json
+  Id             Int             @id @default(autoincrement())
+  Id_Profile     Int?
+  Tipo           TipoHistorico
+  IdRegistro     Int?
+  Acao           String
   EDVAlteradoPor Int?
-  DataAlteracao  DateTime @default(now())
-  profile        profile  @relation(fields: [Id_Profile], references: [id], map: "PerfilHistorico_Id_Profile_fkey")
+  Dados          Json
+  DataAlteracao  DateTime        @default(now())
 
-  @@index([Id_Profile], map: "PerfilHistorico_Id_Profile_fkey")
+  profile profile? @relation(fields: [Id_Profile], references: [id])
+
+  @@index([Id_Profile])
+  @@index([Tipo])
 }
 
 model profile {
@@ -190,4 +195,15 @@ enum formacao_academica_nivel_formacao {
   TECNICO
   GRADUACAO
   POS_GRADUACAO
+}
+
+enum TipoHistorico {
+  DADOS_INSTRUTOR
+  PROFILE
+  FORMACAO_ACADEMICA
+  CURSO
+  COMPETENCIA
+  SOFTSKILL
+  SITUACAO_PROFISSIONAL
+  IDIOMA
 }

@@ -31,3 +31,6 @@ src/
 └── server.ts ok 
 
 
+banco 
+9d59ce7
+ 

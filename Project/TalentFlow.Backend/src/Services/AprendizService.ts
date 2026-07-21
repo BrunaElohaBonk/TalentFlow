@@ -1,25 +1,73 @@
+import { Prisma } from "@prisma/client";
 import { prisma } from "../lib/prisma.js";
+import { TipoHistorico } from "@prisma/client";
+import { idiomas_nome_Idioma } from "@prisma/client";
 
 export default class AprendizService {
-    static async criar(data: {
-        EDV: number;
-        Id_Turma: number;
-    }) {
-        return await prisma.aprendiz.create({
+    //Metado para registrar tudo desde criar ate deletar
+
+    private static async registrarHistorico(
+        tx: Prisma.TransactionClient,
+        idProfile: number,
+        tipo: "PROFILE" | "CURSO" | "COMPETENCIA" | "competencia" | "FORMACAO_ACADEMICA" | "SITUACAO_PROFISSIONAL",
+        idRegistro: number,
+        usuario: { EDV: number },
+        antes: any,
+        depois: any
+    ) {
+        await tx.perfilhistorico.create({
             data: {
-                EDV: data.EDV,
-                Id_Turma: data.Id_Turma,
-                profile: {
-                    create: {}
+                Id_Profile: idProfile,
+                Tipo: tipo,
+                IdRegistro: idRegistro,
+                Acao: "UPDATE",
+                EDVAlteradoPor: usuario.EDV,
+                Dados: {
+                    antes,
+                    depois
                 }
-            },
-            include: {
-                user: true,
-                turma: false,
-                profile: true
             }
         });
     }
+
+    static async criar(data: { EDV: number;Id_Turma: number;},
+        usuarioLogado: { EDV: number; name: string; }
+) {
+        return await prisma.$transaction(async (tx) => {
+
+            const criadoaprendiz = await tx.aprendiz.create({
+                data: {
+                    EDV: data.EDV,
+                    Id_Turma: data.Id_Turma,
+                    profile: {
+                        create: {}
+                    }
+                },
+                include: {
+                    user: true,
+                    turma: false,
+                    profile: true
+                }
+            });
+    
+            await tx.perfilhistorico.create({
+                data: {
+                    Id_Profile: criadoaprendiz.profile?.id,
+                    Tipo: TipoHistorico.PROFILE,
+                    IdRegistro:criadoaprendiz.profile?.id,
+                    Acao: "CREATE",
+                    EDVAlteradoPor: usuarioLogado.EDV,
+                    Dados: {
+                        criadoaprendiz: null
+                    }
+                }
+            });
+    
+            return criadoaprendiz;
+        });
+
+    }
+
 
     static async atualizarPerfil(
         idPerfil: number,
@@ -40,23 +88,19 @@ export default class AprendizService {
             }
 
             const perfilAtualizado = await tx.profile.update({
-                where: {
-                    id: idPerfil
-                },
+                where: { id: idPerfil },
                 data
             });
 
-            await tx.perfilhistorico.create({
-                data: {
-                    Id_Profile: idPerfil,
-                    EDVAlteradoPor: usuarioLogado.EDV,
-                    dados: {
-                        mensagem: `${usuarioLogado.name} editou o perfil`,
-                        antes: perfilAntigo,
-                        depois: perfilAtualizado
-                    }
-                }
-            });
+            await this.registrarHistorico(
+                tx,
+                idPerfil,
+                TipoHistorico.PROFILE,
+                idPerfil,
+                usuarioLogado,
+                perfilAntigo,
+                perfilAtualizado
+            );
 
             return perfilAtualizado;
         });
@@ -73,7 +117,7 @@ export default class AprendizService {
         }
     ) {
         return await prisma.$transaction(async (tx: any) => {
-            const FAAntigo = await tx.formacao_academica.findUnique({
+            const formacaoAcademicaAntigo = await tx.formacao_academica.findUnique({
 
                 where: {
                     id,
@@ -81,29 +125,26 @@ export default class AprendizService {
                 },
             });
 
-            if (!FAAntigo) {
+            if (!formacaoAcademicaAntigo) {
                 throw new Error("Perfil não encontrado.");
             }
-            const FAAtualizado = await tx.formacao_academica.update({
+            const formacaoAcademicaAtualizado = await tx.formacao_academica.update({
                 where: {
                     id: id
                 },
                 data
             });
-            //abreviação de Formacao Academica = FAAntigo = FAAtualizado
-            await tx.perfilhistorico.create({
-                data: {
-                    Id_Profile: Id_Profile,
-                    EDVAlteradoPor: usuarioLogado.EDV,
-                    dados: {
-                        mensagem: `${usuarioLogado.name} editou o perfil`,
-                        antes: FAAntigo,
-                        depois: FAAtualizado
-                    }
-                }
-            });
-
-            return FAAtualizado;
+            
+            await this.registrarHistorico(
+                tx,
+                Id_Profile,
+                TipoHistorico.FORMACAO_ACADEMICA,
+                id,
+                usuarioLogado,
+                formacaoAcademicaAntigo,
+                formacaoAcademicaAtualizado
+            );
+            return formacaoAcademicaAtualizado;
         });
     }
 
@@ -118,40 +159,37 @@ export default class AprendizService {
         }
     ) {
         return await prisma.$transaction(async (tx: any) => {
-            const SPAntigo = await tx.situacao_profissional.findUnique({
+            const SituacaoProfissionalAntigo = await tx.situacao_profissional.findUnique({
                 where: {
                     id,
                     profile: { EDV_Aprendiz: EDV }
                 }
             });
 
-            if (!SPAntigo){
+            if (!SituacaoProfissionalAntigo){
                 throw new Error("Perfil não encontrado.");  
             }
-            const SPAtualizado = await tx.situacao_profissional.update({
+            const situacaoProfissionalAtualizado = await tx.situacao_profissional.update({
                 where: {
                     id,
                     profile: { EDV_Aprendiz: EDV }
                 },
                 data
             });
-            await tx.perfilhistorico.create({
-                data: {
-                    Id_Profile: Id_Profile,
-                    EDVAlteradoPor: usuarioLogado.EDV,
-                    dados: {
-                        mensagem: `${usuarioLogado.name} editou o perfil`,
-                        antes: SPAntigo,
-                        depois: SPAtualizado
-                    }
-                }
-            });
-    
-            return SPAtualizado;
+             await this.registrarHistorico(
+                tx,
+                Id_Profile,
+                TipoHistorico.SITUACAO_PROFISSIONAL,
+                id,
+                usuarioLogado,
+                SituacaoProfissionalAntigo,
+                situacaoProfissionalAtualizado
+            );    
+            return situacaoProfissionalAtualizado;
         });
     }
 
-    static async atualizarSoftskills(
+    static async atualizarcompetencias(
         EDV: number,
         id: number,
         Id_Profile: number,
@@ -162,35 +200,33 @@ export default class AprendizService {
         }
     ) {
         return await prisma.$transaction(async (tx: any) =>{
-            const SSAntigo = await tx.softskill.findUnique({
+            const competenciaAntigo = await tx.competencia.findUnique({
                 where: {
                     id,
                     profile: { EDV_Aprendiz: EDV }
                 }
             })
-            if (!SSAntigo) {
+            if (!competenciaAntigo) {
                 throw new Error("Perfil não encontrado.");
             }
-            const SSAtualizado = await tx.softskill.update({
+            const competenciaAtualizado = await tx.competencia.update({
                 where: {
                     id,
                     profile: { EDV_Aprendiz: EDV }
                 },
                 data
             })
-            await tx.perfilhistorico.create({
-                data: {
-                    Id_Profile: Id_Profile,
-                    EDVAlteradoPor: usuarioLogado.EDV,
-                    dados: {
-                        mensagem: `${usuarioLogado.name} editou o perfil`,
-                        antes: SSAntigo,
-                        depois: SSAtualizado
-                    }
-                }
-            });
-            
-        return SSAtualizado;
+
+            await this.registrarHistorico(
+                tx,
+                Id_Profile,
+                TipoHistorico.COMPETENCIA,
+                id,
+                usuarioLogado,
+                competenciaAntigo,
+                competenciaAtualizado
+            );             
+        return competenciaAtualizado;
 
         });
     }
@@ -222,17 +258,16 @@ export default class AprendizService {
                 },
                 data
             });
-            await tx.perfilhistorico.create({
-                data: {
-                    Id_Profile: Id_Profile,
-                    EDVAlteradoPor: usuarioLogado.EDV,
-                    dados: {
-                        mensagem: `${usuarioLogado.name} editou o perfil`,
-                        antes: competenciaAntigo,
-                        depois: competenciaAtualizado
-                    }
-                }
-            });
+
+            await this.registrarHistorico(
+                tx,
+                Id_Profile,
+                TipoHistorico.COMPETENCIA,
+                id,
+                usuarioLogado,
+                competenciaAntigo,
+                competenciaAtualizado
+            ); 
     
             return competenciaAtualizado;
 
@@ -267,17 +302,16 @@ export default class AprendizService {
                 },
                 data
             });
-            await tx.perfilhistorico.create({
-                data: {
-                    Id_Profile: Id_Profile,
-                    EDVAlteradoPor: usuarioLogado.EDV,
-                    dados: {
-                        mensagem: `${usuarioLogado.name} editou o perfil`,
-                        antes: cursosAntigo,
-                        depois: cursosAtualizado
-                    }
-                }
-            });
+            await this.registrarHistorico(
+                tx,
+                Id_Profile,
+                TipoHistorico.CURSO,
+                id,
+                usuarioLogado,
+                cursosAntigo,
+                cursosAtualizado
+            ); 
+
             return cursosAtualizado;
         });
     }
@@ -323,7 +357,7 @@ export default class AprendizService {
     }
 
 
-    static async verSoftskills(EDV: number, id: number) {
+    static async vercompetencias(EDV: number, id: number) {
         return await prisma.soft_skills.findMany({
             where: {
                 Id_Profile: id,
@@ -457,17 +491,15 @@ export default class AprendizService {
         };
     }
 
-
-
     static async filtrarTudo(filtros: any) {
 
         const {
             nome,
             turma,
             cursos,
-            idioma,
+            idiomas,
             competencia,
-            softskill,
+            softskills,
             setor
         } = filtros;
 
@@ -516,16 +548,25 @@ export default class AprendizService {
                             : undefined,
 
 
-                        soft_skills: softskill
+                        soft_skills: softskills
                             ? {
                                 some: {
                                     nome_SoftSkills: {
-                                        contains: String(softskill)
+                                        contains: String(softskills)
                                     }
                                 }
                             }
                             : undefined,
 
+                        idiomas: idiomas?.length
+                        ? {
+                            some: {
+                                nome_Idioma: {
+                                    in: idiomas as idiomas_nome_Idioma[]
+                                }
+                            }
+                        }
+                        : undefined,
 
                         situacao_profissional: setor
                             ? {
@@ -561,6 +602,8 @@ export default class AprendizService {
                         competencia: true,
 
                         soft_skills: true,
+
+                        idiomas: true,
 
                         situacao_profissional: true,
                     }
