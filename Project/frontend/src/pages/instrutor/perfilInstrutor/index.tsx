@@ -2,16 +2,14 @@ import Header from "../../../components/header"
 import Sidebar from "../../../components/sidebar"
 import EditarPerfil from "../../../components/editarPerfil"
 import "./perfilInstrutor.css"
-import { useNavigate } from "react-router-dom"
 import icon_editar from './../../../assets/img/icon_editar.png'
 import user from '../../../assets/img/icon_user.png'
 import { useEffect, useState } from "react"
-import axios from "axios"
 
 interface IPerfil {
     edv: number;
     img: string;
-    name: string;
+    nome: string;
     email: string;
     user: string;
     contato: number;
@@ -20,18 +18,22 @@ interface IPerfil {
 
 function PerfilInstrutor(){
     const [editar, setEditar] = useState(false)
-    const [perfil, setPerfil] = useState<IPerfil>({
-        edv: 12345678,
-        img: "foto.png",
-        name: "Maria Joaquina Silveira",
-        email: "maria.silveira@br.bosch.com",
-        user: "MJS1CT",
-        contato: 41991234567,
-        nascimento: new Date("07/09/2008"),
-    });
-
-
-    const navigate = useNavigate()
+    const [perfil, setPerfil] = useState<IPerfil | null>(null);
+    useEffect(() => {
+        const usuarioSalvo = localStorage.getItem("usuario");
+        if (usuarioSalvo) {
+            const usuario = JSON.parse(usuarioSalvo);
+            setPerfil({
+                edv: Number(usuario.edv),
+                img: usuario.img,
+                nome: usuario.nome,
+                email: usuario.email,
+                user: usuario.user,
+                contato: usuario.contato,
+                nascimento: ConverterData(usuario.dataNascimento)
+            });
+        }
+    }, []);
 
     // const [perfil, setPerfil] = useState([])
     // const fetchPerfil = async () => {
@@ -53,7 +55,7 @@ function PerfilInstrutor(){
     return(
         <div className="perfil">
             <Header></Header>
-            <EditarPerfil visible={editar} setVisible={setEditar} edv={perfil.edv}/>
+            <EditarPerfil visible={editar} setVisible={setEditar} edv={perfil?.edv ?? 0}/>
             <div className="perfil-container">
                 <Sidebar></Sidebar>
                 <div className="perfil-body">   
@@ -61,18 +63,24 @@ function PerfilInstrutor(){
                         <button onClick={()=> setEditar(true)}>
                             <img src={icon_editar} alt="editar" className="perfil-editar"/>
                         </button>
-                        <div className="perfil-header">
-                            <img src={user} alt="user" className="perfil-user"/>
-                            <span className="perfil-titulo" title={perfil.name}>{perfil.name}</span>
-                        </div>
-                        <div className="perfil-conteudo">
-                            <span className="perfil-span" title={perfil.edv.toString()}>EDV: {perfil.edv}</span>
-                            <span className="perfil-span" title={perfil.user}>User: {perfil.user}</span>
-                            <span className="perfil-span" title={perfil.email}>Email: {perfil.email}</span>
-                            <span className="perfil-span" title={perfil.nascimento.toLocaleDateString("pt-BR")}>Data de Nascimento: {perfil.nascimento.toLocaleDateString("pt-BR")}</span>
-                            <span className="perfil-span" title={Idade(perfil.nascimento).toString()}>Idade: {Idade(perfil.nascimento)}</span>
-                            <span className="perfil-span" title={Telefone(perfil.contato)}>Contato: {Telefone(perfil.contato)}</span>
-                        </div>
+                        {perfil ? (
+                            <>
+                                <div className="perfil-header">
+                                    <img src={user} alt="user" className="perfil-user"/>
+                                    <span className="perfil-titulo" title={perfil.nome}>{perfil.nome}</span>
+                                </div>
+                                <div className="perfil-conteudo">
+                                    <span className="perfil-span">EDV: {perfil.edv}</span>
+                                    <span className="perfil-span">User: {perfil.user}</span>
+                                    <span className="perfil-span">Email: {perfil.email}</span>
+                                    <span className="perfil-span">Data de Nascimento: {perfil.nascimento.toLocaleDateString("pt-BR")}</span>
+                                    <span className="perfil-span">Idade: {Idade(perfil.nascimento)} anos</span>
+                                    <span className="perfil-span">Contato: {Telefone(perfil.contato)}</span>
+                                </div>
+                            </>
+                        ):(
+                             <span>Nenhum usuário encontrado</span>
+                        )}
                     </div>
                 </div>
             </div>
@@ -99,3 +107,12 @@ function Idade(dataNascimento: Date) {
     }
     return idade;
 }   
+
+function ConverterData(data: string) {
+    const [dia, mes, ano] = data.split("/");
+    return new Date(
+        Number(ano),
+        Number(mes) - 1,
+        Number(dia)
+    );
+}

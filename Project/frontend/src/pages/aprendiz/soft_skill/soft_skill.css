@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
-.formacao-container {
+.soft-skill-container {
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,.35);
@@ -10,7 +10,7 @@
     z-index: 9999;
 }
 
-.formacao-body {
+.soft-skill-body {
     width: 700px;
     max-width: 90%;
     max-height: 80vh;
@@ -22,7 +22,7 @@
     font-family: 'Poppins', sans-serif;
 }
 
-.formacao-header {
+.soft-skill-header {
     position: relative;
     display: flex;
     justify-content: flex-end;
@@ -59,21 +59,21 @@
     transform: scale(1.1);
 }
 
-.formacao-modal {
+.soft-skill-modal {
     max-height: 450px;
     overflow-y: auto;
 }
 
-.formacao-modal::-webkit-scrollbar {
+.soft-skill-modal::-webkit-scrollbar {
     width: 6px;
 }
 
-.formacao-modal::-webkit-scrollbar-thumb {
+.soft-skill-modal::-webkit-scrollbar-thumb {
     background: #d9d9d9;
     border-radius: 10px;
 }
 
-.formacao-item {
+.soft-skill-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -81,18 +81,18 @@
     border-bottom: 1px solid #d9d9d9;
 }
 
-.formacao-item:last-child {
+.soft-skill-item:last-child {
     border-bottom: none;
 }
 
-.formacao-titulo {
+.soft-skill-titulo {
     font-family: 'Poppins', sans-serif;
     font-size: 1rem;
     font-weight: 600;
     color: #333;
 }
 
-.formacao-acoes {
+.soft-skill-acoes {
     display: flex;
     align-items: center;
     gap: 15px;
@@ -126,7 +126,7 @@
     transform: scale(1.1);
 }
 
-.formacao-vazia {
+.soft-skill-vazia {
     font-family: 'Poppins', sans-serif;
     font-size: 1.3rem;
     font-weight: 600;
@@ -137,22 +137,22 @@
 
 @media(max-width:768px) {
 
-    .formacao-body {
+    .soft-skill-body {
         width: 90%;
         padding: 20px;
     }
 
-    .formacao-item {
+    .soft-skill-item {
         flex-direction: column;
         align-items: flex-start;
         gap: 15px;
     }
 
-    .formacao-acoes {
+    .soft-skill-acoes {
         align-self: flex-end;
     }
 
-    .formacao-titulo {
+    .soft-skill-titulo {
         font-size: 1rem;
     }
 

@@ -100,9 +100,9 @@ function SoftSkill({ visible, setVisible }: Props) {
 
     return (
 
-        <div className="formacao-container">
-            <div className="formacao-body">
-                <div className="formacao-header">
+        <div className="soft-skill-container">
+            <div className="soft-skill-body">
+                <div className="soft-skill-header">
                     <button
                         type="button"
                         className="btn-header"
@@ -117,22 +117,22 @@ function SoftSkill({ visible, setVisible }: Props) {
                         <img src={fechar} alt="fechar" className="icon-fechar-img" />
                     </button>
                 </div>
-                <div className="formacao-modal">
+                <div className="soft-skill-modal">
                     {
                         softSkills.length === 0 ?
-                            <p className="formacao-vazia">
+                            <p className="soft-skill-vazia">
                                 Nenhuma formação acadêmica encontrada.
                             </p>
                             :
                             softSkills.map((item) => (
                                 <div
-                                    className="formacao-item"
+                                    className="soft-skill-item"
                                     key={item.id}
                                 >
-                                    <span className="formacao-titulo">
+                                    <span className="soft-skill-titulo">
                                         {item.nome}
                                     </span>
-                                    <div className="formacao-acoes">
+                                    <div className="soft-skill-acoes">
                                         <button
                                             type="button"
                                             className="btn-acao"

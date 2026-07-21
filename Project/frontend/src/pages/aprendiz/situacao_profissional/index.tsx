@@ -19,7 +19,6 @@ function SituacaoProfissional({visible, setVisible, setEditarSituacao}: any) {
         <>
             <div className="situacao-overlay">
                 <div className="situacao-card">
-
                     <div className="situacao-header">
                         <h2>
                             Situação Profissional

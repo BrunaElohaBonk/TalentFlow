@@ -52,6 +52,28 @@ const usuario: Usuario[] = [
     tipo: "instrutor",
     senha: "123",
     img: ""
+  },
+  {
+    nome: "Mariana Ferreira Costa",
+    email: "mariana.costa@bosch.com",
+    edv: "92906813",
+    user: "MFC7CT",
+    contato: 41996543218,
+    dataNascimento: "15/04/1997",
+    tipo: "instrutor",
+    senha: "123",
+    img: ""
+  },
+  {
+    nome: "Rafael Henrique Costa",
+    email: "rafael.costa@bosch.com",
+    edv: "92906814",
+    user: "RHC8CT",
+    contato: 41997865432,
+    dataNascimento: "22/09/1994",
+    tipo: "instrutor",
+    senha: "123",
+    img: ""
   }
 ]
 
