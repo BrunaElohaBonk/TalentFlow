@@ -22,6 +22,12 @@
     flex-direction: column;
 }
 
+.editarPerfil-input:disabled {
+    background-color: #eeeeee;
+    color: #777;
+    cursor: not-allowed;
+}
+
 .editarPerfil-fechar {
     position: absolute;
     top: 20px;

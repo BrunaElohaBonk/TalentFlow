@@ -10,6 +10,7 @@ import "react-datepicker/dist/react-datepicker.css";
 interface IPerfil {
     img: File | null;
     name: string;
+    edv: number | null;
     email: string;
     user: string;
     contato: string;
@@ -23,6 +24,7 @@ interface Props {
 
 function EditarPerfil({ visible, setVisible, edv }: Props){
     const nomeRef = useRef<HTMLInputElement>(null);
+    const edvRef = useRef<HTMLInputElement>(null);
     const emailRef = useRef<HTMLInputElement>(null);
     const userRef = useRef<HTMLInputElement>(null);
     const nascimentoRef = useRef<HTMLInputElement>(null);
@@ -54,6 +56,7 @@ function EditarPerfil({ visible, setVisible, edv }: Props){
     const [perfil, setPerfil] = useState<IPerfil>({
         img: null,
         name: '',
+        edv: null,
         email: '',
         user: '',
         contato: '',
@@ -68,6 +71,7 @@ function EditarPerfil({ visible, setVisible, edv }: Props){
             setPerfil({
                 name: User.name || '',
                 img: null,
+                edv: User.edv || '',
                 email: User.email || '',
                 user: User.user || '',
                 contato: User.contato || '',
@@ -141,6 +145,7 @@ function EditarPerfil({ visible, setVisible, edv }: Props){
             });
         }
     }
+
     useEffect(() => {
         if (visible) {
             fetchPerfil();
@@ -194,7 +199,11 @@ function EditarPerfil({ visible, setVisible, edv }: Props){
                     </div>
                     <div className="editarPerfil-grupo">
                         <label className="editarPerfil-label">Nome Completo</label>
-                        <input ref={nomeRef} name="name" className="editarPerfil-input" value={perfil.name} onChange={handleChange} onKeyDown={(e) => proximoCampo(e, emailRef)}/>
+                        <input ref={nomeRef} name="name" className="editarPerfil-input" value={perfil.name} disabled/>
+                    </div>
+                    <div className="editarPerfil-grupo">
+                        <label className="editarPerfil-label">EDV</label>
+                        <input ref={edvRef} name="edv" className="editarPerfil-input" value={perfil.edv} disabled/>
                     </div>
                     <div className="editarPerfil-grupo">
                         <label className="editarPerfil-label">Email</label>
@@ -202,11 +211,11 @@ function EditarPerfil({ visible, setVisible, edv }: Props){
                     </div>
                     <div className="editarPerfil-grupo">
                         <label className="editarPerfil-label">UserID</label>
-                        <input ref={userRef} name="user" className="editarPerfil-input" value={perfil.user} onChange={handleChange} onKeyDown={(e) => proximoCampo(e, nascimentoRef)}/>
+                        <input ref={userRef} name="user" className="editarPerfil-input" value={perfil.user} disabled/>
                     </div>
                     <div className="editarPerfil-grupo">
                         <label className="editarPerfil-label">Data de nascimento</label>
-                        <input ref={nascimentoRef} name="nascimento" className="editarPerfil-input" inputMode="numeric" value={perfil.nascimento} onChange={handleNascimento} maxLength={10} onKeyDown={(e) => proximoCampo(e, contatoRef)}/>
+                        <input ref={nascimentoRef} name="nascimento" className="editarPerfil-input" value={perfil.nascimento} disabled/>
                     </div>
                     <div className="editarPerfil-grupo">
                         <label className="editarPerfil-label">Contato</label>
