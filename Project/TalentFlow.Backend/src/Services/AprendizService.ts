@@ -30,9 +30,9 @@ export default class AprendizService {
         });
     }
 
-    static async criar(data: { EDV: number;Id_Turma: number;},
+    static async criar(data: { EDV: number; Id_Turma: number; },
         usuarioLogado: { EDV: number; name: string; }
-) {
+    ) {
         return await prisma.$transaction(async (tx) => {
 
             const criadoaprendiz = await tx.aprendiz.create({
@@ -49,12 +49,12 @@ export default class AprendizService {
                     profile: true
                 }
             });
-    
+
             await tx.perfilhistorico.create({
                 data: {
                     Id_Profile: criadoaprendiz.profile?.id,
                     Tipo: TipoHistorico.PROFILE,
-                    IdRegistro:criadoaprendiz.profile?.id,
+                    IdRegistro: criadoaprendiz.profile?.id,
                     Acao: "CREATE",
                     EDVAlteradoPor: usuarioLogado.EDV,
                     Dados: {
@@ -62,7 +62,7 @@ export default class AprendizService {
                     }
                 }
             });
-    
+
             return criadoaprendiz;
         });
 
@@ -80,7 +80,7 @@ export default class AprendizService {
         return await prisma.$transaction(async (tx: any) => {
 
             const perfilAntigo = await tx.profile.findUnique({
-                where: { id: idPerfil}
+                where: { id: idPerfil }
             });
 
             if (!perfilAntigo) {
@@ -121,7 +121,7 @@ export default class AprendizService {
 
                 where: {
                     id,
-                    profile: { EDV_Aprendiz: EDV}
+                    profile: { EDV_Aprendiz: EDV }
                 },
             });
 
@@ -134,7 +134,7 @@ export default class AprendizService {
                 },
                 data
             });
-            
+
             await this.registrarHistorico(
                 tx,
                 Id_Profile,
@@ -166,8 +166,8 @@ export default class AprendizService {
                 }
             });
 
-            if (!SituacaoProfissionalAntigo){
-                throw new Error("Perfil não encontrado.");  
+            if (!SituacaoProfissionalAntigo) {
+                throw new Error("Perfil não encontrado.");
             }
             const situacaoProfissionalAtualizado = await tx.situacao_profissional.update({
                 where: {
@@ -176,7 +176,7 @@ export default class AprendizService {
                 },
                 data
             });
-             await this.registrarHistorico(
+            await this.registrarHistorico(
                 tx,
                 Id_Profile,
                 TipoHistorico.SITUACAO_PROFISSIONAL,
@@ -184,7 +184,7 @@ export default class AprendizService {
                 usuarioLogado,
                 SituacaoProfissionalAntigo,
                 situacaoProfissionalAtualizado
-            );    
+            );
             return situacaoProfissionalAtualizado;
         });
     }
@@ -199,7 +199,7 @@ export default class AprendizService {
             name: string;
         }
     ) {
-        return await prisma.$transaction(async (tx: any) =>{
+        return await prisma.$transaction(async (tx: any) => {
             const competenciaAntigo = await tx.competencia.findUnique({
                 where: {
                     id,
@@ -225,8 +225,8 @@ export default class AprendizService {
                 usuarioLogado,
                 competenciaAntigo,
                 competenciaAtualizado
-            );             
-        return competenciaAtualizado;
+            );
+            return competenciaAtualizado;
 
         });
     }
@@ -241,7 +241,7 @@ export default class AprendizService {
             name: string;
         }
     ) {
-        return await prisma.$transaction(async (tx: any) =>{
+        return await prisma.$transaction(async (tx: any) => {
             const competenciaAntigo = await tx.competencia.findUnique({
                 where: {
                     id,
@@ -267,8 +267,8 @@ export default class AprendizService {
                 usuarioLogado,
                 competenciaAntigo,
                 competenciaAtualizado
-            ); 
-    
+            );
+
             return competenciaAtualizado;
 
         });
@@ -310,7 +310,7 @@ export default class AprendizService {
                 usuarioLogado,
                 cursosAntigo,
                 cursosAtualizado
-            ); 
+            );
 
             return cursosAtualizado;
         });
@@ -332,7 +332,6 @@ export default class AprendizService {
         });
     }
 
-
     static async verFormacaoAcademica(EDV: number, id: number) {
         return await prisma.formacao_academica.findMany({
             where: {
@@ -343,7 +342,6 @@ export default class AprendizService {
             }
         });
     }
-
 
     static async verSituacaoProfissional(EDV: number, id: number) {
         return await prisma.situacao_profissional.findMany({
@@ -356,7 +354,6 @@ export default class AprendizService {
         });
     }
 
-
     static async vercompetencias(EDV: number, id: number) {
         return await prisma.soft_skills.findMany({
             where: {
@@ -367,7 +364,6 @@ export default class AprendizService {
             }
         });
     }
-
 
     static async verCompetencias(EDV: number, id: number) {
         return await prisma.competencia.findMany({
@@ -380,7 +376,6 @@ export default class AprendizService {
         });
     }
 
-
     static async vercursos(EDV: number, id: number) {
         return await prisma.cursos.findMany({
             where: {
@@ -392,7 +387,6 @@ export default class AprendizService {
         });
     }
 
-
     static async verCursos(EDV: number, id: number) {
         return await prisma.cursos.findMany({
             where: {
@@ -403,91 +397,121 @@ export default class AprendizService {
             }
         });
     }
-    static async filtrarApredizDashboart() {
 
-        const aprendizesEstagio = await prisma.situacao_profissional.count({
-            where: {
-                cumprido_Estagio: true
-            }
-        });
+}
+export class DashboardService {
 
+    static async dashboardAprendiz() {
 
         const aprendizes = await prisma.aprendiz.findMany({
             include: {
-                user: true
+                user: true,
+                profile: {
+                    include: {
+                        situacao_profissional: true,
+                        competencia: true,
+                        idiomas: true,
+                        formacao_academica: true
+                    }
+                }
             }
         });
 
+        const totalAprendizes = aprendizes.length;
 
-        const idades = aprendizes.map((aprendiz:any) => {
+        const emEstagio = aprendizes.filter(aprendiz =>
+            aprendiz.profile?.situacao_profissional.some(
+                s => s.cumprido_Estagio
+            )
+        ).length;
 
-            const nascimento = new Date(
-                aprendiz.user.data_nascimento
-            );
+        const percentualEstagio = totalAprendizes > 0
+            ? Number(((emEstagio / totalAprendizes) * 100).toFixed(2))
+            : 0;
 
+
+        const setores: any = {};
+        const competencias: any = {};
+        const idiomas: any = {};
+        const idades: any = {};
+
+
+        aprendizes.forEach(aprendiz => {
+
+            const nascimento = new Date(aprendiz.user.data_nascimento);
             const hoje = new Date();
 
-            let idade =
-                hoje.getFullYear() -
-                nascimento.getFullYear();
+            let idade = hoje.getFullYear() - nascimento.getFullYear();
 
-            const mes =
-                hoje.getMonth() -
-                nascimento.getMonth();
+            const mes = hoje.getMonth() - nascimento.getMonth();
 
-
-            if (
-                mes < 0 ||
-                (mes === 0 &&
-                    hoje.getDate() < nascimento.getDate())
-            ) {
+            if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) {
                 idade--;
             }
 
-            return idade;
-
-        });
+            idades[idade] = (idades[idade] || 0) + 1;
 
 
-        const aprendizesIdioma = await prisma.cursos.findMany({
-            distinct: [
-                "Id_Profile"
-            ]
-        });
-
-
-        const aprendizesMaisQueMedio =
-            await prisma.formacao_academica.count({
-                where: {
-                    nivel_formacao: {
-                        in: [
-                            "TECNICO",
-                            "GRADUACAO",
-                            "POS_GRADUACAO"
-                        ]
-                    }
+            aprendiz.profile?.situacao_profissional.forEach(s => {
+                if (s.nome_Setor) {
+                    setores[s.nome_Setor] = (setores[s.nome_Setor] || 0) + 1;
                 }
             });
 
 
+            aprendiz.profile?.competencia.forEach(c => {
+                competencias[c.nome_Competencia] =
+                    (competencias[c.nome_Competencia] || 0) + 1;
+            });
+
+
+            aprendiz.profile?.idiomas.forEach(i => {
+                idiomas[i.nome_Idioma] =
+                    (idiomas[i.nome_Idioma] || 0) + 1;
+            });
+
+        });
+
+
+        const cursoSuperior = aprendizes.filter(aprendiz =>
+            aprendiz.profile?.formacao_academica.some(f =>
+                f.nivel_formacao === "GRADUACAO" ||
+                f.nivel_formacao === "POS_GRADUACAO"
+            )
+        ).length;
+
+
         return {
+            totalAprendizes,
 
             estagio: {
-                quantidade: aprendizesEstagio
+                quantidade: emEstagio,
+                percentual: percentualEstagio
             },
 
-            idade: {
-                idades
-            },
+            idade: Object.entries(idades).map(([idade, quantidade]) => ({
+                idade: Number(idade),
+                quantidade
+            })),
 
-            cursos: {
-                quantidade: aprendizesIdioma.length
-            },
+            setores: Object.entries(setores).map(([nome, quantidade]) => ({
+                nome,
+                quantidade
+            })),
+
+            competencias: Object.entries(competencias).map(([nome, quantidade]) => ({
+                nome,
+                quantidade
+            })),
+
+            idiomas: Object.entries(idiomas).map(([nome, quantidade]) => ({
+                nome,
+                quantidade
+            })),
 
             formacao: {
-                acimaEnsinoMedio: aprendizesMaisQueMedio
+                cursoSuperior
             }
-
         };
     }
 
@@ -500,33 +524,60 @@ export default class AprendizService {
             idiomas,
             competencia,
             softskills,
-            setor
+            setor,
+            formacao,
+            idade
         } = filtros;
 
+        let filtroIdade: any = undefined;
+
+        if (idade) {
+            const hoje = new Date();
+
+            filtroIdade = {
+                gte: new Date(
+                    hoje.getFullYear() - Number(idade) - 1,
+                    hoje.getMonth(),
+                    hoje.getDate()
+                ),
+                lt: new Date(
+                    hoje.getFullYear() - Number(idade),
+                    hoje.getMonth(),
+                    hoje.getDate()
+                )
+            };
+        }
 
         return await prisma.aprendiz.findMany({
 
             where: {
 
-                user: nome
-                    ? {
-                        name: {
+                user: {
+                    name: nome
+                        ? {
                             contains: String(nome)
                         }
-                    }
-                    : undefined,
+                        : undefined,
 
+                    data_nascimento: filtroIdade
+                },
 
                 Id_Turma: turma
                     ? Number(turma)
                     : undefined,
 
-
                 profile: {
-
                     is: {
 
-                        formacao_academica: cursos
+                        formacao_academica: formacao
+                            ? {
+                                some: {
+                                    nivel_formacao: formacao
+                                }
+                            }
+                            : undefined,
+
+                        cursos: cursos
                             ? {
                                 some: {
                                     name_Curso: {
@@ -535,7 +586,6 @@ export default class AprendizService {
                                 }
                             }
                             : undefined,
-
 
                         competencia: competencia
                             ? {
@@ -546,7 +596,6 @@ export default class AprendizService {
                                 }
                             }
                             : undefined,
-
 
                         soft_skills: softskills
                             ? {
@@ -559,14 +608,14 @@ export default class AprendizService {
                             : undefined,
 
                         idiomas: idiomas?.length
-                        ? {
-                            some: {
-                                nome_Idioma: {
-                                    in: idiomas as idiomas_nome_Idioma[]
+                            ? {
+                                some: {
+                                    nome_Idioma: {
+                                        in: idiomas
+                                    }
                                 }
                             }
-                        }
-                        : undefined,
+                            : undefined,
 
                         situacao_profissional: setor
                             ? {
@@ -577,40 +626,26 @@ export default class AprendizService {
                                 }
                             }
                             : undefined
-
                     }
-
                 }
-
             },
 
-
             include: {
-
                 user: true,
 
-                turma: false,
+                turma: true,
 
                 profile: {
-
                     include: {
-
                         formacao_academica: true,
-
                         cursos: true,
-
                         competencia: true,
-
                         soft_skills: true,
-
                         idiomas: true,
-
-                        situacao_profissional: true,
+                        situacao_profissional: true
                     }
                 }
             }
-
         });
-
     }
 }
