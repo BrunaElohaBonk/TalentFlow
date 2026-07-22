@@ -371,8 +371,8 @@ export default class AprendizService {
     });
   }
 
-  static async vercompetencias(EDV: number, id: number) {
-    return await prisma.soft_skills.findMany({
+  static async verCompetencias(EDV: number, id: number) {
+    return await prisma.competencia.findMany({
       where: {
         Id_Profile: id,
         profile: {
