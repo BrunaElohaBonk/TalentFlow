@@ -11,19 +11,17 @@ export class TurmaNotFoundError extends Error {
 export class TurmaService {
   static async criar(data: CriarTurmaDTO) {
     return await prisma.$transaction(async (tx) => {
-
-      const turma = await prisma.turma.create({ data, });
+      const turma = await prisma.turma.create({ data });
       await tx.turmahistorico.create({
         data: {
           Id_Turma: turma.id,
           acao: "CREATE",
           EDVAlteradoPor: data.EDV_Instrutor,
           dados: {
-            turma: null
-          }
-
-        }
-      })
+            turma: null,
+          },
+        },
+      });
       return turma;
     });
   }
@@ -34,7 +32,6 @@ export class TurmaService {
         user: true,
         aprendiz: true,
       },
-
     });
   }
 
@@ -54,7 +51,7 @@ export class TurmaService {
     return turma;
   }
 
-  static async atualizar(id: number, data: EditarTurmaDTO, usuarioLogado: { EDV: number; name: string; }) {
+  static async atualizar(id: number, data: EditarTurmaDTO, usuarioEDV: number) {
     return await prisma.$transaction(async (tx) => {
       try {
         const turmaAntigo = await tx.turma.findUnique({ where: { id } });
@@ -72,16 +69,14 @@ export class TurmaService {
           data: {
             Id_Turma: id,
             acao: "UPDATE",
-            EDVAlteradoPor: usuarioLogado.EDV,
+            EDVAlteradoPor: usuarioEDV,
             dados: {
               turmaAntigo,
-              autalizadoturma
-            }
-
-          }
-        })
+              autalizadoturma,
+            },
+          },
+        });
         return autalizadoturma;
-
       } catch (error: any) {
         if (error.code === "P2025") {
           throw new TurmaNotFoundError();
@@ -92,24 +87,23 @@ export class TurmaService {
     });
   }
 
-  static async deletar(id: number, usuarioLogado: { EDV: number; name: string; }): Promise<any> {
+  static async deletar(id: number, usuarioEDV: number): Promise<any> {
     return await prisma.$transaction(async (tx) => {
       try {
         const turma = await prisma.turma.update({
           where: { id },
-          data: { Ativo: false }
+          data: { Ativo: false },
         });
         await tx.turmahistorico.create({
           data: {
             Id_Turma: id,
             acao: "DELETE",
-            EDVAlteradoPor: usuarioLogado.EDV,
+            EDVAlteradoPor: usuarioEDV,
             dados: {
-              turma
-            }
-
-          }
-        })
+              turma,
+            },
+          },
+        });
         return turma;
       } catch (error: any) {
         if (error.code === "P2025") {

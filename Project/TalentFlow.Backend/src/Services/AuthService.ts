@@ -114,7 +114,7 @@ export class UserService {
             Tipo: TipoHistorico.DADOS_INSTRUTOR,
             IdRegistro: user.EDV,
             Acao: "CREATE",
-            // EDVAlteradoPor: usuarioLogado.EDV,
+            EDVAlteradoPor: null,
             Dados: {
               user: null,
             },
@@ -131,10 +131,7 @@ export class UserService {
     }
   }
 
-  static async deletar(
-    EDV: number,
-    usuarioLogado: { EDV: number; name: string }
-  ) {
+  static async deletar(EDV: number, usuarioEDV: number) {
     return await prisma.$transaction(async (tx) => {
       const user = await prisma.user.update({
         where: { EDV },
@@ -147,7 +144,7 @@ export class UserService {
           Tipo: TipoHistorico.DADOS_INSTRUTOR,
           IdRegistro: user.EDV,
           Acao: "DELETE",
-          EDVAlteradoPor: usuarioLogado.EDV,
+          EDVAlteradoPor: usuarioEDV,
           Dados: {
             user,
           },
