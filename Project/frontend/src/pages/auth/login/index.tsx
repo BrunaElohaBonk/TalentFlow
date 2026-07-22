@@ -6,7 +6,7 @@ import Header from '../../../components/header'
 import Swal from 'sweetalert2'
 import './login.css'
 import { useNavigate } from "react-router-dom"
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useAuth } from "../../../context/authContext";
 
 interface Usuario {
@@ -26,7 +26,14 @@ function Login() {
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const { login } = useAuth();
-
+  const edvRef = useRef<HTMLInputElement>(null);
+  const senhaRef = useRef<HTMLInputElement>(null);
+  const enterRef = useRef<HTMLButtonElement>(null);
+  const proximoCampo = (e: React.KeyboardEvent<HTMLInputElement>, proximo: React.RefObject<HTMLElement | null>) => {
+    if (e.key === "Enter") {
+        e.preventDefault();
+        proximo.current?.focus();
+    }};
   // EXCLUIR AQUI NO BACKEND
   // Esses dados vão vir do banco de dados através da API
   // TEMPORÁRIO - REMOVER NA INTEGRAÇÃO COM BACKEND
@@ -147,13 +154,13 @@ const usuario: Usuario[] = [
             <div className='img_icon'>
               <img src={icon_user} alt="icon_user" className='icon'/>
             </div>
-            <input type='text' onKeyDown={(e) => {if (e.key === "Enter"){handleLogin()}}} inputMode='numeric' maxLength={8} placeholder="EDV" className='input_login' value={edv} onChange={(e) => setEdv(e.target.value.replace(/[^0-9]/g, ""))}></input>
+            <input ref={edvRef} type='text' inputMode='numeric' maxLength={8} placeholder="EDV" className='input_login' value={edv} onChange={(e) => setEdv(e.target.value.replace(/[^0-9]/g, ""))} onKeyDown={(e) => proximoCampo(e, senhaRef)}></input>
           </div>
           <div className='password'>
             <div className='img_icon'>
               <img src={icon_cadeado} alt="icon_cadeado" className='icon'/>
             </div>
-            <input type={showPassword ? "text" : "password"} onKeyDown={(e) => {if(e.key === "Enter"){handleLogin()}}} placeholder="Password" className='input_login' value={password} onChange={(e) => setPassword(e.target.value)}></input>
+            <input ref={senhaRef} type={showPassword ? "text" : "password"} placeholder="Password" className='input_login' value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={(e) => proximoCampo(e, enterRef)}></input>
             <img src={showPassword ? icon_olho_fechado : icon_olho} alt="Visualizar senha" className='eye-icon' onClick={() => setShowPassword(!showPassword)}/>
           </div>
           <div className="forgot-password">
@@ -161,7 +168,7 @@ const usuario: Usuario[] = [
             <span className="forgot-link">Clique aqui</span>
           </div>
           <div className='button'>
-            <button className='entrar' onClick={handleLogin}>
+            <button ref={enterRef} className='entrar' onKeyDown={(e) => {if (e.key === "Enter") {handleLogin();}}}>
               ENTRAR
             </button>
           </div>
