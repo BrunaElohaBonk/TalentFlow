@@ -2,6 +2,13 @@ import { Prisma } from "@prisma/client";
 import { prisma } from "../lib/prisma.js";
 import { TipoHistorico } from "@prisma/client";
 import { idiomas_nome_Idioma } from "@prisma/client";
+import {
+    AtualizarCompetenciasDto,
+  AtualizarCursosComplementaresDto,
+  AtualizarFormacaoAcademicaDto,
+  AtualizarPerfilDto,
+  AtualizarSituacaoProfissionalDto,
+} from "../DTO/aprendizDTO.ts";
 
 export default class AprendizService {
   //Metado para registrar tudo desde criar ate deletar
@@ -17,9 +24,9 @@ export default class AprendizService {
   ) {
     await tx.perfilhistorico.create({
       data: {
-        Id_Profile: idProfile,
+        Id_Profile: idProfile!,
         Tipo: tipo,
-        IdRegistro: idRegistro,
+        IdRegistro: idRegistro!,
         Acao: "UPDATE",
         EDVAlteradoPor: usuario,
         Dados: {
@@ -69,7 +76,7 @@ export default class AprendizService {
 
   static async atualizarPerfil(
     idPerfil: number,
-    data: any,
+    data: AtualizarPerfilDto,
     usuarioEDV: number
   ) {
     return await prisma.$transaction(async (tx: any) => {
@@ -102,15 +109,14 @@ export default class AprendizService {
 
   static async atualizarFormacaoAcademica(
     EDV: number,
-    id: number,
     Id_Profile: number,
-    data: any,
+    data: AtualizarFormacaoAcademicaDto,
     usuarioEDV: number
   ) {
     return await prisma.$transaction(async (tx: any) => {
       const formacaoAcademicaAntigo = await tx.formacao_academica.findUnique({
         where: {
-          id,
+          id: data.id,
           profile: { EDV_Aprendiz: EDV },
         },
       });
@@ -120,7 +126,8 @@ export default class AprendizService {
       }
       const formacaoAcademicaAtualizado = await tx.formacao_academica.update({
         where: {
-          id: id,
+          id: data.id,
+          profile: { EDV_Aprendiz: EDV },
         },
         data,
       });
@@ -129,7 +136,7 @@ export default class AprendizService {
         tx,
         Id_Profile,
         TipoHistorico.FORMACAO_ACADEMICA,
-        id,
+        data.id,
         usuarioEDV,
         formacaoAcademicaAntigo,
         formacaoAcademicaAtualizado
@@ -140,16 +147,14 @@ export default class AprendizService {
 
   static async atualizarSituacaoProfissional(
     EDV: number,
-    id: number,
     Id_Profile: number,
-    data: any,
+    data: AtualizarSituacaoProfissionalDto,
     usuarioEDV: number
   ) {
     return await prisma.$transaction(async (tx: any) => {
       const SituacaoProfissionalAntigo =
         await tx.situacao_profissional.findUnique({
           where: {
-            id,
             profile: { EDV_Aprendiz: EDV },
           },
         });
@@ -160,7 +165,6 @@ export default class AprendizService {
       const situacaoProfissionalAtualizado =
         await tx.situacao_profissional.update({
           where: {
-            id,
             profile: { EDV_Aprendiz: EDV },
           },
           data,
@@ -169,7 +173,7 @@ export default class AprendizService {
         tx,
         Id_Profile,
         TipoHistorico.SITUACAO_PROFISSIONAL,
-        id,
+        null!,
         usuarioEDV,
         SituacaoProfissionalAntigo,
         situacaoProfissionalAtualizado
@@ -180,15 +184,14 @@ export default class AprendizService {
 
   static async atualizarcompetencias(
     EDV: number,
-    id: number,
     Id_Profile: number,
-    data: any,
+    data: AtualizarCompetenciasDto,
     usuarioEDV: number
   ) {
     return await prisma.$transaction(async (tx: any) => {
       const competenciaAntigo = await tx.competencia.findUnique({
         where: {
-          id,
+          id: data.id,
           profile: { EDV_Aprendiz: EDV },
         },
       });
@@ -197,7 +200,7 @@ export default class AprendizService {
       }
       const competenciaAtualizado = await tx.competencia.update({
         where: {
-          id,
+            id: data.id,
           profile: { EDV_Aprendiz: EDV },
         },
         data,
@@ -207,7 +210,7 @@ export default class AprendizService {
         tx,
         Id_Profile,
         TipoHistorico.COMPETENCIA,
-        id,
+        data.id,
         usuarioEDV,
         competenciaAntigo,
         competenciaAtualizado
@@ -218,15 +221,14 @@ export default class AprendizService {
 
   static async atualizarCompetencias(
     EDV: number,
-    id: number,
     Id_Profile: number,
-    data: any,
+    data: AtualizarCompetenciasDto,
     usuarioEDV: number
   ) {
     return await prisma.$transaction(async (tx: any) => {
       const competenciaAntigo = await tx.competencia.findUnique({
         where: {
-          id,
+            id: data.id,
           profile: { EDV_Aprendiz: EDV },
         },
       });
@@ -235,7 +237,7 @@ export default class AprendizService {
       }
       const competenciaAtualizado = await tx.competencia.update({
         where: {
-          id,
+            id: data.id,
           profile: { EDV_Aprendiz: EDV },
         },
         data,
@@ -245,7 +247,7 @@ export default class AprendizService {
         tx,
         Id_Profile,
         TipoHistorico.COMPETENCIA,
-        id,
+        data.id,
         usuarioEDV,
         competenciaAntigo,
         competenciaAtualizado
@@ -257,15 +259,14 @@ export default class AprendizService {
 
   static async atualizarCursos(
     EDV: number,
-    id: number,
     Id_Profile: number,
-    data: any,
+    data: AtualizarCursosComplementaresDto,
     usuarioEDV: number
   ) {
     return await prisma.$transaction(async (tx: any) => {
       const cursosAntigo = await tx.cursos.findUnique({
         where: {
-          id,
+          id:data.id,
           profile: { EDV_Aprendiz: EDV },
         },
       });
@@ -274,7 +275,7 @@ export default class AprendizService {
       }
       const cursosAtualizado = await tx.cursos.update({
         where: {
-          id,
+          id:data.id,
           profile: { EDV_Aprendiz: EDV },
         },
         data,
@@ -283,7 +284,7 @@ export default class AprendizService {
         tx,
         Id_Profile,
         TipoHistorico.CURSO,
-        id,
+        data.id,
         usuarioEDV,
         cursosAntigo,
         cursosAtualizado
