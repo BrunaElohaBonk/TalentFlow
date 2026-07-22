@@ -184,7 +184,7 @@ export default class AprendizService {
     });
   }
 
-  static async atualizarcompetencias(
+  static async atualizarCompetencias(
     EDV: number,
     Id_Profile: number,
     data: AtualizarCompetenciasDto,
