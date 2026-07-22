@@ -3,11 +3,13 @@ import { prisma } from "../lib/prisma.js";
 import { TipoHistorico } from "@prisma/client";
 import { idiomas_nome_Idioma } from "@prisma/client";
 import {
-    AtualizarCompetenciasDto,
+  AtualizarCompetenciasDto,
   AtualizarCursosComplementaresDto,
   AtualizarFormacaoAcademicaDto,
+  AtualizarIdiomasDto,
   AtualizarPerfilDto,
   AtualizarSituacaoProfissionalDto,
+  AtualizarSoftSkillsDto,
 } from "../DTO/aprendizDTO.ts";
 
 export default class AprendizService {
@@ -200,7 +202,7 @@ export default class AprendizService {
       }
       const competenciaAtualizado = await tx.competencia.update({
         where: {
-            id: data.id,
+          id: data.id,
           profile: { EDV_Aprendiz: EDV },
         },
         data,
@@ -219,25 +221,25 @@ export default class AprendizService {
     });
   }
 
-  static async atualizarCompetencias(
+  static async atualizarIdiomas(
     EDV: number,
     Id_Profile: number,
-    data: AtualizarCompetenciasDto,
+    data: AtualizarIdiomasDto,
     usuarioEDV: number
   ) {
     return await prisma.$transaction(async (tx: any) => {
-      const competenciaAntigo = await tx.competencia.findUnique({
+      const idiomasAntigo = await tx.idiomas.findUnique({
         where: {
-            id: data.id,
+          id: data.id,
           profile: { EDV_Aprendiz: EDV },
         },
       });
-      if (!competenciaAntigo) {
+      if (!idiomasAntigo) {
         throw new Error("Perfil não encontrado.");
       }
-      const competenciaAtualizado = await tx.competencia.update({
+      const idiomasAtualizado = await tx.idiomas.update({
         where: {
-            id: data.id,
+          id: data.id,
           profile: { EDV_Aprendiz: EDV },
         },
         data,
@@ -246,14 +248,14 @@ export default class AprendizService {
       await this.registrarHistorico(
         tx,
         Id_Profile,
-        TipoHistorico.COMPETENCIA,
+        TipoHistorico.IDIOMA,
         data.id,
         usuarioEDV,
-        competenciaAntigo,
-        competenciaAtualizado
+        idiomasAntigo,
+        idiomasAtualizado
       );
 
-      return competenciaAtualizado;
+      return idiomasAtualizado;
     });
   }
 
@@ -266,7 +268,7 @@ export default class AprendizService {
     return await prisma.$transaction(async (tx: any) => {
       const cursosAntigo = await tx.cursos.findUnique({
         where: {
-          id:data.id,
+          id: data.id,
           profile: { EDV_Aprendiz: EDV },
         },
       });
@@ -275,7 +277,7 @@ export default class AprendizService {
       }
       const cursosAtualizado = await tx.cursos.update({
         where: {
-          id:data.id,
+          id: data.id,
           profile: { EDV_Aprendiz: EDV },
         },
         data,
@@ -291,6 +293,43 @@ export default class AprendizService {
       );
 
       return cursosAtualizado;
+    });
+  }
+  
+  static async atualizarSoftskills(
+    EDV: number,
+    Id_Profile: number,
+    data: AtualizarSoftSkillsDto,
+    usuarioEDV: number
+  ) {
+    return await prisma.$transaction(async (tx: any) => {
+      const softskillAntigo = await tx.softskills.findUnique({
+        where: {
+          id: data.id,
+          profile: { EDV_Aprendiz: EDV },
+        },
+      });
+      if (!softskillAntigo) {
+        throw new Error("Perfil não encontrado.");
+      }
+      const softskillAtualizado = await tx.softskills.update({
+        where: {
+          id: data.id,
+          profile: { EDV_Aprendiz: EDV },
+        },
+        data,
+      });
+      await this.registrarHistorico(
+        tx,
+        Id_Profile,
+        TipoHistorico.CURSO,
+        data.id,
+        usuarioEDV,
+        softskillAntigo,
+        softskillAtualizado
+      );
+
+      return softskillAtualizado;
     });
   }
 
