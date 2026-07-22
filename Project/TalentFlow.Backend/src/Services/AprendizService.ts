@@ -393,7 +393,7 @@ export default class AprendizService {
     });
   }
 
-  static async vercursos(EDV: number, id: number) {
+  static async verCursos(EDV: number, id: number) {
     return await prisma.cursos.findMany({
       where: {
         Id_Profile: id,
