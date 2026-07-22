@@ -12,6 +12,20 @@ import {
   AtualizarSoftSkillsDto,
 } from "../DTO/aprendizDTO.ts";
 
+type AprendizDashboard = Prisma.aprendizGetPayload<{
+  include: {
+    user: true;
+    profile: {
+      include: {
+        situacao_profissional: true;
+        competencia: true;
+        idiomas: true;
+        formacao_academica: true;
+      };
+    };
+  };
+}>;
+
 export default class AprendizService {
   //Metado para registrar tudo desde criar ate deletar
 
@@ -22,7 +36,7 @@ export default class AprendizService {
     idRegistro: number,
     usuario: number,
     antes: any,
-    depois: any
+    depois: any,
   ) {
     await tx.perfilhistorico.create({
       data: {
@@ -41,9 +55,9 @@ export default class AprendizService {
 
   static async criar(
     data: { EDV: number; Id_Turma: number },
-    usuarioEDV: number
+    usuarioEDV: number,
   ) {
-    return await prisma.$transaction(async (tx:any) => {
+    return await prisma.$transaction(async (tx: any) => {
       const criadoaprendiz = await tx.aprendiz.create({
         data: {
           EDV: data.EDV,
@@ -79,7 +93,7 @@ export default class AprendizService {
   static async atualizarPerfil(
     idPerfil: number,
     data: AtualizarPerfilDto,
-    usuarioEDV: number
+    usuarioEDV: number,
   ) {
     return await prisma.$transaction(async (tx: any) => {
       const perfilAntigo = await tx.profile.findUnique({
@@ -102,7 +116,7 @@ export default class AprendizService {
         idPerfil,
         usuarioEDV,
         perfilAntigo,
-        perfilAtualizado
+        perfilAtualizado,
       );
 
       return perfilAtualizado;
@@ -113,7 +127,7 @@ export default class AprendizService {
     EDV: number,
     Id_Profile: number,
     data: AtualizarFormacaoAcademicaDto,
-    usuarioEDV: number
+    usuarioEDV: number,
   ) {
     return await prisma.$transaction(async (tx: any) => {
       const formacaoAcademicaAntigo = await tx.formacao_academica.findUnique({
@@ -141,7 +155,7 @@ export default class AprendizService {
         data.id,
         usuarioEDV,
         formacaoAcademicaAntigo,
-        formacaoAcademicaAtualizado
+        formacaoAcademicaAtualizado,
       );
       return formacaoAcademicaAtualizado;
     });
@@ -151,7 +165,7 @@ export default class AprendizService {
     EDV: number,
     Id_Profile: number,
     data: AtualizarSituacaoProfissionalDto,
-    usuarioEDV: number
+    usuarioEDV: number,
   ) {
     return await prisma.$transaction(async (tx: any) => {
       const SituacaoProfissionalAntigo =
@@ -178,7 +192,7 @@ export default class AprendizService {
         null!,
         usuarioEDV,
         SituacaoProfissionalAntigo,
-        situacaoProfissionalAtualizado
+        situacaoProfissionalAtualizado,
       );
       return situacaoProfissionalAtualizado;
     });
@@ -188,7 +202,7 @@ export default class AprendizService {
     EDV: number,
     Id_Profile: number,
     data: AtualizarCompetenciasDto,
-    usuarioEDV: number
+    usuarioEDV: number,
   ) {
     return await prisma.$transaction(async (tx: any) => {
       const competenciaAntigo = await tx.competencia.findUnique({
@@ -215,7 +229,7 @@ export default class AprendizService {
         data.id,
         usuarioEDV,
         competenciaAntigo,
-        competenciaAtualizado
+        competenciaAtualizado,
       );
       return competenciaAtualizado;
     });
@@ -225,7 +239,7 @@ export default class AprendizService {
     EDV: number,
     Id_Profile: number,
     data: AtualizarIdiomasDto,
-    usuarioEDV: number
+    usuarioEDV: number,
   ) {
     return await prisma.$transaction(async (tx: any) => {
       const idiomasAntigo = await tx.idiomas.findUnique({
@@ -252,7 +266,7 @@ export default class AprendizService {
         data.id,
         usuarioEDV,
         idiomasAntigo,
-        idiomasAtualizado
+        idiomasAtualizado,
       );
 
       return idiomasAtualizado;
@@ -263,7 +277,7 @@ export default class AprendizService {
     EDV: number,
     Id_Profile: number,
     data: AtualizarCursosComplementaresDto,
-    usuarioEDV: number
+    usuarioEDV: number,
   ) {
     return await prisma.$transaction(async (tx: any) => {
       const cursosAntigo = await tx.cursos.findUnique({
@@ -289,18 +303,18 @@ export default class AprendizService {
         data.id,
         usuarioEDV,
         cursosAntigo,
-        cursosAtualizado
+        cursosAtualizado,
       );
 
       return cursosAtualizado;
     });
   }
-  
+
   static async atualizarSoftskills(
     EDV: number,
     Id_Profile: number,
     data: AtualizarSoftSkillsDto,
-    usuarioEDV: number
+    usuarioEDV: number,
   ) {
     return await prisma.$transaction(async (tx: any) => {
       const softskillAntigo = await tx.soft_skills.findUnique({
@@ -326,7 +340,7 @@ export default class AprendizService {
         data.id,
         usuarioEDV,
         softskillAntigo,
-        softskillAtualizado
+        softskillAtualizado,
       );
 
       return softskillAtualizado;
@@ -417,7 +431,7 @@ export default class AprendizService {
 }
 export class DashboardService {
   static async dashboardAprendiz() {
-    const aprendizes = await prisma.aprendiz.findMany({
+    const aprendizes: AprendizDashboard[] = await prisma.aprendiz.findMany({
       include: {
         user: true,
         profile: {
@@ -434,7 +448,7 @@ export class DashboardService {
     const totalAprendizes = aprendizes.length;
 
     const emEstagio = aprendizes.filter((aprendiz) =>
-      aprendiz.profile?.situacao_profissional.some((s) => s.cumprido_Estagio)
+      aprendiz.profile?.situacao_profissional.some((s) => s.cumprido_Estagio),
     ).length;
 
     const percentualEstagio =
@@ -442,10 +456,10 @@ export class DashboardService {
         ? Number(((emEstagio / totalAprendizes) * 100).toFixed(2))
         : 0;
 
-    const setores: any = {};
-    const competencias: any = {};
-    const idiomas: any = {};
-    const idades: any = {};
+    const setores: Record<string, number> = {};
+    const competencias: Record<string, number> = {};
+    const idiomas: Record<string, number> = {};
+    const idades: Record<number, number> = {};
 
     aprendizes.forEach((aprendiz) => {
       const nascimento = new Date(aprendiz.user.data_nascimento);
@@ -481,8 +495,8 @@ export class DashboardService {
       aprendiz.profile?.formacao_academica.some(
         (f) =>
           f.nivel_formacao === "GRADUACAO" ||
-          f.nivel_formacao === "POS_GRADUACAO"
-      )
+          f.nivel_formacao === "POS_GRADUACAO",
+      ),
     ).length;
 
     return {
@@ -532,7 +546,7 @@ export class DashboardService {
       idade,
     } = filtros;
 
-    let filtroIdade: any = undefined;
+    let filtroIdade = undefined;
 
     if (idade) {
       const hoje = new Date();
@@ -541,17 +555,18 @@ export class DashboardService {
         gte: new Date(
           hoje.getFullYear() - Number(idade) - 1,
           hoje.getMonth(),
-          hoje.getDate()
+          hoje.getDate(),
         ),
+
         lt: new Date(
           hoje.getFullYear() - Number(idade),
           hoje.getMonth(),
-          hoje.getDate()
+          hoje.getDate(),
         ),
       };
     }
 
-    return await prisma.aprendiz.findMany({
+    return prisma.aprendiz.findMany({
       where: {
         user: {
           name: nome
@@ -598,9 +613,7 @@ export class DashboardService {
             soft_skills: softskills
               ? {
                   some: {
-                    nome_SoftSkills: {
-                      contains: String(softskills),
-                    },
+                    nome_SoftSkills: softskills,
                   },
                 }
               : undefined,
@@ -618,9 +631,7 @@ export class DashboardService {
             situacao_profissional: setor
               ? {
                   some: {
-                    nome_Setor: {
-                      contains: String(setor),
-                    },
+                    nome_Setor: setor,
                   },
                 }
               : undefined,

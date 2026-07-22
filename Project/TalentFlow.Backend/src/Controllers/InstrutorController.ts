@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from "express";
+import { AuthRequest } from "../Middlewares/authMiddleware.ts";
 import InstrutorService from "../Services/InstrutorService.ts";
 
 
 export default class instrutorController {
     static async editarInstrutor(
-        req: Request,
+        req: AuthRequest,
         res: Response,
         next: NextFunction
     ) {
@@ -15,7 +16,8 @@ export default class instrutorController {
         const instrutor =
             await InstrutorService.editar(
                 Number(EDV),
-                req.body
+                req.body,
+                req.user!.EDV
             );
 
 

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import AprendizService from "../Services/AprendizService.ts";
+import AprendizService, { DashboardService } from "../Services/AprendizService.ts";
 import { AuthRequest } from "../Middlewares/authMiddleware.ts";
 
 export default class aprendizController {
@@ -43,7 +43,8 @@ export default class aprendizController {
     const formacaoAtualizada = await AprendizService.atualizarFormacaoAcademica(
       Number(EDV),
       Number(id),
-      req.body
+      req.body,
+      req.user!.EDV
     );
 
     return res.status(200).json({
@@ -64,7 +65,8 @@ export default class aprendizController {
       await AprendizService.atualizarSituacaoProfissional(
         Number(EDV),
         Number(id),
-        req.body
+        req.body,
+        req.user!.EDV
       );
 
     return res.status(200).json({
@@ -83,7 +85,8 @@ export default class aprendizController {
     const softskill = await AprendizService.atualizarSoftskills(
       Number(EDV),
       Number(id),
-      req.body
+      req.body,
+      req.user!.EDV
     );
 
     return res.status(200).json({
@@ -93,7 +96,7 @@ export default class aprendizController {
     });
   }
   static async atualizarCompetencias(
-    req: Request,
+    req: AuthRequest,
     res: Response,
     next: NextFunction
   ) {
@@ -102,7 +105,8 @@ export default class aprendizController {
     const competencia = await AprendizService.atualizarCompetencias(
       Number(EDV),
       Number(id),
-      req.body
+      req.body,
+      req.user!.EDV
     );
 
     return res.status(200).json({
@@ -113,7 +117,7 @@ export default class aprendizController {
   }
 
   static async atualizarIdiomas(
-    req: Request,
+    req: AuthRequest,
     res: Response,
     next: NextFunction
   ) {
@@ -122,17 +126,17 @@ export default class aprendizController {
     const idioma = await AprendizService.atualizarIdiomas(
       Number(EDV),
       Number(id),
-      req.body
+      req.body,
+      req.user!.EDV
     );
 
     return res.status(200).json({
       response: "Idioma atualizado com sucesso!",
-
       data: idioma,
     });
   }
   static async atualizarCursos(
-    req: Request,
+    req: AuthRequest,
     res: Response,
     next: NextFunction
   ) {
@@ -141,7 +145,8 @@ export default class aprendizController {
     const curso = await AprendizService.atualizarCursos(
       Number(EDV),
       Number(id),
-      req.body
+      req.body,
+      req.user!.EDV
     );
 
     return res.status(200).json({
@@ -164,7 +169,7 @@ export default class aprendizController {
     });
   }
   static async verFormacaoAcademica(
-    req: Request,
+    req: AuthRequest,
     res: Response,
     next: NextFunction
   ) {
@@ -180,7 +185,7 @@ export default class aprendizController {
     });
   }
   static async verSituacaoProfissional(
-    req: Request,
+    req: AuthRequest,
     res: Response,
     next: NextFunction
   ) {
@@ -209,7 +214,7 @@ export default class aprendizController {
     });
   }
   static async verCompetencias(
-    req: Request,
+    req: AuthRequest,
     res: Response,
     next: NextFunction
   ) {
@@ -247,7 +252,7 @@ export default class aprendizController {
     res: Response,
     next: NextFunction
   ) {
-    const dashboard = await AprendizService.filtrarApredizDashboart();
+    const dashboard = await DashboardService.dashboardAprendiz();
 
     return res.status(200).json(dashboard);
   }
@@ -256,7 +261,7 @@ export default class aprendizController {
     res: Response,
     next: NextFunction
   ) {
-    const aprendizes = await AprendizService.filtrarTudo(req.query);
+    const aprendizes = await DashboardService.filtrarTudo(req.query);
 
     return res.status(200).json(aprendizes);
   }

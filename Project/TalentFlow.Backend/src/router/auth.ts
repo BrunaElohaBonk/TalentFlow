@@ -1,63 +1,58 @@
 import express from "express";
-import { roleMiddleware } from "../Middlewares/roleMiddleware.ts"
-import { authMiddleware } from "../Middlewares/authMiddleware.ts"
+import { roleMiddleware } from "../Middlewares/roleMiddleware.ts";
+import { authMiddleware } from "../Middlewares/authMiddleware.ts";
 import AuthController from "../Controllers/authController.ts";
 import { validationMiddleware } from "../Middlewares/validationMiddleware.ts";
 import { loginRateLimit } from "../Middlewares/ratelimitMiddleware.ts";
-import { criarUserSchema } from "../DTO/schemas/instrutorSchema.ts"
+import { criarUserSchema } from "../DTO/schemas/instrutorSchema.ts";
 
 import {
-    loginSchema,
-    redefinirSenhaSchema,
-    esqueceuSenhaSchema,
-    primeiroAcessoSchema
+  loginSchema,
+  redefinirSenhaSchema,
+  esqueceuSenhaSchema,
+  primeiroAcessoSchema,
 } from "../DTO/schemas/authSchema.ts";
 
 const route = express.Router();
 
 route.post(
-    "/register",
-    validationMiddleware(criarUserSchema),
-    AuthController.register
+  "/register",
+  validationMiddleware(criarUserSchema),
+  AuthController.register,
 );
 
 route.post(
-    "/login",
-    loginRateLimit,
-    validationMiddleware(loginSchema),
-    AuthController.login
+  "/login",
+  loginRateLimit,
+  validationMiddleware(loginSchema),
+  AuthController.login,
 );
 
 route.post(
-    "/redefinirSenha",
-    validationMiddleware(redefinirSenhaSchema),
-    AuthController.redefinirSenha
+  "/redefinirSenha",
+  validationMiddleware(redefinirSenhaSchema),
+  AuthController.redefinirSenha,
 );
 
 route.post(
-    "/esqueceuSenha",
-    validationMiddleware(esqueceuSenhaSchema),
-    AuthController.esqueceuSenha
+  "/esqueceuSenha",
+  validationMiddleware(esqueceuSenhaSchema),
+  AuthController.esqueceuSenha,
 );
 
-
-route.post(
-    "/logout",
-    AuthController.logout
-);
-
+route.post("/logout", AuthController.logout);
 
 route.put(
-    "/deletarUser/:EDV",
-    authMiddleware,
-    roleMiddleware("INSTRUTOR"),
-    AuthController.DeletarUser
-)
+  "/deletarUser/:EDV",
+  authMiddleware,
+  roleMiddleware("INSTRUTOR"),
+  AuthController.DeletarUser,
+);
 
 route.post(
-    "/primeiroAcesso",
-    validationMiddleware(primeiroAcessoSchema),
-    AuthController.primeiroAcesso
+  "/primeiroAcesso",
+  validationMiddleware(primeiroAcessoSchema),
+  AuthController.primeiroAcesso,
 );
 
 export default route;

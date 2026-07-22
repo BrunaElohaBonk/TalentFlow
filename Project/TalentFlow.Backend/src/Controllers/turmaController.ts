@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { TurmaService } from "../Services/TurmaService.ts";
 import { CriarTurmaDTO } from "../DTO/turmaDTO.ts"
+import { AuthRequest } from "../Middlewares/authMiddleware.ts";
 
 
 export default class turmaController {
@@ -69,7 +70,7 @@ export default class turmaController {
 
 
     static async atualizarTurma(
-        req: Request,
+        req: AuthRequest,
         res: Response,
         next: NextFunction
     ): Promise<void> {
@@ -80,7 +81,8 @@ export default class turmaController {
         const turma =
             await TurmaService.atualizar(
                 Number(id),
-                req.body
+                req.body,
+                req.user!.EDV
             );
 
 
@@ -96,7 +98,7 @@ export default class turmaController {
     }
 
     static async deletarTurma(
-        req: Request,
+        req: AuthRequest,
         res: Response,
         next: NextFunction
     ): Promise<void> {
@@ -105,7 +107,8 @@ export default class turmaController {
 
 
         await TurmaService.deletar(
-            Number(id)
+            Number(id),
+            req.user!.EDV
         );
 
 
