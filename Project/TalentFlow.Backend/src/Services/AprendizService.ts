@@ -43,7 +43,7 @@ export default class AprendizService {
     data: { EDV: number; Id_Turma: number },
     usuarioEDV: number
   ) {
-    return await prisma.$transaction(async (tx) => {
+    return await prisma.$transaction(async (tx:any) => {
       const criadoaprendiz = await tx.aprendiz.create({
         data: {
           EDV: data.EDV,
