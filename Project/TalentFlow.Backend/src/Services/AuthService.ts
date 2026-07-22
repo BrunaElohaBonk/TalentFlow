@@ -7,7 +7,7 @@ import {
   AdicionarUserDto,
   EsqueceuSenhaDto,
   LoginDto,
-  RedefinirSenhaDto
+  RedefinirSenhaDto,
 } from "../DTO/authDTO.ts";
 import { Prisma, TipoHistorico } from "@prisma/client";
 export class UserJaExisteError extends Error {
@@ -48,26 +48,24 @@ export class PasswordMismatchError extends Error {
 }
 interface JWTPayload {
   EDV: number;
-  tipoUser:
-  | "APRENDIZ"
-  | "INSTRUTOR";
+  tipoUser: "APRENDIZ" | "INSTRUTOR";
   name: string;
 }
 
 type LoginResult =
   | {
-    primeiroAcesso: true;
-    redirectTo: string;
-  }
+      primeiroAcesso: true;
+      redirectTo: string;
+    }
   | {
-    token: string;
+      token: string;
 
-    user: {
-      EDV: number;
-      name: string;
-      tipoUser: string;
+      user: {
+        EDV: number;
+        name: string;
+        tipoUser: string;
+      };
     };
-  };
 
 export class UserService {
   private static getSecret() {
@@ -84,68 +82,47 @@ export class UserService {
   }
 
   private static formatarDataBR(data: Date): string {
+    const dia = String(data.getUTCDate()).padStart(2, "0");
 
-    const dia =
-      String(data.getUTCDate())
-        .padStart(2, "0");
+    const mes = String(data.getUTCMonth() + 1).padStart(2, "0");
 
-
-    const mes =
-      String(data.getUTCMonth() + 1)
-        .padStart(2, "0");
-
-
-    const ano =
-      data.getUTCFullYear();
-
+    const ano = data.getUTCFullYear();
 
     return `${dia}/${mes}/${ano}`;
-
   }
 
-  static async register(data: AdicionarUserDto,  usuarioLogado: { EDV: number;name: string;}) 
-  {
-    const passwordCrypt =
-      await bcrypt.hash(
-        data.password_login,
-        10
-      );
+  static async register(data: AdicionarUserDto) {
+    const passwordCrypt = await bcrypt.hash(data.password_login, 10);
 
     try {
       return await prisma.$transaction(async (tx) => {
-      const user = await prisma.user.create({
-        data: {
-          EDV: data.EDV,
-          tipoUser: data.tipoUser,
-          name: data.name,
-          data_nascimento:
-            this.converterDataBR(
-              data.data_nascimento
-            ),
-          user_bosch:
-            data.user_bosch,
-          contato:
-            data.contato,
-          email_bosch:
-            data.email_bosch,
-          password_login:
-            passwordCrypt,
-        }
-      });
-      await tx.perfilhistorico.create({
-        data: {
+        const user = await prisma.user.create({
+          data: {
+            EDV: data.EDV,
+            tipoUser: data.tipoUser,
+            name: data.name,
+            data_nascimento: this.converterDataBR(data.data_nascimento),
+            user_bosch: data.user_bosch,
+            contato: data.contato,
+            email_bosch: data.email_bosch,
+            password_login: passwordCrypt,
+          },
+        });
+        await tx.perfilhistorico.create({
+          data: {
             Id_Profile: null,
             Tipo: TipoHistorico.DADOS_INSTRUTOR,
             IdRegistro: user.EDV,
             Acao: "CREATE",
-            EDVAlteradoPor: usuarioLogado.EDV,
+            // EDVAlteradoPor: usuarioLogado.EDV,
             Dados: {
-                user:null
-            }
-          }});     
+              user: null,
+            },
+          },
+        });
 
-    return user;
-});
+        return user;
+      });
     } catch (error: any) {
       if (error.code === "P2002") {
         throw new UserJaExisteError();
@@ -156,203 +133,156 @@ export class UserService {
 
   static async deletar(
     EDV: number,
-    usuarioLogado: { EDV: number;name: string;}
+    usuarioLogado: { EDV: number; name: string }
   ) {
     return await prisma.$transaction(async (tx) => {
-    const user = await prisma.user.update({
+      const user = await prisma.user.update({
         where: { EDV },
-        data: { Ativo: false }
+        data: { Ativo: false },
       });
 
-    await tx.perfilhistorico.create({
-      data: {
+      await tx.perfilhistorico.create({
+        data: {
           Id_Profile: null,
           Tipo: TipoHistorico.DADOS_INSTRUTOR,
           IdRegistro: user.EDV,
           Acao: "DELETE",
           EDVAlteradoPor: usuarioLogado.EDV,
           Dados: {
-              user
-          }
-        }}); 
+            user,
+          },
+        },
+      });
       return user;
-    }); 
+    });
   }
 
-  static async login(
-    data: LoginDto
-  ): Promise<LoginResult> {
-    const user =
-      await prisma.user.findUnique({
-        where: {
-          EDV: data.EDV
-        }
-      });
+  static async login(data: LoginDto): Promise<LoginResult> {
+    const user = await prisma.user.findUnique({
+      where: {
+        EDV: data.EDV,
+      },
+    });
     if (!user) {
       throw new UserNotFoundError();
     }
-    const primeiroAcesso =
-      this.formatarDataBR(
-        user.data_nascimento
-      );
+    const primeiroAcesso = this.formatarDataBR(user.data_nascimento);
     if (data.password === primeiroAcesso) {
       return {
         primeiroAcesso: true,
-        redirectTo: "/trocar-senha"
+        redirectTo: "/trocar-senha",
       };
     }
 
-    const senhaValida =
-      await bcrypt.compare(
-        data.password,
-        user.password_login
-      );
+    const senhaValida = await bcrypt.compare(
+      data.password,
+      user.password_login
+    );
     if (!senhaValida) {
       throw new InvalidCredentialsError();
     }
 
-    const token =
-      jwt.sign(
-        {
-          EDV: user.EDV,
-          tipoUser: user.tipoUser,
-          name: user.name
-        },
-        this.getSecret(),
-        {
-          expiresIn: "2d"
-        }
-      );
+    const token = jwt.sign(
+      {
+        EDV: user.EDV,
+        tipoUser: user.tipoUser,
+        name: user.name,
+      },
+      this.getSecret(),
+      {
+        expiresIn: "2d",
+      }
+    );
     return {
       token,
       user: {
         EDV: user.EDV,
         name: user.name,
-        tipoUser: user.tipoUser
-      }
+        tipoUser: user.tipoUser,
+      },
     };
   }
 
-  static async primeiroAcesso(
-    data: {
-      EDV: number;
-      email: string;
-      password: string;
-      confirmPassword: string;
-    }
-  ): Promise<void> {
+  static async primeiroAcesso(data: {
+    EDV: number;
+    email: string;
+    password: string;
+    confirmPassword: string;
+  }): Promise<void> {
     if (data.password !== data.confirmPassword) {
       throw new PasswordMismatchError();
     }
-    const user =
-      await prisma.user.findUnique({
-        where: {
-          EDV: data.EDV
-        }
-      });
+    const user = await prisma.user.findUnique({
+      where: {
+        EDV: data.EDV,
+      },
+    });
     if (!user) {
       throw new UserNotFoundError();
     }
-    const senhaCrypt =
-      await bcrypt.hash(
-        data.password,
-        10
-      );
+    const senhaCrypt = await bcrypt.hash(data.password, 10);
     await prisma.user.update({
       where: {
-        EDV: data.EDV
+        EDV: data.EDV,
       },
       data: {
         email_bosch: data.email,
-        password_login: senhaCrypt
-      }
+        password_login: senhaCrypt,
+      },
     });
   }
-  static async redefinirSenha(
-    data: RedefinirSenhaDto
-  ): Promise<void> {
-    if (
-      !data.token ||
-      !data.password ||
-      !data.confirmPassword
-    ) {
-      throw new Error(
-        "Campos obrigatórios ausentes"
-      );
+  static async redefinirSenha(data: RedefinirSenhaDto): Promise<void> {
+    if (!data.token || !data.password || !data.confirmPassword) {
+      throw new Error("Campos obrigatórios ausentes");
     }
-    if (
-      data.password !==
-      data.confirmPassword
-    ) {
+    if (data.password !== data.confirmPassword) {
       throw new PasswordMismatchError();
     }
     let decoded: JWTPayload;
     try {
-      decoded =
-        jwt.verify(
-          data.token,
-          this.getSecret()
-        ) as JWTPayload;
+      decoded = jwt.verify(data.token, this.getSecret()) as JWTPayload;
     } catch {
       throw new InvalidTokenError();
     }
-    const user =
-      await prisma.user.findUnique({
-
-        where: {
-          EDV: decoded.EDV
-        }
-      });
+    const user = await prisma.user.findUnique({
+      where: {
+        EDV: decoded.EDV,
+      },
+    });
     if (!user) {
-
       throw new UserNotFoundError();
-
     }
-    const senhaCrypt =
-      await bcrypt.hash(
-        data.password,
-        10
-      );
+    const senhaCrypt = await bcrypt.hash(data.password, 10);
     await prisma.user.update({
       where: {
-        EDV: decoded.EDV
+        EDV: decoded.EDV,
       },
       data: {
-        password_login:
-          senhaCrypt
-      }
+        password_login: senhaCrypt,
+      },
     });
   }
-  static async esqueceuSenha(
-    data: EsqueceuSenhaDto
-  ): Promise<void> {
-    const user =
-      await prisma.user.findUnique({
-        where: {
-          email_bosch: data.email
-        }
-      });
+  static async esqueceuSenha(data: EsqueceuSenhaDto): Promise<void> {
+    const user = await prisma.user.findUnique({
+      where: {
+        email_bosch: data.email,
+      },
+    });
     if (!user) {
       return;
     }
-    const resetToken =
-      jwt.sign(
-        {
-          EDV: user.EDV
-        },
-        this.getSecret(),
-        {
-          expiresIn: "1h"
-        }
-      );
-    console.log("TOKEN GERADO:", resetToken);
-    const linkReset =
-      `http://localhost:3000/redefinir-senha?token=${resetToken}`;
-
-    await EmailService.enviarEmail(
-      data.email,
-      linkReset
+    const resetToken = jwt.sign(
+      {
+        EDV: user.EDV,
+      },
+      this.getSecret(),
+      {
+        expiresIn: "1h",
+      }
     );
+    console.log("TOKEN GERADO:", resetToken);
+    const linkReset = `http://localhost:3000/redefinir-senha?token=${resetToken}`;
+
+    await EmailService.enviarEmail(data.email, linkReset);
   }
 }
-

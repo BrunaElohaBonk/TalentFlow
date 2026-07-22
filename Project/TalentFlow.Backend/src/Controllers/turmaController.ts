@@ -13,6 +13,7 @@ export default class turmaController {
     ): Promise<void> {
 
         const data: CriarTurmaDTO = req.body;
+        console.log(data)
         const turma =
             await TurmaService.criar({
                 nomeTurma: data.nomeTurma,

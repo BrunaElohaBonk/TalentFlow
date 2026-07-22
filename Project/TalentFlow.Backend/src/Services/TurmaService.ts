@@ -9,15 +9,15 @@ export class TurmaNotFoundError extends Error {
 }
 
 export class TurmaService {
-  static async criar(data: CriarTurmaDTO, id_turma: number, usuarioLogado: { EDV: number; name: string; }) {
+  static async criar(data: CriarTurmaDTO) {
     return await prisma.$transaction(async (tx) => {
 
       const turma = await prisma.turma.create({ data, });
       await tx.turmahistorico.create({
         data: {
-          Id_Turma: id_turma,
+          Id_Turma: turma.id,
           acao: "CREATE",
-          EDVAlteradoPor: usuarioLogado.EDV,
+          EDVAlteradoPor: data.EDV_Instrutor,
           dados: {
             turma: null
           }

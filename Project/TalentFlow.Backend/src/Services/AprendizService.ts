@@ -30,9 +30,7 @@ export default class AprendizService {
         });
     }
 
-    static async criar(data: { EDV: number; Id_Turma: number; },
-        usuarioLogado: { EDV: number; name: string; }
-    ) {
+    static async criar(data: { EDV: number; Id_Turma: number; }, usuarioEDV: number) {
         return await prisma.$transaction(async (tx) => {
 
             const criadoaprendiz = await tx.aprendiz.create({
@@ -56,7 +54,7 @@ export default class AprendizService {
                     Tipo: TipoHistorico.PROFILE,
                     IdRegistro: criadoaprendiz.profile?.id,
                     Acao: "CREATE",
-                    EDVAlteradoPor: usuarioLogado.EDV,
+                    EDVAlteradoPor: usuarioEDV,
                     Dados: {
                         criadoaprendiz: null
                     }
