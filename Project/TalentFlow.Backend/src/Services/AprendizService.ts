@@ -303,7 +303,7 @@ export default class AprendizService {
     usuarioEDV: number
   ) {
     return await prisma.$transaction(async (tx: any) => {
-      const softskillAntigo = await tx.softskills.findUnique({
+      const softskillAntigo = await tx.soft_skills.findUnique({
         where: {
           id: data.id,
           profile: { EDV_Aprendiz: EDV },
@@ -312,7 +312,7 @@ export default class AprendizService {
       if (!softskillAntigo) {
         throw new Error("Perfil não encontrado.");
       }
-      const softskillAtualizado = await tx.softskills.update({
+      const softskillAtualizado = await tx.soft_skills.update({
         where: {
           id: data.id,
           profile: { EDV_Aprendiz: EDV },
@@ -382,8 +382,8 @@ export default class AprendizService {
     });
   }
 
-  static async verCompetencias(EDV: number, id: number) {
-    return await prisma.competencia.findMany({
+  static async verIdiomas(EDV: number, id: number) {
+    return await prisma.idiomas.findMany({
       where: {
         Id_Profile: id,
         profile: {
@@ -404,8 +404,8 @@ export default class AprendizService {
     });
   }
 
-  static async verCursos(EDV: number, id: number) {
-    return await prisma.cursos.findMany({
+  static async verSoftskills(EDV: number, id: number) {
+    return await prisma.soft_skills.findMany({
       where: {
         Id_Profile: id,
         profile: {
