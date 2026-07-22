@@ -4,172 +4,196 @@ import { authMiddleware } from "../Middlewares/authMiddleware.ts";
 import { roleMiddleware } from "../Middlewares/roleMiddleware.ts";
 import { ownerMiddleware } from "../Middlewares/ownerMiddleware.ts";
 import { validationMiddleware } from "../Middlewares/validationMiddleware.ts";
-
+import { upload } from "../Middlewares/uploadMiddleware.ts";
 import {
-    criarAprendizSchema,
-    atualizarPerfilSchema,
-    atualizarSituacaoProfissionalSchema,
-    atualizarFormacaoSchema,
-    atualizarSoftSkillsSchema,
-    atualizarCompetenciaSchema,
-    atualizarIdiomaSchema,
-    atualizarCursoSchema
+  criarAprendizSchema,
+  atualizarPerfilSchema,
+  atualizarSituacaoProfissionalSchema,
+  atualizarFormacaoSchema,
+  atualizarSoftSkillsSchema,
+  atualizarCompetenciaSchema,
+  atualizarIdiomaSchema,
+  atualizarCursoSchema,
 } from "../DTO/schemas/aprendizSchema.ts";
 
 const route = express.Router();
 route.post(
-    "/criar",
-    authMiddleware,
-    roleMiddleware("INSTRUTOR"),
-    validationMiddleware(criarAprendizSchema),
-    aprendizController.criar
+  "/criar",
+  authMiddleware,
+  roleMiddleware("INSTRUTOR"),
+  validationMiddleware(criarAprendizSchema),
+  aprendizController.criar,
 );
 
 route.get(
-    "/perfil/:EDV/:id",
-    authMiddleware,
-    roleMiddleware("INSTRUTOR"),
-    aprendizController.verPerfil
+  "/perfil/:EDV/:id",
+  authMiddleware,
+  roleMiddleware("INSTRUTOR"),
+  aprendizController.verPerfil,
 );
 
 route.put(
-    "/atualizarPerfil/:EDV/:idPerfil",
-    authMiddleware,
-    roleMiddleware("APRENDIZ"),
-    ownerMiddleware,
-    validationMiddleware(atualizarPerfilSchema),
-    aprendizController.atualizarPerfil
+  "/atualizarPerfil/:EDV/:idPerfil",
+  authMiddleware,
+  roleMiddleware("APRENDIZ"),
+  ownerMiddleware,
+  validationMiddleware(atualizarPerfilSchema),
+  aprendizController.atualizarPerfil,
 );
 
 route.put(
-    "/atualizarFormacaoAcademica/:EDV/:id",
-    authMiddleware,
-    roleMiddleware("APRENDIZ"),
-    ownerMiddleware,
-    validationMiddleware(atualizarFormacaoSchema),
-    aprendizController.atualizarFormacaoAcademica
-);
-
-
-
-route.put(
-    "/atualizarSituacaoProfissional/:EDV/:id",
-    authMiddleware,
-    roleMiddleware("APRENDIZ"),
-    ownerMiddleware,
-    validationMiddleware(atualizarSituacaoProfissionalSchema),
-    aprendizController.atualizarSituacaoProfissional
+  "/atualizarFormacaoAcademica/:EDV/:id",
+  authMiddleware,
+  roleMiddleware("APRENDIZ"),
+  ownerMiddleware,
+  validationMiddleware(atualizarFormacaoSchema),
+  aprendizController.atualizarFormacaoAcademica,
 );
 
 route.put(
-    "/atualizarSoftskills/:EDV/:id",
-    authMiddleware,
-    roleMiddleware("APRENDIZ"),
-    ownerMiddleware,
-    validationMiddleware(atualizarSoftSkillsSchema),
-    aprendizController.atualizarSoftskills
+  "/atualizarSituacaoProfissional/:EDV/:id",
+  authMiddleware,
+  roleMiddleware("APRENDIZ"),
+  ownerMiddleware,
+  validationMiddleware(atualizarSituacaoProfissionalSchema),
+  aprendizController.atualizarSituacaoProfissional,
 );
 
 route.put(
-    "/atualizarCompetencias/:EDV/:id",
-    authMiddleware,
-    roleMiddleware("APRENDIZ"),
-    ownerMiddleware,
-    validationMiddleware(atualizarCompetenciaSchema),
-    aprendizController.atualizarCompetencias
-);
-
-
-
-route.put(
-    "/atualizarIdiomas/:EDV/:id",
-    authMiddleware,
-    roleMiddleware("APRENDIZ"),
-    ownerMiddleware,
-    validationMiddleware(atualizarIdiomaSchema),
-    aprendizController.atualizarIdiomas
+  "/atualizarSoftskills/:EDV/:id",
+  authMiddleware,
+  roleMiddleware("APRENDIZ"),
+  ownerMiddleware,
+  validationMiddleware(atualizarSoftSkillsSchema),
+  aprendizController.atualizarSoftskills,
 );
 
 route.put(
-    "/atualizarCursos/:EDV/:id",
+  "/atualizarCompetencias/:EDV/:id",
+  authMiddleware,
+  roleMiddleware("APRENDIZ"),
+  ownerMiddleware,
+  validationMiddleware(atualizarCompetenciaSchema),
+  aprendizController.atualizarCompetencias,
+);
+
+route.put(
+  "/foto/:EDV",
+  authMiddleware,
+  roleMiddleware("APRENDIZ"),
+  upload.single("foto"),
+  aprendizController.atualizarFoto,
+);
+route.put(
+    "/idioma/certificado/:id",
     authMiddleware,
     roleMiddleware("APRENDIZ"),
-    ownerMiddleware,
-    validationMiddleware(atualizarCursoSchema),
-    aprendizController.atualizarCursos
+    upload.single("certificado"),
+    aprendizController.adicionarCertificadoIdioma
 );
 
-
-route.get(
-    "/meuPerfil/:EDV/:id",
+route.put(
+    "/formacao/certificado/:id",
     authMiddleware,
     roleMiddleware("APRENDIZ"),
-    ownerMiddleware,
-    aprendizController.verPerfil
+    upload.single("certificado"),
+    aprendizController.adicionarCertificadoFormacao
 );
 
-route.get(
-    "/minhaFormacao/:EDV/:id",
+route.put(
+    "/curso/certificado/:id",
     authMiddleware,
     roleMiddleware("APRENDIZ"),
-    ownerMiddleware,
-    aprendizController.verFormacaoAcademica
+    upload.single("certificado"),
+    aprendizController.adicionarCertificadoCurso
+);
+
+route.put(
+  "/atualizarIdiomas/:EDV/:id",
+  authMiddleware,
+  roleMiddleware("APRENDIZ"),
+  ownerMiddleware,
+  validationMiddleware(atualizarIdiomaSchema),
+  aprendizController.atualizarIdiomas,
+);
+
+route.put(
+  "/atualizarCursos/:EDV/:id",
+  authMiddleware,
+  roleMiddleware("APRENDIZ"),
+  ownerMiddleware,
+  validationMiddleware(atualizarCursoSchema),
+  aprendizController.atualizarCursos,
 );
 
 route.get(
-    "/minhaSituacao/:EDV/:id",
-    authMiddleware,
-    roleMiddleware("APRENDIZ"),
-    ownerMiddleware,
-    aprendizController.verSituacaoProfissional
+  "/meuPerfil/:EDV/:id",
+  authMiddleware,
+  roleMiddleware("APRENDIZ"),
+  ownerMiddleware,
+  aprendizController.verPerfil,
 );
 
 route.get(
-    "/minhasSoftskills/:EDV/:id",
-    authMiddleware,
-    roleMiddleware("APRENDIZ"),
-    ownerMiddleware,
-    aprendizController.verSoftskills
+  "/minhaFormacao/:EDV/:id",
+  authMiddleware,
+  roleMiddleware("APRENDIZ"),
+  ownerMiddleware,
+  aprendizController.verFormacaoAcademica,
 );
 
 route.get(
-    "/minhasCompetencias/:EDV/:id",
-    authMiddleware,
-    roleMiddleware("APRENDIZ"),
-    ownerMiddleware,
-    aprendizController.verCompetencias
+  "/minhaSituacao/:EDV/:id",
+  authMiddleware,
+  roleMiddleware("APRENDIZ"),
+  ownerMiddleware,
+  aprendizController.verSituacaoProfissional,
 );
 
 route.get(
-    "/meusIdiomas/:EDV/:id",
-    authMiddleware,
-    roleMiddleware("APRENDIZ"),
-    ownerMiddleware,
-    aprendizController.verIdiomas
+  "/minhasSoftskills/:EDV/:id",
+  authMiddleware,
+  roleMiddleware("APRENDIZ"),
+  ownerMiddleware,
+  aprendizController.verSoftskills,
 );
 
 route.get(
-    "/meusCursos/:EDV/:id",
-    authMiddleware,
-    roleMiddleware("APRENDIZ"),
-    ownerMiddleware,
-    aprendizController.verCursos
+  "/minhasCompetencias/:EDV/:id",
+  authMiddleware,
+  roleMiddleware("APRENDIZ"),
+  ownerMiddleware,
+  aprendizController.verCompetencias,
 );
 
 route.get(
-    "/dashboard",
-    authMiddleware,
-    roleMiddleware("INSTRUTOR"),
-    aprendizController.filtrarApredizDashboart
+  "/meusIdiomas/:EDV/:id",
+  authMiddleware,
+  roleMiddleware("APRENDIZ"),
+  ownerMiddleware,
+  aprendizController.verIdiomas,
 );
 
-
+route.get(
+  "/meusCursos/:EDV/:id",
+  authMiddleware,
+  roleMiddleware("APRENDIZ"),
+  ownerMiddleware,
+  aprendizController.verCursos,
+);
 
 route.get(
-    "/filtros",
-    authMiddleware,
-    roleMiddleware("INSTRUTOR"),
-    aprendizController.filtrarTudoAprendiz
+  "/dashboard",
+  authMiddleware,
+  roleMiddleware("INSTRUTOR"),
+  aprendizController.filtrarApredizDashboart,
+);
+
+route.get(
+  "/filtros",
+  authMiddleware,
+  roleMiddleware("INSTRUTOR"),
+  aprendizController.filtrarTudoAprendiz,
 );
 
 export default route;

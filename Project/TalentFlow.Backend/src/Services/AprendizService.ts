@@ -52,6 +52,76 @@ export default class AprendizService {
       },
     });
   }
+  static async adicionarCertificadoCurso(
+    id: number,
+    certificado: string | undefined,
+  ) {
+    if (!certificado) {
+      throw new Error("Certificado não enviado");
+    }
+
+    return await prisma.cursos.update({
+      where: {
+        id,
+      },
+
+      data: {
+        certificado,
+      },
+    });
+  }
+  static async adicionarCertificadoFormacao(
+    id: number,
+    certificado: string | undefined,
+  ) {
+    if (!certificado) {
+      throw new Error("Certificado não enviado");
+    }
+
+    return await prisma.formacao_academica.update({
+      where: {
+        id,
+      },
+
+      data: {
+        certificado,
+      },
+    });
+  }
+  static async adicionarCertificadoIdioma(
+    id: number,
+    certificado: string | undefined,
+  ) {
+    if (!certificado) {
+      throw new Error("Certificado não enviado");
+    }
+
+    return await prisma.idiomas.update({
+      where: {
+        id,
+      },
+
+      data: {
+        certificado,
+      },
+    });
+  }
+
+  static async atualizarFoto(EDV: number, foto: string | undefined) {
+    if (!foto) {
+      throw new Error("Imagem não enviada");
+    }
+
+    return await prisma.user.update({
+      where: {
+        EDV: EDV,
+      },
+
+      data: {
+        fotoPerfil: foto,
+      },
+    });
+  }
 
   static async criar(
     data: { EDV: number; Id_Turma: number },
