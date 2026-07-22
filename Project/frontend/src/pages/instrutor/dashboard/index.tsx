@@ -8,7 +8,7 @@ import { aprendizes } from "../verAprendiz/aprendizes";
 import { GraficoSetor, GraficoEstagio, GraficoSuperior, GraficoCompetencias, GraficoIdiomas } from "./graficos";
 
 function Dashboard() {
-    const [busca, setBusca] = useState("");
+    const [busca] = useState("");
     const [filtro, setFiltro] = useState(false)
     const Idade = (dataNascimento: Date) => {
         const hoje = new Date();

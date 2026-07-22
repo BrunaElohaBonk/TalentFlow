@@ -10,6 +10,10 @@
     z-index:9999;
 }
 
+body.dark .competenciaVisualizar-card{
+    background-color: #242424;
+    color: white;
+}
 .competenciaVisualizar-card {
     width:600px;
     background:white;

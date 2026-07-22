@@ -8,9 +8,9 @@ import { useDropzone } from "react-dropzone";
 import "react-datepicker/dist/react-datepicker.css";
 
 interface IPerfil {
-    img: File | null;
+    img: File | string | null;
     name: string;
-    edv: number | null;
+    edv: number;
     email: string;
     user: string;
     contato: string;
@@ -56,7 +56,7 @@ function EditarPerfil({ visible, setVisible, edv }: Props){
     const [perfil, setPerfil] = useState<IPerfil>({
         img: null,
         name: '',
-        edv: null,
+        edv: 0,
         email: '',
         user: '',
         contato: '',
@@ -82,6 +82,26 @@ function EditarPerfil({ visible, setVisible, edv }: Props){
             console.error('Erro:', e);
         }
     };
+    useEffect(() => {
+        if (!visible) return;
+
+        const usuarioSalvo = localStorage.getItem("usuario");
+
+        if (usuarioSalvo) {
+            const usuario = JSON.parse(usuarioSalvo);
+
+            setPerfil({
+                img: null,
+                name: usuario.nome,
+                edv: Number(usuario.edv),
+                email: usuario.email,
+                user: usuario.user,
+                contato: formatarContato(usuario.contato),
+                nascimento: usuario.dataNascimento,
+            });
+        }
+        fetchPerfil();
+    }, [visible]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setPerfil({
@@ -146,40 +166,21 @@ function EditarPerfil({ visible, setVisible, edv }: Props){
         }
     }
 
-    useEffect(() => {
-        if (visible) {
-            fetchPerfil();
-        }
-    }, [visible]);
-
-    const handleNascimento = (e: React.ChangeEvent<HTMLInputElement>) => {
-        let value = e.target.value.replace(/\D/g, "");
-        if (value.length > 8) {
-            value = value.slice(0, 8);
-        }
-        if (value.length > 2) {
-            value = value.replace(/^(\d{2})(\d)/, "$1/$2");
-        }
-        if (value.length > 5) {
-            value = value.replace(/^(\d{2})\/(\d{2})(\d)/, "$1/$2/$3");
-        }
-        setPerfil({
-            ...perfil,
-            nascimento: value
-        });
-    };
-
-    const handleContato = (e: React.ChangeEvent<HTMLInputElement>) => {
-        let value = e.target.value.replace(/\D/g, "");
+    const formatarContato = (contato: string | number) => {
+        let value = String(contato).replace(/\D/g, "");
         if (value.length > 11) {
             value = value.slice(0, 11);
         }
         value = value.replace(/^(\d{2})(\d)/, "($1) $2");
         value = value.replace(/(\d{5})(\d)/, "$1-$2");
-        setPerfil({
-            ...perfil,
-            contato: value
-        });
+        return value;
+    };
+
+    const handleContato = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setPerfil((prev) => ({
+            ...prev,
+            contato: formatarContato(e.target.value),
+        }));
     };
 
     if (!visible) return null;

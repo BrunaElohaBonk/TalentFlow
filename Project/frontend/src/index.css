@@ -38,3 +38,42 @@ body,
 .swal2-container {
     z-index: 20000 !important;
 }
+
+body.dark .swal2-popup {
+    background-color: #242424 !important;
+    color: white !important;
+}
+
+body.dark .swal2-title {
+    color: white !important;
+}
+
+body.dark .swal2-html-container {
+    color: #ddd !important;
+}
+
+body {
+    background-color: #ffffff;
+    color: #222;
+    transition: .3s;
+}
+
+
+body.dark {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+:root {
+    --bg: #ffffff;
+    --primary: #000;
+    --primaryT: rgba(0,0,0,0.2);
+    --transDur: 0.3s;
+}
+
+body.dark {
+    --bg: #121212;
+    --primary: #ffffff;
+    --primaryT: rgba(255,255,255,0.3);
+}
+

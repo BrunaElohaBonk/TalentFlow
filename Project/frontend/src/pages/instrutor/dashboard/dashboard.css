@@ -67,6 +67,15 @@
     grid-column: span 2;
 }
 
+body.dark .dashboard-card{
+    background-color: #242424;
+    color: #ffffff;
+}
+
+body.dark .grafico-titulo{
+    color: white;
+}
+
 .dashboard-card {
     padding: 20px;
     border-radius: 15px;

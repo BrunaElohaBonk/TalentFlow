@@ -25,7 +25,7 @@ function SituacaoProfissional({visible, setVisible, situacao}: Props) {
                 <div className="situacao-card" onClick={(e) => e.stopPropagation()}>
 
                     <div className="situacao-header">
-                        <h2>
+                        <h2 className='formacao-lista-titulo'>
                             Situação Profissional
                         </h2>
 
@@ -44,7 +44,7 @@ function SituacaoProfissional({visible, setVisible, situacao}: Props) {
                     <div className="situacao-conteudo">
 
                         <div className="situacao-item">
-                            <span>
+                            <span className='formacao-titulo'>
                                 Nome do Setor
                             </span>
                             <p>
@@ -54,7 +54,7 @@ function SituacaoProfissional({visible, setVisible, situacao}: Props) {
 
 
                         <div className="situacao-item">
-                            <span>
+                            <span className='formacao-titulo'>
                                 Nome do Líder
                             </span>
                             <p>
@@ -64,7 +64,7 @@ function SituacaoProfissional({visible, setVisible, situacao}: Props) {
 
 
                         <div className="situacao-item">
-                            <span>
+                            <span className='formacao-titulo'>
                                 Cumprindo Estágio?
                             </span>
                             <p>
@@ -75,7 +75,7 @@ function SituacaoProfissional({visible, setVisible, situacao}: Props) {
 
                         <div className="situacao-item situacao-descricao">
 
-                            <span>
+                            <span className='formacao-titulo'>
                                 Situação atual e expectativas para o futuro
                             </span>
 

@@ -12,6 +12,11 @@
     overflow: hidden;
 }
 
+body.dark .instrutor-modal{
+    background-color: #242424;
+    color: white;
+}
+
 .instrutor-body {
     position: relative;
     flex: 1;

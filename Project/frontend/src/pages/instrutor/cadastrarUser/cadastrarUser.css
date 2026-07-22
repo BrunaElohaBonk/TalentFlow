@@ -33,7 +33,16 @@
     flex: 1;
     overflow: hidden;
 }
- 
+
+body.dark .user-form{
+    background-color: #242424;
+    color: white;
+}
+
+body.dark .user-titulo{
+    color: white;
+}
+
 .user-body {
     display: flex;
     align-items: center;

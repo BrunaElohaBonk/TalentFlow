@@ -12,6 +12,11 @@
     overflow: hidden;
 }
 
+body.dark .turma-modal{
+    background-color: #242424;
+    color: white;
+}
+
 .turma-body {
     flex: 1;
     overflow: auto;

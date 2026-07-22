@@ -10,6 +10,31 @@
     display: flex;
     /* min-height: 94vh; */
 }
+.sidebar-container,
+.sidebar-corpo,
+.sidebar-link {
+    transition: 
+        background-color 0.3s ease,
+        color 0.3s ease,
+        border-color 0.3s ease;
+}
+
+body.dark .sidebar-corpo {
+    background-color: #121212;
+    color: rgb(228, 228, 228);
+}   
+
+body.dark .sidebar-link {
+    color: #818181;
+}
+
+body.dark .sidebar-link:hover {
+    color: #ffffff;
+}
+
+body.dark .sidebar-link.active {
+    color: #ffffff;
+}
 
 .sidebar-container{
     display: flex;

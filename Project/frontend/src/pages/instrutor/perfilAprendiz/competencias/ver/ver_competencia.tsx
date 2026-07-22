@@ -24,7 +24,7 @@ function CompetenciaVisualizar({
         <div className="competenciaVisualizar-overlay" onClick={() => setVisible(false)}>
             <div className="competenciaVisualizar-card" onClick={(e) => e.stopPropagation()}>
                 <div className="competenciaVisualizar-header">
-                    <h2>Competência</h2>
+                    <h2 className='formacao-lista-titulo'>Competência</h2>
                     <div className="competenciaVisualizar-acoes">
                         <button className="competenciaVisualizar-fechar" onClick={() => setVisible(false)}>
                             <img src={icon_fechar} alt="Fechar"/>
@@ -33,11 +33,11 @@ function CompetenciaVisualizar({
                 </div>
                 <div className="competenciaVisualizar-conteudo">
                     <div className="competenciaVisualizar-item">
-                        <span>Nome da Competência</span>
+                        <span className='formacao-titulo'>Nome da Competência</span>
                         <p>{competencia.nome || "Não informado."}</p>
                     </div>
                     <div className="competenciaVisualizar-item">
-                        <span>Nível</span>
+                        <span className='formacao-titulo'>Nível</span>
                         <p>{competencia.nivel || "Não informado."}</p>
                     </div>
                 </div>

@@ -12,6 +12,11 @@
     overflow: hidden;
 }
 
+body.dark .aprendiz-modal{
+    background-color: #242424;
+    color: white;
+}
+
 .aprendiz-body {
     position: relative;
     flex: 1;

@@ -28,6 +28,11 @@
     justify-content: center;
 }
 
+body.dark .dadosAprendiz-bloco{
+    background-color: #242424;
+    color: white;
+}
+
 .dadosAprendiz-bloco {
     position: relative;
     width: 100%;

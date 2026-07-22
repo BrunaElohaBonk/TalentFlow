@@ -10,6 +10,11 @@
     z-index: 9999;
 }
 
+body.dark .editarTurma-card{
+    background-color: #242424;
+    color: white;
+}
+
 .editarTurma-card{
     position: relative;
     width: 90%;

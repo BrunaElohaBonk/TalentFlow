@@ -13,6 +13,17 @@
     overflow: hidden;
 }
 
+body.dark .notificacao-body{
+    background-color: #121212;
+    color: white;
+}
+
+body.dark .notificacao-modal,
+body.dark .notificacao-card {
+    background-color: #242424;
+    color: white;
+}
+
 .notificacao-body {
     position: relative;
     flex: 1;

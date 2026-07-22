@@ -5,6 +5,7 @@ import "./perfilInstrutor.css"
 import icon_editar from './../../../assets/img/icon_editar.png'
 import user from '../../../assets/img/icon_user.png'
 import { useEffect, useState } from "react"
+import { useTheme } from '../../../context/themeContext'
 
 interface IPerfil {
     edv: number;
@@ -19,6 +20,7 @@ interface IPerfil {
 function PerfilInstrutor(){
     const [editar, setEditar] = useState(false)
     const [perfil, setPerfil] = useState<IPerfil | null>(null);
+    const { darkMode, alternarTema } = useTheme();
     useEffect(() => {
         const usuarioSalvo = localStorage.getItem("usuario");
         if (usuarioSalvo) {
@@ -27,7 +29,7 @@ function PerfilInstrutor(){
                 edv: Number(usuario.edv),
                 img: usuario.img,
                 nome: usuario.nome,
-                email: usuario.email,
+                email: usuario.email,   
                 user: usuario.user,
                 contato: usuario.contato,
                 nascimento: ConverterData(usuario.dataNascimento)
@@ -59,6 +61,33 @@ function PerfilInstrutor(){
             <div className="perfil-container">
                 <Sidebar></Sidebar>
                 <div className="perfil-body">   
+                    <label htmlFor="theme" className="theme">
+    <span className="theme__toggle-wrap">
+        <input
+            id="theme"
+            className="theme__toggle"
+            type="checkbox"
+            role="switch"
+            name="theme"
+            checked={darkMode}
+            onChange={alternarTema}
+        />
+
+        <span className="theme__fill"></span>
+
+        <span className="theme__icon">
+            <span className="theme__icon-part"></span>
+            <span className="theme__icon-part"></span>
+            <span className="theme__icon-part"></span>
+            <span className="theme__icon-part"></span>
+            <span className="theme__icon-part"></span>
+            <span className="theme__icon-part"></span>
+            <span className="theme__icon-part"></span>
+            <span className="theme__icon-part"></span>
+            <span className="theme__icon-part"></span>
+        </span>
+    </span>
+</label>
                     <div className="perfil-form">
                         <button onClick={()=> setEditar(true)}>
                             <img src={icon_editar} alt="editar" className="perfil-editar"/>

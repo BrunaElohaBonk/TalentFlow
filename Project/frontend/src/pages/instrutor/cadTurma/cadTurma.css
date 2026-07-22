@@ -12,6 +12,11 @@
     overflow: hidden;
 }
 
+body.dark .cadTurma-form{
+    background-color: #242424;
+    color: white;
+}
+
 .cadTurma-body {
     display: flex;
     align-items: center;

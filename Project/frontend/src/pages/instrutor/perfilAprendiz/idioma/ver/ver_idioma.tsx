@@ -26,7 +26,7 @@ function IdiomaVisualizar({
         <div className="idiomaVisualizar-overlay" onClick={() => setVisible(false)}>
             <div className="idiomaVisualizar-card" onClick={(e) => e.stopPropagation()}>
                 <div className="idiomaVisualizar-header">
-                    <h2>Idioma</h2>
+                    <h2 className='formacao-lista-titulo'>Idioma</h2>
                     <div className="idiomaVisualizar-acoes">
                         <button className="idiomaVisualizar-fechar" onClick={() => setVisible(false)}>
                             <img src={icon_fechar} alt="Fechar"/>
@@ -35,15 +35,15 @@ function IdiomaVisualizar({
                 </div>
                 <div className="idiomaVisualizar-conteudo">
                     <div className="idiomaVisualizar-item">
-                        <span>Nome do Idioma</span>
+                        <span className='formacao-titulo'>Nome do Idioma</span>
                         <p>{idioma.idioma || "Não informado."}</p>
                     </div>
                     <div className="idiomaVisualizar-item">
-                        <span>Nível</span>
+                        <span className='formacao-titulo'>Nível</span>
                         <p>{idioma.nivel || "Não informado."}</p>
                     </div>
                     <div className="idiomaVisualizar-item certificado-item">
-                        <span>Certificado</span>
+                        <span className='formacao-titulo'>Certificado</span>
                         <p>{idioma.certificado || "Não incluído"}</p>
                         {/* {
                             idioma.certificado ? (

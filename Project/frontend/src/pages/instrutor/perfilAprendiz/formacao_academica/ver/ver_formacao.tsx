@@ -30,7 +30,7 @@ function FormacaoAcademicaVisualizar({
         <div className="formacaoVisualizar-overlay" onClick={() => setVisible(false)}>
             <div className="formacaoVisualizar-card" onClick={(e) => e.stopPropagation()}>
                 <div className="formacaoVisualizar-header">
-                    <h2>Formação Acadêmica</h2>
+                    <h2 className='formacao-lista-titulo'>Formação Acadêmica</h2>
                     <div className="formacaoVisualizar-acoes">
                         <button className="formacaoVisualizar-fechar" onClick={() => setVisible(false)}>
                             <img src={icon_fechar} alt="Fechar"/>
@@ -39,39 +39,39 @@ function FormacaoAcademicaVisualizar({
                 </div>
                 <div className="formacaoVisualizar-conteudo">
                     <div className="formacaoVisualizar-item">
-                        <span>Nome do Curso</span>
+                        <span className='formacao-titulo'>Nome do Curso</span>
                         <p>{formacao.nomeCurso || "Não informado."}</p>
                     </div>
                     <div className="formacaoVisualizar-item">
-                        <span>Nome da Instituição</span>
+                        <span className='formacao-titulo'>Nome da Instituição</span>
                         <p>{formacao.instituicao || "Não informado."}</p>
                     </div>
                     <div className="formacaoVisualizar-item">
-                        <span>Situação</span>
+                        <span className='formacao-titulo'>Situação</span>
                         <p>{formacao.status ? "Concluído" : "Cursando"}</p>
                     </div>
                     {
                         formacao.status && (
                             <div className="formacaoVisualizar-item">
-                                <span>Período Atual</span>
+                                <span className='formacao-titulo'>Período Atual</span>
                                 <p>{formacao.periodoAtual || "Não informado."}</p>
                             </div>
                         )
                     }
                     <div className="formacaoVisualizar-item">
-                        <span>Total de Períodos</span>
+                        <span className='formacao-titulo'>Total de Períodos</span>
                         <p>{formacao.totalPeriodos || "Não informado."}</p>
                     </div>
                     <div className="formacaoVisualizar-item">
-                        <span>Nível de Formação</span>
+                        <span className='formacao-titulo'>Nível de Formação</span>
                         <p>{formacao.nivelFormacao || "Não informado."}</p>
                     </div>
                     <div className="formacaoVisualizar-item formacaoVisualizar-descricao">
-                        <span>Descrição</span>
+                        <span className='formacao-titulo'>Descrição</span>
                         <p>{formacao.descricaoCurso || "Não informado."}</p>
                     </div>
                     <div className="formacaoVisualizar-item certificado-item">
-                        <span>Certificado</span>
+                        <span className='formacao-titulo'>Certificado</span>
                         {
                             formacao.certificado ? (
                                 <p>
