@@ -30,6 +30,7 @@ model competencia {
 model cursos {
   id             Int                  @id @default(autoincrement())
   Id_Profile     Int
+  certificado      String?
   name_Curso     String
   status_Cursos  cursos_status_Cursos
   data_Conclusao DateTime
@@ -43,6 +44,7 @@ model formacao_academica {
   id               Int                                 @id @default(autoincrement())
   Id_Profile       Int
   name_Curso       String
+  certificado      String?
   status_Academico formacao_academica_status_Academico
   nivel_formacao   formacao_academica_nivel_formacao
   periodo_Atual    Int
@@ -56,6 +58,7 @@ model formacao_academica {
 model idiomas {
   id           Int                  @id @default(autoincrement())
   Id_Profile   Int
+  certificado      String?
   nome_Idioma  idiomas_nome_Idioma
   nivel_Idioma idiomas_nivel_Idioma
   profile      profile              @relation(fields: [Id_Profile], references: [id], map: "Idiomas_Id_Profile_fkey")
@@ -142,6 +145,7 @@ model turma {
 model user {
   EDV                   Int                     @id
   tipoUser              user_tipoUser
+  fotoPerfil            String?
   name                  String
   data_nascimento       DateTime
   user_bosch            String?                 @unique(map: "User_user_bosch_key")

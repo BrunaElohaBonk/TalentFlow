@@ -10,6 +10,11 @@ const app = express();
 
 const port = 8080;
 
+app.use(
+    "/uploads",
+    express.static("uploads")
+);
+
 
 dotenv.config({
     quiet:true
