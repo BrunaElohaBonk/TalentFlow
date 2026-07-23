@@ -64,6 +64,11 @@ type LoginResult =
         EDV: number;
         name: string;
         tipoUser: string;
+        email_bosch: string;
+        user_bosch: string;
+        contato: string;
+        data_nascimento: Date;
+        imagem: string;
       };
     };
 
@@ -155,6 +160,7 @@ export class UserService {
   }
 
   static async login(data: LoginDto): Promise<LoginResult> {
+    console.log(data)
     const user = await prisma.user.findUnique({
       where: {
         EDV: data.EDV,
@@ -196,6 +202,11 @@ export class UserService {
         EDV: user.EDV,
         name: user.name,
         tipoUser: user.tipoUser,
+        email_bosch: user.email_bosch || "",
+        user_bosch: user.user_bosch || "",
+        contato: user.contato,
+        data_nascimento: user.data_nascimento,
+        imagem: user.fotoPerfil || "",
       },
     };
   }

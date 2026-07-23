@@ -8,18 +8,19 @@ import './login.css'
 import { useNavigate } from "react-router-dom"
 import { useRef, useState } from 'react'
 import { useAuth } from "../../../context/authContext";
+import api from '../../../services/api'
 
-interface Usuario {
-    edv: string;
-    img: string;
-    nome: string;
-    email: string;
-    user: string;
-    contato: number;
-    dataNascimento: string;
-    tipo: "instrutor" | "aprendiz";
-    senha: string;
-}
+// interface Usuario {
+//     edv: string;
+//     img: string;
+//     nome: string;
+//     email: string;
+//     user: string;
+//     contato: number;
+//     dataNascimento: string;
+//     tipo: "instrutor" | "aprendiz";
+//     senha: string;
+// }
 
 function Login() {
   const [edv, setEdv] = useState("")
@@ -37,52 +38,55 @@ function Login() {
   // EXCLUIR AQUI NO BACKEND
   // Esses dados vão vir do banco de dados através da API
   // TEMPORÁRIO - REMOVER NA INTEGRAÇÃO COM BACKEND
-const usuario: Usuario[] = [
-  {
-    edv: "92906829",
-    img: "",
-    nome: "Bruna Elohá Bonk",
-    email: "bruna@bosch.com",
-    user: "BOB1CT",
-    contato: 42999830200,
-    dataNascimento: "21/08/2006",
-    tipo: "aprendiz",
-    senha: "123"
-  },
-  {
-    nome: "Lasnine Miranda",
-    email: "lasnine@bosch.com",
-    edv: "92906812",
-    user: "SLN6CT",
-    contato: 41995325493,
-    dataNascimento: "08/01/2008",
-    tipo: "instrutor",
-    senha: "123",
-    img: ""
-  },
-  {
-    nome: "Mariana Ferreira Costa",
-    email: "mariana.costa@bosch.com",
-    edv: "92906813",
-    user: "MFC7CT",
-    contato: 41996543218,
-    dataNascimento: "15/04/1997",
-    tipo: "instrutor",
-    senha: "123",
-    img: ""
-  },
-  {
-    nome: "Rafael Henrique Costa",
-    email: "rafael.costa@bosch.com",
-    edv: "92906814",
-    user: "RHC8CT",
-    contato: 41997865432,
-    dataNascimento: "22/09/1994",
-    tipo: "instrutor",
-    senha: "123",
-    img: ""
-  }
-]
+//  const [usuario,setusuario] = useState<Usuario[]>()
+
+// const usuario: Usuario[] 
+//= [
+//   {
+//     edv: "92906829",
+//     img: "",
+//     nome: "Bruna Elohá Bonk",
+//     email: "bruna@bosch.com",
+//     user: "BOB1CT",
+//     contato: 42999830200,
+//     dataNascimento: "21/08/2006",
+//     tipo: "aprendiz",
+//     senha: "123"
+//   },
+//   {
+//     nome: "Lasnine Miranda",
+//     email: "lasnine@bosch.com",
+//     edv: "92906812",
+//     user: "SLN6CT",
+//     contato: 41995325493,
+//     dataNascimento: "08/01/2008",
+//     tipo: "instrutor",
+//     senha: "123",
+//     img: ""
+//   },
+//   {
+//     nome: "Mariana Ferreira Costa",
+//     email: "mariana.costa@bosch.com",
+//     edv: "92906813",
+//     user: "MFC7CT",
+//     contato: 41996543218,
+//     dataNascimento: "15/04/1997",
+//     tipo: "instrutor",
+//     senha: "123",
+//     img: ""
+//   },
+//   {
+//     nome: "Rafael Henrique Costa",
+//     email: "rafael.costa@bosch.com",
+//     edv: "92906814",
+//     user: "RHC8CT",
+//     contato: 41997865432,
+//     dataNascimento: "22/09/1994",
+//     tipo: "instrutor",
+//     senha: "123",
+//     img: ""
+//   }
+// ]
 
   const navigate = useNavigate() 
 
@@ -107,36 +111,51 @@ const usuario: Usuario[] = [
       })
       return
     }
-    const usuarioEncontrado = usuario.find(
-      (usuario) => usuario.edv === edv && usuario.senha === password
-    )
-    if (!usuarioEncontrado) {
-      Swal.fire({
-        icon: "error",
-        title: "Erro",
-        text: "EDV ou senha inválidos.",
-        confirmButtonColor: "#2B83D5",
-        confirmButtonText: "OK"
-      })
-      return
-    }
-    if (usuarioEncontrado) {
-      login(usuarioEncontrado);
+    try {
+      const response = await api.post("/auth/login", {
+        EDV: edv,
+        password
+      });
+      
+      const usuarioEncontrado = response.data;
 
-      if (password === usuarioEncontrado.dataNascimento) {
-        navigate('/Confirm_login')
+      localStorage.setItem('usuario', JSON.stringify(usuarioEncontrado))
+
+      if (usuarioEncontrado.password === usuarioEncontrado.dataNascimento) {
+        navigate("/Confirm_login");
+        return;
+      }
+      
+      if (!usuarioEncontrado) {
+        Swal.fire({
+          icon: "error",
+          title: "Erro",
+          text: "EDV ou senha inválidos.",
+          confirmButtonColor: "#2B83D5",
+          confirmButtonText: "OK"
+        })
         return
       }
-
-      if (usuarioEncontrado.tipo === "aprendiz") {
-        navigate('/Perfil')
-        return
+      if (usuarioEncontrado) {
+        login(usuarioEncontrado);
+        
+        if (password === usuarioEncontrado.dataNascimento) {
+          navigate('/Confirm_login')
+          return
+        }
+        
+        if (usuarioEncontrado.tipo === "aprendiz") {
+          navigate('/Perfil')
+          return
+        }
+        
+        if (usuarioEncontrado.tipo === "instrutor") {
+          navigate('/Home')
+          return
+        }
       }
-
-      if (usuarioEncontrado.tipo === "instrutor") {
-        navigate('/Home')
-        return
-      }
+    } catch(e){
+      console.log(e)
     }
   }
 

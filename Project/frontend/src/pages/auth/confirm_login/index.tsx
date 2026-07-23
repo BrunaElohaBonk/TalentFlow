@@ -9,8 +9,9 @@ import Swal from 'sweetalert2'
 import './confirm_login.css'
 import { useNavigate } from "react-router-dom"
 import { useState } from "react"
+import api from '../../../services/api'
 
-function Confirm_login() {
+async function Confirm_login() {
   const navigate = useNavigate()
 
   const [edv, setEdv] = useState("")
@@ -20,10 +21,17 @@ function Confirm_login() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [logout, setLogout] = useState(false)
 
-  const usuario = {
-    nome: "Bruna",
-    dataNascimento: "21/08/2006"
-  }
+
+  // const usuario = {
+  //   nome: "Bruna",
+  //   dataNascimento: "21/08/2006"
+  // }
+
+   await api.post("/auth/primeiroAcesso", {
+    EDV: edv,
+    password: password,
+    confirmPassword: confirmPassword,
+  });
 
   const validarSenha = () => {
     const temMaiuscula = /[A-Z]/.test(password)
