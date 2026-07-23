@@ -6,7 +6,7 @@ import { useState } from 'react';
 import fechar from '../../assets/img/close.png'
 import setinha from '../../assets/img/setinha.png'
 
-function Filtro({ visible, setVisible, filtros, setFiltros }){
+function Filtro({ visible, setVisible, filtros, setFiltros } :any){
     const [aberto, setAberto] = useState<string | null>(null);
     const alternarFiltro = (nome: string) => {
         setAberto(aberto === nome ? null : nome);
@@ -77,6 +77,25 @@ function Filtro({ visible, setVisible, filtros, setFiltros }){
                         </FormGroup>
                     </div>
                 </div>
+                <div className="filtro-titulo-expansivel"  onClick={() => setAberto(aberto === "estagio" ? null : "estagio")}>
+                    <span>Estágio</span>
+                    <img  src={setinha} alt="abrir filtro" className="filtro-titulo-img"/>
+                </div>
+                <div className={`filtro-expansao ${aberto === "estagio" ? "mostrar" : ""}`}>
+                <div className="filtro-checkbox">
+                    <FormGroup>
+                        <FormControlLabel label="Sim" control={
+                                <Checkbox checked={filtros.estagio === true} onChange={(e) => {setFiltros({...filtros, estagio: e.target.checked ? true : null});}}/>                            
+                            }
+                        />
+                        <FormControlLabel label="Não"
+                            control={
+                                <Checkbox checked={filtros.estagio === false} onChange={(e) => {setFiltros({...filtros, estagio: e.target.checked ? false : null});}}/>
+                            }
+                        />
+                    </FormGroup>
+                </div>
+            </div>
                 <div className="filtro-titulo-expansivel" onClick={() => alternarFiltro("setor")}>
                     <span>Setores</span>
                     <img  src={setinha} alt="abrir filtro" className="filtro-titulo-img"/>
