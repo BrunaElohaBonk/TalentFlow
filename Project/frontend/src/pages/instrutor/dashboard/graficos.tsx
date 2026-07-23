@@ -9,15 +9,20 @@ export function GraficoSetor({ aprendizes }: Props) {
     const { darkMode } = useTheme();
     const corPrimaria = darkMode ? "#F97316" : "#193B82";
     const dados = Object.values(
-        aprendizes.reduce((acc, aprendiz) => {
-            const setor = aprendiz.situacaoProfissional.nomeSetor;
-            if (!acc[setor]) {
-                acc[setor] = { setor, quantidade: 0 };
-            }
-            acc[setor].quantidade++;
-            return acc;
-        }, {})
-    );
+    aprendizes.reduce((acc, aprendiz) => {
+        const setor = aprendiz.situacaoProfissional.nomeSetor;
+        if (!acc[setor]) {
+            acc[setor] = {
+                setor,
+                quantidade: 0,
+            };
+        }
+        acc[setor].quantidade++;
+        return acc;
+        }, {} as Record<string, { setor: string; quantidade: number }>)
+    )
+    .sort((a, b) => b.quantidade - a.quantidade) // maior para menor
+    .slice(0, 15);
     return (
         <ResponsiveContainer width="100%" height={300}>
             <BarChart data={dados}>
@@ -91,20 +96,22 @@ export function GraficoCompetencias({ aprendizes }: Props) {
     const { darkMode } = useTheme();
     const corPrimaria = darkMode ? "#FACC15" : "#35A7CF";
     const dadosCompetencias = Object.values(
-        aprendizes.reduce((acc, aprendiz) => {
-            aprendiz.competencias.forEach((competencia: any) => {
-                const nome = competencia.nome;
-                if (!acc[nome]) {
-                    acc[nome] = {
-                        competencia: nome,
-                        quantidade: 0,
-                    };
-                }
-                acc[nome].quantidade++;
-            });
-            return acc;
+    aprendizes.reduce((acc, aprendiz) => {
+        aprendiz.competencias.forEach((competencia: any) => {
+            const nome = competencia.nome;
+            if (!acc[nome]) {
+                acc[nome] = {
+                    competencia: nome,
+                    quantidade: 0,
+                };
+            }
+            acc[nome].quantidade++;
+        });
+        return acc;
         }, {} as Record<string, { competencia: string; quantidade: number }>)
-    );
+    )
+    .sort((a, b) => b.quantidade - a.quantidade) 
+    .slice(0, 6);
 
     return (
         <ResponsiveContainer width="100%" height={Math.max(300, dadosCompetencias.length * 40)}>
@@ -138,17 +145,22 @@ export function GraficoIdiomas({ aprendizes }: Props) {
     const { darkMode } = useTheme();
     const corPrimaria = darkMode ? "#F97316" : "#193B82";
     const dadosIdiomas = Object.values(
-        aprendizes.reduce((acc, aprendiz) => {
-            aprendiz.idiomas.forEach((idioma: any) => {
-                const nome = idioma.idioma;
-                if (!acc[nome]) {
-                    acc[nome] = { idioma: nome, quantidade: 0 };
-                }
-                acc[nome].quantidade++;
-            });
-            return acc;
+    aprendizes.reduce((acc, aprendiz) => {
+        aprendiz.idiomas.forEach((idioma: any) => {
+            const nome = idioma.idioma;
+            if (!acc[nome]) {
+                acc[nome] = {
+                    idioma: nome,
+                    quantidade: 0,
+                };
+            }
+            acc[nome].quantidade++;
+        });
+        return acc;
         }, {} as Record<string, { idioma: string; quantidade: number }>)
-    );
+    )
+    .sort((a, b) => b.quantidade - a.quantidade) 
+    .slice(0, 6);
     return (
         <ResponsiveContainer width="100%" height={300}>
             <BarChart data={dadosIdiomas} layout="vertical" margin={{ top: 10, right: 30, left: 20, bottom: 10 }}>
