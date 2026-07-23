@@ -21,7 +21,7 @@ export function GraficoSetor({ aprendizes }: Props) {
         return acc;
         }, {} as Record<string, { setor: string; quantidade: number }>)
     )
-    .sort((a, b) => b.quantidade - a.quantidade) // maior para menor
+    .sort((a, b) => b.quantidade - a.quantidade)
     .slice(0, 15);
     return (
         <ResponsiveContainer width="100%" height={300}>

@@ -168,7 +168,7 @@ const usuario: Usuario[] = [
             <span className="forgot-link">Clique aqui</span>
           </div>
           <div className='button'>
-            <button ref={enterRef} className='entrar' onKeyDown={(e) => {if (e.key === "Enter") {handleLogin();}}}>
+            <button ref={enterRef} className="entrar" onClick={handleLogin} onKeyDown={(e) => { if (e.key === "Enter") {handleLogin();}}}>
               ENTRAR
             </button>
           </div>
