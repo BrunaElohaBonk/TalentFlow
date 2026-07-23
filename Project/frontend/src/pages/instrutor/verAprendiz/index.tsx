@@ -181,7 +181,7 @@ function VerAprendiz(){
                                         <span className="aprendiz-titulo" title={aprendizes.perfil.nome}>{aprendizes.perfil.nome}</span>
                                     </div>
                                     <div className="aprendiz-conteudo">
-                                        <span className="aprendiz-span" title={aprendizes.perfil.turma}>{aprendizes.perfil.turma}</span>
+                                        <span className="aprendiz-span" title={aprendizes.perfil.turma || 'Sem Turma'}>{aprendizes.perfil.turma || 'Sem Turma'}</span>
                                         <button onClick={() => navigate(`/PerfilAprendiz/${aprendizes.perfil.edv}`)} className="aprendiz-button">Ver Dados do Aprendiz</button>
                                     </div>
                                 </div>
