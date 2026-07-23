@@ -8,6 +8,16 @@
     margin-left: 20px;
 }
 
+body.dark .perfil-bloco{
+    background-color: #161616;
+    color: white;
+}
+
+body.dark h2,
+body.dark label{
+    color: white;
+}
+
 .perfilAprendiz-body{
     position: relative;
     display: flex;
