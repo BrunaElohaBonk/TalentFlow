@@ -10,19 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.1",
-    "@mui/material": "^9.2.0",
     "@tailwindcss/vite": "^4.3.2",
     "axios": "^1.18.1",
-    "framer-motion": "^12.42.2",
     "react": "^19.2.7",
-    "react-datepicker": "^9.1.0",
     "react-dom": "^19.2.7",
-    "react-dropzone": "^15.0.0",
-    "react-is": "^19.2.7",
     "react-router-dom": "^7.18.1",
-    "recharts": "^3.9.2",
     "sweetalert2": "^11.26.25",
     "sweetalert2-react-content": "^5.1.2",
     "tailwindcss": "^4.3.2"
