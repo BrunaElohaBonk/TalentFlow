@@ -1,0 +1,224 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+.aprendiz{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.aprendiz-container {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+body.dark .aprendiz-modal{
+    background-color: #242424;
+    color: white;
+}
+
+.aprendiz-body {
+    position: relative;
+    flex: 1;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+}
+
+.aprendiz-pesquisa{
+    position: relative;
+    width: 100%;
+    padding: 0 150px;
+    margin-bottom: 40px;
+}
+
+.aprendiz-card-area {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(200px, 1fr));
+    gap: 50px;
+    padding: 0 150px;
+}
+
+.aprendiz-modal {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    min-height: 200px;
+    padding: 20px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: rgba(60,64,67,.3) 0 1px 2px,rgba(60,64,67,.15) 0 2px 6px;
+}
+
+.aprendiz-btn-delete {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.aprendiz-deletar {
+    width: 20px;
+    height: 20px;
+}
+
+.aprendiz-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0 10px;
+    gap: 10px;
+}
+
+.aprendiz-img {
+    width: clamp(50px, 10vw, 150px);
+    height: clamp(50px, 10vw, 150px);
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.aprendiz-aviso {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2rem;
+    font-weight: bold;
+    grid-column: span 3;
+    text-align: center;
+}
+
+.aprendiz-titulo {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    max-width: 95%;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.aprendiz-conteudo {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    width: 90%;
+    margin: 0 auto;
+    gap: 10px;
+}
+
+.aprendiz-span {
+    width: 100%;
+    min-width: 0;
+    color: #8a8a8a;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left; 
+}
+
+.aprendiz-button {
+    width: 90%;
+    max-width: 250px; 
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5px;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: .2s;
+    background: #2B83D5;
+    color: white;
+}
+
+.aprendiz-button:hover {
+    background: #3d96e9;
+    transform: scale(1.03);
+}
+
+.aprendiz-input {
+    width: 100%;
+    height: 40px;
+    border-radius: 15px;
+    border: 1px solid #D9D9D9;
+    padding: 0 45px 0 15px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    color: #8a8a8a;
+    transition: 0.25s;
+}
+
+.aprendiz-input-area{
+    position: relative;
+    width: 100%;
+}
+
+.aprendiz-input::placeholder {
+    color: #8a8a8a;
+}
+
+.aprendiz-input:focus {
+    outline: none;
+    border-color: #2B83D5;
+    box-shadow: 0 0 5px rgba(43, 131, 213, .3);
+}
+
+.aprendiz-button-pesquisar {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.img-lupa {
+    width: 20px;
+    height: 20px;
+}
+
+.img-filter{
+    width: 30px;
+    height: 30px;
+}
+
+.aprendiz-button-filtro{
+    position: absolute;
+    right: 50px;   
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+.aprendiz-button-filtro:hover{
+    background: #f5f5f5;
+}
+
+@media (max-width: 1100px){
+    .aprendiz-card-area{
+        grid-template-columns: repeat(2,1fr);
+    }
+}
+
+@media (max-width: 700px){
+    .aprendiz-card-area{
+        grid-template-columns: 1fr;
+    }
+}

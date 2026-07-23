@@ -1,1 +1,79 @@
 @import "tailwindcss";
+
+html,
+body,
+#root {
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.swal2-popup {
+    font-family: 'Poppins', sans-serif;
+}
+
+.swal2-confirm {
+    background-color: #2B83D5 !important;
+    font-family: 'Poppins', sans-serif !important;
+    transition: 0.25s;
+}
+
+.swal2-confirm:hover {
+    background-color: #3d96e9 !important;
+    transform: scale(1.05);
+}
+
+.swal2-cancel {
+    background-color: #2B83D5 !important;
+    font-family: 'Poppins', sans-serif !important;
+    transition: 0.25s;
+}
+
+.swal2-cancel:hover {
+    background-color: #3d96e9 !important;
+    color: white !important;
+    transform: scale(1.05);
+}
+
+.swal2-container {
+    z-index: 20000 !important;
+}
+
+body.dark .swal2-popup {
+    background-color: #242424 !important;
+    color: white !important;
+}
+
+body.dark .swal2-title {
+    color: white !important;
+}
+
+body.dark .swal2-html-container {
+    color: #ddd !important;
+}
+
+body {
+    background-color: #ffffff;
+    color: #222;
+    transition: .3s;
+}
+
+
+body.dark {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+:root {
+    --bg: #ffffff;
+    --primary: #000;
+    --primaryT: rgba(0,0,0,0.2);
+    --transDur: 0.3s;
+}
+
+body.dark {
+    --bg: #121212;
+    --primary: #ffffff;
+    --primaryT: rgba(255,255,255,0.3);
+}
+

@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+.dashboard{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.dashboard-content{
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.dashboard-body{
+    flex: 1;
+    overflow: auto;
+    position: relative;
+}
+
+.dashboard-pesquisar{
+    position: relative;
+    width: 100%;
+    padding: 0 150px;
+    margin-bottom: 40px;
+}
+
+.img-filter{
+    width: 30px;
+    height: 30px;
+}
+
+.dashboard-button-filtro{
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dashboard-button-filtro:hover{
+    background: #f5f5f5;
+}
+
+.dashboard-graficos {
+    margin-top: 60px;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 25px;
+    padding: 30px;
+}
+
+.dashboard-card:nth-child(1),
+.dashboard-card:nth-child(2) {
+    grid-column: span 3;
+}
+
+.dashboard-card:nth-child(3),
+.dashboard-card:nth-child(4),
+.dashboard-card:nth-child(5) {
+    grid-column: span 2;
+}
+
+body.dark .dashboard-card{
+    background-color: #242424;
+    color: #ffffff;
+}
+
+body.dark .grafico-titulo{
+    color: white;
+}
+
+.dashboard-card {
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    min-height: 350px;
+}
+
+.grafico-titulo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+    font-size: clamp(0.5rem, 3vw, 0.9rem);
+    margin-bottom: 5px;
+    color: #8a8a8a;
+}
+
+.dashboard-aviso{
+    font-family: 'Poppins', sans-serif;
+    font-size: 2rem;
+    font-weight: bold;
+    grid-column: span 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}

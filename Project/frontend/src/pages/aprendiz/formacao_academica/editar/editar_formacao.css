@@ -1,0 +1,250 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+.editarFormacao-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.35);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.editarFormacao-card {
+    position: relative;
+    width: 95%;
+    max-width: 600px;
+    background: white;
+    border-radius: 20px;
+    padding: 30px 35px;
+    box-shadow: rgba(60,64,67,.3) 0px 1px 2px, rgba(60,64,67,.15) 0px 2px 6px;
+    display: flex;
+    flex-direction: column;
+}
+
+.editarFormacao-fechar {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.editarFormacao-fechar img {
+    width: 30px;
+    height: 30px;
+}
+
+.editarFormacao-titulo {
+    display: block;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.editarFormacao-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.editarFormacao-grupo {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.editarFormacao-label {
+    width: 100%;
+    display: block;
+    text-align: left;
+    font-family: 'Poppins', sans-serif;
+    font-size: .95rem;
+    font-weight: bold;
+    color: #8a8a8a;
+    margin-bottom: 4px;
+}
+
+.editarFormacao-input {
+    width: 100%;
+    height: 36px;
+    border-radius: 12px;
+    border: 1px solid #d9d9d9;
+    padding: 0 12px;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+}
+
+.editarFormacao-input:focus,
+.editarFormacao-textarea:focus {
+    outline: none;
+    border-color: #2B83D5;
+    box-shadow: 0 0 5px rgba(43,131,213,.3);
+}
+
+
+.editarFormacao-grupo:has(.editarFormacao-situacaoContainer) {
+    margin-bottom: 10px;
+    margin-top: 8px;
+}
+
+
+.editarFormacao-grupo:has(.editarFormacao-situacaoContainer) > .editarFormacao-label {
+    margin-bottom: 0px;
+    transform: translateY(28px);
+}
+
+.editarFormacao-situacaoContainer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+.editarFormacao-radio {
+    width: auto;
+    transform: translateY(-15px);
+}
+
+
+.editarFormacao-radio .MuiRadioGroup-root {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+
+.editarFormacao-radio .MuiFormControlLabel-root {
+    margin-right: 15px;
+    transform: translateY(12px);
+}
+
+
+.editarFormacao-radio .MuiFormControlLabel-label {
+    font-family: 'Poppins', sans-serif;
+    font-size: .95rem;
+    color: #6a6a6a;
+}
+
+
+.editarFormacao-periodos {
+    width: 160px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: -18px;
+}
+
+
+.editarFormacao-periodoGrupo {
+    width: 160px;
+}
+
+
+.editarFormacao-periodoGrupo .editarFormacao-label {
+    white-space: nowrap;
+    font-size: .85rem;
+}
+
+
+.editarFormacao-periodos .editarFormacao-input {
+    width: 160px;
+    height: 36px;
+}
+
+
+.periodo-disabled {
+    background-color: #eeeeee;
+    cursor: not-allowed;
+    opacity: .5;
+}
+
+
+/* TEXTAREA */
+
+.editarFormacao-textarea {
+    width: 100%;
+    height: 80px;
+    resize: none;
+    border-radius: 12px;
+    border: 1px solid #d9d9d9;
+    padding: 10px;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+}
+
+
+/* BOTÃO */
+
+.editarFormacao-botoes {
+    display: flex;
+    justify-content: center;
+}
+
+
+.editarFormacao-salvar {
+    margin-top: 8px;
+    width: 200px;
+    height: 38px;
+    border: none;
+    border-radius: 10px;
+    background: #2B83D5;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+
+.editarFormacao-salvar:hover {
+    background: #3d96e9;
+}
+
+.certificado-container {
+    width: 100%;
+    height: 36px;
+    border-radius: 12px;
+    border: 1px solid #d9d9d9;
+    background-color: transparent;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: .25s;
+}
+
+
+.certificado-container:hover {
+    border-color: #2B83D5;
+}
+
+
+.certificado-container:focus-within {
+    border-color: #2B83D5;
+    box-shadow: 0 0 5px rgba(43,131,213,.3);
+}
+
+
+.certificado-file {
+    color: #8a8a8a;
+    font-family: 'Poppins', sans-serif;
+    font-size: .95rem;
+    margin: 0;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.certificado-upload {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+}
