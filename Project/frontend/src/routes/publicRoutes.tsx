@@ -1,7 +1,12 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/authContext";
+import type { ReactNode } from "react";
 
-function PublicRoute({children}) {
+interface PrivateRouteProps {
+    children: ReactNode;
+}
+
+function PublicRoute({children}: PrivateRouteProps) {
     const { usuario } = useAuth();
     if(usuario){
         if(usuario.tipo === "instrutor"){
