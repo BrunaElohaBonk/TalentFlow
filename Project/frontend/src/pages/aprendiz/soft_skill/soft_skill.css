@@ -10,6 +10,17 @@
     z-index: 9999;
 }
 
+body.dark .soft-skill-body{
+    background-color: #242424;
+    color: white;
+}
+
+body.dark h2,
+body.dark label{
+    color: white;
+}
+
+
 .soft-skill-body {
     width: 700px;
     max-width: 90%;

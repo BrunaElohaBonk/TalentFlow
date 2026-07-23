@@ -1,6 +1,7 @@
 import Header from "../../../components/header"
 import icon_logout from '../../../assets/img/icon_logout.png'
 import { useEffect, useState } from "react";
+import { useTheme } from '../../../context/themeContext'
 import icon_editar from '../../../assets/img/icon_editar.png'
 import icon_user from '../../../assets/img/icon_user.png'
 import icon_olho from '../../../assets/img/icon_olho.png'
@@ -66,7 +67,7 @@ function formatarTelefone(numero: number) {
 }
 
 function Perfil() {
-
+    const { darkMode, alternarTema } = useTheme();
     const [aprendiz, setAprendiz] = useState<Usuario | null>(null)
     const [logout, setLogout] = useState(false)
     const [situacao, setSituacao] = useState(false)
@@ -100,8 +101,27 @@ function Perfil() {
             <div className="confirm-logout">
                 <img src={icon_logout} alt="icon_logout" onClick={() => setLogout(true)} />
             </div>
-
+            <div className="perfilAprendiz-body">
+                <label htmlFor="theme" className="theme">
+                    <span className="theme__toggle-wrap">
+                        <input id="theme" className="theme__toggle" type="checkbox" role="switch" name="theme" checked={darkMode} onChange={alternarTema}/>
+                        <span className="theme__fill"></span>
+                        <span className="theme__icon">
+                            <span className="theme__icon-part"></span>
+                            <span className="theme__icon-part"></span>
+                            <span className="theme__icon-part"></span>
+                            <span className="theme__icon-part"></span>
+                            <span className="theme__icon-part"></span>
+                            <span className="theme__icon-part"></span>
+                            <span className="theme__icon-part"></span>
+                            <span className="theme__icon-part"></span>
+                            <span className="theme__icon-part"></span>
+                        </span>
+                    </span>
+                </label>
+            </div>
             <Logout visible={logout} setVisible={setLogout}/>
+
         <SituacaoProfissional visible={situacao} setVisible={setSituacao} setEditarSituacao={setEditarSituacao}/>
         <FormacaoAcademica visible={formacao_academica} setVisible={setFormacaoAcademica} setEditarFormacao={setEditarFormacao} setAdicionarFormacao={setAdicionarFormacao}/>
         <CursoComplementar visible={curso_complementar} setVisible={setCursoComplementar}/>
