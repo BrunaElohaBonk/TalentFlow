@@ -8,6 +8,15 @@
     margin-left: 20px;
 }
 
+.perfilAprendiz-body{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    margin-top: 10px;
+    margin-left: 20px;
+}
+
 .perfil-logout:hover {
     height: 32px;
     width: 32px;

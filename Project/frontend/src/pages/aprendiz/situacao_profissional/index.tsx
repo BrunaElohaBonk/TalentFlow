@@ -19,7 +19,7 @@ function SituacaoProfissional({visible, setVisible, setEditarSituacao}: any) {
                 <div className="situacao-card" onClick={(e) => e.stopPropagation()}>
 
                     <div className="situacao-header">
-                        <h2>Situação Profissional</h2>
+                        <h2 className='formacao-lista-titulo'>Situação Profissional</h2>
                         <div className="situacao-acoes">
                             <button className="situacao-editar" onClick={() => {
                                     setVisible(false)
@@ -35,19 +35,19 @@ function SituacaoProfissional({visible, setVisible, setEditarSituacao}: any) {
                     </div>
                     <div className="situacao-conteudo">
                         <div className="situacao-item">
-                            <span>Nome do Setor</span>
+                            <span className='formacao-titulo'>Nome do Setor</span>
                             <p>{situacao.setor || "Não informado."}</p>
                         </div>
                         <div className="situacao-item">
-                            <span>Nome do Líder</span>
+                            <span className='formacao-titulo'>Nome do Líder</span>
                             <p>{situacao.lider || "Não informado."}</p>
                         </div>
                         <div className="situacao-item">
-                            <span>Cumprindo Estágio?</span>
+                            <span className='formacao-titulo'>Cumprindo Estágio?</span>
                             <p>{situacao.estagio || "Não informado."}</p>
                         </div>
                         <div className="situacao-item situacao-descricao">
-                            <span>Situação atual e expectativas para o futuro</span>
+                            <span className='formacao-titulo'>Situação atual e expectativas para o futuro</span>
                             <p>{situacao.descricao || "Não informado."}</p>
                         </div>
                     </div>

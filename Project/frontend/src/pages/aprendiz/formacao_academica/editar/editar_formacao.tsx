@@ -6,6 +6,7 @@ import axios from 'axios'
 import { FormControl, FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import { useDropzone } from "react-dropzone";
 import download from '../../../../assets/img/icon download.png'
+import { useTheme } from '../../../../context/themeContext'
 
 interface IFormacao {
     curso: string;
@@ -26,7 +27,7 @@ interface Props {
 }
 
 function EditarFormacaoAcademica({ visible, setVisible, setFormacaoAcademica, id }: Props) {
-
+    const { darkMode } = useTheme();
     const [formacao, setFormacao] = useState<IFormacao>({
         curso: '',
         instituicao: '',
@@ -242,7 +243,7 @@ function EditarFormacaoAcademica({ visible, setVisible, setFormacaoAcademica, id
                     </div>
                     <div className="editarFormacao-grupo">
                         <label className="editarFormacao-label">Nível de Formação</label>
-                        <select name="nivelFormacao" className="editarFormacao-input" value={formacao.nivelFormacao} onChange={handleChange}>
+                        <select name="nivelFormacao" className={`editarFormacao-input ${darkMode ? "dark" : ""}`} value={formacao.nivelFormacao} onChange={handleChange}>
                             <option value="">Selecione o nível</option>
                             {
                                 niveisFormacao.map((item) => (
