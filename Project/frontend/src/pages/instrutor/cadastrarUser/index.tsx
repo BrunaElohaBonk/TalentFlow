@@ -7,8 +7,9 @@ import './cadastrarUser.css';
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
-import { FormControl, FormControlLabel, FormLabel, MenuItem, Radio, RadioGroup, Select } from "@mui/material";
+import { FormControl, FormControlLabel, FormLabel, MenuItem, Paper, Radio, RadioGroup, Select } from "@mui/material";
 import { turmas as turmasMock } from "../verTurma/turma";
+import { useTheme } from "../../../context/themeContext";
 
 interface ITurma {
     id: number;
@@ -32,6 +33,7 @@ interface IUser {
 
 function CadastrarUser() {
     const { id } = useParams();
+    const { darkMode } = useTheme();
     const edvRef = useRef<HTMLInputElement>(null);
     const nameRef = useRef<HTMLInputElement>(null);
     const emailRef = useRef<HTMLInputElement>(null);
@@ -224,7 +226,7 @@ function CadastrarUser() {
                                     </RadioGroup>
                                 </FormControl>
                                 {user.tipo === "Aprendiz" && (
-                                    <Select fullWidth displayEmpty value={user.turma} className="user-select" onChange={(e) =>setUser({ ...user, turma: e.target.value })}>
+                                    <Select fullWidth displayEmpty value={user.turma} className={`user-select ${darkMode ? "dark" : ""}`} MenuProps={{classes:{paper: darkMode ? "user-select-dark-menu" : ""}}} onChange={(e) =>setUser({ ...user, turma: e.target.value })}>
                                         <MenuItem value="" disabled>Selecione uma turma</MenuItem>
                                         {selectTurma.map((turma) => (<MenuItem key={turma.id} value={turma.nome}>{turma.nome}</MenuItem>))}
                                     </Select>

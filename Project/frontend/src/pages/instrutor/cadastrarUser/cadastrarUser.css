@@ -43,6 +43,18 @@ body.dark .user-titulo{
     color: white;
 }
 
+.user-select-dark-menu {
+    background-color: #1f2937 !important;
+}
+
+.user-select-dark-menu .MuiMenuItem-root {
+    color: white;
+}
+
+.user-select-dark-menu .MuiMenuItem-root:hover {
+    background-color: #374151;
+}
+
 .user-body {
     display: flex;
     align-items: center;
