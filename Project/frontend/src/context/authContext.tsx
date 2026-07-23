@@ -3,7 +3,7 @@ import { createContext, useContext, useState } from "react";
 interface Usuario {
     EDV: number;
     name: string;
-    tipoUser: "APRENDIZ" | "INSTRUTOR";
+    tipo: "aprendiz" | "instrutor";
 }
 
 interface AuthContextType {

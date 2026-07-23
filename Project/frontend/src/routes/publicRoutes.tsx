@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 
-function PublicRoute({children}) {
+function PublicRoute({children}: any) {
     const { usuario } = useAuth();
     if(usuario){
         if(usuario.tipo === "instrutor"){
