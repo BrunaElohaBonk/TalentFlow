@@ -1,0 +1,101 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+.competenciaVisualizar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.35);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+}
+
+body.dark .competenciaVisualizar-card{
+    background-color: #242424;
+    color: white;
+}
+.competenciaVisualizar-card {
+    width:600px;
+    background:white;
+    border-radius:20px;
+    box-shadow:rgba(0,0,0,.3) 0px 4px 10px;
+    padding:30px;
+    box-sizing:border-box;
+    font-family:'Poppins', sans-serif;
+}
+
+.competenciaVisualizar-header {
+    position:relative;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.competenciaVisualizar-header h2 {
+    margin:0;
+    font-size:25px;
+    font-weight:600;
+    color:#333;
+}
+
+.competenciaVisualizar-acoes {
+    position:absolute;
+    right:0;
+    top:-10px;
+    display:flex;
+}
+
+.competenciaVisualizar-acoes button {
+    border:none;
+    background:transparent;
+    cursor:pointer;
+    padding:0;
+    display:flex;
+    align-items:center;
+}
+
+.competenciaVisualizar-fechar img {
+    width:32px;
+}
+
+.competenciaVisualizar-acoes img:hover {
+    transform:scale(1.1);
+}
+
+.competenciaVisualizar-conteudo {
+    margin-top:35px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+}
+
+.competenciaVisualizar-item {
+    display:flex;
+    flex-direction:column;
+}
+
+.competenciaVisualizar-item span {
+    font-size:.9rem;
+    font-weight:600;
+    color:#333;
+    margin-bottom:3px;
+}
+
+.competenciaVisualizar-item p {
+    margin:0;
+    font-size:.9rem;
+    color:#6a6a6a;
+}
+
+@media(max-width:768px){
+
+    .competenciaVisualizar-card {
+        width:90%;
+        padding:25px;
+    }
+
+    .competenciaVisualizar-header h2 {
+        font-size:22px;
+    }
+
+}

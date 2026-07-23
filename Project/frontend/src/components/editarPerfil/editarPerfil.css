@@ -1,0 +1,168 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+.editarPerfil-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.35);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+body.dark .editarPerfil-card {
+    background-color: #242424;
+    color: white;
+}
+
+.editarPerfil-card {
+    position: relative;
+    width: 95%;
+    max-width: 600px;
+    max-height: 80vh; 
+    background: white;
+    border-radius: 20px;
+    padding: 35px;
+    box-shadow:rgba(60,64,67,.3) 0px 1px 2px,rgba(60,64,67,.15) 0px 2px 6px;
+    display: flex;
+    flex-direction: column;
+}
+
+.editarPerfil-input:disabled {
+    background-color: #eeeeee;
+    color: #777;
+    cursor: not-allowed;
+}
+
+.editarPerfil-fechar {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.editarPerfil-fechar img {
+    width: 30px;
+    height: 30px;
+}
+
+.editarPerfil-titulo {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.editarPerfil-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.editarPerfil-grupo {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+}
+
+.editarPerfil-label {
+    width: 100%;
+    display: block;
+    margin-left: 3%;
+    text-align: left;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #8a8a8a;
+}
+
+.editarPerfil-input,
+.foto-container {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.editarPerfil-input {
+    width: 100%;
+    height: 40px;
+    border-radius: 15px;
+    border: 1px solid #D9D9D9;
+    background-color: transparent;
+    padding: 0 15px;
+    margin: 10px;
+    margin-top: 2%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: 0.25s;
+    box-sizing: border-box;
+}
+
+.editarPerfil-input:focus {
+    outline:none;
+    border-color:#2B83D5;
+    box-shadow:0 0 5px rgba(43,131,213,.3);
+}
+
+.editarPerfil-salvar {
+    margin-top:20px;
+    width:220px;
+    height:45px;
+    border:none;
+    border-radius:10px;
+    background:#2B83D5;
+    color:white;
+    font-family:'Poppins',sans-serif;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.foto-container {
+    width: 100%;
+    height: 40px;
+    border-radius: 15px;
+    border: 1px solid #D9D9D9;
+    background-color: transparent;
+    padding: 0 15px;
+    margin: 10px;
+    margin-top: 2%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: 0.25s;
+    box-sizing: border-box;
+}
+
+.foto-container:hover {
+    border-color: #2B83D5;
+}
+
+.foto-container:focus-within {
+    border-color: #2B83D5;
+    box-shadow: 0 0 5px rgba(43, 131, 213, .3);
+}
+
+.editar-file {
+    color: #8a8a8a;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    margin: 0;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.editar-download {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+}
