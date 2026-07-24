@@ -32,7 +32,7 @@ function PerfilInstrutor(){
                 email: usuario.email,   
                 user: usuario.user,
                 contato: usuario.contato,
-                nascimento: ConverterData(usuario.dataNascimento)
+                nascimento: ConverterData(usuario.data_nascimento)
             });
         }
     }, []);
