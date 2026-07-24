@@ -118,13 +118,6 @@ function Login() {
       
       const usuarioEncontrado = response.data;
 
-      localStorage.setItem('usuario', JSON.stringify(usuarioEncontrado))
-
-      if (usuarioEncontrado.password === usuarioEncontrado.dataNascimento) {
-        navigate("/Confirm_login");
-        return;
-      }
-      
       if (!usuarioEncontrado) {
         Swal.fire({
           icon: "error",
@@ -136,19 +129,19 @@ function Login() {
         return
       }
       if (usuarioEncontrado) {
-        login(usuarioEncontrado);
+        await login(usuarioEncontrado);
         
-        if (password === usuarioEncontrado.dataNascimento) {
-          navigate('/Confirm_login')
-          return
-        }
-        
-        if (usuarioEncontrado.tipo === "aprendiz") {
+        // if (password === usuarioEncontrado.dataNascimento) {
+        //   navigate('/Confirm_login')
+        //   return
+        // // }
+        console.log(usuarioEncontrado)
+        if (usuarioEncontrado.user.tipo === "aprendiz") {
           navigate('/Perfil')
           return
         }
         
-        if (usuarioEncontrado.tipo === "instrutor") {
+        if (usuarioEncontrado.user.tipo === "instrutor") {
           navigate('/Home')
           return
         }

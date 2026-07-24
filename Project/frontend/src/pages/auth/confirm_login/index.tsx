@@ -26,7 +26,7 @@ async function Confirm_login() {
   //   nome: "Bruna",
   //   dataNascimento: "21/08/2006"
   // }
-
+  const usuario = await api.post
    await api.post("/auth/primeiroAcesso", {
     EDV: edv,
     password: password,

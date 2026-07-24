@@ -63,7 +63,7 @@ type LoginResult =
       user: {
         EDV: number;
         name: string;
-        tipoUser: string;
+        tipo: string;
         email_bosch: string;
         user_bosch: string;
         contato: string;
@@ -98,6 +98,8 @@ export class UserService {
 
   static async register(data: AdicionarUserDto) {
     const passwordCrypt = await bcrypt.hash(data.password_login, 10);
+
+    console.log(data)
 
     try {
       return await prisma.$transaction(async (tx) => {
@@ -201,7 +203,7 @@ export class UserService {
       user: {
         EDV: user.EDV,
         name: user.name,
-        tipoUser: user.tipoUser,
+        tipo: user.tipoUser.toLowerCase(),
         email_bosch: user.email_bosch || "",
         user_bosch: user.user_bosch || "",
         contato: user.contato,
