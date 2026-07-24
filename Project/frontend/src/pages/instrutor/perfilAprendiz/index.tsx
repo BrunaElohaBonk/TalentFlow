@@ -13,32 +13,93 @@ import icon_user from '../../../assets/img/icon_user.png'
 import voltar from '../../../assets/img/voltar.png'
 import { useNavigate, useParams } from "react-router-dom";
 import { aprendizes } from "../verAprendiz/aprendizes";
+import api from "../../../services/api";
 
+interface IAprendizPerfil {
+    edv: number;
+    img: string;
+    nome: string;
+    email: string;
+    user: string;
+    contato: number;
+    nascimento: Date;
+    turma: number;
 
+    situacaoProfissional: any;
+    formacaoAcademica: any[];
+    cursosComplementares: any[];
+    idiomas: any[];
+    softskills: any[];
+    competencias: any[];
+}
 
 function PerfilAprendiz(){
     const navigate = useNavigate()
-    const { edv } = useParams();
+    const { edv , id_profile} = useParams();
     type Aprendiz = (typeof aprendizes)[number];
-    const [aprendiz, setAprendiz] = useState<Aprendiz | null>(null)
+    const [aprendiz, setAprendiz] = useState<IAprendizPerfil | null>(null)
     const [situacao, setSituacao] = useState(false)
     const [formacao_academica, setFormacaoAcademica] = useState(false)
     const [curso_complementar, setCursoComplementar] = useState(false)
     const [idioma, setIdioma] = useState(false)
     const [soft_skill, setSoftSkill] = useState(false)
     const [competencia, setCompetencia] = useState(false)
-    useEffect(() => {
-        const dados = aprendizes.find(
-            a => a.perfil.edv === Number(edv)
-        );
+    // useEffect(() => {
+    //     const dados = aprendizes.find(
+    //         a => a.perfil.edv === Number(edv)
+    //     );
 
-        if (dados) {
-            setAprendiz(dados);
+    //     if (dados) {
+    //         setAprendiz(dados);
+    //     }
+    // }, [edv]);
+    // if (!aprendiz) {
+    //     return <h2>Carregando...</h2>;
+    // }
+    useEffect(() => {
+        async function carregarPerfil() {
+            try {
+                const response = await api.get(`/aprediz/perfil/:${edv}/:${id_profile}`);
+                const usuario = JSON.parse(localStorage.getItem("usuario")!);
+    
+                setAprendiz({
+                    edv: usuario.EDV,
+                    img: usuario.imagem,
+                    nome: usuario.name,
+                    email: usuario.email_bosch,
+                    user: usuario.user_bosch,
+                    contato: usuario.contato,
+                    nascimento: new Date(usuario.data_nascimento),
+                    turma: usuario.id_turma,
+    
+                    situacaoProfissional:
+                        response.data.situacaoProfissional,
+    
+                    formacaoAcademica:
+                        response.data.formacaoAcademica,
+    
+                    cursosComplementares:
+                        response.data.cursosComplementares,
+    
+                    idiomas:
+                        response.data.idiomas,
+    
+                    softskills:
+                        response.data.softskills,
+    
+                    competencias:
+                        response.data.competencias,
+                });
+
+                console.log(response, usuario)
+    
+            } catch (err) {
+                console.log(err);
+            }
         }
-    }, [edv]);
-    if (!aprendiz) {
-        return <h2>Carregando...</h2>;
-    }
+    
+        carregarPerfil();
+    }, []);
 
     return(
         <div className="dadosAprendiz">
@@ -61,14 +122,14 @@ function PerfilAprendiz(){
                             <div className="dadosAprendiz-topo">
                                 <div className="dadosAprendiz-foto-container"><img src={icon_user} alt="icon_user" /></div>
                                 <div className="dadosAprendiz-dados-perfil">
-                                    <div className="dadosAprendiz-cabecalho-perfil"><h1>{aprendiz.perfil.nome}</h1></div>
+                                    <div className="dadosAprendiz-cabecalho-perfil"><h1>{aprendiz.nome}</h1></div>
                                     <div className="dadosAprendiz-informacoes">
-                                        <span>Email: {aprendiz.perfil.email}</span>
-                                        <span>EDV: {aprendiz.perfil.edv}</span>
-                                        <span>User: {aprendiz.perfil.user}</span>
-                                        <span>Data de Nascimento: {aprendiz.perfil.nascimento.toLocaleDateString("pt-BR")}</span>
-                                        <span>Idade: {calcularIdade(aprendiz.perfil.nascimento)} anos</span>
-                                        <span>Contato: {formatarTelefone(aprendiz.perfil.contato)}</span>
+                                        <span>Email: {aprendiz.email}</span>
+                                        <span>EDV: {aprendiz.edv}</span>
+                                        <span>User: {aprendiz.user}</span>
+                                        <span>Data de Nascimento: {aprendiz.nascimento.toLocaleDateString("pt-BR")}</span>
+                                        <span>Idade: {calcularIdade(aprendiz.nascimento)} anos</span>
+                                        <span>Contato: {formatarTelefone(aprendiz.contato)}</span>
                                     </div>
                                 </div>
                             </div>
