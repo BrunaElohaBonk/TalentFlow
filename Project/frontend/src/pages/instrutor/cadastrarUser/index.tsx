@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 import { FormControl, FormControlLabel, FormLabel, MenuItem, Radio, RadioGroup, Select } from "@mui/material";
 import { turmas as turmasMock } from "../verTurma/turma";
 import { useTheme } from "../../../context/themeContext";
+import api from "../../../services/api";
 
 interface ITurma {
     id: number;
@@ -65,7 +66,7 @@ function CadastrarUser() {
     
     const fetchTurmas = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080//api/turma/visualizarTurmas`);
+            const response = await api.get(`turma/visualizarTurmas`);
             setTurmas(response.data.response);
         }
         catch (e) {
@@ -75,7 +76,7 @@ function CadastrarUser() {
     
     const fetchUser = async () => {
         try {
-            const response = await axios.get(`link backend`);
+            const response = await api.get(`link backend`);
             const Usuario = response.data.response;
             setUser({
                 edv: Usuario.edv || 0,
@@ -156,7 +157,7 @@ function CadastrarUser() {
                     password_login: user.senha
                 };
                 console.log("Token enviado:", token);
-                response = await axios.post("http://localhost:8080/api/instrutor/criarInstrutor", dadosInstrutor, {headers: {Authorization: `Bearer ${token}`}});
+                response = await api.post("instrutor/criarInstrutor", dadosInstrutor);
             } 
             else {
                 const dadosAprendiz = { 
@@ -164,7 +165,7 @@ function CadastrarUser() {
                     Id_Turma: Number(user.turma)
                 };
                 console.log("Token enviado:", token);
-                response = await axios.post("http://localhost:8080/api/aprendiz/criar", dadosAprendiz, {headers: {Authorization: `Bearer ${token}`}});
+                response = await api.post("aprendiz/criar", dadosAprendiz, {headers: {Authorization: `Bearer ${token}`}});
             }
             Swal.fire({
                 title: 'Sucesso!',

@@ -10,11 +10,11 @@ import "react-datepicker/dist/react-datepicker.css";
 interface IPerfil {
     img: File | string | null;
     name: string;
-    edv: number;
-    email: string;
-    user: string;
+    EDV: number;
+    email_bosch: string;
+    user_bosch: string;
     contato: string;
-    nascimento: string;
+    data_nascimento: string;
 }
 interface Props {
     visible: boolean;
@@ -56,26 +56,26 @@ function EditarPerfil({ visible, setVisible, edv }: Props){
     const [perfil, setPerfil] = useState<IPerfil>({
         img: null,
         name: '',
-        edv: 0,
-        email: '',
-        user: '',
+        EDV: 0,
+        email_bosch: '',
+        user_bosch: '',
         contato: '',
-        nascimento: '',
+        data_nascimento: '',
     });
     const fetchPerfil = async () => {
         try {
-            const response = await axios.get(`link backend/${edv}`);
+            const response = await axios.get(`http://localhost:8080/api/instrutor/editarInstrutor/${edv}`);
             console.log("Resposta API:", response.data);
             const User = response.data.response;
             console.log("Usuário:", User);
             setPerfil({
                 name: User.name || '',
                 img: null,
-                edv: User.edv || '',
-                email: User.email || '',
-                user: User.user || '',
+                EDV: User.EDV || 0,
+                email_bosch: User.email_bosch || '',
+                user_bosch: User.user_bosch || '',
                 contato: User.contato || '',
-                nascimento: User.nascimento? new Date(User.nascimento).toLocaleDateString("pt-BR"): ''
+                data_nascimento: User.data_nascimento ? new Date(User.data_nascimento).toLocaleDateString("pt-BR"): ''
             });
         } 
         catch (e) {
@@ -93,11 +93,11 @@ function EditarPerfil({ visible, setVisible, edv }: Props){
             setPerfil({
                 img: null,
                 name: usuario.nome,
-                edv: Number(usuario.edv),
-                email: usuario.email,
-                user: usuario.user,
+                EDV: Number(usuario.edv),
+                email_bosch: usuario.email,
+                user_bosch: usuario.user,
                 contato: formatarContato(usuario.contato),
-                nascimento: usuario.dataNascimento,
+                data_nascimento: usuario.dataNascimento,
             });
         }
         fetchPerfil();
@@ -112,7 +112,7 @@ function EditarPerfil({ visible, setVisible, edv }: Props){
 
     const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const [dia, mes, ano] = perfil.nascimento.split("/");
+        const [dia, mes, ano] = perfil.data_nascimento.split("/");
         const dataNascimento = new Date(
             Number(ano),
             Number(mes) - 1,
@@ -134,7 +134,7 @@ function EditarPerfil({ visible, setVisible, edv }: Props){
             });
             return;
         }
-        if (!perfil.name || !perfil.email || !perfil.contato || !perfil.email || !perfil.nascimento) {
+        if (!perfil.email_bosch || !perfil.contato || !perfil.data_nascimento) {
             Swal.fire({
                 title: 'Atenção!',
                 text: 'Preencha os campos obrigatórios!',
@@ -204,19 +204,19 @@ function EditarPerfil({ visible, setVisible, edv }: Props){
                     </div>
                     <div className="editarPerfil-grupo">
                         <label className="editarPerfil-label">EDV</label>
-                        <input ref={edvRef} name="edv" className="editarPerfil-input" value={perfil.edv} disabled/>
+                        <input ref={edvRef} name="EDV" className="editarPerfil-input" value={perfil.EDV} disabled/>
                     </div>
                     <div className="editarPerfil-grupo">
                         <label className="editarPerfil-label">Email</label>
-                        <input ref={emailRef} name="email" className="editarPerfil-input" value={perfil.email} onChange={handleChange} onKeyDown={(e) => proximoCampo(e, userRef)}/>
+                        <input ref={emailRef} name="email_bosch" className="editarPerfil-input" value={perfil.email_bosch} onChange={handleChange} onKeyDown={(e) => proximoCampo(e, userRef)}/>
                     </div>
                     <div className="editarPerfil-grupo">
                         <label className="editarPerfil-label">UserID</label>
-                        <input ref={userRef} name="user" className="editarPerfil-input" value={perfil.user} disabled/>
+                        <input ref={userRef} name="user_bosch" className="editarPerfil-input" value={perfil.user_bosch} disabled/>
                     </div>
                     <div className="editarPerfil-grupo">
                         <label className="editarPerfil-label">Data de nascimento</label>
-                        <input ref={nascimentoRef} name="nascimento" className="editarPerfil-input" value={perfil.nascimento} disabled/>
+                        <input ref={nascimentoRef} name="data_nascimento" className="editarPerfil-input" value={perfil.data_nascimento} disabled/>
                     </div>
                     <div className="editarPerfil-grupo">
                         <label className="editarPerfil-label">Contato</label>
