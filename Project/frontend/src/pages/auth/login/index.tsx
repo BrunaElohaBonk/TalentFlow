@@ -40,8 +40,7 @@ function Login() {
   // TEMPORÁRIO - REMOVER NA INTEGRAÇÃO COM BACKEND
 //  const [usuario,setusuario] = useState<Usuario[]>()
 
-// const usuario: Usuario[] 
-//= [
+// const usuario: Usuario[]= [
 //   {
 //     edv: "92906829",
 //     img: "",
