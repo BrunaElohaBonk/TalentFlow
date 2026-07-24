@@ -6,6 +6,7 @@ import Swal from 'sweetalert2'
 import axios from 'axios'
 import { useDropzone } from "react-dropzone";
 import "react-datepicker/dist/react-datepicker.css";
+import api from '../../services/api'
 
 interface IPerfil {
     img: File | string | null;
@@ -53,6 +54,13 @@ function EditarPerfil({ visible, setVisible, edv }: Props){
             }
         },
     });
+    const formatarData = (data: string) => {
+    if (!data) return "";
+
+    const [ano, mes, dia] = data.split("T")[0].split("-");
+
+    return `${dia}/${mes}/${ano}`;
+};
     const [perfil, setPerfil] = useState<IPerfil>({
         img: null,
         name: '',
@@ -62,47 +70,24 @@ function EditarPerfil({ visible, setVisible, edv }: Props){
         contato: '',
         data_nascimento: '',
     });
-    const fetchPerfil = async () => {
-        try {
-            const response = await axios.get(`http://localhost:8080/api/instrutor/editarInstrutor/${edv}`);
-            console.log("Resposta API:", response.data);
-            const User = response.data.response;
-            console.log("Usuário:", User);
-            setPerfil({
-                name: User.name || '',
-                img: null,
-                EDV: User.EDV || 0,
-                email_bosch: User.email_bosch || '',
-                user_bosch: User.user_bosch || '',
-                contato: User.contato || '',
-                data_nascimento: User.data_nascimento ? new Date(User.data_nascimento).toLocaleDateString("pt-BR"): ''
-            });
-        } 
-        catch (e) {
-            console.error('Erro:', e);
-        }
-    };
     useEffect(() => {
         if (!visible) return;
-
         const usuarioSalvo = localStorage.getItem("usuario");
-
         if (usuarioSalvo) {
             const usuario = JSON.parse(usuarioSalvo);
-
+            console.log("Usuário local:", usuario);
             setPerfil({
                 img: null,
-                name: usuario.nome,
-                EDV: Number(usuario.edv),
-                email_bosch: usuario.email,
-                user_bosch: usuario.user,
-                contato: formatarContato(usuario.contato),
-                data_nascimento: usuario.dataNascimento,
+                name: usuario.name || '',
+                EDV: Number(usuario.EDV) || 0,
+                email_bosch: usuario.email_bosch || '',
+                user_bosch: usuario.user_bosch || '',
+                contato: usuario.contato || '',
+                data_nascimento: formatarData(usuario.data_nascimento),
             });
         }
-        fetchPerfil();
     }, [visible]);
-
+    
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setPerfil({
             ...perfil,
@@ -143,29 +128,29 @@ function EditarPerfil({ visible, setVisible, edv }: Props){
             return;
         }
         try {
-            const response = await axios.put(
-                `link backend`,{
-                    ...perfil
-                }
-            );
+            const response = await api.put(`instrutor/editarInstrutor/${perfil.EDV}`,perfil);
+            const usuario = JSON.parse(localStorage.getItem("usuario")!);
+            usuario.email = perfil.email_bosch;
+            usuario.contato = perfil.contato;
+            usuario.dataNascimento = perfil.data_nascimento;
+            localStorage.setItem("usuario", JSON.stringify(usuario));
             Swal.fire({
-                title: 'Sucesso!',
-                text: 'Seu perfil foi atualizado com sucesso!',
-                icon: 'success'
+                title: "Sucesso!",
+                text: "Seu perfil foi atualizado com sucesso!",
+                icon: "success",
             });
-            console.log("Resposta API:", response.data);
-            setVisible(false)
+            console.log(response.data);
+            setVisible(false);
         }
         catch (e) {
-            console.error('Erro ao atualizar:', e);
+            console.error("Erro ao atualizar:", e);
             Swal.fire({
-                title: 'Erro!',
-                text: 'Não foi possível atualizar o seu perfil',
-                icon: 'error'
+                title: "Erro!",
+                text: "Não foi possível atualizar o seu perfil.",
+                icon: "error",
             });
         }
     }
-
     const formatarContato = (contato: string | number) => {
         let value = String(contato).replace(/\D/g, "");
         if (value.length > 11) {

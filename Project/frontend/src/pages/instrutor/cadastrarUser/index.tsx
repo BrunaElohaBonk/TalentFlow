@@ -117,7 +117,7 @@ function CadastrarUser() {
         const dataNascimento = new Date(
             Number(ano),
             Number(mes) - 1,
-            Number(dia)
+            Number(dia) + 1
         );
         const hoje = new Date();
         let idade = hoje.getFullYear() - dataNascimento.getFullYear();
