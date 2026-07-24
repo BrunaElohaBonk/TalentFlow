@@ -44,16 +44,17 @@ function CadastrarUser() {
     const salvarRef = useRef<HTMLButtonElement>(null);
     const [turmas, setTurmas] = useState<ITurma[]>([]);
     const [selectTurma, setSelectTurma] = useState(turmasMock);
+    const token = localStorage.getItem("token");
     // const [showPassword, setShowPassword] = useState(false)
     const proximoCampo = (e: React.KeyboardEvent<HTMLInputElement>, proximo: React.RefObject<HTMLElement | null>) => {
         if (e.key === "Enter") {
             e.preventDefault();
             proximo.current?.focus();
         }};
-    const [user, setUser] = useState<IUser>({
-        edv: 0,
-        name: '',
-        turma: '',  
+        const [user, setUser] = useState<IUser>({
+            edv: 0,
+            name: '',
+            turma: '',  
         email: '',
         user: '',
         nascimento: '',
@@ -61,7 +62,7 @@ function CadastrarUser() {
         senha: '',
         tipo: "aprendiz"
     });
-
+    
     const fetchTurmas = async () => {
         try {
             const response = await axios.get(`http://localhost:5173/visualizarTurmas`);
@@ -71,7 +72,7 @@ function CadastrarUser() {
             console.log(e);
         }
     };
-
+    
     const fetchUser = async () => {
         try {
             const response = await axios.get(`link backend`);
@@ -92,7 +93,7 @@ function CadastrarUser() {
             console.error('Erro:', e);
         }
     };
-
+    
     useEffect(() => {
         if (id) {
             fetchUser();
@@ -100,7 +101,7 @@ function CadastrarUser() {
         setSelectTurma(turmasMock);
         fetchTurmas();
     }, []);
-
+    
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setUser((prev) => ({
@@ -108,7 +109,7 @@ function CadastrarUser() {
             [name]: name === "edv" ? Number(value) : value
         }));
     };
-
+    
     const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault();
         const [dia, mes, ano] = user.nascimento.split("/");
@@ -124,7 +125,7 @@ function CadastrarUser() {
         if (mesAtual < dataNascimento.getMonth() || (mesAtual === dataNascimento.getMonth() && diaAtual < dataNascimento.getDate())) {
             idade--;
         }
-
+        
         if (idade < 15 || idade > 100) {
             Swal.fire({
                 title: "Idade inválida!",
@@ -154,14 +155,14 @@ function CadastrarUser() {
                     contato: user.contato,
                     password_login: user.senha
                 };
-                response = await axios.post("http://localhost:3000/api/instrutor/criarInstrutor", dadosInstrutor);
+                response = await axios.post("http://localhost:8080/api/instrutor/criarInstrutor", dadosInstrutor, {headers: {Authorization: `Bearer ${token}`}});
             } 
             else {
                 const dadosAprendiz = { 
                     EDV: user.edv,
                     Id_Turma: Number(user.turma)
                 };
-                response = await axios.post("http://localhost:3000/api/aprendiz/criar", dadosAprendiz);
+                response = await axios.post("http://localhost:8080/api/aprendiz/criar", dadosAprendiz, {headers: {Authorization: `Bearer ${token}`}});
             }
             Swal.fire({
                 title: 'Sucesso!',

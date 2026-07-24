@@ -1,12 +1,11 @@
 import { createContext, useContext, useState } from "react";
 
 interface Usuario {
-    token: string;
-    user: {
         EDV: number
         tipo: string
-    }
+        token: string
 }
+
 
 interface AuthContextType {
     usuario: Usuario | null;
@@ -26,7 +25,7 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
         setUsuario(usuario);
         localStorage.setItem(
             "usuario",
-            JSON.stringify(usuario.user)
+            JSON.stringify(usuario)
         );
         localStorage.setItem(
             "token",
