@@ -8,13 +8,14 @@ import { aprendizes } from "../verAprendiz/aprendizes";
 import { GraficoSetor, GraficoEstagio, GraficoSuperior, GraficoCompetencias, GraficoIdiomas } from "./graficos";
 
 function Dashboard() {
+    console.log("Dashboard renderizou")
     const [busca] = useState("");
     const [filtro, setFiltro] = useState(false)
-    const Idade = (dataNascimento: Date) => {
+    const Idade = (data_nascimento: Date) => {
         const hoje = new Date();
-        let idade = hoje.getFullYear() - dataNascimento.getFullYear();
-        const mes = hoje.getMonth() - dataNascimento.getMonth();
-        if (mes < 0 || (mes === 0 && hoje.getDate() < dataNascimento.getDate())) {
+        let idade = hoje.getFullYear() - data_nascimento.getFullYear();
+        const mes = hoje.getMonth() - data_nascimento.getMonth();
+        if (mes < 0 || (mes === 0 && hoje.getDate() < data_nascimento.getDate())) {
             idade--;
         }
         return idade;

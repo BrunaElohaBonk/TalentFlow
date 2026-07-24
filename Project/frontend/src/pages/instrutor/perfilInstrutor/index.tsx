@@ -25,12 +25,13 @@ function PerfilInstrutor(){
         const usuarioSalvo = localStorage.getItem("usuario");
         if (usuarioSalvo) {
             const usuario = JSON.parse(usuarioSalvo);
+            console.log(usuario)
             setPerfil({
-                edv: Number(usuario.edv),
-                img: usuario.img,
-                nome: usuario.nome,
-                email: usuario.email,   
-                user: usuario.user,
+                edv: usuario.EDV,
+                img: usuario.imagem,
+                nome: usuario.name,
+                email: usuario.email_bosch,
+                user: usuario.user_bosch,
                 contato: usuario.contato,
                 nascimento: ConverterData(usuario.data_nascimento)
             });
@@ -113,14 +114,14 @@ function Telefone(numero: number) {
     return telefone.replace(/^(\d{2})(\d{5})(\d{4})$/,"($1)$2-$3");
 }
 
-function Idade(dataNascimento: Date) {
+function Idade(data_nascimento: Date) {
     const hoje = new Date();
-    let idade = hoje.getFullYear() - dataNascimento.getFullYear();
+    let idade = hoje.getFullYear() - data_nascimento.getFullYear();
     const mesAtual = hoje.getMonth();
-    const mesNascimento = dataNascimento.getMonth();
+    const mesNascimento = data_nascimento.getMonth();
     if (
         mesAtual < mesNascimento ||
-        (mesAtual === mesNascimento && hoje.getDate() < dataNascimento.getDate())
+        (mesAtual === mesNascimento && hoje.getDate() < data_nascimento.getDate())
     ) {
         idade--;
     }
