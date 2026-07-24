@@ -30,7 +30,7 @@ route.post(
 );
 
 route.get(
-  "/perfil/:EDV/:id",
+  "/perfil/:EDV",
   authMiddleware,
   roleMiddleware("INSTRUTOR"),
   aprendizController.verPerfil,

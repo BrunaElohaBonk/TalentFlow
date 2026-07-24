@@ -37,69 +37,25 @@ function PerfilAprendiz(){
     const navigate = useNavigate()
     const { edv , id_profile} = useParams();
     type Aprendiz = (typeof aprendizes)[number];
-    const [aprendiz, setAprendiz] = useState<IAprendizPerfil | null>(null)
+    const [aprendiz, setAprendiz] = useState<Aprendiz | null>(null)
     const [situacao, setSituacao] = useState(false)
     const [formacao_academica, setFormacaoAcademica] = useState(false)
     const [curso_complementar, setCursoComplementar] = useState(false)
     const [idioma, setIdioma] = useState(false)
     const [soft_skill, setSoftSkill] = useState(false)
     const [competencia, setCompetencia] = useState(false)
-    // useEffect(() => {
-    //     const dados = aprendizes.find(
-    //         a => a.perfil.edv === Number(edv)
-    //     );
-
-    //     if (dados) {
-    //         setAprendiz(dados);
-    //     }
-    // }, [edv]);
-    // if (!aprendiz) {
-    //     return <h2>Carregando...</h2>;
-    // }
     useEffect(() => {
-        async function carregarPerfil() {
-            try {
-                const response = await api.get(`/aprediz/perfil/:${edv}/:${id_profile}`);
-                const usuario = JSON.parse(localStorage.getItem("usuario")!);
-    
-                setAprendiz({
-                    edv: usuario.EDV,
-                    img: usuario.imagem,
-                    nome: usuario.name,
-                    email: usuario.email_bosch,
-                    user: usuario.user_bosch,
-                    contato: usuario.contato,
-                    nascimento: new Date(usuario.data_nascimento),
-                    turma: usuario.id_turma,
-    
-                    situacaoProfissional:
-                        response.data.situacaoProfissional,
-    
-                    formacaoAcademica:
-                        response.data.formacaoAcademica,
-    
-                    cursosComplementares:
-                        response.data.cursosComplementares,
-    
-                    idiomas:
-                        response.data.idiomas,
-    
-                    softskills:
-                        response.data.softskills,
-    
-                    competencias:
-                        response.data.competencias,
-                });
+        const dados = aprendizes.find(
+            a => a.perfil.edv === Number(edv)
+        );
 
-                console.log(response, usuario)
-    
-            } catch (err) {
-                console.log(err);
-            }
+        if (dados) {
+            setAprendiz(dados);
         }
-    
-        carregarPerfil();
-    }, []);
+    }, [edv]);
+    if (!aprendiz) {
+        return <h2>Carregando...</h2>;
+    }
 
     return(
         <div className="dadosAprendiz">

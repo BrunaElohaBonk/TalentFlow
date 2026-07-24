@@ -17,6 +17,7 @@ import Competencia from "../competencias";
 import EditarFormacaoAcademica from '../formacao_academica/editar/editar_formacao'
 import AdicionarFormacaoAcademica from "../formacao_academica/adicionar/adicionar";
 import './perfil.css'
+import { usuarios } from "../../instrutor/verInstrutor/users";
 
 interface Usuario {
     edv: number;
@@ -148,7 +149,7 @@ function Perfil() {
                         </div>
                         <div className="perfil-dados-perfil">
                             <div className="perfil-cabecalho-perfil">
-                                <h1>{aprendiz.nome}</h1>
+                                <h1>{usuarios.}</h1>
                             </div>
                             <div className="perfil-informacoes">
                                 <span>Email: {aprendiz.email}</span>

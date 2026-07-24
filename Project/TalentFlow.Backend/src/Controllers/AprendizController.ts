@@ -214,9 +214,9 @@ export default class aprendizController {
     });
   }
   static async verPerfil(req: Request, res: Response, next: NextFunction) {
-    const { EDV, id } = req.params;
+    const { EDV } = req.params;
 
-    const perfil = await AprendizService.verPerfil(Number(EDV), Number(id));
+    const perfil = await AprendizService.verPerfil(Number(EDV));
 
     if (!perfil) {
       throw new Error("Perfil não encontrado");
