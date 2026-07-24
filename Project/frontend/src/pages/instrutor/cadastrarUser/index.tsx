@@ -1,23 +1,19 @@
 import { useParams } from "react-router-dom";
 import Header from "../../../components/header";
 import Sidebar from "../../../components/sidebar";
-// import icon_olho from '../../../assets/img/icon_olho.png'
-// import icon_olho_fechado from '../../../assets/img/icon_olho_fechado.png'
 import './cadastrarUser.css';
 import { useEffect, useRef, useState } from "react";
-import axios from "axios";
 import Swal from "sweetalert2";
 import { FormControl, FormControlLabel, FormLabel, MenuItem, Radio, RadioGroup, Select } from "@mui/material";
 import { useTheme } from "../../../context/themeContext";
 import api from "../../../services/api";
-import { turmas as turmasMock } from "../verTurma/turma";
 
 interface ITurma {
     id: number;
-    nome: string;
-    curso: string;
-    instrutorEdv: number;
-    instrutorNome: string;
+    nomeTurma: string;
+    name_Curso: string;
+    EDV_Instrutor: number;
+    nomeInstrutor: string;
 }
 
 interface IUser {
@@ -44,9 +40,7 @@ function CadastrarUser() {
     const senhaRef = useRef<HTMLInputElement>(null);
     const salvarRef = useRef<HTMLButtonElement>(null);
     const [turmas, setTurmas] = useState<ITurma[]>([]);
-    const [selectTurma, setSelectTurma] = useState(turmasMock);
     const token = localStorage.getItem("token");
-    // const [showPassword, setShowPassword] = useState(false)
     const proximoCampo = (e: React.KeyboardEvent<HTMLInputElement>, proximo: React.RefObject<HTMLElement | null>) => {
         if (e.key === "Enter") {
             e.preventDefault();
@@ -56,21 +50,22 @@ function CadastrarUser() {
             edv: 0,
             name: '',
             turma: '',  
-        email: '',
-        user: '',
-        nascimento: '',
-        contato: '',
-        senha: '',
-        tipo: "aprendiz"
+            email: '',
+            user: '',
+            nascimento: '',
+            contato: '',
+            senha: '',
+            tipo: "aprendiz"
     });
     
     const fetchTurmas = async () => {
         try {
-            const response = await api.get(`turma/visualizarTurmas`);
-            setTurmas(response.data.response);
+            const response = await api.get("turma/visualizarTurmas");
+            console.log("Turmas API:", response.data);
+            setTurmas(response.data);
         }
         catch (e) {
-            console.log(e);
+            console.log("Erro ao buscar turmas:", e);
         }
     };
     
@@ -99,7 +94,6 @@ function CadastrarUser() {
         if (id) {
             fetchUser();
         }
-        setSelectTurma(turmasMock);
         fetchTurmas();
     }, []);
     
@@ -253,14 +247,10 @@ function CadastrarUser() {
                                 {user.tipo === "aprendiz" && (
                                     <Select fullWidth displayEmpty value={user.turma} className={`user-select ${darkMode ? "dark" : ""}`} MenuProps={{classes:{paper: darkMode ? "user-select-dark-menu" : ""}}} onChange={(e) =>setUser({ ...user, turma: e.target.value })}>
                                         <MenuItem value="" disabled>Selecione uma turma</MenuItem>
-                                        {selectTurma.map((turma) => (<MenuItem key={turma.id} value={turma.id}>{turma.nome}</MenuItem>))}
+                                        {turmas.map((turma) => (<MenuItem key={turma.id} value={turma.id}>{turma.nomeTurma}</MenuItem>))}
                                     </Select>
                                 )}
                             </div>
-                            {/* <div className="user-senha">
-                                <input ref={senhaRef} name="senha" type={showPassword ? "text" : "password"} placeholder="Senha" value={user.senha} onChange={handleChange} className="user-input" onKeyDown={(e) => proximoCampo(e, salvarRef)}/>
-                                <img src={showPassword ? icon_olho_fechado : icon_olho} alt="Visualizar senha" className='user-eye-icon' onClick={() => setShowPassword(!showPassword)}/>
-                            </div> */}
                         </div>
                         <div className="user-button">
                             <button ref={salvarRef} type="submit" className="user-salvar">CONFIRMAR</button>
