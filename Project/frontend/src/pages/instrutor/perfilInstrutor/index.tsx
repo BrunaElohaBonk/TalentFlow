@@ -93,7 +93,7 @@ function PerfilInstrutor(){
                                     <span className="perfil-span">EDV: {perfil.edv}</span>
                                     <span className="perfil-span">User: {perfil.user}</span>
                                     <span className="perfil-span">Email: {perfil.email}</span>
-                                    <span className="perfil-span">Data de Nascimento: {perfil.nascimento}</span>
+                                    <span className="perfil-span">Data de Nascimento: {formatarData(perfil.nascimento)}</span>
                                     <span className="perfil-span">Idade: {Idade(perfil.nascimento)} anos</span>
                                     <span className="perfil-span">Contato:Contato: {Telefone(perfil.contato)}</span>
                                 </div>
