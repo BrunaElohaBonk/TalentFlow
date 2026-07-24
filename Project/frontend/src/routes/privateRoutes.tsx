@@ -6,7 +6,7 @@ function PrivateRoute({children, tipo} : any){
     if(!usuario){
         return <Navigate to="/" replace />;
     }
-    if(tipo && usuario.tipo !== tipo){
+    if(tipo && usuario.user.tipo !== tipo){
         return <Navigate to="/Home" />;
     }
     return children;
