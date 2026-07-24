@@ -32,6 +32,8 @@ export function authMiddleware(
 
   const [, token] = authHeader.split(" ");
 
+  console.log(token)
+
   if (!token) {
     return res.status(401).json({
       message: "Token inválido",

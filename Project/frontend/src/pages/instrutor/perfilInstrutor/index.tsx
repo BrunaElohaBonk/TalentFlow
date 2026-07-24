@@ -33,7 +33,7 @@ function PerfilInstrutor(){
                 email: usuario.email_bosch,
                 user: usuario.user_bosch,
                 contato: usuario.contato,
-                nascimento: ConverterData(usuario.data_nascimento)
+                nascimento:new Date(usuario.data_nascimento)
             });
         }
     }, []);
@@ -95,7 +95,7 @@ function PerfilInstrutor(){
                                     <span className="perfil-span">Email: {perfil.email}</span>
                                     <span className="perfil-span">Data de Nascimento: {perfil.nascimento.toLocaleDateString("pt-BR")}</span>
                                     <span className="perfil-span">Idade: {Idade(perfil.nascimento)} anos</span>
-                                    <span className="perfil-span">Contato: {Telefone(perfil.contato)}</span>
+                                    <span className="perfil-span">Contato:{perfil.nascimento.toLocaleDateString("pt-BR")}</span>
                                 </div>
                             </>
                         ):(
