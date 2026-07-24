@@ -65,7 +65,7 @@ function CadastrarUser() {
     
     const fetchTurmas = async () => {
         try {
-            const response = await axios.get(`http://localhost:5173/visualizarTurmas`);
+            const response = await axios.get(`http://localhost:8080//api/turma/visualizarTurmas`);
             setTurmas(response.data.response);
         }
         catch (e) {
@@ -134,7 +134,7 @@ function CadastrarUser() {
             });
             return;
         }
-        if (!user.edv || !user.name || !user.turma || !user.email || !user.nascimento || !user.contato || !user.senha || (user.tipo === "aprendiz" && !user.turma)) {
+        if (!user.edv || !user.name || !user.email || !user.nascimento || !user.contato || (user.tipo === "aprendiz" && !user.turma)) {
             Swal.fire({
                 title: 'Atenção!',
                 text: 'Preencha os campos obrigatórios!',
@@ -155,6 +155,7 @@ function CadastrarUser() {
                     contato: user.contato,
                     password_login: user.senha
                 };
+                console.log("Token enviado:", token);
                 response = await axios.post("http://localhost:8080/api/instrutor/criarInstrutor", dadosInstrutor, {headers: {Authorization: `Bearer ${token}`}});
             } 
             else {
@@ -162,6 +163,7 @@ function CadastrarUser() {
                     EDV: user.edv,
                     Id_Turma: Number(user.turma)
                 };
+                console.log("Token enviado:", token);
                 response = await axios.post("http://localhost:8080/api/aprendiz/criar", dadosAprendiz, {headers: {Authorization: `Bearer ${token}`}});
             }
             Swal.fire({
