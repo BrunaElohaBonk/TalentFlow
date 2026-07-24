@@ -8,9 +8,9 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { FormControl, FormControlLabel, FormLabel, MenuItem, Radio, RadioGroup, Select } from "@mui/material";
-import { turmas as turmasMock } from "../verTurma/turma";
 import { useTheme } from "../../../context/themeContext";
 import api from "../../../services/api";
+import { turmas as turmasMock } from "../verTurma/turma";
 
 interface ITurma {
     id: number;

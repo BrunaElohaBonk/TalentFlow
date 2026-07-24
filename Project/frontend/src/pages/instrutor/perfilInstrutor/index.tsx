@@ -14,7 +14,7 @@ interface IPerfil {
     email: string;
     user: string;
     contato: number;
-    nascimento: Date;
+    nascimento: string;
 }
 
 function PerfilInstrutor(){
@@ -32,8 +32,8 @@ function PerfilInstrutor(){
                 nome: usuario.name,
                 email: usuario.email_bosch,
                 user: usuario.user_bosch,
-                contato: usuario.contato,
-                nascimento:new Date(usuario.data_nascimento)
+                contato: Number(usuario.contato),
+                nascimento: formatarData(usuario.data_nascimento)
             });
         }
     }, []);
@@ -93,9 +93,9 @@ function PerfilInstrutor(){
                                     <span className="perfil-span">EDV: {perfil.edv}</span>
                                     <span className="perfil-span">User: {perfil.user}</span>
                                     <span className="perfil-span">Email: {perfil.email}</span>
-                                    <span className="perfil-span">Data de Nascimento: {perfil.nascimento.toLocaleDateString("pt-BR")}</span>
+                                    <span className="perfil-span">Data de Nascimento: {perfil.nascimento}</span>
                                     <span className="perfil-span">Idade: {Idade(perfil.nascimento)} anos</span>
-                                    <span className="perfil-span">Contato:{perfil.nascimento.toLocaleDateString("pt-BR")}</span>
+                                    <span className="perfil-span">Contato:Contato: {Telefone(perfil.contato)}</span>
                                 </div>
                             </>
                         ):(
@@ -109,30 +109,43 @@ function PerfilInstrutor(){
 }
 export default PerfilInstrutor
 
-function Telefone(numero: number) {
-    const telefone = numero.toString();
-    return telefone.replace(/^(\d{2})(\d{5})(\d{4})$/,"($1)$2-$3");
+function Telefone(numero: number | string) {
+    const telefone = String(numero).replace(/\D/g, "");
+    return telefone.replace(
+        /^(\d{2})(\d{5})(\d{4})$/,
+        "($1) $2-$3"
+    );
 }
 
-function Idade(data_nascimento: Date) {
-    const hoje = new Date();
-    let idade = hoje.getFullYear() - data_nascimento.getFullYear();
-    const mesAtual = hoje.getMonth();
-    const mesNascimento = data_nascimento.getMonth();
-    if (
-        mesAtual < mesNascimento ||
-        (mesAtual === mesNascimento && hoje.getDate() < data_nascimento.getDate())
-    ) {
-        idade--;
-    }
-    return idade;
-}   
-
-function ConverterData(data: string) {
-    const [dia, mes, ano] = data.split("/");
-    return new Date(
+function Idade(data_nascimento: string) {
+    const [dia, mes, ano] = data_nascimento.split("/");
+    const nascimento = new Date(
         Number(ano),
         Number(mes) - 1,
         Number(dia)
     );
+    const hoje = new Date();
+    let idade = hoje.getFullYear() - nascimento.getFullYear();
+    const mesAtual = hoje.getMonth();
+    const mesNascimento = nascimento.getMonth();
+    if (
+        mesAtual < mesNascimento ||
+        (mesAtual === mesNascimento && hoje.getDate() < nascimento.getDate())
+    ) {
+        idade--;
+    }
+    return idade;
+}
+
+function formatarData(data: string) {
+    if (!data) return "";
+    if (data.includes("T")) {
+        const [ano, mes, dia] = data.split("T")[0].split("-");
+
+        return `${dia}/${mes}/${ano}`;
+    }
+    if (data.includes("/")) {
+        return data;
+    }
+    return "";
 }
