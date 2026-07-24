@@ -15,6 +15,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { aprendizes } from "../verAprendiz/aprendizes";
 
 
+
 function PerfilAprendiz(){
     const navigate = useNavigate()
     const { edv } = useParams();

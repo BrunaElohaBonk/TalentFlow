@@ -88,7 +88,7 @@ function VerTurma(){
         <div className="turma">
             <Header />
             <VisualizarTurma visible={visualizar} setVisible={setVisualizar} turma={turmaSelecionada}/>
-            <EditarTurma visible={editar} setVisible={setEditar} turma={turmaSelecionada}/>
+            <EditarTurma visible={editar} setVisible={setEditar} turma={turmaSelecionada}  atualizarLista={fetchTurma}/>
             <div className="turma-container">
                 <Sidebar />
                 <div className="turma-body">
