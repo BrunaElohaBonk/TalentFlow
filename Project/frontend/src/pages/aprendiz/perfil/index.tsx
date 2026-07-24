@@ -155,7 +155,7 @@ function Perfil() {
                                 <span>EDV: {aprendiz.edv}</span>
                                 <span>User: {aprendiz.user}</span>
                                 <span>Data de Nascimento: {aprendiz.data_nascimento}</span>
-                                {/* <span>Idade: {calcularIdade(converterData(aprendiz.data_nascimento))} anos</span> */}
+                                <span>Idade: {calcularIdade(converterData(aprendiz.data_nascimento))} anos</span>
                                 <span>Contato: {formatarTelefone(aprendiz.contato)}</span>
                             </div>
                         </div>
