@@ -3,10 +3,10 @@ import fechar from '../../../../assets/img/close.png'
 
 interface ITurma {
     id: number;
-    nome: string;
-    curso: string;
-    instrutorEdv: number;
-    instrutorNome: string;
+    nomeTurma: string;
+    name_Curso: string;
+    EDV_Instrutor: number;
+    nomeInstrutor: string;
 }
 
 interface Props {
@@ -23,16 +23,16 @@ function VisualizarTurma({ visible, setVisible, turma }: Props) {
                 <button className="visualizar-fechar" onClick={() => setVisible(false)}>
                     <img src={fechar} alt="fechar" />
                 </button>
-                <h1 className="visualizar-titulo">{turma.nome}</h1>
+                <h1 className="visualizar-titulo">{turma.nomeTurma}</h1>
                 <div className="visualizar-conteudo">
                     <div className="visualizar-linha">
-                        <span className="visualizar-label">Curso: {turma.curso}</span>
+                        <span className="visualizar-label">Curso: {turma.name_Curso}</span>
                     </div>
                     <div className="visualizar-linha">
-                        <span className="visualizar-label">Instrutor: {turma.instrutorNome}</span>
+                        <span className="visualizar-label">Instrutor: {turma.nomeInstrutor}</span>
                     </div>
                     <div className="visualizar-linha">
-                        <span className="visualizar-label">EDV: {turma.instrutorEdv}</span>
+                        <span className="visualizar-label">EDV: {turma.EDV_Instrutor}</span>
 
                     </div>
                 </div>
