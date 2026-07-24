@@ -19,6 +19,10 @@ import {
 const route = express.Router();
 route.post(
   "/criar",
+  (req, res, next) => {
+    console.log("ENTROU NA ROTA CRIAR APRENDIZ");
+    next();
+  },
   authMiddleware,
   roleMiddleware("INSTRUTOR"),
   validationMiddleware(criarAprendizSchema),

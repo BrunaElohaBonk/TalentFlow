@@ -23,7 +23,7 @@ export function authMiddleware(
   next: NextFunction
 ) {
   const authHeader = req.headers.authorization;
-
+  console.log("ENTROU NO AUTH MIDDLEWARE");
   if (!authHeader) {
     return res.status(401).json({
       message: "Token não informado",
@@ -31,7 +31,6 @@ export function authMiddleware(
   }
 
   const [, token] = authHeader.split(" ");
-
   if (!token) {
     return res.status(401).json({
       message: "Token inválido",
@@ -57,7 +56,7 @@ export function authMiddleware(
       });
     }
     req.user = usuario.data;
-
+    console.log("Usuário autenticado:", req.user);
     next();
   } catch (error) {
     return res.status(401).json({

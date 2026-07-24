@@ -21,6 +21,8 @@ export function roleMiddleware(...roles: Role[]) {
         message: "Usuário sem permissão",
       });
     }
+    console.log("Role recebida:", req.user);
+    console.log("Roles permitidas:", roles);
     next();
   };
 }
