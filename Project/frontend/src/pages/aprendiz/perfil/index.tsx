@@ -18,6 +18,7 @@ import EditarFormacaoAcademica from '../formacao_academica/editar/editar_formaca
 import AdicionarFormacaoAcademica from "../formacao_academica/adicionar/adicionar";
 import './perfil.css'
 import { usuarios } from "../../instrutor/verInstrutor/users";
+import api from "../../../services/api";
 
 interface Usuario {
     edv: number;
@@ -90,9 +91,16 @@ function Perfil() {
         setAprendiz(aprendizLogado)
     }, [])
 
+
+
     if (!aprendiz) {
         return <h2>Carregando...</h2>
     }
+
+    const router = async  ()=>{
+        return await api.get(`/aprediz/perfil/${aprendiz.edv}`)
+    }
+
 
     return (
         <>
@@ -194,7 +202,7 @@ function Perfil() {
                         <div className="perfil-card-perfil">
                             <h3>Idiomas</h3>
                             <ul>
-                                <li>Português</li>
+                                <li>{router.}</li>
                                 <li>Inglês B1</li>
                             </ul>
                             <button className="perfil-btn-visualizar" onClick={() => setIdioma(true)}>

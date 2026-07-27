@@ -9,7 +9,7 @@ import {
   LoginDto,
   RedefinirSenhaDto,
 } from "../DTO/authDTO.ts";
-import { Prisma, TipoHistorico } from "@prisma/client";
+import { Prisma, TipoHistorico, user_tipoUser } from "@prisma/client";
 export class UserJaExisteError extends Error {
   constructor(message = "EDV ou e-mail já cadastrado") {
     super(message);
@@ -160,6 +160,16 @@ export class UserService {
       return user;
     });
   }
+  static async BuscarUser(tipoUser:user_tipoUser){
+    const busca = await prisma.user.findMany({
+      where:{tipoUser :tipoUser}
+    })
+    if (!busca){
+      throw new ServerConfigError();
+    }
+    return busca;
+  }
+  
 
   static async login(data: LoginDto): Promise<LoginResult> {
     console.log(data)
