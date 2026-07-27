@@ -2,27 +2,12 @@ import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGri
 import { useTheme } from "../../../context/themeContext";
 
 interface Props {
-    aprendizes: any[];
+    dados: any;
 }
 
-export function GraficoSetor({ aprendizes }: Props) {
+export function GraficoSetor( {dados} : Props) {
     const { darkMode } = useTheme();
     const corPrimaria = darkMode ? "#F97316" : "#193B82";
-    const dados = Object.values(
-    aprendizes.reduce((acc, aprendiz) => {
-        const setor = aprendiz.situacaoProfissional.nomeSetor;
-        if (!acc[setor]) {
-            acc[setor] = {
-                setor,
-                quantidade: 0,
-            };
-        }
-        acc[setor].quantidade++;
-        return acc;
-        }, {} as Record<string, { setor: string; quantidade: number }>)
-    )
-    .sort((a, b) => b.quantidade - a.quantidade)
-    .slice(0, 15);
     return (
         <ResponsiveContainer width="100%" height={300}>
             <BarChart data={dados}>
@@ -36,27 +21,26 @@ export function GraficoSetor({ aprendizes }: Props) {
     );
 }
 
-export function GraficoEstagio({ aprendizes }: Props) {
+export function GraficoEstagio({ dados }: Props) {
     const { darkMode } = useTheme();
     const corAzulEscuro = darkMode ? "#F97316" : "#193B82";
     const corAzulClaro = darkMode ? "#FACC15" : "#35A7CF";
-    const estagiando = aprendizes.filter(aprendiz => aprendiz.situacaoProfissional.cumprindoEstagio).length;
-    const dados = [
+    const dadosGrafico = [
         {
             name:"Estagiando",
-            value:estagiando,
+            value:dados.quantidade,
             fill: corAzulEscuro
         },
         {
             name:"Não estagiando",
-            value: aprendizes.length - estagiando,
+            value: dados.naoEstagiando,
             fill: corAzulClaro
         }
     ];
     return (
         <ResponsiveContainer width="100%" height={300}>
             <PieChart>
-                <Pie data={dados} dataKey="value" nameKey="name" outerRadius={100}/>
+                <Pie data={dadosGrafico} dataKey="value" nameKey="name" outerRadius={100}/>
                 <Tooltip />
                 <Legend />
             </PieChart>
@@ -64,27 +48,26 @@ export function GraficoEstagio({ aprendizes }: Props) {
     );
 }
 
-export function GraficoSuperior({ aprendizes }: Props) {
+export function GraficoSuperior({ dados }: Props) {
     const { darkMode } = useTheme();
     const corPrimaria = darkMode ? "#F97316" : "#193B82"; 
     const corSecundaria = darkMode ? "#FACC15" : "#35A7CF"; 
-    const superior = aprendizes.filter(aprendiz =>  aprendiz.formacaoAcademica.some(formacao => formacao.nivelFormacao === "Graduação")).length;
-    const dados = [
+    const dadosGrafico = [
         {
             name:"Cursando",
-            value: superior,
+            value:dados.cursoSuperior,
             fill: corPrimaria
         },
         {
             name:"Não cursando",
-            value: aprendizes.length - superior,
+            value:dados.naocursoSuperior,
             fill: corSecundaria
         }
     ];
     return (
         <ResponsiveContainer width="100%" height={300}>
             <PieChart>
-                <Pie data={dados} dataKey="value" nameKey="name" innerRadius={70} outerRadius={110}/>
+                <Pie data={dadosGrafico} dataKey="value" nameKey="name" innerRadius={70} outerRadius={110}/>
                 <Tooltip contentStyle={{backgroundColor: darkMode ? "#242424" : "#fff", color: darkMode ? "#fff" : "#000", border: "none"}}/>
                 <Legend wrapperStyle={{color: darkMode ? "#fff" : "#000"}}/>
             </PieChart>
@@ -92,31 +75,14 @@ export function GraficoSuperior({ aprendizes }: Props) {
     );
 }
 
-export function GraficoCompetencias({ aprendizes }: Props) {
+export function GraficoCompetencias({ dados }: Props) {
     const { darkMode } = useTheme();
     const corPrimaria = darkMode ? "#FACC15" : "#35A7CF";
-    const dadosCompetencias = Object.values(
-    aprendizes.reduce((acc, aprendiz) => {
-        aprendiz.competencias.forEach((competencia: any) => {
-            const nome = competencia.nome;
-            if (!acc[nome]) {
-                acc[nome] = {
-                    competencia: nome,
-                    quantidade: 0,
-                };
-            }
-            acc[nome].quantidade++;
-        });
-        return acc;
-        }, {} as Record<string, { competencia: string; quantidade: number }>)
-    )
-    .sort((a, b) => b.quantidade - a.quantidade) 
-    .slice(0, 6);
 
     return (
-        <ResponsiveContainer width="100%" height={Math.max(300, dadosCompetencias.length * 40)}>
+        <ResponsiveContainer width="100%" height={300}>
             <BarChart
-                data={dadosCompetencias}
+                data={dados}
                 layout="vertical"
                 margin={{ top: 10, right: 30, left: 20, bottom: 10 }}
             >
@@ -141,29 +107,13 @@ export function GraficoCompetencias({ aprendizes }: Props) {
 
 
 
-export function GraficoIdiomas({ aprendizes }: Props) {
+export function GraficoIdiomas({ dados }: Props) {
     const { darkMode } = useTheme();
     const corPrimaria = darkMode ? "#F97316" : "#193B82";
-    const dadosIdiomas = Object.values(
-    aprendizes.reduce((acc, aprendiz) => {
-        aprendiz.idiomas.forEach((idioma: any) => {
-            const nome = idioma.idioma;
-            if (!acc[nome]) {
-                acc[nome] = {
-                    idioma: nome,
-                    quantidade: 0,
-                };
-            }
-            acc[nome].quantidade++;
-        });
-        return acc;
-        }, {} as Record<string, { idioma: string; quantidade: number }>)
-    )
-    .sort((a, b) => b.quantidade - a.quantidade) 
-    .slice(0, 6);
+    
     return (
         <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={dadosIdiomas} layout="vertical" margin={{ top: 10, right: 30, left: 20, bottom: 10 }}>
+            <BarChart data={dados} layout="vertical" margin={{ top: 10, right: 30, left: 20, bottom: 10 }}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis type="number" />
                 <YAxis type="category" dataKey="idioma" width={100} />
