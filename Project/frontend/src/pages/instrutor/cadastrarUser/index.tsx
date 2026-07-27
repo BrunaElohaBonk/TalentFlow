@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 import { FormControl, FormControlLabel, FormLabel, MenuItem, Radio, RadioGroup, Select } from "@mui/material";
 import { useTheme } from "../../../context/themeContext";
 import api from "../../../services/api";
+import axios from "axios";
 
 interface ITurma {
     id: number;
@@ -68,32 +69,8 @@ function CadastrarUser() {
             console.log("Erro ao buscar turmas:", e);
         }
     };
-    
-    const fetchUser = async () => {
-        try {
-            const response = await api.get(`link backend`);
-            const Usuario = response.data.response;
-            setUser({
-                edv: Usuario.edv || 0,
-                name: Usuario.name || '',
-                turma: Usuario.turma?.toString() || '',
-                email: Usuario.email || '',
-                user: Usuario.user || '',
-                nascimento: Usuario.nascimento? new Date(Usuario.nascimento).toLocaleDateString("pt-BR"): '',
-                contato: Usuario.contato || '',
-                senha: '',
-                tipo: Usuario.tipo
-            });
-        }
-        catch (e) {
-            console.error('Erro:', e);
-        }
-    };
-    
+
     useEffect(() => {
-        if (id) {
-            fetchUser();
-        }
         fetchTurmas();
     }, []);
     
@@ -138,38 +115,41 @@ function CadastrarUser() {
             return;
         }
         try {
-            let response;
+            const dadosUsuario = {
+                EDV: user.edv,
+                tipoUser: user.tipo === "instrutor" ? "INSTRUTOR" : "APRENDIZ",
+                name: user.name,
+                email_bosch: user.email,
+                user_bosch: user.user,
+                data_nascimento: user.nascimento,
+                contato: user.contato,
+                password_login: user.senha
+            };
+            console.log("Dados enviados:", dadosUsuario);
+            const cadastro = await api.post("/auth/register", dadosUsuario);
+            const EDV = cadastro.data.user.user.EDV;
+            console.log("Usuário criado:", cadastro.data);
+            const usuarioCriado = cadastro.data.user;
+
             if (user.tipo === "instrutor") {
-                const dadosInstrutor = {
-                    EDV: user.edv,
-                    tipoUser: "INSTRUTOR",
-                    name: user.name,
-                    email_bosch: user.email,
-                    user_bosch: user.user,
-                    data_nascimento: user.nascimento,
-                    contato: user.contato,
-                    password_login: user.senha
-                };
-                console.log("Token enviado:", token);
-                response = await api.post("instrutor/criarInstrutor", dadosInstrutor);
+                await api.post("/instrutor/criarInstrutor", { EDV: usuarioCriado.EDV });
             } 
             else {
-                const dadosAprendiz = { 
-                    EDV: user.edv,
-                    Id_Turma: Number(user.turma)
-                };
-                console.log("Token enviado:", token);
-                response = await api.post("aprendiz/criar", dadosAprendiz, {headers: {Authorization: `Bearer ${token}`}});
+                await api.post("/aprendiz/criar",{ EDV: Number(EDV), Id_Turma: Number(user.turma) },{headers: {Authorization: `Bearer ${token}`}});
             }
+
             Swal.fire({
                 title: 'Sucesso!',
                 text: 'Usuário cadastrado com sucesso!',
                 icon: 'success'
             });
-            console.log("Resposta API:", response.data);
         } 
-        catch (e) {
+        catch (e : any) {
             console.error('Erro ao cadastrar:', e);
+            console.log(
+                    "ERRO APRENDIZ:",
+                    JSON.stringify(e.response?.data, null, 2)
+                );
             Swal.fire({
                 title: 'Erro!',
                 text: 'Não foi possível cadastrar o usuário',
