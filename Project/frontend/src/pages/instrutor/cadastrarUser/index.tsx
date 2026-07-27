@@ -1,4 +1,3 @@
-import { useParams } from "react-router-dom";
 import Header from "../../../components/header";
 import Sidebar from "../../../components/sidebar";
 import './cadastrarUser.css';
@@ -7,7 +6,6 @@ import Swal from "sweetalert2";
 import { FormControl, FormControlLabel, FormLabel, MenuItem, Radio, RadioGroup, Select } from "@mui/material";
 import { useTheme } from "../../../context/themeContext";
 import api from "../../../services/api";
-import axios from "axios";
 
 interface ITurma {
     id: number;
@@ -30,7 +28,6 @@ interface IUser {
 }
 
 function CadastrarUser() {
-    const { id } = useParams();
     const { darkMode } = useTheme();
     const edvRef = useRef<HTMLInputElement>(null);
     const nameRef = useRef<HTMLInputElement>(null);
@@ -114,28 +111,33 @@ function CadastrarUser() {
             });
             return;
         }
-        try {
-            const dadosUsuario = {
-                EDV: user.edv,
-                tipoUser: user.tipo === "instrutor" ? "INSTRUTOR" : "APRENDIZ",
-                name: user.name,
-                email_bosch: user.email,
-                user_bosch: user.user,
-                data_nascimento: user.nascimento,
-                contato: user.contato,
-                password_login: user.senha
-            };
-            console.log("Dados enviados:", dadosUsuario);
-            const cadastro = await api.post("/auth/register", dadosUsuario);
-            const EDV = cadastro.data.user.user.EDV;
-            console.log("Usuário criado:", cadastro.data);
-            const usuarioCriado = cadastro.data.user;
+       const dadosUsuario = {
+            EDV: user.edv,
+            tipoUser: user.tipo.toUpperCase(),
+            name: user.name,
+            email_bosch: user.email,
+            user_bosch: user.user,
+            data_nascimento: user.nascimento,
+            contato: user.contato,
+            password_login: user.senha
+        };
 
-            if (user.tipo === "instrutor") {
-                await api.post("/instrutor/criarInstrutor", { EDV: usuarioCriado.EDV });
-            } 
-            else {
-                await api.post("/aprendiz/criar",{ EDV: Number(EDV), Id_Turma: Number(user.turma) },{headers: {Authorization: `Bearer ${token}`}});
+        try {
+            const cadastro = await api.post("/auth/register", dadosUsuario);
+            console.log("Usuário criado:", cadastro.data);
+            if (user.tipo === "aprendiz") {
+                const EDV = cadastro.data.user.user.EDV;
+                await api.post("/aprendiz/criar",
+                    {
+                        EDV: EDV,
+                        Id_Turma: Number(user.turma)
+                    },
+                    {
+                        headers:{
+                            Authorization:`Bearer ${token}`
+                        }
+                    }
+                );
             }
 
             Swal.fire({
