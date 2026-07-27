@@ -149,7 +149,7 @@ function Perfil() {
                         </div>
                         <div className="perfil-dados-perfil">
                             <div className="perfil-cabecalho-perfil">
-                                <h1>{usuarios.}</h1>
+                                <h1>{aprendiz.nome}</h1>
                             </div>
                             <div className="perfil-informacoes">
                                 <span>Email: {aprendiz.email}</span>
