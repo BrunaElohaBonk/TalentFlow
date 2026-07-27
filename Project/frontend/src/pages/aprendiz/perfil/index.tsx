@@ -98,10 +98,7 @@ function Perfil() {
     }
 
     const router = async  ()=>{
-        const response = await api.post(`/aprediz/perfil/${aprendiz.EDV}/${}´, {
-            EDV: edv,
-            password
-        });
+        return await api.get(`/aprediz/perfil/${aprendiz.edv}`)
     }
 
 
@@ -160,7 +157,7 @@ function Perfil() {
                         </div>
                         <div className="perfil-dados-perfil">
                             <div className="perfil-cabecalho-perfil">
-                                <h1>{usuarios.}</h1>
+                                <h1>{aprendiz.nome}</h1>
                             </div>
                             <div className="perfil-informacoes">
                                 <span>Email: {aprendiz.email}</span>
@@ -205,7 +202,7 @@ function Perfil() {
                         <div className="perfil-card-perfil">
                             <h3>Idiomas</h3>
                             <ul>
-                                <li>Português</li>
+                                <li>{router.}</li>
                                 <li>Inglês B1</li>
                             </ul>
                             <button className="perfil-btn-visualizar" onClick={() => setIdioma(true)}>

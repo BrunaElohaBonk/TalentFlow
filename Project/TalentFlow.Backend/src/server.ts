@@ -6,6 +6,7 @@ import { errorMiddleware } from "./Middlewares/erroMiddleware.ts";
 
 
 const app = express();
+app.use(express.json());
 
 const port = 8080;
 

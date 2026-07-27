@@ -4,10 +4,10 @@ import { useAuth } from "../context/authContext";
 function PublicRoute({children}: any) {
     const { usuario } = useAuth();
     if(usuario){
-        if(usuario.tipo === "instrutor"){
+        if(usuario.user.tipo === "instrutor"){
             return <Navigate to="/Home" replace />;
         }
-        if(usuario.tipo === "aprendiz"){
+        if(usuario.user.tipo === "aprendiz"){
             return <Navigate to="/Perfil" replace />;
         }
     }
