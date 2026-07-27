@@ -18,6 +18,7 @@ import EditarFormacaoAcademica from '../formacao_academica/editar/editar_formaca
 import AdicionarFormacaoAcademica from "../formacao_academica/adicionar/adicionar";
 import './perfil.css'
 import { usuarios } from "../../instrutor/verInstrutor/users";
+import api from "../../../services/api";
 
 interface Usuario {
     edv: number;
@@ -90,9 +91,19 @@ function Perfil() {
         setAprendiz(aprendizLogado)
     }, [])
 
+
+
     if (!aprendiz) {
         return <h2>Carregando...</h2>
     }
+
+    const router = async  ()=>{
+        const response = await api.post(`/aprediz/perfil/${aprendiz.EDV}/${}´, {
+            EDV: edv,
+            password
+        });
+    }
+
 
     return (
         <>

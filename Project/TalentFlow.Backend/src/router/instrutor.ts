@@ -30,8 +30,7 @@ route
 
         AuthController.register
     )
-
-
+    
 
     .put(
         "/editarInstrutor/:EDV",
