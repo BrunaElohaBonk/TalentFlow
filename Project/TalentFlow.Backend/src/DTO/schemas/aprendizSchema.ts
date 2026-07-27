@@ -16,6 +16,7 @@ const EDVSchema = z.coerce.number()
 // CRIAR APRENDIZ
 
 export const criarAprendizSchema = z.object({
+    
 
     EDV: EDVSchema,
 
