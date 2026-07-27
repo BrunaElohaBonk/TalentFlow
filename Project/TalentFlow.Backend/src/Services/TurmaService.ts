@@ -51,42 +51,46 @@ export class TurmaService {
     return turma;
   }
 
-  static async atualizar(id: number, data: EditarTurmaDTO, usuarioEDV: number) {
+  static async atualizar(
+    id: number,
+    data: EditarTurmaDTO,
+    usuarioEDV: number
+) {
     return await prisma.$transaction(async (tx) => {
-      try {
-        const turmaAntigo = await tx.turma.findUnique({ where: { id } });
+
+        const turmaAntigo = await tx.turma.findUnique({
+            where: { id }
+        });
 
         if (!turmaAntigo) {
-          throw new Error("turma não encontrado.");
+            throw new TurmaNotFoundError();
         }
-        const autalizadoturma = await prisma.turma.update({
-          where: { id },
-          data: {
-            name_Curso: data.name_Curso,
-          },
-        });
-        await tx.turmahistorico.create({
-          data: {
-            Id_Turma: id,
-            acao: "UPDATE",
-            EDVAlteradoPor: usuarioEDV,
-            dados: {
-              turmaAntigo,
-              autalizadoturma,
+
+        const turmaAtualizada = await tx.turma.update({
+            where: { id },
+            data: {
+                nomeTurma: data.nomeTurma,
+                name_Curso: data.name_Curso,
+                nomeInstrutor: data.nomeInstrutor,
+                EDV_Instrutor: data.EDV_Instrutor,
             },
-          },
         });
-        return autalizadoturma;
-      } catch (error: any) {
-        if (error.code === "P2025") {
-          throw new TurmaNotFoundError();
-        }
 
-        throw error;
-      }
+        await tx.turmahistorico.create({
+            data: {
+                Id_Turma: id,
+                acao: "UPDATE",
+                EDVAlteradoPor: usuarioEDV,
+                dados: {
+                    antes: turmaAntigo,
+                    depois: turmaAtualizada,
+                },
+            },
+        });
+
+        return turmaAtualizada;
     });
-  }
-
+}
   static async deletar(id: number, usuarioEDV: number): Promise<any> {
     return await prisma.$transaction(async (tx) => {
       try {

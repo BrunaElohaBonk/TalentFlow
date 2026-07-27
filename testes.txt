@@ -1,0 +1,190 @@
+Register
+POST
+
+http://localhost:8080/api/auth/register
+{
+    "EDV": 90000001,
+    "tipoUser": "INSTRUTOR",
+    "name": "Carlos Henrique Silva",
+    "data_nascimento": "1990-05-20T00:00:00.000Z",
+    "user_bosch": "CHS001",
+    "contato": "(41)999991111",
+    "email_bosch": "carlos@bosch.com",
+    "password_login": "123456"
+}
+{
+  "EDV": 91000002,
+  "tipoUser": "INSTRUTOR",
+  "name": "Fernanda Oliveira Souza",
+  "data_nascimento": "1992-07-22T00:00:00.000Z",
+  "user_bosch": "FOS002",
+  "contato": "(41)97777-2222",
+  "email_bosch": "fernanda.souza@bosch.com",
+  "password_login": "Bosch@123"
+}
+{
+  "EDV": 91000001,
+  "tipoUser": "INSTRUTOR",
+  "name": "Marcos Antonio Pereira",
+  "data_nascimento": "1985-03-15T00:00:00.000Z",
+  "user_bosch": "MAP001",
+  "contato": "(41)98888-1111",
+  "email_bosch": "marcos.pereira@bosch.com",
+  "password_login": "Bosch@123"
+}
+{
+  "EDV": 91001001,
+  "tipoUser": "APRENDIZ",
+  "name": "Julia Carolina Gabriel dos Santos",
+  "data_nascimento": "2008-01-17T00:00:00.000Z",
+  "user_bosch": "JCG001",
+  "contato": "(41)99666-1111",
+  "email_bosch": "julia.gabriel@bosch.com",
+  "password_login": "Julia@123"
+}
+{
+  "EDV": 91001002,
+  "tipoUser": "APRENDIZ",
+  "name": "Lucas Henrique Almeida",
+  "data_nascimento": "2007-09-10T00:00:00.000Z",
+  "user_bosch": "LHA002",
+  "contato": "(41)99555-2222",
+  "email_bosch": "lucas.almeida@bosch.com",
+  "password_login": "Lucas@123"
+}
+{
+  "EDV": 91001003,
+  "tipoUser": "APRENDIZ",
+  "name": "Ana Beatriz Ferreira",
+  "data_nascimento": "2006-11-05T00:00:00.000Z",
+  "user_bosch": "ABF003",
+  "contato": "(41)99444-3333",
+  "email_bosch": "ana.ferreira@bosch.com",
+  "password_login": "Ana@123"
+}
+Login
+POST
+
+http://localhost:8080/api/auth/login
+{
+    "EDV": 90000001,
+    "password_login": "123456"
+}
+
+Copie o token.
+Header das próximas requisições
+Authorization
+Bearer 
+
+Criar Turma
+POST
+
+http://localhost:8080/api/turma/criarTurma
+{
+    "nomeTurma": "DS2026A",
+    "name_Curso": "Desenvolvimento de Sistemas",
+    "EDV_Instrutor": 90000001,
+    "nomeInstrutor": "Carlos Henrique Silva"
+}
+{
+  "nomeTurma": "AUT-2026-01",
+  "name_Curso": "Automação Industrial",
+  "EDV_Instrutor": 91000002,
+  "nomeInstrutor": "Fernanda Oliveira Souza"
+}
+{
+  "nomeTurma": "LOG-2026-01",
+  "name_Curso": "Logística",
+  "EDV_Instrutor": 91000001,
+  "nomeInstrutor": "Marcos Antonio Pereira"
+}
+
+4) Visualizar Turmas
+GET
+http://localhost:8080/api/turma/visualizarTurmas
+
+Buscar Turma
+GET
+http://localhost:8080/api/turma/buscarTurma/1
+
+Atualizar Turma
+PUT
+http://localhost:8080/api/turma/atualizarTurma/1
+{
+    "nomeTurma": "DS2026B",
+    "name_Curso": "Desenvolvimento de Sistemas",
+    "EDV_Instrutor": 90000001,
+    "nomeInstrutor": "Carlos Henrique Silva"
+}
+
+Criar Aprendiz
+POST
+http://localhost:8080/api/aprendiz/criar
+
+{
+  "EDV": 91001001,
+  "Id_Turma": 1
+}
+{
+  "EDV": 91001002,
+  "Id_Turma": 2
+}
+{
+  "EDV": 91001003,
+  "Id_Turma": 3
+}
+
+Ver Perfil
+GET
+http://localhost:8080/api/aprendiz/perfil/90000002/1
+
+Dashboard
+GET
+http://localhost:8080/api/aprendiz/dashboard
+
+Filtros
+GET
+http://localhost:8080/api/aprendiz/filtros
+
+Atualizar Perfil
+PUT
+http://localhost:8080/api/aprendiz/atualizarPerfil/90000002/1
+
+Body depende do schema.
+
+Atualizar Formação
+PUT
+http://localhost:8080/api/aprendiz/atualizarFormacaoAcademica/90000002/1
+
+Atualizar Situação
+PUT
+http://localhost:8080/api/aprendiz/atualizarSituacaoProfissional/90000002/1
+
+Atualizar Soft Skills
+PUT
+http://localhost:8080/api/aprendiz/atualizarSoftskills/90000002/1
+
+Atualizar Competências
+PUT
+http://localhost:8080/api/aprendiz/atualizarCompetencias/90000002/1
+
+Atualizar Idiomas
+PUT
+http://localhost:8080/api/aprendiz/atualizarIdiomas/90000002/1
+
+Atualizar Cursos
+PUT
+http://localhost:8080/api/aprendiz/atualizarCursos/90000002/1
+
+
+Editar Instrutor
+PUT
+http://localhost:8080/api/instrutor/editarInstrutor/90000001
+
+Desativar Usuário
+PUT
+http://localhost:8080/api/auth/deletarUser/90000002
+
+Deletar Turma
+DELETE
+http://localhost:8080/api/turma/deletarTurma/1

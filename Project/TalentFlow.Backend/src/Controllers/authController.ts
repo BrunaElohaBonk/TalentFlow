@@ -16,7 +16,7 @@ class AuthController {
   ): Promise<void> {
     const data: AdicionarUserDto = req.body;
     const user = await UserService.register(data);
-    req.user!.EDV;
+    // req.user!.EDV;
     res.status(201).json({
       message: "Usuário cadastrado com sucesso",
       user,

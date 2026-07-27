@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+.cadTurma{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.cadTurma-container {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+body.dark .cadTurma-form{
+    background-color: #242424;
+    color: white;
+}
+
+.cadTurma-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 20px;
+    flex: 1;
+    overflow: auto;
+}
+
+.cadTurma-form {
+    display: flex;
+    flex-direction: column;
+    width: clamp(320px, 45%, 700px);
+    min-height: 30rem;
+    padding: 40px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+
+.cadTurma-titulo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-weight: bold;
+    font-size: clamp(1.5rem, 3vw, 2.8rem);
+    margin-bottom: 40px;
+}
+
+.cadTurma-conteudo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 20px;
+}
+
+.cadTurma-input {
+    width: 80%;
+    height: 40px;
+    border-radius: 15px;
+    border: 1px solid #D9D9D9;
+    padding: 0 15px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    color: #8a8a8a;
+    transition: 0.25s;
+    outline: none;
+}
+
+.cadTurma-input:focus {
+    border-color: #2B83D5;
+}
+
+.cadTurma-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px;
+}
+
+.cadTurma-salvar {
+    height: 3rem;
+    width: 180px;
+    border-radius: 10px;
+    background-color: #2B83D5;
+    color: white;
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+    border: none;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.cadTurma-salvar:hover {
+    background-color: #1767ad;
+}
+
+.cadTurma-salvar:active {
+    transform: scale(0.97);
+}
+
+@media (max-width: 900px) {
+    .cadTurma-form {
+        width: 70%;
+    }
+}
+
+@media (max-width: 600px) {
+    .cadTurma-container {
+        flex-direction: column;
+    }
+
+    .cadTurma-body {
+        padding: 10px;
+    }
+
+    .cadTurma-form {
+        width: 95%;
+        padding: 25px;
+        min-height: auto;
+    }
+
+    .editar-input {
+        width: 100%;
+    }
+
+    .cadTurma-salvar {
+        width: 100%;
+    }
+
+}

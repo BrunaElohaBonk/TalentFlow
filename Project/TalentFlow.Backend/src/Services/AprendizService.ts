@@ -417,10 +417,21 @@ export default class AprendizService {
     });
   }
 
-  static async verPerfil(EDV: number, id: number) {
+  static async verPerfil(EDV: number) {
+
+    const profile = await prisma.profile.findFirst({
+      where: {
+        EDV_Aprendiz: EDV
+      }
+    })
+
+    if(!profile){
+      return 
+    }
+
     return await prisma.profile.findFirst({
       where: {
-        id,
+        id: profile.id,
         EDV_Aprendiz: EDV,
       },
       include: {
