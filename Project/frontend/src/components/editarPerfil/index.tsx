@@ -3,7 +3,7 @@ import sair from '../../assets/img/close.png'
 import download from '../../assets/img/icon download.png'
 import { useEffect, useRef, useState } from 'react'
 import Swal from 'sweetalert2'
-import axios from 'axios'
+import axios from 'axios';
 import { useDropzone } from "react-dropzone";
 import "react-datepicker/dist/react-datepicker.css";
 import api from '../../services/api'

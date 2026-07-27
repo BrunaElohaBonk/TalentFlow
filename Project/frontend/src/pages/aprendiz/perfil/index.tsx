@@ -85,11 +85,26 @@ function Perfil() {
     const [adicionarFormacao, setAdicionarFormacao] = useState(false)
 
     useEffect(() => {
-        const usuario:any = localStorage.getItem("usuario")
-        const aprendizLogado = JSON.parse(usuario)
-        console.log(aprendizLogado)
-        setAprendiz(aprendizLogado)
-    }, [])
+        async function carregarPerfil() {
+            const usuario = localStorage.getItem("usuario");
+    
+            if (!usuario) return;
+    
+            const aprendizLogado = JSON.parse(usuario);
+    
+            try {
+                const response = await api.get(
+                    `/aprendiz/perfil/${aprendizLogado.edv}`
+                );
+    
+                setAprendiz(response.data.data);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+    
+        carregarPerfil();
+    }, []);
 
 
 
@@ -180,7 +195,7 @@ function Perfil() {
                             </button>
                         </div>
                         <div className="perfil-card-perfil">
-                            <h3>Formação Acadêmica</h3>
+                            <h3>Formação Acadêmica </h3>
                             <ul>
                                 <li>Técnico em Informática</li>
                                 <li>ADS (cursando)</li>
@@ -202,7 +217,7 @@ function Perfil() {
                         <div className="perfil-card-perfil">
                             <h3>Idiomas</h3>
                             <ul>
-                                <li>{router.}</li>
+                                <li>a</li>
                                 <li>Inglês B1</li>
                             </ul>
                             <button className="perfil-btn-visualizar" onClick={() => setIdioma(true)}>
