@@ -9,7 +9,7 @@ import {
   LoginDto,
   RedefinirSenhaDto,
 } from "../DTO/authDTO.ts";
-import { Prisma, TipoHistorico } from "@prisma/client";
+import { Prisma, TipoHistorico, user_tipoUser } from "@prisma/client";
 export class UserJaExisteError extends Error {
   constructor(message = "EDV ou e-mail já cadastrado") {
     super(message);
@@ -63,7 +63,12 @@ type LoginResult =
       user: {
         EDV: number;
         name: string;
-        tipoUser: string;
+        tipo: string;
+        email_bosch: string;
+        user_bosch: string;
+        contato: string;
+        data_nascimento: Date;
+        imagem: string;
       };
     };
 
@@ -93,6 +98,8 @@ export class UserService {
 
   static async register(data: AdicionarUserDto) {
     const passwordCrypt = await bcrypt.hash(data.password_login, 10);
+
+    console.log(data)
 
     try {
       return await prisma.$transaction(async (tx) => {
@@ -153,8 +160,19 @@ export class UserService {
       return user;
     });
   }
+  static async BuscarUser(tipoUser:user_tipoUser){
+    const busca = await prisma.user.findMany({
+      where:{tipoUser :tipoUser}
+    })
+    if (!busca){
+      throw new ServerConfigError();
+    }
+    return busca;
+  }
+  
 
   static async login(data: LoginDto): Promise<LoginResult> {
+    console.log(data)
     const user = await prisma.user.findUnique({
       where: {
         EDV: data.EDV,
@@ -195,7 +213,12 @@ export class UserService {
       user: {
         EDV: user.EDV,
         name: user.name,
-        tipoUser: user.tipoUser,
+        tipo: user.tipoUser.toLowerCase(),
+        email_bosch: user.email_bosch || "",
+        user_bosch: user.user_bosch || "",
+        contato: user.contato,
+        data_nascimento: user.data_nascimento,
+        imagem: user.fotoPerfil || "",
       },
     };
   }

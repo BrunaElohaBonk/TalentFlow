@@ -3,15 +3,15 @@ import Header from "../../../components/header";
 import Sidebar from "../../../components/sidebar";
 import './cadTurma.css';
 import { useEffect, useRef, useState } from "react";
-import axios from "axios";
 import Swal from "sweetalert2";
+import api from "../../../services/api";
 
 interface ITurma {
     id?: number;
-    name: string;
-    course: string;
-    edvInstrutor: string;
-    instrutor: string;
+    nomeTurma: string;
+    name_Curso: string;
+    EDV_Instrutor: string;
+    nomeInstrutor: string;
 }
 
 function CadTurma() {
@@ -21,72 +21,94 @@ function CadTurma() {
     const edvInstrutorRef = useRef<HTMLInputElement>(null);
     const instrutorRef = useRef<HTMLInputElement>(null);
     const salvarRef = useRef<HTMLButtonElement>(null);
-    const proximoCampo = (e: React.KeyboardEvent<HTMLInputElement>, proximo: React.RefObject<HTMLElement | null>) => {
+    const [turma, setTurma] = useState<ITurma>({
+        nomeTurma: '',
+        name_Curso: '',
+        EDV_Instrutor: '',
+        nomeInstrutor: '',
+    });
+    const proximoCampo = (
+        e: React.KeyboardEvent<HTMLInputElement>,
+        proximo: React.RefObject<HTMLElement | null>
+    ) => {
         if (e.key === "Enter") {
             e.preventDefault();
             proximo.current?.focus();
-        }};
-    const [turma, setTurma] = useState<ITurma>({
-        name: '',
-        course: '',
-        edvInstrutor: '',
-        instrutor: '',
-    });
+        }
+    };
     const fetchTurma = async () => {
         try {
-            const response = await axios.get(`link backend`);
-            const Turma = response.data.response;
+            const response = await api.get(`/turma/buscarTurma/${id}`);
+            const Turma = response.data;
             setTurma({
-                name: Turma.name || '',
-                course: Turma.course || '',
-                edvInstrutor: Turma.edvInstrutor?.toString() || '',
-                instrutor: Turma.instrutor || ''
+                nomeTurma: Turma.nomeTurma || '',
+                name_Curso: Turma.name_Curso || '',
+                EDV_Instrutor: Turma.EDV_Instrutor?.toString() || '',
+                nomeInstrutor: Turma.nomeInstrutor || ''
             });
-        } 
-        catch (e) {
-            console.error('Erro:', e);
+        } catch (e) {
+            console.error("Erro:", e);
         }
     };
     useEffect(() => {
+
         if (id) {
             fetchTurma();
         }
-    }, []);
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    }, [id]);
+
+
+    const handleChange = (
+        e: React.ChangeEvent<HTMLInputElement>
+    ) => {
         setTurma({
-            ...turma, 
-            [e.target.name]: e.target.value});
+            ...turma,
+            [e.target.name]: e.target.value
+        });
+
     };
-    const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+
+    const handleSubmit = async (
+        e: React.FormEvent<HTMLFormElement>
+    ) => {
         e.preventDefault();
-        if (!turma.name || !turma.course || !turma.edvInstrutor || !turma.instrutor){
+        if (
+            !turma.nomeTurma ||
+            !turma.name_Curso ||
+            !turma.EDV_Instrutor ||
+            !turma.nomeInstrutor
+        ) {
             Swal.fire({
                 title: 'Atenção!',
-                text: 'Preencha os campos obrigatórios!',
+                text: 'Preencha todos os campos!',
                 icon: 'warning'
             });
             return;
         }
         try {
-            const response = await axios.put(
-                `link backend`,
+            const response = await api.post(
+                "/turma/criarTurma",
                 {
-                    ...turma,
-                    edvInstrutor: Number(turma.edvInstrutor)
+                    nomeTurma: turma.nomeTurma,
+                    name_Curso: turma.name_Curso,
+                    EDV_Instrutor: Number(turma.EDV_Instrutor),
+                    nomeInstrutor: turma.nomeInstrutor
                 }
             );
+
             Swal.fire({
                 title: 'Sucesso!',
-                text: 'Turma cadastrada com sucesso!',
+                text: 'Turma criada com sucesso!',
                 icon: 'success'
             });
-            console.log("Resposta API:", response.data);
-        } 
-        catch (e) {
-            console.error('Erro ao cadastrar:', e);
+
+            console.log(response.data);
+
+        } catch (e: any) {
+            console.error(e);
             Swal.fire({
                 title: 'Erro!',
-                text: 'Não foi possível cadastrar a turma',
+                text: e.response?.data?.message || "Erro ao criar turma",
                 icon: 'error'
             });
         }
@@ -97,16 +119,60 @@ function CadTurma() {
             <div className="cadTurma-container">
                 <Sidebar />
                 <div className="cadTurma-body">
-                    <form onSubmit={handleSubmit} className="cadTurma-form">
-                        <span className="cadTurma-titulo">Cadastrar Turma</span>
+                    <form
+                        onSubmit={handleSubmit}
+                        className="cadTurma-form"
+                    >
+                        <span className="cadTurma-titulo">
+                            Cadastrar Turma
+                        </span>
                         <div className="cadTurma-conteudo">
-                            <input ref={nameRef} name="name" placeholder="Nome da Turma" value={turma.name} onChange={handleChange} className="cadTurma-input" onKeyDown={(e) => proximoCampo(e, courseRef)}/>
-                            <input ref={courseRef} name="course" placeholder="Curso" value={turma.course} onChange={handleChange} className="cadTurma-input" onKeyDown={(e) => proximoCampo(e, edvInstrutorRef)}/>
-                            <input ref={edvInstrutorRef} name="edvInstrutor" type="number" placeholder="EDV do Instrutor" value={turma.edvInstrutor} onChange={handleChange} className="cadTurma-input" onKeyDown={(e) => proximoCampo(e, instrutorRef)}/>
-                            <input ref={instrutorRef} name="instrutor" placeholder="Nome do Instrutor" value={turma.instrutor} onChange={handleChange} className="cadTurma-input" onKeyDown={(e) => proximoCampo(e, salvarRef)}/>
+                            <input
+                                ref={nameRef}
+                                name="nomeTurma"
+                                placeholder="Nome da Turma"
+                                value={turma.nomeTurma}
+                                onChange={handleChange}
+                                className="cadTurma-input"
+                                onKeyDown={(e) => proximoCampo(e, courseRef)}
+                            />
+                            <input
+                                ref={courseRef}
+                                name="name_Curso"
+                                placeholder="Curso"
+                                value={turma.name_Curso}
+                                onChange={handleChange}
+                                className="cadTurma-input"
+                                onKeyDown={(e) => proximoCampo(e, edvInstrutorRef)}
+                            />
+                            <input
+                                ref={edvInstrutorRef}
+                                name="EDV_Instrutor"
+                                type="number"
+                                placeholder="EDV do Instrutor"
+                                value={turma.EDV_Instrutor}
+                                onChange={handleChange}
+                                className="cadTurma-input"
+                                onKeyDown={(e) => proximoCampo(e, instrutorRef)}
+                            />
+                            <input
+                                ref={instrutorRef}
+                                name="nomeInstrutor"
+                                placeholder="Nome do Instrutor"
+                                value={turma.nomeInstrutor}
+                                onChange={handleChange}
+                                className="cadTurma-input"
+                                onKeyDown={(e) => proximoCampo(e, salvarRef)}
+                            />
                         </div>
                         <div className="cadTurma-button">
-                            <button ref={salvarRef} type="submit" className="cadTurma-salvar">CONFIRMAR</button>
+                            <button
+                                ref={salvarRef}
+                                type="submit"
+                                className="cadTurma-salvar"
+                            >
+                                CONFIRMAR
+                            </button>
                         </div>
                     </form>
                 </div>

@@ -29,8 +29,6 @@ route
         turmaController.criarTurma
     ) // funcionou no postman sem middleware
 
-
-
     .get(
         "/visualizarTurmas",
 

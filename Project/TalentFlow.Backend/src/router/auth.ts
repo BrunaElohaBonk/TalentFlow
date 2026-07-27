@@ -15,6 +15,17 @@ import {
 
 const route = express.Router();
 
+route.get(
+  "/buscaruser/:tipo",
+
+  authMiddleware,
+
+  roleMiddleware("INSTRUTOR"),
+
+  AuthController.buscaruser,
+)
+
+
 route.post(
   "/register",
   validationMiddleware(criarUserSchema),

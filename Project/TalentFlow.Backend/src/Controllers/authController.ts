@@ -7,6 +7,7 @@ import {
 } from "../DTO/authDTO.ts";
 import { UserService } from "../Services/AuthService.ts";
 import { AuthRequest } from "../Middlewares/authMiddleware.ts";
+import { user_tipoUser } from "@prisma/client";
 
 class AuthController {
   static async register(
@@ -16,7 +17,6 @@ class AuthController {
   ): Promise<void> {
     const data: AdicionarUserDto = req.body;
     const user = await UserService.register(data);
-    req.user!.EDV;
     res.status(201).json({
       message: "Usuário cadastrado com sucesso",
       user,
@@ -33,6 +33,19 @@ class AuthController {
       response: "Sucesso ao Deletar User!",
     });
   }
+  static async buscaruser(
+    req: AuthRequest,
+    res: Response
+  ) {
+    const data  = req.params.tipoUser as user_tipoUser;
+    await UserService.BuscarUser(data);
+    return res.status(200).send({
+      response: "Sucesso ao Buscar User!",
+    });
+  }
+
+
+
   static async login(
     req: Request,
     res: Response,

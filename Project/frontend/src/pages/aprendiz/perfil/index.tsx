@@ -17,6 +17,8 @@ import Competencia from "../competencias";
 import EditarFormacaoAcademica from '../formacao_academica/editar/editar_formacao'
 import AdicionarFormacaoAcademica from "../formacao_academica/adicionar/adicionar";
 import './perfil.css'
+import { usuarios } from "../../instrutor/verInstrutor/users";
+import api from "../../../services/api";
 
 interface Usuario {
     edv: number;
@@ -25,7 +27,7 @@ interface Usuario {
     email: string;
     user: string;
     contato: number;
-    dataNascimento: string;
+    data_nascimento: string;
     tipo: string;
 }
 
@@ -48,6 +50,7 @@ function converterData(data: string) {
 function calcularIdade(dataNascimento: Date) {
     const hoje = new Date();
     let idade = hoje.getFullYear() - dataNascimento.getFullYear();
+    
     const mesAtual = hoje.getMonth();
     const mesNascimento = dataNascimento.getMonth();
 
@@ -88,9 +91,19 @@ function Perfil() {
         setAprendiz(aprendizLogado)
     }, [])
 
+
+
     if (!aprendiz) {
         return <h2>Carregando...</h2>
     }
+
+    const router = async  ()=>{
+        const response = await api.post(`/aprediz/perfil/${aprendiz.EDV}/${}´, {
+            EDV: edv,
+            password
+        });
+    }
+
 
     return (
         <>
@@ -147,14 +160,14 @@ function Perfil() {
                         </div>
                         <div className="perfil-dados-perfil">
                             <div className="perfil-cabecalho-perfil">
-                                <h1>{aprendiz.nome}</h1>
+                                <h1>{usuarios.}</h1>
                             </div>
                             <div className="perfil-informacoes">
                                 <span>Email: {aprendiz.email}</span>
                                 <span>EDV: {aprendiz.edv}</span>
                                 <span>User: {aprendiz.user}</span>
-                                <span>Data de Nascimento: {aprendiz.dataNascimento}</span>
-                                <span>Idade: {calcularIdade(converterData(aprendiz.dataNascimento))} anos</span>
+                                <span>Data de Nascimento: {aprendiz.data_nascimento}</span>
+                                <span>Idade: {calcularIdade(converterData(aprendiz.data_nascimento))} anos</span>
                                 <span>Contato: {formatarTelefone(aprendiz.contato)}</span>
                             </div>
                         </div>
