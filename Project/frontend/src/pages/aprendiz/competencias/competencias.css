@@ -10,6 +10,16 @@
     z-index: 9999;
 }
 
+body.dark .competencia-body{
+    background-color: #242424;
+    color: white;
+}
+
+body.dark h2,
+body.dark label{
+    color: white;
+}
+
 .competencia-body {
     width: 700px;
     max-width: 90%;

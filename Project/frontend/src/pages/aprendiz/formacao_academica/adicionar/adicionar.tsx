@@ -6,6 +6,7 @@ import axios from "axios";
 import { FormControl, FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import { useDropzone } from "react-dropzone";
 import download from "../../../../assets/img/icon download.png";
+import { useTheme } from "../../../../context/themeContext";
 
 interface IFormacao {
     curso: string;
@@ -29,7 +30,7 @@ function AdicionarFormacaoAcademica({
     setVisible,
     setFormacaoAcademica,
 }: Props) {
-
+    const { darkMode } = useTheme();
     const [formacao, setFormacao] = useState<IFormacao>({
         curso: "",
         instituicao: "",
@@ -63,8 +64,15 @@ function AdicionarFormacaoAcademica({
         },
     });
 
+    const niveisFormacao = [
+        "Ensino Médio",
+        "Técnico",
+        "Graduação",
+        "Pós Graduação"
+    ];
+
     const handleChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
     ) => {
         setFormacao({
             ...formacao,
@@ -317,13 +325,14 @@ function AdicionarFormacaoAcademica({
                         <label className="adicionarFormacao-label">
                             Nível de Formação
                         </label>
-
-                        <input
-                            name="nivelFormacao"
-                            className="adicionarFormacao-input"
-                            value={formacao.nivelFormacao}
-                            onChange={handleChange}
-                        />
+                        <select name="nivelFormacao" className={`editarFormacao-input ${darkMode ? "dark" : ""}`} value={formacao.nivelFormacao} onChange={handleChange}>
+                            <option value="">Selecione o nível</option>
+                            {
+                                niveisFormacao.map((item) => (
+                                    <option key={item} value={item}>{item}</option>
+                                ))
+                            }
+                        </select>
                     </div>
 
                     <div className="adicionarFormacao-grupo">

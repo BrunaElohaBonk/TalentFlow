@@ -1,0 +1,269 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model aprendiz {
+  EDV      Int      @id
+  Id_Turma Int
+  user     user     @relation(fields: [EDV], references: [EDV], map: "Aprendiz_EDV_fkey")
+  turma    turma    @relation(fields: [Id_Turma], references: [id], map: "Aprendiz_Id_Turma_fkey")
+  profile  profile?
+
+  @@index([Id_Turma], map: "Aprendiz_Id_Turma_fkey")
+}
+
+model competencia {
+  id                Int     @id @default(autoincrement())
+  Id_Profile        Int
+  nome_Competencia  String
+  nivel_Competencia String
+  profile           profile @relation(fields: [Id_Profile], references: [id], map: "Competencia_Id_Profile_fkey")
+
+  @@index([Id_Profile], map: "Competencia_Id_Profile_fkey")
+}
+
+model cursos {
+  id             Int                  @id @default(autoincrement())
+  Id_Profile     Int
+  certificado      String?
+  name_Curso     String
+  status_Cursos  cursos_status_Cursos
+  data_Conclusao DateTime
+  carga_horaria  Int
+  profile        profile              @relation(fields: [Id_Profile], references: [id], map: "Cursos_Id_Profile_fkey")
+
+  @@index([Id_Profile], map: "Cursos_Id_Profile_fkey")
+}
+
+model formacao_academica {
+  id               Int                                 @id @default(autoincrement())
+  Id_Profile       Int
+  name_Curso       String
+  certificado      String?
+  status_Academico formacao_academica_status_Academico
+  nivel_formacao   formacao_academica_nivel_formacao
+  periodo_Atual    Int
+  total_Periodo    Int
+  nome_Institucao  String
+  profile          profile                             @relation(fields: [Id_Profile], references: [id], map: "Formacao_Academica_Id_Profile_fkey")
+
+  @@index([Id_Profile], map: "Formacao_Academica_Id_Profile_fkey")
+}
+
+model idiomas {
+  id           Int                  @id @default(autoincrement())
+  Id_Profile   Int
+  certificado      String?
+  nome_Idioma  idiomas_nome_Idioma
+  nivel_Idioma idiomas_nivel_Idioma
+  profile      profile              @relation(fields: [Id_Profile], references: [id], map: "Idiomas_Id_Profile_fkey")
+
+  @@index([Id_Profile], map: "Idiomas_Id_Profile_fkey")
+}
+
+model perfilhistorico {
+  Id             Int             @id @default(autoincrement())
+  Id_Profile     Int?
+  Tipo           TipoHistorico
+  IdRegistro     Int?
+  Acao           String
+  EDVAlteradoPor Int?
+  Dados          Json
+  DataAlteracao  DateTime        @default(now())
+
+  profile profile? @relation(fields: [Id_Profile], references: [id])
+
+  @@index([Id_Profile])
+  @@index([Tipo])
+}
+
+model profile {
+  id                    Int                     @id @default(autoincrement())
+  EDV_Aprendiz          Int                     @unique(map: "Profile_EDV_Aprendiz_key")
+  competencia           competencia[]
+  cursos                cursos[]
+  formacao_academica    formacao_academica[]
+  idiomas               idiomas[]
+  perfilhistorico       perfilhistorico[]
+  aprendiz              aprendiz                @relation(fields: [EDV_Aprendiz], references: [EDV], map: "Profile_EDV_Aprendiz_fkey")
+  situacao_profissional situacao_profissional[]
+  soft_skills           soft_skills[]
+}
+
+model situacao_profissional {
+  id               Int     @id @default(autoincrement())
+  Id_Profile       Int
+  nome_Setor       NomeSetor?
+  nome_Lider       String?
+  cumprido_Estagio Boolean @default(false)
+  bio_profissional String?
+  profile          profile @relation(fields: [Id_Profile], references: [id], map: "Situacao_profissional_Id_Profile_fkey")
+
+  @@index([Id_Profile], map: "Situacao_profissional_Id_Profile_fkey")
+}
+
+model soft_skills {
+  id              Int     @id @default(autoincrement())
+  Id_Profile      Int
+  nome_SoftSkills NomeSoftskills
+  profile         profile @relation(fields: [Id_Profile], references: [id], map: "Soft_Skills_Id_Profile_fkey")
+
+  @@index([Id_Profile], map: "Soft_Skills_Id_Profile_fkey")
+}
+
+model tokenrecuperacaosenha {
+  id        Int       @id @default(autoincrement())
+  token     String    @unique(map: "TokenRecuperacaoSenha_token_key")
+  expiresAt DateTime
+  EDV       Int?
+  createdAt DateTime  @default(now())
+  usedAt    DateTime?
+  user      user?     @relation(fields: [EDV], references: [EDV], map: "TokenRecuperacaoSenha_EDV_fkey")
+
+  @@index([EDV], map: "TokenRecuperacaoSenha_EDV_fkey")
+}
+
+model turma {
+  id            Int        @id @default(autoincrement())
+  nomeTurma     String
+  EDV_Instrutor Int
+  name_Curso    String
+  nomeInstrutor String
+  Ativo         Boolean    @default(true)
+  aprendiz      aprendiz[]
+  user          user       @relation(fields: [EDV_Instrutor], references: [EDV], map: "Turma_EDV_Instrutor_fkey")
+
+  @@index([EDV_Instrutor], map: "Turma_EDV_Instrutor_fkey")
+  turmahistorico turmahistorico[]
+}
+
+model user {
+  EDV                   Int                     @id
+  tipoUser              user_tipoUser
+  fotoPerfil            String?
+  name                  String
+  data_nascimento       DateTime
+  user_bosch            String?                 @unique(map: "User_user_bosch_key")
+  email_bosch           String?                 @unique(map: "User_email_bosch_key")
+  contato               String
+  password_login        String
+  Ativo                 Boolean                 @default(true)
+  aprendiz              aprendiz?
+  tokenrecuperacaosenha tokenrecuperacaosenha[]
+  turma                 turma[]
+
+}
+
+enum user_tipoUser {
+  APRENDIZ
+  INSTRUTOR
+}
+
+enum NomeSetor {
+  ENGENHARIA
+  BDO
+  TEF
+  BD
+  RH
+  COMPRAS
+  BICO
+  CRIN
+  LOGISTICA
+  QMM
+  TOTO
+  IMPACT
+  FERRAMENTARIA
+  PRODUCAO
+  BPS
+  ETS
+  HSE
+  ESPAÇO_SAUDE
+}
+
+enum NomeSoftskills {
+  COMUNICACAO
+  TRABALHO_EM_EQUIPE
+  LIDERANCA
+  EMPATIA
+  PROATIVIDADE
+  RESOLUCAO_DE_PROBLEMAS
+  PENSAMENTO_CRITICO
+  GESTAO_DO_TEMPO
+  ORGANIZACAO
+  CRIATIVIDADE
+  NEGOCIACAO
+  RESILIENCIA
+  ESCUTA_ATIVA
+  RESPONSABILIDADE
+  AUTONOMIA
+  APRENDIZADO_CONTINUO
+  INOVACAO
+  ORATORIA
+  COMPROMETIMENTO
+}
+enum idiomas_nome_Idioma {
+  ALEMAO
+  ARABE
+  COREANO
+  ESPANHOL
+  FRANCES
+  INGLES
+  ITALIANO
+  JAPONES
+  MANDARIM
+  RUSSO
+  TAILANDES
+}
+
+enum cursos_status_Cursos {
+  CONCLUIDO
+  CURSANDO
+}
+
+enum formacao_academica_status_Academico {
+  CONCLUIDO
+  CURSANDO
+}
+
+enum idiomas_nivel_Idioma {
+  BASICO
+  INTERMEDIARIO
+  AVANCADO
+  FLUENTE
+}
+
+enum formacao_academica_nivel_formacao {
+  ENSINO_MEDIO
+  TECNICO
+  GRADUACAO
+  POS_GRADUACAO
+}
+
+enum TipoHistorico {
+  DADOS_INSTRUTOR
+  PROFILE
+  FORMACAO_ACADEMICA
+  CURSO
+  COMPETENCIA
+  SOFTSKILL
+  SITUACAO_PROFISSIONAL
+  IDIOMA
+}
+model turmahistorico {
+  Id             Int             @id @default(autoincrement())
+  Id_Turma       Int?
+  acao           String
+  EDVAlteradoPor Int?
+  dados          Json
+  dataAlteracao  DateTime        @default(now())
+
+  turmas turma? @relation(fields: [Id_Turma], references: [id])
+
+  @@index([Id_Turma])
+}
+

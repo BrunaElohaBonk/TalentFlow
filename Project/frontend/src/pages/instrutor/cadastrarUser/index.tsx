@@ -1,21 +1,19 @@
 import { useParams } from "react-router-dom";
 import Header from "../../../components/header";
 import Sidebar from "../../../components/sidebar";
-import icon_olho from '../../../assets/img/icon_olho.png'
-import icon_olho_fechado from '../../../assets/img/icon_olho_fechado.png'
 import './cadastrarUser.css';
 import { useEffect, useRef, useState } from "react";
-import axios from "axios";
 import Swal from "sweetalert2";
 import { FormControl, FormControlLabel, FormLabel, MenuItem, Radio, RadioGroup, Select } from "@mui/material";
-import { turmas as turmasMock } from "../verTurma/turma";
+import { useTheme } from "../../../context/themeContext";
+import api from "../../../services/api";
 
 interface ITurma {
     id: number;
-    nome: string;
-    curso: string;
-    instrutorEdv: number;
-    instrutorNome: string;
+    nomeTurma: string;
+    name_Curso: string;
+    EDV_Instrutor: number;
+    nomeInstrutor: string;
 }
 
 interface IUser {
@@ -27,11 +25,12 @@ interface IUser {
     nascimento: string;
     contato: string;
     senha: string;
-    tipo: "Instrutor" | "Aprendiz";
+    tipo: "instrutor" | "aprendiz";
 }
 
 function CadastrarUser() {
     const { id } = useParams();
+    const { darkMode } = useTheme();
     const edvRef = useRef<HTMLInputElement>(null);
     const nameRef = useRef<HTMLInputElement>(null);
     const emailRef = useRef<HTMLInputElement>(null);
@@ -41,38 +40,38 @@ function CadastrarUser() {
     const senhaRef = useRef<HTMLInputElement>(null);
     const salvarRef = useRef<HTMLButtonElement>(null);
     const [turmas, setTurmas] = useState<ITurma[]>([]);
-    const [selectTurma, setSelectTurma] = useState(turmasMock);
-    const [showPassword, setShowPassword] = useState(false)
+    const token = localStorage.getItem("token");
     const proximoCampo = (e: React.KeyboardEvent<HTMLInputElement>, proximo: React.RefObject<HTMLElement | null>) => {
         if (e.key === "Enter") {
             e.preventDefault();
             proximo.current?.focus();
         }};
-    const [user, setUser] = useState<IUser>({
-        edv: 0,
-        name: '',
-        turma: '',  
-        email: '',
-        user: '',
-        nascimento: '',
-        contato: '',
-        senha: '',
-        tipo: "Aprendiz"
+        const [user, setUser] = useState<IUser>({
+            edv: 0,
+            name: '',
+            turma: '',  
+            email: '',
+            user: '',
+            nascimento: '',
+            contato: '',
+            senha: '',
+            tipo: "aprendiz"
     });
-
+    
     const fetchTurmas = async () => {
         try {
-            const response = await axios.get(`link backend`);
-            setTurmas(response.data.response);
+            const response = await api.get("turma/visualizarTurmas");
+            console.log("Turmas API:", response.data);
+            setTurmas(response.data);
         }
         catch (e) {
-            console.log(e);
+            console.log("Erro ao buscar turmas:", e);
         }
     };
-
+    
     const fetchUser = async () => {
         try {
-            const response = await axios.get(`link backend`);
+            const response = await api.get(`link backend`);
             const Usuario = response.data.response;
             setUser({
                 edv: Usuario.edv || 0,
@@ -82,7 +81,7 @@ function CadastrarUser() {
                 user: Usuario.user || '',
                 nascimento: Usuario.nascimento? new Date(Usuario.nascimento).toLocaleDateString("pt-BR"): '',
                 contato: Usuario.contato || '',
-                senha: Usuario.senha || '',
+                senha: '',
                 tipo: Usuario.tipo
             });
         }
@@ -90,15 +89,14 @@ function CadastrarUser() {
             console.error('Erro:', e);
         }
     };
-
+    
     useEffect(() => {
         if (id) {
             fetchUser();
         }
-        setSelectTurma(turmasMock);
         fetchTurmas();
     }, []);
-
+    
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setUser((prev) => ({
@@ -106,14 +104,14 @@ function CadastrarUser() {
             [name]: name === "edv" ? Number(value) : value
         }));
     };
-
+    
     const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault();
         const [dia, mes, ano] = user.nascimento.split("/");
         const dataNascimento = new Date(
             Number(ano),
             Number(mes) - 1,
-            Number(dia)
+            Number(dia) + 1
         );
         const hoje = new Date();
         let idade = hoje.getFullYear() - dataNascimento.getFullYear();
@@ -122,7 +120,7 @@ function CadastrarUser() {
         if (mesAtual < dataNascimento.getMonth() || (mesAtual === dataNascimento.getMonth() && diaAtual < dataNascimento.getDate())) {
             idade--;
         }
-
+        
         if (idade < 15 || idade > 100) {
             Swal.fire({
                 title: "Idade inválida!",
@@ -131,7 +129,7 @@ function CadastrarUser() {
             });
             return;
         }
-        if (!user.edv || !user.name || !user.turma || !user.email || !user.nascimento || !user.contato || !user.senha || (user.tipo === "Aprendiz" && !user.turma)) {
+        if (!user.edv || !user.name || !user.email || !user.nascimento || !user.contato || (user.tipo === "aprendiz" && !user.turma)) {
             Swal.fire({
                 title: 'Atenção!',
                 text: 'Preencha os campos obrigatórios!',
@@ -140,14 +138,36 @@ function CadastrarUser() {
             return;
         }
         try {
-            const response = await axios.put(`link backend`,{...user, nascimento: dataNascimento});
+            let response;
+            if (user.tipo === "instrutor") {
+                const dadosInstrutor = {
+                    EDV: user.edv,
+                    tipoUser: "INSTRUTOR",
+                    name: user.name,
+                    email_bosch: user.email,
+                    user_bosch: user.user,
+                    data_nascimento: user.nascimento,
+                    contato: user.contato,
+                    password_login: user.senha
+                };
+                console.log("Token enviado:", token);
+                response = await api.post("instrutor/criarInstrutor", dadosInstrutor);
+            } 
+            else {
+                const dadosAprendiz = { 
+                    EDV: user.edv,
+                    Id_Turma: Number(user.turma)
+                };
+                console.log("Token enviado:", token);
+                response = await api.post("aprendiz/criar", dadosAprendiz, {headers: {Authorization: `Bearer ${token}`}});
+            }
             Swal.fire({
                 title: 'Sucesso!',
                 text: 'Usuário cadastrado com sucesso!',
                 icon: 'success'
             });
             console.log("Resposta API:", response.data);
-        }
+        } 
         catch (e) {
             console.error('Erro ao cadastrar:', e);
             Swal.fire({
@@ -169,10 +189,11 @@ function CadastrarUser() {
         if (value.length > 5) {
             value = value.replace(/^(\d{2})\/(\d{2})(\d)/, "$1/$2/$3");
         }
-        setUser({
-            ...user,
-            nascimento: value
-        });
+        setUser(prev => ({
+            ...prev,
+            nascimento: value,
+            senha: prev.senha === "" || prev.senha === prev.nascimento? value: prev.senha
+        }));
     };
 
     const handleContato = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -216,23 +237,19 @@ function CadastrarUser() {
                                 <FormControl className="user-radio">
                                     <FormLabel>Tipo de usuário</FormLabel>
                                     <RadioGroup row value={user.tipo} onChange={(e) => {
-                                        const tipo = e.target.value;
-                                        setUser({ ...user, tipo: tipo as "Instrutor" | "Aprendiz", turma: tipo === "Instrutor" ? "Instrutor" : "" });
-                                    }}>
-                                        <FormControlLabel value="Instrutor" control={<Radio sx={{ color: "#2B83D5", "&.Mui-checked": { color: "#2B83D5" }, "& .MuiSvgIcon-root": { fontSize: 24 } }} />} label="Instrutor" />
-                                        <FormControlLabel value="Aprendiz" control={<Radio sx={{ color: "#2B83D5", "&.Mui-checked": { color: "#2B83D5" }, "& .MuiSvgIcon-root": { fontSize: 24 } }} />} label="Aprendiz" />
+                                            const tipo = e.target.value;
+                                            setUser({...user, tipo: tipo as "instrutor" | "aprendiz", turma: tipo === "aprendiz" ? user.turma : ""});
+                                        }}>
+                                        <FormControlLabel value="instrutor" control={<Radio sx={{ color: "#2B83D5", "&.Mui-checked": { color: "#2B83D5" }, "& .MuiSvgIcon-root": { fontSize: 24 } }} />} label="Instrutor" />
+                                        <FormControlLabel value="aprendiz" control={<Radio sx={{ color: "#2B83D5", "&.Mui-checked": { color: "#2B83D5" }, "& .MuiSvgIcon-root": { fontSize: 24 } }} />} label="Aprendiz" />
                                     </RadioGroup>
                                 </FormControl>
-                                {user.tipo === "Aprendiz" && (
-                                    <Select fullWidth displayEmpty value={user.turma} className="user-select" onChange={(e) =>setUser({ ...user, turma: e.target.value })}>
+                                {user.tipo === "aprendiz" && (
+                                    <Select fullWidth displayEmpty value={user.turma} className={`user-select ${darkMode ? "dark" : ""}`} MenuProps={{classes:{paper: darkMode ? "user-select-dark-menu" : ""}}} onChange={(e) =>setUser({ ...user, turma: e.target.value })}>
                                         <MenuItem value="" disabled>Selecione uma turma</MenuItem>
-                                        {selectTurma.map((turma) => (<MenuItem key={turma.id} value={turma.nome}>{turma.nome}</MenuItem>))}
+                                        {turmas.map((turma) => (<MenuItem key={turma.id} value={turma.id}>{turma.nomeTurma}</MenuItem>))}
                                     </Select>
                                 )}
-                            </div>
-                            <div className="user-senha">
-                                <input ref={senhaRef} name="senha" type={showPassword ? "text" : "password"} placeholder="Senha" value={user.senha} onChange={handleChange} className="user-input" onKeyDown={(e) => proximoCampo(e, salvarRef)}/>
-                                <img src={showPassword ? icon_olho_fechado : icon_olho} alt="Visualizar senha" className='user-eye-icon' onClick={() => setShowPassword(!showPassword)}/>
                             </div>
                         </div>
                         <div className="user-button">

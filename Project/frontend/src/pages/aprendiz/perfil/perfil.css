@@ -8,6 +8,25 @@
     margin-left: 20px;
 }
 
+body.dark .perfil-bloco{
+    background-color: #161616;
+    color: white;
+}
+
+body.dark h2,
+body.dark label{
+    color: white;
+}
+
+.perfilAprendiz-body{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    margin-top: 10px;
+    margin-left: 20px;
+}
+
 .perfil-logout:hover {
     height: 32px;
     width: 32px;

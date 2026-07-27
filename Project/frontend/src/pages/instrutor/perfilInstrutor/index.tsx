@@ -14,7 +14,7 @@ interface IPerfil {
     email: string;
     user: string;
     contato: number;
-    nascimento: Date;
+    nascimento: string;
 }
 
 function PerfilInstrutor(){
@@ -25,14 +25,15 @@ function PerfilInstrutor(){
         const usuarioSalvo = localStorage.getItem("usuario");
         if (usuarioSalvo) {
             const usuario = JSON.parse(usuarioSalvo);
+            console.log(usuario)
             setPerfil({
-                edv: Number(usuario.edv),
-                img: usuario.img,
-                nome: usuario.nome,
-                email: usuario.email,   
-                user: usuario.user,
-                contato: usuario.contato,
-                nascimento: ConverterData(usuario.dataNascimento)
+                edv: usuario.EDV,
+                img: usuario.imagem,
+                nome: usuario.name,
+                email: usuario.email_bosch,
+                user: usuario.user_bosch,
+                contato: Number(usuario.contato),
+                nascimento: formatarData(usuario.data_nascimento)
             });
         }
     }, []);
@@ -61,33 +62,23 @@ function PerfilInstrutor(){
             <div className="perfil-container">
                 <Sidebar></Sidebar>
                 <div className="perfil-body">   
-                    <label htmlFor="theme" className="theme">
-    <span className="theme__toggle-wrap">
-        <input
-            id="theme"
-            className="theme__toggle"
-            type="checkbox"
-            role="switch"
-            name="theme"
-            checked={darkMode}
-            onChange={alternarTema}
-        />
-
-        <span className="theme__fill"></span>
-
-        <span className="theme__icon">
-            <span className="theme__icon-part"></span>
-            <span className="theme__icon-part"></span>
-            <span className="theme__icon-part"></span>
-            <span className="theme__icon-part"></span>
-            <span className="theme__icon-part"></span>
-            <span className="theme__icon-part"></span>
-            <span className="theme__icon-part"></span>
-            <span className="theme__icon-part"></span>
-            <span className="theme__icon-part"></span>
-        </span>
-    </span>
-</label>
+                     <label htmlFor="theme" className="theme">
+                        <span className="theme__toggle-wrap">
+                            <input id="theme" className="theme__toggle" type="checkbox" role="switch" name="theme" checked={darkMode} onChange={alternarTema}/>
+                            <span className="theme__fill"></span>
+                            <span className="theme__icon">
+                                <span className="theme__icon-part"></span>
+                                <span className="theme__icon-part"></span>
+                                <span className="theme__icon-part"></span>
+                                <span className="theme__icon-part"></span>
+                                <span className="theme__icon-part"></span>
+                                <span className="theme__icon-part"></span>
+                                <span className="theme__icon-part"></span>
+                                <span className="theme__icon-part"></span>
+                                <span className="theme__icon-part"></span>
+                            </span>
+                        </span>
+                    </label>
                     <div className="perfil-form">
                         <button onClick={()=> setEditar(true)}>
                             <img src={icon_editar} alt="editar" className="perfil-editar"/>
@@ -102,9 +93,9 @@ function PerfilInstrutor(){
                                     <span className="perfil-span">EDV: {perfil.edv}</span>
                                     <span className="perfil-span">User: {perfil.user}</span>
                                     <span className="perfil-span">Email: {perfil.email}</span>
-                                    <span className="perfil-span">Data de Nascimento: {perfil.nascimento.toLocaleDateString("pt-BR")}</span>
+                                    <span className="perfil-span">Data de Nascimento: {formatarData(perfil.nascimento)}</span>
                                     <span className="perfil-span">Idade: {Idade(perfil.nascimento)} anos</span>
-                                    <span className="perfil-span">Contato: {Telefone(perfil.contato)}</span>
+                                    <span className="perfil-span">Contato:Contato: {Telefone(perfil.contato)}</span>
                                 </div>
                             </>
                         ):(
@@ -118,30 +109,43 @@ function PerfilInstrutor(){
 }
 export default PerfilInstrutor
 
-function Telefone(numero: number) {
-    const telefone = numero.toString();
-    return telefone.replace(/^(\d{2})(\d{5})(\d{4})$/,"($1)$2-$3");
+function Telefone(numero: number | string) {
+    const telefone = String(numero).replace(/\D/g, "");
+    return telefone.replace(
+        /^(\d{2})(\d{5})(\d{4})$/,
+        "($1) $2-$3"
+    );
 }
 
-function Idade(dataNascimento: Date) {
-    const hoje = new Date();
-    let idade = hoje.getFullYear() - dataNascimento.getFullYear();
-    const mesAtual = hoje.getMonth();
-    const mesNascimento = dataNascimento.getMonth();
-    if (
-        mesAtual < mesNascimento ||
-        (mesAtual === mesNascimento && hoje.getDate() < dataNascimento.getDate())
-    ) {
-        idade--;
-    }
-    return idade;
-}   
-
-function ConverterData(data: string) {
-    const [dia, mes, ano] = data.split("/");
-    return new Date(
+function Idade(data_nascimento: string) {
+    const [dia, mes, ano] = data_nascimento.split("/");
+    const nascimento = new Date(
         Number(ano),
         Number(mes) - 1,
         Number(dia)
     );
+    const hoje = new Date();
+    let idade = hoje.getFullYear() - nascimento.getFullYear();
+    const mesAtual = hoje.getMonth();
+    const mesNascimento = nascimento.getMonth();
+    if (
+        mesAtual < mesNascimento ||
+        (mesAtual === mesNascimento && hoje.getDate() < nascimento.getDate())
+    ) {
+        idade--;
+    }
+    return idade;
+}
+
+function formatarData(data: string) {
+    if (!data) return "";
+    if (data.includes("T")) {
+        const [ano, mes, dia] = data.split("T")[0].split("-");
+
+        return `${dia}/${mes}/${ano}`;
+    }
+    if (data.includes("/")) {
+        return data;
+    }
+    return "";
 }

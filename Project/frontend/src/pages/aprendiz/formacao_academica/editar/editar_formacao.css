@@ -10,6 +10,27 @@
     z-index: 9999;
 }
 
+body.dark .editarFormacao-card{
+    background-color: #242424;
+    color: white;
+}
+
+body.dark h2,
+body.dark span{
+    color: white;
+}
+
+.editarFormacao-input.dark {
+    background-color: #242424;
+    color: #fff;
+    border-color: #444;
+}
+
+.editarFormacao-input.dark option {
+    background-color: #242424;
+    color: #fff;
+}
+
 .editarFormacao-card {
     position: relative;
     width: 95%;

@@ -1,0 +1,38 @@
+src/
+├── controllers/  3 tem
+├── services/     4 tem
+├── models/       4
+├── routes/       2 tem
+├── middlewares/  5 é
+└── server.ts     1 tem
+
+PRISMA TEM QUE ESTAR NA 6.19
+
+iniciar com esse comandos 
+npm i
+npx prisma generate
+npm install zod
+npm install nodemailer
+npm install -D @types/nodemailer
+npm install multer
+npm install -D @types/multer
+
+não esqueca do:
+ .env
+
+ http://localhost:8080/api/auth(rounters)/registerUser(auth na router)
+
+
+src/
+├── Controllers/ ok
+├── DTO/ ok
+├── Middlewares/ ok 
+├── Routes/ ok
+├── Services/ ok
+├── Utils/ -> quero usar pra fazer as notificações
+└── server.ts ok 
+
+
+banco 
+9d59ce7
+ 

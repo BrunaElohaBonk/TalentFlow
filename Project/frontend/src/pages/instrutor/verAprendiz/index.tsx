@@ -31,6 +31,7 @@ function VerAprendiz(){
         idadeMax: "",
         setores: [] as string[],
         idiomas: [] as string[],
+        estagio: null as boolean | null,
         formacoes: [] as string[]
     });
     const normalizar = (texto: string) =>
@@ -92,6 +93,12 @@ function VerAprendiz(){
             const formacoesAprendiz = item.formacaoAcademica.map(f => f.nomeCurso);
             const possuiFormacao = filtros.formacoes.some(formacao => formacoesAprendiz.includes(formacao));
             if (!possuiFormacao) {
+                return false;
+            }
+        }
+        if (filtros.estagio !== null) {
+            const estaEmEstagio = item.situacaoProfissional.cumprindoEstagio; 
+            if (estaEmEstagio !== filtros.estagio) {
                 return false;
             }
         }
@@ -181,7 +188,7 @@ function VerAprendiz(){
                                         <span className="aprendiz-titulo" title={aprendizes.perfil.nome}>{aprendizes.perfil.nome}</span>
                                     </div>
                                     <div className="aprendiz-conteudo">
-                                        <span className="aprendiz-span" title={aprendizes.perfil.turma}>{aprendizes.perfil.turma}</span>
+                                        <span className="aprendiz-span" title={aprendizes.perfil.turma || 'Sem Turma'}>{aprendizes.perfil.turma || 'Sem Turma'}</span>
                                         <button onClick={() => navigate(`/PerfilAprendiz/${aprendizes.perfil.edv}`)} className="aprendiz-button">Ver Dados do Aprendiz</button>
                                     </div>
                                 </div>

@@ -2,69 +2,74 @@ import './editar.css'
 import { useEffect, useState } from "react";
 import fechar from "../../../../assets/img/close.png";
 import Swal from 'sweetalert2';
-import axios from 'axios';
+import api from "../../../../services/api";
 interface ITurma {
     id: number;
-    nome: string;
-    curso: string;
-    instrutorNome: string;
-    instrutorEdv: number;
+    nomeTurma: string;
+    name_Curso: string;
+    nomeInstrutor: string;
+    EDV_Instrutor: number;
 }
-
 interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
     turma: ITurma | null;
+    atualizarLista: () => Promise<void>;
 }
-
-function EditarTurma({ visible, setVisible, turma }: Props) {
+function EditarTurma({ visible, setVisible, turma, atualizarLista }: Props) {
     const [nome, setNome] = useState("");
     const [curso, setCurso] = useState("");
     const [instrutorNome, setInstrutorNome] = useState("");
     const [instrutorEdv, setInstrutorEdv] = useState("");
     useEffect(() => {
         if (turma) {
-            setNome(turma.nome);
-            setCurso(turma.curso);
-            setInstrutorNome(turma.instrutorNome);
-            setInstrutorEdv(turma.instrutorEdv.toString());
+            setNome(turma.nomeTurma);
+            setCurso(turma.name_Curso);
+            setInstrutorNome(turma.nomeInstrutor);
+            setInstrutorEdv(turma.EDV_Instrutor.toString());
         }
     }, [turma]);
-    if (!visible || !turma) return null;
-    const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!nome || !curso || !instrutorEdv || !instrutorNome) {
             Swal.fire({
-                title: 'Atenção!',
-                text: 'Preencha os campos obrigatórios!',
-                icon: 'warning'
+                title: "Atenção!",
+                text: "Preencha os campos obrigatórios!",
+                icon: "warning",
             });
             return;
         }
         try {
-            const response = await axios.put(`link backend`, {
-                id: turma.id,
-                nome,
-                curso,
-                instrutorNome,
-                instrutorEdv: Number(instrutorEdv)
-            });
+            const response = await api.put(
+                `/turma/atualizarTurma/${turma.id}`,
+                {
+                    nomeTurma: nome,
+                    name_Curso: curso,
+                    nomeInstrutor: instrutorNome,
+                    EDV_Instrutor: Number(instrutorEdv)
+                }
+            );
+            await atualizarLista();
+            
             Swal.fire({
-                title: 'Sucesso!',
-                text: 'A turma foi atualizada com sucesso!',
-                icon: 'success'
+                title: "Sucesso!",
+                text: "Turma atualizada com sucesso!",
+                icon: "success",
             });
-            console.log("Resposta API:", response.data);
-        } 
-        catch (e) {
-            console.error('Erro ao atualizar:', e);
+            console.log(response.data);
+            setVisible(false);
+        } catch (e) {
+            console.error(e);
             Swal.fire({
-                title: 'Erro!',
-                text: 'Não foi possível atualizar a turma',
-                icon: 'error'
+                title: "Erro!",
+                text: "Não foi possível atualizar a turma.",
+                icon: "error",
             });
         }
     };
+    if (!visible) {
+        return null;
+    }
 
     return (
         <div className="editarTurma-overlay" onClick={() => setVisible(false)}>
@@ -74,20 +79,20 @@ function EditarTurma({ visible, setVisible, turma }: Props) {
                 <form className="editarTurma-form" onSubmit={handleSubmit} onClick={(e) => e.stopPropagation()}>
                     <div className="editarTurma-grupo">
                         <label className="editarTurma-label">Nome da Turma</label>
-                        <input className="editarTurma-input" value={nome} onChange={(e) => setNome(e.target.value)}/>
+                        <input className="editarTurma-input" value={nome} onChange={(e) => setNome(e.target.value)} />
                     </div>
                     <div className="editarTurma-grupo">
                         <label className="editarTurma-label">Curso</label>
-                        <input className="editarTurma-input" value={curso} onChange={(e) => setCurso(e.target.value)}/>
+                        <input className="editarTurma-input" value={curso} onChange={(e) => setCurso(e.target.value)} />
                     </div>
                     <div className="editarTurma-grupo">
                         <label className="editarTurma-label">Instrutor</label>
                         <input
-                            className="editarTurma-input" value={instrutorNome} onChange={(e) => setInstrutorNome(e.target.value)}/>
+                            className="editarTurma-input" value={instrutorNome} onChange={(e) => setInstrutorNome(e.target.value)} />
                     </div>
                     <div className="editarTurma-grupo">
                         <label className="editarTurma-label">EDV do Instrutor</label>
-                        <input className="editarTurma-input" value={instrutorEdv} onChange={(e) => setInstrutorEdv(e.target.value)}/>
+                        <input className="editarTurma-input" value={instrutorEdv} onChange={(e) => setInstrutorEdv(e.target.value)} />
                     </div>
                     <div className="editarTurma-botoes">
                         <button type="submit" className="editarTurma-salvar">Salvar</button>

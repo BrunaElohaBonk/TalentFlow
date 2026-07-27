@@ -10,6 +10,16 @@
     z-index: 9999;
 }
 
+body.dark .situacao-card{
+    background-color: #242424;
+    color: white;
+}
+
+body.dark .formacao-titulo,
+body.dark .formacao-lista-titulo{
+    color: white;
+}
+
 .situacao-card {
     width: 600px;
     min-height: 350px;
