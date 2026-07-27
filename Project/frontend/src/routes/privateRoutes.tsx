@@ -1,7 +1,9 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/authContext";
+import type { ReactNode } from "react";
 
 function PrivateRoute({children, tipo} : any){
+
     const {usuario} = useAuth();
 
     console.log(usuario)
