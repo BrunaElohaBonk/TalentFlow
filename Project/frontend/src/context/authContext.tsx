@@ -8,7 +8,6 @@ interface Usuario {
     }
 }
 
-
 interface AuthContextType {
     usuario: Usuario | null;
     login: (usuario: Usuario) => void;
@@ -22,7 +21,6 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
         const salvo = localStorage.getItem("usuario");
         return salvo ? JSON.parse(salvo) : null;
     });
-
     function login(usuario: Usuario){
         setUsuario(usuario);
         localStorage.setItem(
@@ -34,24 +32,13 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
             JSON.stringify(usuario.token)
         );
     }
-
     function logout(){
         setUsuario(null);
         localStorage.removeItem("usuario");
         localStorage.removeItem("token");
     }
-
-
     return (
-        <AuthContext.Provider 
-            value={{
-                usuario,
-                login,
-                logout
-            }}
-        >
-            {children}
-        </AuthContext.Provider>
+        <AuthContext.Provider value={{usuario, login, logout}}>{children}</AuthContext.Provider>
     );
 }
 
