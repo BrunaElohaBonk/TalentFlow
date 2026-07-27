@@ -1,15 +1,15 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/authContext";
-import type { ReactNode } from "react";
 
 function PublicRoute({children}: any) {
     const { usuario } = useAuth();
     if(usuario){
+
       //Não mudar usuario.user.tipo
         if(usuario.user.tipo === "instrutor"){
             return <Navigate to="/Home" replace />;
         }
-        if(usuario.user.tipo "aprendiz"){
+        if(usuario.user.tipo === "aprendiz"){
             return <Navigate to="/Perfil" replace />;
         }
     }

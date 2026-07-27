@@ -6,6 +6,8 @@ import { AuthRequest } from "../Middlewares/authMiddleware.ts";
 
 export default class aprendizController {
   static async criar(req: AuthRequest, res: Response) {
+    console.log("bory "+req.body);
+    console.log("user" + req.user);
     const aprendiz = await AprendizService.criar(req.body, req.user!.EDV);
 
     return res.status(201).json({

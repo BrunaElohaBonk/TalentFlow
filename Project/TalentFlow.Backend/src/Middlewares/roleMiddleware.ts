@@ -10,6 +10,7 @@ export function roleMiddleware(...roles: Role[]) {
 
     next: NextFunction
   ) => {
+    console.log(req.user)
     if (!req.user) {
       return res.status(401).json({
         message: "Usuário não autenticado",
