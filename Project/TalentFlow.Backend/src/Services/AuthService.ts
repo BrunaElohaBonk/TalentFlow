@@ -69,6 +69,7 @@ type LoginResult =
         contato: string;
         data_nascimento: Date;
         imagem: string;
+        ativo:boolean;
       };
     };
 
@@ -219,13 +220,13 @@ export class UserService {
         contato: user.contato,
         data_nascimento: user.data_nascimento,
         imagem: user.fotoPerfil || "",
+        ativo: user.Ativo
       },
     };
   }
 
   static async primeiroAcesso(data: {
     EDV: number;
-    email: string;
     password: string;
     confirmPassword: string;
   }): Promise<void> {
@@ -246,7 +247,6 @@ export class UserService {
         EDV: data.EDV,
       },
       data: {
-        email_bosch: data.email,
         password_login: senhaCrypt,
       },
     });
