@@ -146,7 +146,7 @@ function VerAprendiz(){
         
     const fetchAprendiz = async () => {
         try {
-            const response = await api.get("/perfil/:EDV");
+            const response = await api.get(`aprendiz/perfil/`);
             console.log("API RESPONSE:", response.data);
             setAprendiz(response.data.response);
         } 
@@ -168,7 +168,7 @@ function VerAprendiz(){
 
         if (!confirm.isConfirmed) return
             try {
-                await axios.delete(`link backend/${edv}`)
+                await api.delete(`/auth/deletarUser/${edv}`)
                 Swal.fire({
                     title: 'Deletado!',
                     text: 'Aprendiz removido com sucesso!',

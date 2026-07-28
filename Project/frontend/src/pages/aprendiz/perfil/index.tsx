@@ -17,7 +17,6 @@ import Competencia from "../competencias";
 import EditarFormacaoAcademica from '../formacao_academica/editar/editar_formacao'
 import AdicionarFormacaoAcademica from "../formacao_academica/adicionar/adicionar";
 import './perfil.css'
-import { usuarios } from "../../instrutor/verInstrutor/users";
 import api from "../../../services/api";
 
 interface Usuario {
@@ -202,7 +201,6 @@ function Perfil() {
                         <div className="perfil-card-perfil">
                             <h3>Idiomas</h3>
                             <ul>
-                                <li>{router.}</li>
                                 <li>Inglês B1</li>
                             </ul>
                             <button className="perfil-btn-visualizar" onClick={() => setIdioma(true)}>
