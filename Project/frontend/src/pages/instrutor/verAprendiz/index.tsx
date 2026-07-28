@@ -202,34 +202,33 @@ function VerAprendiz(){
         }
     };
 
-    const handleDelete = async (edv) => {
+    const handleDelete = async (EDV) => {
         const confirm = await Swal.fire({
-            title: 'Tem certeza?',
-            text: 'O aprendiz será deletado!',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Sim, deletar!',
-            cancelButtonText: 'Cancelar'
-        })
-
-        if (!confirm.isConfirmed) return
-            try {
-                await api.delete(`/auth/deletarUser/${edv}`)
-                Swal.fire({
-                    title: 'Deletado!',
-                    text: 'Aprendiz removido com sucesso!',
-                    icon: 'success'
-                })
-                fetchAprendizes()
-            } 
-            catch (error) {
-                console.error('Erro ao deletar:', error)
-                Swal.fire({
-                    title: 'Erro!',
-                    text: 'Erro ao deletar aprendiz',
-                    icon: 'error'
-                })
-            }
+        title: 'Tem certeza?',
+        text: 'O aprendiz será removido da lista!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sim, remover!',
+        cancelButtonText: 'Cancelar'
+    });
+        if (!confirm.isConfirmed) return;
+        try {
+            await api.put(`/auth/deletarUser/${EDV}`);
+            Swal.fire({
+                title: 'Removido!',
+                text: 'Aprendiz removido com sucesso!',
+                icon: 'success'
+            });
+            fetchAprendizes();
+        } 
+        catch (error) {
+            console.error('Erro ao remover:', error);
+            Swal.fire({
+                title: 'Erro!',
+                text: 'Erro ao remover aprendiz',
+                icon: 'error'
+            });
+        }
     }
     useEffect(() => {
         fetchAprendizes();
@@ -238,7 +237,7 @@ function VerAprendiz(){
     return(
         <div className="aprendiz">
             <Header></Header>
-            <Filtro visible={filtro} setVisible={setFiltro} filtros={filtros} setFiltros={setFiltros}/>
+            <Filtro visible={filtro} setVisible={setFiltro} filtros={filtros} setFiltros={setFiltros} aprendizes={aprendiz} turmas={turma}/>
             <div className="aprendiz-container">
                 <Sidebar/>
                 <div className="aprendiz-body">

@@ -1,40 +1,66 @@
 import './filter.css'
-import { aprendizes } from '../../pages/instrutor/verAprendiz/aprendizes'
-import { turmas } from '../../pages/instrutor/verTurma/turma'
-import { Modal, Box, Typography, FormControl, InputLabel, Select, MenuItem, FormGroup, FormControlLabel, Checkbox, Button, FormLabel } from "@mui/material";
+import { Box,  FormControl, FormGroup, FormControlLabel, Checkbox, Button } from "@mui/material";
 import { useState } from 'react';
 import fechar from '../../assets/img/close.png'
 import setinha from '../../assets/img/setinha.png'
 
-function Filtro({ visible, setVisible, filtros, setFiltros } :any){
+
+interface ISituacaoProfissional {
+    nome_Setor: string;
+    nome_Lider: string;
+    cumprido_Estagio: boolean;
+    bio_profissional: string;
+}
+
+interface IAprendiz {
+    EDV: number;
+    data: {
+        situacao_profissional: ISituacaoProfissional[];
+        idiomas: {
+            nome_Idioma: string;
+            nivel_Idioma: string;
+        }[];
+    };
+}
+
+function Filtro({ visible, setVisible, filtros, setFiltros, aprendizes, turmas } :any){
     const [aberto, setAberto] = useState<string | null>(null);
     const alternarFiltro = (nome: string) => {
         setAberto(aberto === nome ? null : nome);
     };
-    const setores = [
-        "Engenharia",
-        "RH",
-        "TEF",
-        "BDO",
-        "BD",
-        "Logística",
-        "CRIN"
+    const setores: string[] = [
+        ...new Set(
+            aprendizes.flatMap((aprendiz) =>
+                aprendiz.data.situacao_profissional.map(
+                    (s) => s.nome_Setor
+                )
+            )
+        )
     ];
 
     const idiomas = [
-        "Alemão",
-        "Italiano",
-        "Inglês",
-        "Espanhol",
-        "Francês",
-        "Russo"
+        ...new Set(
+            aprendizes.flatMap((aprendiz) =>
+                aprendiz.data.idiomas.map(
+                    (idioma) => idioma.nome_Idioma
+                )
+            )
+        )
     ];
 
-     const formacoes = [
+    const formacoes = [
         ...new Set(
-            aprendizes.flatMap(ap =>
-                ap.formacaoAcademica.map(f => f.nomeCurso)
+            aprendizes.flatMap((aprendiz) =>
+                aprendiz.data.formacao_academica.map(
+                    (formacao) => formacao.name_Curso
+                )
             )
+        )
+    ];
+
+    const nomesTurmas = [
+        ...new Set(
+            aprendizes.map(ap => ap.turma?.nome)
         )
     ];
 
@@ -63,13 +89,13 @@ function Filtro({ visible, setVisible, filtros, setFiltros } :any){
                 <div className={`filtro-expansao ${aberto === "turmas" ? "mostrar" : ""}`}>
                     <div className="filtro-checkbox">
                         <FormGroup>
-                            {turmas.map((turma) => (
-                                <FormControlLabel key={turma.id} label={turma.nome} control={
-                                    <Checkbox checked={filtros.turmas?.includes(turma.nome) ?? false} onChange={(e) => {
+                            {nomesTurmas.map((turma) => (
+                                <FormControlLabel key={turma} label={turma} control={
+                                    <Checkbox checked={filtros.turmas.includes(turma)} onChange={(e) => {
                                         if (e.target.checked) {
-                                            setFiltros({...filtros, turmas: [...(filtros.turmas ?? []), turma.nome]});
+                                            setFiltros({...filtros, turmas: [ ...filtros.turmas, turma]});
                                         } else {
-                                            setFiltros({...filtros, turmas: (filtros.turmas ?? []).filter(t => t !== turma.nome)});
+                                            setFiltros({...filtros,turmas:filtros.turmas.filter(t=>t!==turma)});
                                         }}}
                                     />}
                                 />
