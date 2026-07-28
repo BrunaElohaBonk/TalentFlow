@@ -185,7 +185,7 @@ function EditarPerfil({ visible, setVisible, edv }: Props){
                     </div>
                     <div className="editarPerfil-grupo">
                         <label className="editarPerfil-label">Nome Completo</label>
-                        <input ref={nomeRef} name="name" className="editarPerfil-input" value={perfil.name} disabled/>
+                        <input ref={nomeRef} name="name" className="editarPerfil-input" value={perfil.name}/>
                     </div>
                     <div className="editarPerfil-grupo">
                         <label className="editarPerfil-label">EDV</label>
@@ -197,11 +197,11 @@ function EditarPerfil({ visible, setVisible, edv }: Props){
                     </div>
                     <div className="editarPerfil-grupo">
                         <label className="editarPerfil-label">UserID</label>
-                        <input ref={userRef} name="user_bosch" className="editarPerfil-input" value={perfil.user_bosch} disabled/>
+                        <input ref={userRef} name="user_bosch" className="editarPerfil-input" value={perfil.user_bosch}/>
                     </div>
                     <div className="editarPerfil-grupo">
                         <label className="editarPerfil-label">Data de nascimento</label>
-                        <input ref={nascimentoRef} name="data_nascimento" className="editarPerfil-input" value={perfil.data_nascimento} disabled/>
+                        <input ref={nascimentoRef} name="data_nascimento" className="editarPerfil-input" value={perfil.data_nascimento}/>
                     </div>
                     <div className="editarPerfil-grupo">
                         <label className="editarPerfil-label">Contato</label>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "../../../components/header"
 import Sidebar from "../../../components/sidebar"
 import './verAprendiz.css'
@@ -9,7 +9,6 @@ import filter from '../../../assets/img/filter.png'
 import { aprendizes } from "./aprendizes";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import axios from "axios";
 import Filtro from "../../../components/filter";
 import api from "../../../services/api";
 
@@ -24,14 +23,50 @@ interface ITurma {
 interface IAprendiz {
     EDV: number;
     name: string;
-    turma: string;
-    email: string;
-    user: string;
-    nascimento: string;
+    email_bosch: string;
+    user_bosch: string;
     contato: string;
-    senha: string;
-    tipo: "aprendiz";
+    data_nascimento: Date;
+    fotoPerfil: string | null;
+    tipoUser: "APRENDIZ";
+
+    data: {
+        id: number;
+        EDV_Aprendiz: number;
+
+        situacao_profissional: {
+            nome_Setor: string;
+            nome_Lider: string;
+            cumprido_Estagio: boolean;
+            bio_profissional: string;
+        }[];
+
+        formacao_academica: {
+            id: number;
+            name_Curso: string;
+            nome_Institucao: string;
+            status_Academico: "CONCLUIDO" | "CURSANDO";
+            periodo_Atual: number;
+            total_Periodo: number;
+            nivel_formacao: string;
+        }[];
+
+        cursos_complementares: {
+            id: number;
+            name_Curso: string;
+            status_Cursos: "CONCLUIDO" | "CURSANDO";
+            data_Conclusao: string;
+            carga_horaria: number;
+        }[];
+
+        idiomas: {
+            id: number;
+            nome_Idioma: string;
+            nivel_Idioma: string;
+        }[];
+    };
 }
+
 
 function VerAprendiz(){
     const navigate = useNavigate()
@@ -62,22 +97,22 @@ function VerAprendiz(){
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
         .toLowerCase();
-    const pesquisar = aprendizes
+    const pesquisar = aprendiz
         .filter((item) => {
         if (filtros.setores.length > 0) {
-            const setorAprendiz = item.situacaoProfissional.nomeSetor;
+            const setorAprendiz = item.data.situacao_profissional[0]?.nome_Setor;
             const possuiSetor = filtros.setores.includes(setorAprendiz);
             if (!possuiSetor) {
                 return false;
             }
         }
-        if (filtros.turmas.length > 0) {
-            if (!filtros.turmas.includes(item.perfil.turma)) {
-                return false;
-            }
-        }
+        // if (filtros.turmas.length > 0) {
+        //     if (!filtros.turmas.includes()) {
+        //         return false;
+        //     }
+        // }
         if (filtros.idadeMin !== "" || filtros.idadeMax !== "") {
-            const idade = Idade(item.perfil.nascimento);
+            const idade = Idade(item.data_nascimento);
             const idadeMin = filtros.idadeMin !== "" ? Number(filtros.idadeMin) : null;
             const idadeMax = filtros.idadeMax !== "" ? Number(filtros.idadeMax) : null;
             if (idadeMin !== null && idadeMax === null) {
@@ -104,8 +139,8 @@ function VerAprendiz(){
             }
         }
         if (filtros.idiomas.length > 0) {
-            const idiomasAprendiz = item.idiomas.map(
-                i => i.idioma
+            const idiomasAprendiz = item.data.idiomas.map(
+                i => i.nome_Idioma
             );
             const possuiIdioma = filtros.idiomas.some(idioma => idiomasAprendiz.includes(idioma));
             if (!possuiIdioma) {
@@ -113,14 +148,14 @@ function VerAprendiz(){
             }
         }
         if (filtros.formacoes.length > 0) {
-            const formacoesAprendiz = item.formacaoAcademica.map(f => f.nomeCurso);
+            const formacoesAprendiz = item.data.formacao_academica.map(f => f.name_Curso);
             const possuiFormacao = filtros.formacoes.some(formacao => formacoesAprendiz.includes(formacao));
             if (!possuiFormacao) {
                 return false;
             }
         }
         if (filtros.estagio !== null) {
-            const estaEmEstagio = item.situacaoProfissional.cumprindoEstagio; 
+            const estaEmEstagio = item.data.situacao_profissional[0]?.cumprido_Estagio; 
             if (estaEmEstagio !== filtros.estagio) {
                 return false;
             }
@@ -131,28 +166,39 @@ function VerAprendiz(){
         const termo = normalizar(busca.trim());
         if (termo === "") return true;
         return (
-            normalizar(item.perfil.nome).includes(termo) ||
-            normalizar(item.perfil.email).includes(termo) ||
-            normalizar(item.perfil.user).includes(termo) ||
-            normalizar(item.perfil.turma).includes(termo) ||
-            item.perfil.edv.toString().includes(termo) ||
-            item.perfil.contato.toString().includes(termo) ||
-            item.perfil.nascimento.toLocaleDateString("pt-BR").includes(termo)
+            normalizar(item.name).includes(termo) ||
+            normalizar(item.email_bosch).includes(termo) ||
+            normalizar(item.user_bosch).includes(termo) ||
+            // normalizar(item.perfil.turma).includes(termo) ||
+            item.EDV.toString().includes(termo) ||
+            item.contato.toString().includes(termo) ||
+            item.data_nascimento.toLocaleDateString("pt-BR").includes(termo)
         );
     })
     .sort((a, b) =>
-        a.perfil.nome.localeCompare(b.perfil.nome, "pt-BR")
+        a.name.localeCompare(b.name, "pt-BR")
     );
         
-    const fetchAprendiz = async () => {
+    const fetchAprendizes = async () => {
         try {
-            const response = await api.get("/perfil/:EDV");
-            console.log("API RESPONSE:", response.data);
-            setAprendiz(response.data.response);
+            const response = await api.get("/auth/buscaruser/APRENDIZ");
+            const usuarios = response.data;
+            console.log("response.data:", response.data);
+            console.log("é array?", Array.isArray(response.data));
+            const aprendizesComPerfil = await Promise.all(
+                usuarios.map(async (usuario: any) => {
+                    const perfilResponse = await api.get(`/aprendiz/perfil/${usuario.EDV}`);
+                    return {
+                        ...usuario, ...perfilResponse.data
+                    };
+                })
+            );
+            console.log("APRENDIZES COMPLETOS:", aprendizesComPerfil);
+            setAprendiz(aprendizesComPerfil);
+
         } 
         catch (error) {
-            console.error("Erro:", error);
-            setAprendiz(null);
+            console.error(error);
         }
     };
 
@@ -168,13 +214,13 @@ function VerAprendiz(){
 
         if (!confirm.isConfirmed) return
             try {
-                await axios.delete(`link backend/${edv}`)
+                await api.delete(`/auth/deletarUser/${edv}`)
                 Swal.fire({
                     title: 'Deletado!',
                     text: 'Aprendiz removido com sucesso!',
                     icon: 'success'
                 })
-                fetchAprendiz()
+                fetchAprendizes()
             } 
             catch (error) {
                 console.error('Erro ao deletar:', error)
@@ -185,7 +231,9 @@ function VerAprendiz(){
                 })
             }
     }
-
+    useEffect(() => {
+        fetchAprendizes();
+    }, []); 
 
     return(
         <div className="aprendiz">
@@ -203,16 +251,16 @@ function VerAprendiz(){
                     </div>
                     <div className="aprendiz-card-area">
                         {pesquisar.length > 0 ? (
-                            pesquisar.map((aprendizes) => (
-                                <div className="aprendiz-modal" key={aprendizes.perfil.edv}>
-                                    <button className="aprendiz-btn-delete" onClick={() => handleDelete(aprendizes.perfil.edv)}><img src={lixeira} alt="deletar" className="aprendiz-deletar"/></button>
+                            pesquisar.map((item) => (
+                                <div className="aprendiz-modal" key={item.EDV}>
+                                    <button className="aprendiz-btn-delete" onClick={() => handleDelete(item.EDV)}><img src={lixeira} alt="deletar" className="aprendiz-deletar"/></button>
                                     <div className="aprendiz-header">
                                         <img src={user} alt="user" className="aprendiz-img"/>
-                                        <span className="aprendiz-titulo" title={aprendizes.perfil.nome}>{aprendizes.perfil.nome}</span>
+                                        <span className="aprendiz-titulo" title={item.name}>{item.name}</span>
                                     </div>
                                     <div className="aprendiz-conteudo">
-                                        <span className="aprendiz-span" title={aprendizes.perfil.turma || 'Sem Turma'}>{aprendizes.perfil.turma || 'Sem Turma'}</span>
-                                        <button onClick={() => navigate(`/PerfilAprendiz/${aprendizes.perfil.edv}`)} className="aprendiz-button">Ver Dados do Aprendiz</button>
+                                        {/* <span className="aprendiz-span" title={item.nomeTurma || 'Sem Turma'}>{item.nomeTurma || 'Sem Turma'}</span> */}
+                                        <button onClick={() => navigate(`/PerfilAprendiz/${item.EDV}`)} className="aprendiz-button">Ver Dados do Aprendiz</button>
                                     </div>
                                 </div>
                             ))
