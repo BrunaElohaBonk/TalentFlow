@@ -2,12 +2,12 @@ import { useState } from "react"
 import Header from "../../../components/header"
 import Sidebar from "../../../components/sidebar"
 import './verInstrutor.css'
-import axios from "axios"
 import Swal from "sweetalert2"
 import lixeira from '../../../assets/img/lixeira.png'
 import user from '../../../assets/img/icon_user.png'
 import lupa from '../../../assets/img/pesquisar.png'
 import { usuarios } from './users'
+import api from "../../../services/api"
 
 function VerInstrutor(){
     const [busca, setBusca] = useState("");
@@ -29,7 +29,7 @@ function VerInstrutor(){
 
     // const fetchInstrutor = async () => {
     //     try {
-    //         const response = await axios.get("link backend");
+    //         const response = await api.get("link backend");
     //         console.log("API RESPONSE:", response.data);
     //         setInstrutor(response.data.response);
     //     } 
@@ -39,7 +39,7 @@ function VerInstrutor(){
     //     }
     // };
 
-    const handleDelete = async (edv) => {
+    const handleDelete = async (EDV) => {
         const confirm = await Swal.fire({
             title: 'Tem certeza?',
             text: 'O instrutor será deletado!',
@@ -51,7 +51,7 @@ function VerInstrutor(){
 
         if (!confirm.isConfirmed) return
             try {
-                await axios.delete(`link backend/${edv}`)
+                await api.delete(`/deletarUser/${EDV}`)
                 Swal.fire({
                     title: 'Deletado!',
                     text: 'Instrutor removido com sucesso!',

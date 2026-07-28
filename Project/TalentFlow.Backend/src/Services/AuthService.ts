@@ -128,7 +128,7 @@ export class UserService {
           },
         });
 
-        return user;
+        return {user};
       });
     } catch (error: any) {
       if (error.code === "P2002") {

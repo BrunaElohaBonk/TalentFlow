@@ -1,4 +1,3 @@
-import { useParams } from "react-router-dom";
 import Header from "../../../components/header";
 import Sidebar from "../../../components/sidebar";
 import './cadastrarUser.css';
@@ -29,7 +28,6 @@ interface IUser {
 }
 
 function CadastrarUser() {
-    const { id } = useParams();
     const { darkMode } = useTheme();
     const edvRef = useRef<HTMLInputElement>(null);
     const nameRef = useRef<HTMLInputElement>(null);
@@ -68,32 +66,8 @@ function CadastrarUser() {
             console.log("Erro ao buscar turmas:", e);
         }
     };
-    
-    const fetchUser = async () => {
-        try {
-            const response = await api.get(`link backend`);
-            const Usuario = response.data.response;
-            setUser({
-                edv: Usuario.edv || 0,
-                name: Usuario.name || '',
-                turma: Usuario.turma?.toString() || '',
-                email: Usuario.email || '',
-                user: Usuario.user || '',
-                nascimento: Usuario.nascimento? new Date(Usuario.nascimento).toLocaleDateString("pt-BR"): '',
-                contato: Usuario.contato || '',
-                senha: '',
-                tipo: Usuario.tipo
-            });
-        }
-        catch (e) {
-            console.error('Erro:', e);
-        }
-    };
-    
+
     useEffect(() => {
-        if (id) {
-            fetchUser();
-        }
         fetchTurmas();
     }, []);
     
@@ -137,39 +111,47 @@ function CadastrarUser() {
             });
             return;
         }
+       const dadosUsuario = {
+            EDV: user.edv,
+            tipoUser: user.tipo.toUpperCase(),
+            name: user.name,
+            email_bosch: user.email,
+            user_bosch: user.user,
+            data_nascimento: user.nascimento,
+            contato: user.contato,
+            password_login: user.senha
+        };
+
         try {
-            let response;
-            if (user.tipo === "instrutor") {
-                const dadosInstrutor = {
-                    EDV: user.edv,
-                    tipoUser: "INSTRUTOR",
-                    name: user.name,
-                    email_bosch: user.email,
-                    user_bosch: user.user,
-                    data_nascimento: user.nascimento,
-                    contato: user.contato,
-                    password_login: user.senha
-                };
-                console.log("Token enviado:", token);
-                response = await api.post("instrutor/criarInstrutor", dadosInstrutor);
-            } 
-            else {
-                const dadosAprendiz = { 
-                    EDV: user.edv,
-                    Id_Turma: Number(user.turma)
-                };
-                console.log("Token enviado:", token);
-                response = await api.post("aprendiz/criar", dadosAprendiz, {headers: {Authorization: `Bearer ${token}`}});
+            const cadastro = await api.post("/auth/register", dadosUsuario);
+            console.log("Usuário criado:", cadastro.data);
+            if (user.tipo === "aprendiz") {
+                const EDV = cadastro.data.user.user.EDV;
+                await api.post("/aprendiz/criar",
+                    {
+                        EDV: EDV,
+                        Id_Turma: Number(user.turma)
+                    },
+                    {
+                        headers:{
+                            Authorization:`Bearer ${token}`
+                        }
+                    }
+                );
             }
+
             Swal.fire({
                 title: 'Sucesso!',
                 text: 'Usuário cadastrado com sucesso!',
                 icon: 'success'
             });
-            console.log("Resposta API:", response.data);
         } 
-        catch (e) {
+        catch (e : any) {
             console.error('Erro ao cadastrar:', e);
+            console.log(
+                    "ERRO APRENDIZ:",
+                    JSON.stringify(e.response?.data, null, 2)
+                );
             Swal.fire({
                 title: 'Erro!',
                 text: 'Não foi possível cadastrar o usuário',
