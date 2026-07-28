@@ -3,23 +3,13 @@ import Sidebar from "../../../components/sidebar";
 import Filtro from "../../../components/filter";
 import filter from '../../../assets/img/filter.png'
 import "./dashboard.css";
-import { useState } from "react";
-import { aprendizes } from "../verAprendiz/aprendizes";
+import { useEffect, useState } from "react";
 import { GraficoSetor, GraficoEstagio, GraficoSuperior, GraficoCompetencias, GraficoIdiomas } from "./graficos";
+import api from "../../../services/api";
 
 function Dashboard() {
-    console.log("Dashboard renderizou")
-    const [busca] = useState("");
-    const [filtro, setFiltro] = useState(false)
-    const Idade = (data_nascimento: Date) => {
-        const hoje = new Date();
-        let idade = hoje.getFullYear() - data_nascimento.getFullYear();
-        const mes = hoje.getMonth() - data_nascimento.getMonth();
-        if (mes < 0 || (mes === 0 && hoje.getDate() < data_nascimento.getDate())) {
-            idade--;
-        }
-        return idade;
-    };
+    const [filtro, setFiltro] = useState(false);
+    const [dadosDashboard, setDadosDashboard] = useState<any>(null);
     const [filtros, setFiltros] = useState({
         turmas: [] as string[],
         idadeMin: "",
@@ -29,93 +19,20 @@ function Dashboard() {
         estagio: null as boolean | null,
         formacoes: [] as string[]
     });
-    const normalizar = (texto: string) =>
-    texto
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .toLowerCase();
-    const pesquisar = aprendizes
-        .filter((item) => {
-        if (filtros.setores.length > 0) {
-            const setorAprendiz = item.situacaoProfissional.nomeSetor;
-            const possuiSetor = filtros.setores.includes(setorAprendiz);
-            if (!possuiSetor) {
-                return false;
-            }
-        }
-        if (filtros.turmas.length > 0) {
-            if (!filtros.turmas.includes(item.perfil.turma)) {
-                return false;
-            }
-        }
-        if (filtros.idadeMin !== "" || filtros.idadeMax !== "") {
-            const idade = Idade(item.perfil.nascimento);
-            const idadeMin = filtros.idadeMin !== "" ? Number(filtros.idadeMin) : null;
-            const idadeMax = filtros.idadeMax !== "" ? Number(filtros.idadeMax) : null;
-            if (idadeMin !== null && idadeMax === null) {
-                if (idade !== idadeMin) {
-                    return false;
-                }
-            }
-            if (idadeMin === null && idadeMax !== null) {
-                if (idade > idadeMax) {
-                    return false;
-                }
-            }
-            if (idadeMin !== null && idadeMax !== null) {
-                if (idadeMin === idadeMax) {
-                    if (idade !== idadeMin) {
-                        return false;
-                    }
-                } 
-                else {
-                    if (idade < idadeMin || idade > idadeMax) {
-                        return false;
-                    }
-                }
-            }
-        }
-        if (filtros.idiomas.length > 0) {
-            const idiomasAprendiz = item.idiomas.map(
-                i => i.idioma
-            );
-            const possuiIdioma = filtros.idiomas.some(idioma => idiomasAprendiz.includes(idioma));
-            if (!possuiIdioma) {
-                return false;
-            }
-        }
-        if (filtros.formacoes.length > 0) {
-            const formacoesAprendiz = item.formacaoAcademica.map(f => f.nomeCurso);
-            const possuiFormacao = filtros.formacoes.some(formacao => formacoesAprendiz.includes(formacao));
-            if (!possuiFormacao) {
-                return false;
-            }
-        }
-        if (filtros.estagio !== null) {
-            const estaEmEstagio = item.situacaoProfissional.cumprindoEstagio; 
-            if (estaEmEstagio !== filtros.estagio) {
-                return false;
-            }
-        }
-        return true;
-    })
-    .filter((item) => {
-        const termo = normalizar(busca.trim());
-        if (termo === "") return true;
-        return (
-            normalizar(item.perfil.nome).includes(termo) ||
-            normalizar(item.perfil.email).includes(termo) ||
-            normalizar(item.perfil.user).includes(termo) ||
-            normalizar(item.perfil.turma).includes(termo) ||
-            item.perfil.edv.toString().includes(termo) ||
-            item.perfil.contato.toString().includes(termo) ||
-            item.perfil.nascimento.toLocaleDateString("pt-BR").includes(termo)
-        );
-    })
-    .sort((a, b) =>
-        a.perfil.nome.localeCompare(b.perfil.nome, "pt-BR")
-    );
-
+    const fetchDashboard = async () => {
+    try {
+        const response = await api.get("/aprendiz/dashboard");
+        setDadosDashboard(response.data);
+    } catch (error) {
+        console.error("Erro ao buscar dashboard:", error);
+    }
+    };
+    useEffect(() => {
+        fetchDashboard();
+    }, []);
+    if (!dadosDashboard) {
+        return <div>Carregando dashboard...</div>;
+    }
     return (
         <div className="dashboard">
             <Header />
@@ -127,33 +44,31 @@ function Dashboard() {
                         <button type="button" className="dashboard-button-filtro"><img src={filter} alt="filtro" className="img-filter" onClick={() => setFiltro(true)}/></button>
                     </div>
                     <div className="dashboard-graficos">
-                        {pesquisar.length === 0 ? (
-                            <div className="dashboard-aviso">Nenhum resultado encontrado</div>
-                        ) : (
+                        {(
                             <>
                                 <div className="dashboard-card">
                                     <h3 className="grafico-titulo">Distribuição por Setor</h3>
-                                    <GraficoSetor aprendizes={pesquisar}/>
+                                    <GraficoSetor dados={dadosDashboard.setores}/>
                                 </div>
 
                                 <div className="dashboard-card">
                                     <h3 className="grafico-titulo">Percentual em Estágio</h3>
-                                    <GraficoEstagio aprendizes={pesquisar}/>
+                                    <GraficoEstagio dados={dadosDashboard.estagio}/>
                                 </div>
 
                                 <div className="dashboard-card">
                                     <h3 className="grafico-titulo">Aprendizes Cursando Ensino Superior</h3>
-                                    <GraficoSuperior aprendizes={pesquisar}/>
+                                    <GraficoSuperior dados={dadosDashboard.formacao}/>
                                 </div>
 
                                 <div className="dashboard-card">
                                     <h3 className="grafico-titulo">Competências</h3>
-                                    <GraficoCompetencias aprendizes={pesquisar}/>
+                                    <GraficoCompetencias dados={dadosDashboard.competencias}/>
                                 </div>
 
                                 <div className="dashboard-card">
                                     <h3 className="grafico-titulo">Idiomas</h3>
-                                    <GraficoIdiomas aprendizes={pesquisar}/>
+                                    <GraficoIdiomas dados={dadosDashboard.idiomas}/>
                                 </div>
                             </>
                         )}
