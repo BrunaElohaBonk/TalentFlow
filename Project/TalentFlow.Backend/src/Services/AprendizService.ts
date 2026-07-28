@@ -585,6 +585,7 @@ export class DashboardService {
 
       estagio: {
         quantidade: emEstagio,
+        naoEstagiando: totalAprendizes - emEstagio,
         percentual: percentualEstagio,
       },
 
@@ -594,22 +595,23 @@ export class DashboardService {
       })),
 
       setores: Object.entries(setores).map(([nome, quantidade]) => ({
-        nome,
+        setor: nome,
         quantidade,
       })),
 
       competencias: Object.entries(competencias).map(([nome, quantidade]) => ({
-        nome,
+        competencia: nome,
         quantidade,
       })),
 
       idiomas: Object.entries(idiomas).map(([nome, quantidade]) => ({
-        nome,
+        idioma: nome,
         quantidade,
       })),
 
       formacao: {
         cursoSuperior,
+        naocursoSuperior: totalAprendizes - cursoSuperior,
       },
     };
   }
