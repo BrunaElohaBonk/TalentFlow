@@ -1,6 +1,7 @@
 Register
 POST
 
+
 http://localhost:8080/api/auth/register
 {
     "EDV": 90000001,
