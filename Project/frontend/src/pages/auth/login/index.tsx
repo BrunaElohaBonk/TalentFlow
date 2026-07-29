@@ -118,7 +118,7 @@ function Login() {
       
       const usuarioEncontrado = response.data;
 
-      if (!usuarioEncontrado) {
+      if (!usuarioEncontrado ) {
         Swal.fire({
           icon: "error",
           title: "Erro",
@@ -128,14 +128,18 @@ function Login() {
         })
         return
       }
+
+      localStorage.removeItem('usuario');
+      localStorage.removeItem('token');
+
       if (usuarioEncontrado) {
-        await login(usuarioEncontrado);
         
-        // if (password === usuarioEncontrado.dataNascimento) {
-        //   navigate('/Confirm_login')
-        //   return
-        // // }
-        console.log(usuarioEncontrado)
+        if (usuarioEncontrado.primeiroAcesso == true) {
+          localStorage.setItem("EDV", edv)
+          navigate('/Confirm_login')
+          return
+        }
+        login(usuarioEncontrado);
         if (usuarioEncontrado.user.tipo === "aprendiz") {
           navigate('/Perfil')
           return

@@ -26,7 +26,7 @@ export const redefinirSenhaSchema = z.object({
             }
         ),
     password: z.string()
-        .min(6, "Senha deve ter no mínimo 6 caracteres"),
+        .min(10, "Senha deve ter no mínimo 10 caracteres"),
     confirmPassword: z.string()
 })
 .refine(
@@ -57,10 +57,8 @@ export const esqueceuSenhaSchema = z.object({
 
 export const primeiroAcessoSchema = z.object({
     EDV: z.coerce.number(),
-    email: z.string()
-        .email("Email inválido"),
     password: z.string()
-        .min(8, "Senha deve possuir pelo menos 8 caracteres"),
+        .min(10, "Senha deve possuir pelo menos 10 caracteres"),
     confirmPassword: z.string()
 })
 .refine(

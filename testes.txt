@@ -1,6 +1,7 @@
 Register
 POST
 
+
 http://localhost:8080/api/auth/register
 {
     "EDV": 90000001,
@@ -22,6 +23,7 @@ http://localhost:8080/api/auth/register
   "email_bosch": "fernanda.souza@bosch.com",
   "password_login": "Bosch@123"
 }
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJFRFYiOjkxMDAwMDAyLCJ0aXBvVXNlciI6IklOU1RSVVRPUiIsIm5hbWUiOiJGZXJuYW5kYSBPbGl2ZWlyYSBTb3V6YSIsImlhdCI6MTc4NTE1NjExNiwiZXhwIjoxNzg1MzI4OTE2fQ.8FRtYw8xTVkO0iDWb_AmWyVSJA_odPKCyMjWtuxvqR4
 {
   "EDV": 91000001,
   "tipoUser": "INSTRUTOR",
