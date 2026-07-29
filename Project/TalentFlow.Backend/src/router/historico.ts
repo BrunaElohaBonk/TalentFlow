@@ -4,9 +4,8 @@ import { HistoricoController } from "../Controllers/historicoController.ts";
 const router = Router();
 
 router.get(
-    "/historico",
+    "/verHistorico",
     HistoricoController.listar
 );
-
 
 export default router;

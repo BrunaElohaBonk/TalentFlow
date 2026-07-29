@@ -40,7 +40,7 @@ export class HistoricoService {
         const turma = historicoTurma.map(item => ({
             id: item.Id,
             tipo: "TURMA",
-            nome: item.turmas?.nomeTurma ?? "Turma",
+            nome: item.turmas?.nomeTurma ?? "Turma sem identificação",
             texto: item.acao,
             dataHora: item.dataAlteracao.toISOString(),
             alteradoPor: item.EDVAlteradoPor
