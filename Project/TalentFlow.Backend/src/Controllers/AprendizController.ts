@@ -16,6 +16,8 @@ export default class aprendizController {
       data: aprendiz,
     });
   }
+
+
   static async atualizarFoto(req: Request, res: Response) {
     const { EDV } = req.params;
 
@@ -215,6 +217,21 @@ export default class aprendizController {
       data: curso,
     });
   }
+
+  static async verAprendiz(req: Request, res: Response) {
+    const { EDV } = req.params;
+
+    const perfil = await AprendizService.verAprendiz(Number(EDV));
+
+    if (!perfil) {
+      throw new Error("Aprendiz não encontrado");
+    }
+
+    return res.status(200).json({
+      data: perfil,
+    });
+  }
+
   static async verPerfil(req: Request, res: Response, next: NextFunction) {
     const { EDV } = req.params;
 
