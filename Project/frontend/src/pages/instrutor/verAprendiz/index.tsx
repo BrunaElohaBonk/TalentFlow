@@ -6,7 +6,6 @@ import user from '../../../assets/img/icon_user.png'
 import lupa from '../../../assets/img/pesquisar.png'
 import lixeira from '../../../assets/img/lixeira.png'
 import filter from '../../../assets/img/filter.png'
-import { aprendizes } from "./aprendizes";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import Filtro from "../../../components/filter";

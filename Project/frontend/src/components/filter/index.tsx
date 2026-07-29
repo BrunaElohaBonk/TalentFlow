@@ -4,7 +4,6 @@ import { useState } from 'react';
 import fechar from '../../assets/img/close.png'
 import setinha from '../../assets/img/setinha.png'
 
-
 interface ISituacaoProfissional {
     nome_Setor: string;
     nome_Lider: string;
@@ -12,56 +11,61 @@ interface ISituacaoProfissional {
     bio_profissional: string;
 }
 
+interface IFormacaoAcademica {
+    name_Curso: string;
+}
+
+interface IIdioma {
+    nome_Idioma: string;
+    nivel_Idioma: string;
+}
+
+interface ITurma {
+    id: number;
+    nomeTurma: string;
+    name_Curso: string;
+    EDV_Instrutor: number;
+    nomeInstrutor: string;
+}
+
 interface IAprendiz {
     EDV: number;
+    turma?: ITurma;
     data: {
         situacao_profissional: ISituacaoProfissional[];
-        idiomas: {
-            nome_Idioma: string;
-            nivel_Idioma: string;
-        }[];
+        idiomas: IIdioma[];
+        formacao_academica: IFormacaoAcademica[];
     };
 }
 
-function Filtro({ visible, setVisible, filtros, setFiltros, aprendizes, turmas } :any){
+interface Props {
+  visible: boolean;
+  filtros: any;
+  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  setFiltros: React.Dispatch<React.SetStateAction<any>>;
+  aprendizes: IAprendiz[];
+  turmas: ITurma[];
+}
+
+function Filtro({ visible, setVisible, filtros, setFiltros, aprendizes, turmas } :Props){
     const [aberto, setAberto] = useState<string | null>(null);
     const alternarFiltro = (nome: string) => {
         setAberto(aberto === nome ? null : nome);
     };
-    const setores: string[] = [
-        ...new Set(
-            aprendizes.flatMap((aprendiz) =>
-                aprendiz.data.situacao_profissional.map(
-                    (s) => s.nome_Setor
-                )
-            )
-        )
+    const setores = [
+        ...new Set(aprendizes?.flatMap(aprendiz => aprendiz.data.situacao_profissional.map(s => s.nome_Setor)) ?? [])
     ];
 
     const idiomas = [
-        ...new Set(
-            aprendizes.flatMap((aprendiz) =>
-                aprendiz.data.idiomas.map(
-                    (idioma) => idioma.nome_Idioma
-                )
-            )
-        )
+        ...new Set(aprendizes?.flatMap(aprendiz => aprendiz.data?.idiomas?.map(idioma => idioma.nome_Idioma) ?? []) ?? [])
     ];
 
     const formacoes = [
-        ...new Set(
-            aprendizes.flatMap((aprendiz) =>
-                aprendiz.data.formacao_academica.map(
-                    (formacao) => formacao.name_Curso
-                )
-            )
-        )
+        ...new Set(aprendizes?.flatMap(aprendiz => aprendiz.data?.formacao_academica?.map(formacao => formacao.name_Curso) ?? []) ?? [])
     ];
 
     const nomesTurmas = [
-        ...new Set(
-            aprendizes.map(ap => ap.turma?.nome)
-        )
+        ...new Set(aprendizes?.map(ap => ap.turma?.nomeTurma).filter(Boolean) ?? [])
     ];
 
     const limparFiltros = () => {

@@ -7,9 +7,66 @@ import { useEffect, useState } from "react";
 import { GraficoSetor, GraficoEstagio, GraficoSuperior, GraficoCompetencias, GraficoIdiomas } from "./graficos";
 import api from "../../../services/api";
 
+interface ITurma {
+    id: number;
+    nomeTurma: string;
+    name_Curso: string;
+    EDV_Instrutor: number;
+    nomeInstrutor: string;
+}
+
+interface IAprendiz {
+    EDV: number;
+    name: string;
+    email_bosch: string;
+    user_bosch: string;
+    contato: string;
+    data_nascimento: Date;
+    fotoPerfil: string | null;
+    tipoUser: "APRENDIZ";
+
+    data: {
+        id: number;
+        EDV_Aprendiz: number;
+
+        situacao_profissional: {
+            nome_Setor: string;
+            nome_Lider: string;
+            cumprido_Estagio: boolean;
+            bio_profissional: string;
+        }[];
+
+        formacao_academica: {
+            id: number;
+            name_Curso: string;
+            nome_Institucao: string;
+            status_Academico: "CONCLUIDO" | "CURSANDO";
+            periodo_Atual: number;
+            total_Periodo: number;
+            nivel_formacao: string;
+        }[];
+
+        cursos_complementares: {
+            id: number;
+            name_Curso: string;
+            status_Cursos: "CONCLUIDO" | "CURSANDO";
+            data_Conclusao: string;
+            carga_horaria: number;
+        }[];
+
+        idiomas: {
+            id: number;
+            nome_Idioma: string;
+            nivel_Idioma: string;
+        }[];
+    };
+}
+
 function Dashboard() {
     const [filtro, setFiltro] = useState(false);
     const [dadosDashboard, setDadosDashboard] = useState<any>(null);
+    const [aprendiz, setAprendiz] = useState<IAprendiz[]>([]);
+    const [turma, setTurma] = useState<ITurma[]>([]);
     const [filtros, setFiltros] = useState({
         turmas: [] as string[],
         idadeMin: "",
@@ -36,7 +93,7 @@ function Dashboard() {
     return (
         <div className="dashboard">
             <Header />
-            <Filtro visible={filtro} setVisible={setFiltro} filtros={filtros} setFiltros={setFiltros}/>   
+            <Filtro visible={filtro} setVisible={setFiltro} filtros={filtros} setFiltros={setFiltros} aprendizes={aprendiz} turmas={turma}/>   
             <div className="dashboard-content">
                 <Sidebar />
                 <div className="dashboard-body">
