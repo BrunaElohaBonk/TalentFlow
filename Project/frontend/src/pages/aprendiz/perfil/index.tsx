@@ -19,6 +19,7 @@ import AdicionarFormacaoAcademica from "../formacao_academica/adicionar/adiciona
 import './perfil.css'
 import { usuarios } from "../../instrutor/verInstrutor/users";
 import api from "../../../services/api";
+import { useNavigate } from "react-router-dom";
 
 interface Usuario {
     edv: number;
@@ -71,7 +72,8 @@ function formatarTelefone(numero: number) {
 
 function Perfil() {
     const { darkMode, alternarTema } = useTheme();
-    const [aprendiz, setAprendiz] = useState<Usuario | null>(null)
+    const [aprendiz, setAprendiz] = useState(null)
+    const [apireq, setApireq] = useState<Usuario | null>(null)
     const [logout, setLogout] = useState(false)
     const [situacao, setSituacao] = useState(false)
     const [formacao_academica, setFormacaoAcademica] = useState(false)
@@ -83,21 +85,22 @@ function Perfil() {
     const [editarSituacao, setEditarSituacao] = useState(false)
     const [editarFormacao, setEditarFormacao] = useState(false)
     const [adicionarFormacao, setAdicionarFormacao] = useState(false)
+    const navigate = useNavigate() 
 
     useEffect(() => {
         async function carregarPerfil() {
             const usuario = localStorage.getItem("usuario");
-    
-            if (!usuario) return;
-    
+            console.log(usuario)
             const aprendizLogado = JSON.parse(usuario);
-    
+            console.log("APRENDIZ ",  aprendizLogado.user);
+            setAprendiz(aprendizLogado.user);
+
             try {
                 const response = await api.get(
-                    `/aprendiz/perfil/${aprendizLogado.edv}`
+                    `/aprendiz/meuPerfil/${aprendizLogado.user.EDV}`
                 );
-    
-                setAprendiz(response.data.data);
+                
+                setApireq(response.data.data);
             } catch (error) {
                 console.error(error);
             }
@@ -106,16 +109,11 @@ function Perfil() {
         carregarPerfil();
     }, []);
 
-
-
     if (!aprendiz) {
-        return <h2>Carregando...</h2>
+        
+        navigate('/')
     }
-
-    const router = async  ()=>{
-        return await api.get(`/aprediz/perfil/${aprendiz.edv}`)
-    }
-
+     console.log("a", aprendiz)
 
     return (
         <>
@@ -153,8 +151,8 @@ function Perfil() {
         <Idioma visible={idioma} setVisible={setIdioma}/>
         <SoftSkill visible={soft_skill} setVisible={setSoftSkill}/>
         <Competencia visible={competencia} setVisible={setCompetencia}/>
-        <EditarPerfil visible={editar} setVisible={setEditar} edv={aprendiz.edv}/>
-        <EditarSituacaoProfissional visible={editarSituacao} setVisible={setEditarSituacao} setSituacaoProfissional={setSituacao} edv={aprendiz.edv}/>
+        <EditarPerfil visible={editar} setVisible={setEditar} edv={aprendiz.EDV}/>
+        <EditarSituacaoProfissional visible={editarSituacao} setVisible={setEditarSituacao} setSituacaoProfissional={setSituacao} edv={aprendiz.EDV}/>
         <EditarFormacaoAcademica visible={editarFormacao} setVisible={setEditarFormacao} setFormacaoAcademica={setFormacaoAcademica} id={1} />
         <AdicionarFormacaoAcademica visible={adicionarFormacao} setVisible={setAdicionarFormacao} setFormacaoAcademica={setFormacaoAcademica}/>
 
@@ -176,11 +174,11 @@ function Perfil() {
                             </div>
                             <div className="perfil-informacoes">
                                 <span>Email: {aprendiz.email}</span>
-                                <span>EDV: {aprendiz.edv}</span>
+                                <span>EDV: {aprendiz.EDV}</span>
                                 <span>User: {aprendiz.user}</span>
                                 <span>Data de Nascimento: {aprendiz.data_nascimento}</span>
-                                <span>Idade: {calcularIdade(converterData(aprendiz.data_nascimento))} anos</span>
-                                <span>Contato: {formatarTelefone(aprendiz.contato)}</span>
+                                <span>Idade: {aprendiz.data_nascimento} anos</span>
+                                <span>Contato: {aprendiz.contato}</span>
                             </div>
                         </div>
                     </div>
