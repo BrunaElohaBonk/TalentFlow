@@ -11,12 +11,13 @@ import api from "../../../services/api"
 interface Iinstrutor {
     EDV: number;
     name: string;
-    email_bosch: string;
     user_bosch: string;
+    email_bosch: string;
     contato: string;
-    data_nascimento: Date;
-    fotoPerfil: string | null;
-    tipoUser: "INSTRUTOR";
+    data_nascimento: string;
+    fotoPerfil: File | string | null;
+    Ativo: boolean;
+    tipoUser: "INSTRUTOR" 
 }
 
 function VerInstrutor(){
@@ -40,11 +41,8 @@ function VerInstrutor(){
 
     const getUsuarioLogado = () => {
         const token = localStorage.getItem("token");
-
         if (!token) return null;
-
         const payload = JSON.parse(atob(token.split(".")[1]));
-
         return payload;
     };
 
@@ -52,10 +50,12 @@ function VerInstrutor(){
         try {
             const response = await api.get("/auth/buscaruser/INSTRUTOR");
             console.log("API RESPONSE:", response.data);
+            console.log("PRIMEIRO USUARIO:", response.data[0]);
+
             const usuarios = response.data;
             const usuarioLogado = getUsuarioLogado();
             const outrosInstrutores = usuarios.filter(
-                (item: Iinstrutor) => item.EDV !== usuarioLogado.EDV
+                (item: Iinstrutor) => item.Ativo === true  && item.tipoUser === "INSTRUTOR" && item.EDV !== usuarioLogado.EDV
             );
             setInstrutor(outrosInstrutores);
         } 
@@ -76,7 +76,9 @@ function VerInstrutor(){
         });
         if (!confirm.isConfirmed) return;
         try {
-            await api.put(`/auth/deletarUser/${EDV}`);
+            const response = await api.put(`/auth/deletarUser/${EDV}`);
+            console.log("Resposta da API:", response.data);
+            console.log("Status:", response.status);
             Swal.fire({
                 title: 'Deletado!',
                 text: 'Instrutor removido com sucesso!',
