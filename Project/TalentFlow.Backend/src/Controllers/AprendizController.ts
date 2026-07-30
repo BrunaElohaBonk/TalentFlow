@@ -4,6 +4,29 @@ import AprendizService, {
 } from "../Services/AprendizService.ts";
 import { AuthRequest } from "../Middlewares/authMiddleware.ts";
 
+export async function adicionarIdioma(req: Request, res: Response) {
+  try {
+    const { id } = req.params;
+
+    const idioma = await AprendizService.adicionarIdioma(
+      Number(id),
+      req.body
+    );
+
+    res.status(201).json({
+      mensagem: "Idioma adicionado com sucesso.",
+      idioma
+    });
+
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      erro: "Não foi possível adicionar o idioma."
+    });
+  }
+}
+
 export default class aprendizController {
   static async criar(req: AuthRequest, res: Response) {
     console.log("bory "+req.body);
@@ -75,6 +98,7 @@ export default class aprendizController {
       data: idioma,
     });
   }
+  
   static async atualizarPerfil(
     req: AuthRequest, // mudar todos para AuthRequest
     res: Response,
@@ -122,7 +146,9 @@ export default class aprendizController {
     next: NextFunction,
   ) {
     const { EDV, id } = req.params;
-
+  
+    console.log("PARAMS RECEBIDOS:", req.params);
+  
     const situacaoAtualizada =
       await AprendizService.atualizarSituacaoProfissional(
         Number(EDV),
@@ -130,10 +156,9 @@ export default class aprendizController {
         req.body,
         req.user!.EDV,
       );
-
+  
     return res.status(200).json({
       response: "Situação profissional atualizada com sucesso!",
-
       data: situacaoAtualizada,
     });
   }
@@ -157,6 +182,7 @@ export default class aprendizController {
       data: softskill,
     });
   }
+  
   static async atualizarCompetencias(
     req: AuthRequest,
     res: Response,
@@ -290,6 +316,7 @@ export default class aprendizController {
       data: softskills,
     });
   }
+  
   static async verCompetencias(
     req: AuthRequest,
     res: Response,

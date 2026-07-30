@@ -33,14 +33,14 @@ interface Usuario {
 interface Perfil {
     id: Number,
     EDV_Aprendiz: number,
-    situacao_profissional: SituacaoProfissional[],
+    situacao_profissional: ISituacaoProfissional[],
     soft_skills: SoftSkills[],
     competencia: Competencia[],
     formacao_academica: FormacaoAcademica[],
     cursos: Cursos[],
     idiomas: Idiomas[]
 }
-interface SituacaoProfissional {
+interface ISituacaoProfissional {
     id: number;
     bio_profissional: string;
 };
@@ -126,6 +126,7 @@ function Perfil() {
     const [editarFormacao, setEditarFormacao] = useState(false)
     const [adicionarFormacao, setAdicionarFormacao] = useState(false)
     const navigate = useNavigate()
+    const [idSituacao, setIdSituacao] = useState<number | null>(null);
 
     useEffect(() => {
         async function carregarPerfil() {
@@ -148,8 +149,11 @@ function Perfil() {
                 const response = await api.get(
                     `/aprendiz/meuPerfil/${aprendizLogado.user.EDV}`
                 );
+                console.log("DADOS DO PERFIL:", response.data.data);
+                console.log("SITUAÇÃO:", response.data.data.situacao_profissional);
 
                 setApireq(response.data.data);
+                setIdSituacao(response.data.data.situacao_profissional[0].id);
             } catch (error) {
                 console.error(error);
             }
@@ -163,7 +167,7 @@ function Perfil() {
         navigate('/')
     }
     console.log("a", aprendiz)
-
+    console.log("SITUAÇÃO ID:", apireq?.situacao_profissional[0]?.id);
     return (
         <>
             <div>
@@ -201,7 +205,7 @@ function Perfil() {
             <SoftSkill visible={soft_skill} setVisible={setSoftSkill} />
             <Competencia visible={competencia} setVisible={setCompetencia} />
             <EditarPerfil visible={editar} setVisible={setEditar} edv={aprendiz?.edv} />
-            <EditarSituacaoProfissional visible={editarSituacao} setVisible={setEditarSituacao} setSituacaoProfissional={setSituacao} edv={aprendiz?.edv} />
+            <EditarSituacaoProfissional visible={editarSituacao} setVisible={setEditarSituacao} setSituacaoProfissional={setSituacao} edv={aprendiz?.edv ?? 0} idSituacao={apireq?.situacao_profissional?.[0]?.id ?? 0} />
             <EditarFormacaoAcademica visible={editarFormacao} setVisible={setEditarFormacao} setFormacaoAcademica={setFormacaoAcademica} id={1} />
             <AdicionarFormacaoAcademica visible={adicionarFormacao} setVisible={setAdicionarFormacao} setFormacaoAcademica={setFormacaoAcademica} />
 
@@ -238,7 +242,7 @@ function Perfil() {
                                 <li key={situacao.id}>
                                     {situacao.bio_profissional.slice(0, 50)}...
                                 </li>
-                                ))}
+                            ))}
                             </ul>
                             <button className="perfil-btn-visualizar" onClick={() => setSituacao(true)}>
                                 <img src={icon_olho} alt="Visualizar" />

@@ -2,7 +2,7 @@ import './editar_idioma.css'
 import sair from '../../../../assets/img/close.png'
 import { useState } from 'react'
 import Swal from 'sweetalert2'
-import axios from 'axios'
+import api from '../../../../services/api'
 import { useDropzone } from "react-dropzone";
 import download from '../../../../assets/img/icon download.png'
 import { FormControl, FormControlLabel, Radio, RadioGroup } from "@mui/material";
@@ -17,14 +17,15 @@ interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
     setIdioma: React.Dispatch<React.SetStateAction<boolean>>;
-    id: number;
+    idProfile: number;
+    edv: number;
 }
-
 function EditarIdioma({
     visible,
     setVisible,
     setIdioma,
-    id
+    idProfile,
+    edv
 }: Props) {
 
     const [idioma, setIdiomaState] = useState<IIdioma>({
@@ -54,7 +55,7 @@ function EditarIdioma({
     })
 
     const handleChange = (
-        e: React.ChangeEvent<HTMLInputElement>
+        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
     )=>{
         setIdiomaState({
             ...idioma,
@@ -89,10 +90,12 @@ function EditarIdioma({
         }
 
         try{
-            await axios.put(
-                `link backend/${id}`,
+            await api.put(
+                `/atualizarIdiomas/${edv}/${idProfile}`,
                 {
-                    ...idioma
+                    nome_Idioma: idioma.nomeIdioma,
+                    nivel_Idioma: idioma.nivel,
+                    certificado: idioma.certificado
                 }
             )
             Swal.fire({
@@ -142,7 +145,7 @@ function EditarIdioma({
                                 onChange={handleNivel}
                             >
                                 <FormControlLabel
-                                    value="Básico"
+                                    value="BASICO"
                                     control={
                                         <Radio
                                             sx={{
@@ -159,7 +162,7 @@ function EditarIdioma({
                                     label="Básico"
                                 />
                                 <FormControlLabel
-                                    value="Intermediário"
+                                    value="INTERMEDIARIO"
                                     control={
                                         <Radio
                                             sx={{
@@ -176,7 +179,7 @@ function EditarIdioma({
                                     label="Intermediário"
                                 />
                                 <FormControlLabel
-                                    value="Avançado"
+                                    value="AVANCADO"
                                     control={
                                         <Radio
                                             sx={{
@@ -193,7 +196,7 @@ function EditarIdioma({
                                     label="Avançado"
                                 />
                                 <FormControlLabel
-                                    value="Fluente"
+                                    value="FLUENTE"
                                     control={
                                         <Radio
                                             sx={{

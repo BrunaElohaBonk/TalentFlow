@@ -164,6 +164,8 @@ function Idioma({ visible, setVisible }: Props) {
                             visible={adicionarIdioma}
                             setVisible={setAdicionarIdioma}
                             setIdioma={setVisible}
+                            id={idProfile}
+                            edv={edv}
                         />
                     )
                 }

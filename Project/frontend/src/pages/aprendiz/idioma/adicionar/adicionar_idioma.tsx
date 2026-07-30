@@ -2,7 +2,7 @@ import './adicionar_idoma.css'
 import sair from '../../../../assets/img/close.png'
 import { useState } from 'react'
 import Swal from 'sweetalert2'
-import axios from 'axios'
+import api from '../../../../services/api'
 import { FormControl, FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import { useDropzone } from "react-dropzone";
 import download from '../../../../assets/img/icon download.png'
@@ -17,12 +17,16 @@ interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
     setIdioma: React.Dispatch<React.SetStateAction<boolean>>;
+    id: number;
+    edv: number;
 }
 
 function AdicionarIdioma({
     visible,
     setVisible,
-    setIdioma
+    setIdioma,
+    id,
+    edv
 }: Props) {
 
     const [idioma, setIdiomaState] = useState<IIdioma>({
@@ -32,17 +36,17 @@ function AdicionarIdioma({
     })
 
     const idiomas = [
-        "Alemão",
-        "Árabe",
-        "Coreano",
-        "Espanhol",
-        "Francês",
-        "Inglês",
-        "Italiano",
-        "Japonês",
-        "Mandarim",
-        "Russo",
-        "Tailandês"
+        { label: "Alemão", value: "ALEMAO" },
+        { label: "Árabe", value: "ARABE" },
+        { label: "Coreano", value: "COREANO" },
+        { label: "Espanhol", value: "ESPANHOL" },
+        { label: "Francês", value: "FRANCES" },
+        { label: "Inglês", value: "INGLES" },
+        { label: "Italiano", value: "ITALIANO" },
+        { label: "Japonês", value: "JAPONES" },
+        { label: "Mandarim", value: "MANDARIM" },
+        { label: "Russo", value: "RUSSO" },
+        { label: "Tailandês", value: "TAILANDES" }
     ];
 
     const [nomeCertificado, setNomeCertificado] = useState("");
@@ -51,13 +55,13 @@ function AdicionarIdioma({
         accept: {
             "image/*": [],
         },
-        multiple:false,
-        maxFiles:1,
-        onDrop:(acceptedFiles)=>{
-            if(acceptedFiles.length > 0){
+        multiple: false,
+        maxFiles: 1,
+        onDrop: (acceptedFiles) => {
+            if (acceptedFiles.length > 0) {
                 const arquivo = acceptedFiles[0];
                 setNomeCertificado(arquivo.name);
-                setIdiomaState((prev)=>({
+                setIdiomaState((prev) => ({
                     ...prev,
                     certificado: arquivo
                 }))
@@ -66,8 +70,8 @@ function AdicionarIdioma({
     })
 
     const handleChange = (
-        e: React.ChangeEvent<HTMLInputElement>
-    )=>{
+        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    ) => {
         setIdiomaState({
             ...idioma,
             [e.target.name]: e.target.value
@@ -76,7 +80,7 @@ function AdicionarIdioma({
 
     const handleNivel = (
         e: React.ChangeEvent<HTMLInputElement>
-    )=>{
+    ) => {
         setIdiomaState({
             ...idioma,
             nivel: e.target.value
@@ -84,74 +88,73 @@ function AdicionarIdioma({
     }
 
     const handleSubmit = async (
-        e:React.FormEvent<HTMLFormElement>
-    )=>{
+        e: React.FormEvent<HTMLFormElement>
+    ) => {
         e.preventDefault();
-        if(
+        if (
             !idioma.nomeIdioma ||
             !idioma.nivel
-        ){
+        ) {
             Swal.fire({
-                title:'Atenção!',
-                text:'Preencha todos os campos obrigatórios.',
-                icon:'warning',
-                confirmButtonColor:'#2B83D5'
+                title: 'Atenção!',
+                text: 'Preencha todos os campos obrigatórios.',
+                icon: 'warning',
+                confirmButtonColor: '#2B83D5'
             })
             return;
         }
-        try{
-            await axios.post(
-                `link backend`,
-                {
-                    ...idioma
-                }
-            )
+        try {
+            await api.post(`/adicionarIdioma/${id}`, {
+                    nome_Idioma: idioma.nomeIdioma,
+                    nivel_Idioma: idioma.nivel
+                 })
+            
             Swal.fire({
-                title:'Sucesso!',
-                text:'Idioma adicionado com sucesso.',
-                icon:'success',
-                confirmButtonColor:'#2B83D5'
+                title: 'Sucesso!',
+                text: 'Idioma adicionado com sucesso.',
+                icon: 'success',
+                confirmButtonColor: '#2B83D5'
             })
             setVisible(false);
-        }catch(error){
+        } catch (error) {
             console.error(error)
             Swal.fire({
-                title:'Erro!',
-                text:'Não foi possível adicionar o idioma.',
-                icon:'error'
+                title: 'Erro!',
+                text: 'Não foi possível adicionar o idioma.',
+                icon: 'error'
             })
         }
     }
 
-    if(!visible){
+    if (!visible) {
         return null
     }
 
-    return(
+    return (
         <div className="adicionarIdioma-overlay" onClick={() => setVisible(false)}>
             <form onSubmit={handleSubmit} className="adicionarIdioma-card" onClick={(e) => e.stopPropagation()}>
-                <button type="button" className="adicionarIdioma-fechar" onClick={()=>{
-                        setVisible(false)
-                        setIdioma(true)
-                    }}
+                <button type="button" className="adicionarIdioma-fechar" onClick={() => {
+                    setVisible(false)
+                    setIdioma(true)
+                }}
                 >
-                    <img src={sair} alt="Fechar"/>
+                    <img src={sair} alt="Fechar" />
                 </button>
                 <span className="adicionarIdioma-titulo">Idioma</span>
                 <div className="adicionarIdioma-container">
-                <div className="adicionarIdioma-grupo">
-                    <label className="adicionarIdioma-label">Nome do Idioma</label>
-                    <select name="nomeIdioma" className="adicionarIdioma-input" value={idioma.nomeIdioma} onChange={handleChange}>
-                        <option value="">Selecione o idioma</option>
-                        {
-                            idiomas.map((item) => (
-                                <option key={item} value={item}>
-                                    {item}
-                                </option>
-                            ))
-                        }
-                    </select>
-                </div>
+                    <div className="adicionarIdioma-grupo">
+                        <label className="adicionarIdioma-label">Nome do Idioma</label>
+                        <select name="nomeIdioma" className="adicionarIdioma-input" value={idioma.nomeIdioma} onChange={handleChange}>
+                            <option value="">Selecione o idioma</option>
+                            {
+                                idiomas.map((item) => (
+                                    <option key={item.value} value={item.value}>
+                                        {item.label}
+                                    </option>
+                                ))
+                            }
+                        </select>
+                    </div>
                     <div className="adicionarIdioma-grupo">
                         <label className="adicionarIdioma-label">Nível</label>
                         <FormControl className="adicionarIdioma-radio">
@@ -162,16 +165,16 @@ function AdicionarIdioma({
                                 onChange={handleNivel}
                             >
                                 <FormControlLabel
-                                    value="Básico"
+                                    value="BASICO"
                                     control={
                                         <Radio
                                             sx={{
-                                                color:"#2B83D5",
-                                                "&.Mui-checked":{
-                                                    color:"#2B83D5"
+                                                color: "#2B83D5",
+                                                "&.Mui-checked": {
+                                                    color: "#2B83D5"
                                                 },
-                                                "& .MuiSvgIcon-root":{
-                                                    fontSize:24
+                                                "& .MuiSvgIcon-root": {
+                                                    fontSize: 24
                                                 }
                                             }}
                                         />
@@ -179,16 +182,16 @@ function AdicionarIdioma({
                                     label="Básico"
                                 />
                                 <FormControlLabel
-                                    value="Intermediário"
+                                    value="INTERMEDIARIO"
                                     control={
                                         <Radio
                                             sx={{
-                                                color:"#2B83D5",
-                                                "&.Mui-checked":{
-                                                    color:"#2B83D5"
+                                                color: "#2B83D5",
+                                                "&.Mui-checked": {
+                                                    color: "#2B83D5"
                                                 },
-                                                "& .MuiSvgIcon-root":{
-                                                    fontSize:24
+                                                "& .MuiSvgIcon-root": {
+                                                    fontSize: 24
                                                 }
                                             }}
                                         />
@@ -196,16 +199,16 @@ function AdicionarIdioma({
                                     label="Intermediário"
                                 />
                                 <FormControlLabel
-                                    value="Avançado"
+                                    value="AVANCADO"
                                     control={
                                         <Radio
                                             sx={{
-                                                color:"#2B83D5",
-                                                "&.Mui-checked":{
-                                                    color:"#2B83D5"
+                                                color: "#2B83D5",
+                                                "&.Mui-checked": {
+                                                    color: "#2B83D5"
                                                 },
-                                                "& .MuiSvgIcon-root":{
-                                                    fontSize:24
+                                                "& .MuiSvgIcon-root": {
+                                                    fontSize: 24
                                                 }
                                             }}
                                         />
@@ -213,16 +216,16 @@ function AdicionarIdioma({
                                     label="Avançado"
                                 />
                                 <FormControlLabel
-                                    value="Fluente"
+                                    value="FLUENTE"
                                     control={
                                         <Radio
                                             sx={{
-                                                color:"#2B83D5",
-                                                "&.Mui-checked":{
-                                                    color:"#2B83D5"
+                                                color: "#2B83D5",
+                                                "&.Mui-checked": {
+                                                    color: "#2B83D5"
                                                 },
-                                                "& .MuiSvgIcon-root":{
-                                                    fontSize:24
+                                                "& .MuiSvgIcon-root": {
+                                                    fontSize: 24
                                                 }
                                             }}
                                         />
@@ -234,13 +237,13 @@ function AdicionarIdioma({
                     </div>
                     <div className="adicionarIdioma-grupo">
                         <label className="adicionarIdioma-label">Certificado</label>
-                        <div 
+                        <div
                             className="certificado-container"
                             {...getRootProps()}
                         >
-                            <input {...getInputProps()}/>
+                            <input {...getInputProps()} />
                             <p className="certificado-file">{nomeCertificado}</p>
-                            <img src={download} className="certificado-upload" alt="upload"/>
+                            <img src={download} className="certificado-upload" alt="upload" />
                         </div>
                     </div>
                     <div className="adicionarIdioma-botoes">

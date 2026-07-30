@@ -5,6 +5,7 @@ import { roleMiddleware } from "../Middlewares/roleMiddleware.ts";
 import { ownerMiddleware } from "../Middlewares/ownerMiddleware.ts";
 import { validationMiddleware } from "../Middlewares/validationMiddleware.ts";
 import { upload } from "../Middlewares/uploadMiddleware.ts";
+import { adicionarIdioma } from "../Controllers/AprendizController.js";
 import {
   criarAprendizSchema,
   atualizarPerfilSchema,
@@ -136,7 +137,12 @@ route.put(
   validationMiddleware(atualizarCursoSchema),
   aprendizController.atualizarCursos,
 );
-
+route.post(
+  "/adicionarIdioma/:id",
+  authMiddleware,
+  roleMiddleware("APRENDIZ"),
+  adicionarIdioma
+);
 route.get(
   "/meuPerfil/:EDV",
   authMiddleware,

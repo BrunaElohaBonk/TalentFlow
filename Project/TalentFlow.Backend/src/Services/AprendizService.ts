@@ -1,7 +1,7 @@
 import { Prisma } from "@prisma/client";
 import { prisma } from "../lib/prisma.js";
 import { TipoHistorico } from "@prisma/client";
-import { idiomas_nome_Idioma } from "@prisma/client";
+import { idiomas_nome_Idioma, idiomas_nivel_Idioma } from "@prisma/client";
 import {
   AtualizarCompetenciasDto,
   AtualizarCursosComplementaresDto,
@@ -11,6 +11,8 @@ import {
   AtualizarSituacaoProfissionalDto,
   AtualizarSoftSkillsDto,
 } from "../DTO/aprendizDTO.ts";
+
+
 
 type AprendizDashboard = Prisma.aprendizGetPayload<{
   include: {
@@ -132,14 +134,77 @@ export default class AprendizService {
         data: {
           EDV: data.EDV,
           Id_Turma: data.Id_Turma,
+
           profile: {
-            create: {},
+            create: {
+              situacao_profissional: {
+                create: {
+                  nome_Setor: "NAO_INFORMADO",
+                  nome_Lider: "NAO_INFORMADO",
+                  cumprido_Estagio: false,
+                  bio_profissional: "NAO_INFORMADO",
+                },
+              },
+
+              formacao_academica: {
+                create: {
+                  name_Curso: "NAO_INFORMADO",
+                  certificado: null,
+                  status_Academico: "CURSANDO",
+                  nivel_formacao: "ENSINO_MEDIO",
+                  periodo_Atual: 0,
+                  total_Periodo: 0,
+                  nome_Institucao: "NAO_INFORMADO",
+                },
+              },
+
+              cursos: {
+                create: {
+                  certificado: null,
+                  name_Curso: "NAO_INFORMADO",
+                  status_Cursos: "CURSANDO",
+                  data_Conclusao: new Date(),
+                  carga_horaria: 0,
+                },
+              },
+
+              idiomas: {
+                create: {
+                  certificado: null,
+                  nome_Idioma: "NAO_INFORMADO",
+                  nivel_Idioma: "BASICO",
+                },
+              },
+
+              competencia: {
+                create: {
+                  nome_Competencia: "NAO_INFORMADO",
+                  nivel_Competencia: "NAO_INFORMADO",
+                },
+              },
+
+              soft_skills: {
+                create: {
+                  nome_SoftSkills: "NAO_INFORMADO",
+                },
+              },
+            },
           },
         },
+
         include: {
           user: true,
           turma: false,
-          profile: true,
+          profile: {
+            include: {
+              situacao_profissional: true,
+              formacao_academica: true,
+              cursos: true,
+              idiomas: true,
+              competencia: true,
+              soft_skills: true,
+            },
+          },
         },
       });
 
@@ -192,6 +257,23 @@ export default class AprendizService {
       return perfilAtualizado;
     });
   }
+  static async adicionarIdioma(
+    Id_Profile: number,
+    data: {
+      nome_Idioma: idiomas_nome_Idioma;
+      nivel_Idioma: idiomas_nivel_Idioma;
+      certificado?: string;
+    }
+  ) {
+    return await prisma.idiomas.create({
+      data: {
+        Id_Profile,
+        nome_Idioma: data.nome_Idioma,
+        nivel_Idioma: data.nivel_Idioma,
+        certificado: data.certificado
+      }
+    });
+  }
 
   static async atualizarFormacaoAcademica(
     EDV: number,
@@ -233,41 +315,44 @@ export default class AprendizService {
 
   static async atualizarSituacaoProfissional(
     EDV: number,
-    Id_Profile: number,
+    idSituacao: number,
     data: AtualizarSituacaoProfissionalDto,
     usuarioEDV: number,
   ) {
     return await prisma.$transaction(async (tx: any) => {
+
       const SituacaoProfissionalAntigo =
         await tx.situacao_profissional.findUnique({
           where: {
-            profile: { EDV_Aprendiz: EDV },
+            id: idSituacao,
           },
         });
 
       if (!SituacaoProfissionalAntigo) {
-        throw new Error("Perfil não encontrado.");
+        throw new Error("Situação profissional não encontrada.");
       }
+
       const situacaoProfissionalAtualizado =
         await tx.situacao_profissional.update({
           where: {
-            profile: { EDV_Aprendiz: EDV },
+            id: idSituacao,
           },
           data,
         });
+
       await this.registrarHistorico(
         tx,
-        Id_Profile,
+        SituacaoProfissionalAntigo.Id_Profile,
         TipoHistorico.SITUACAO_PROFISSIONAL,
-        null!,
+        idSituacao,
         usuarioEDV,
         SituacaoProfissionalAntigo,
         situacaoProfissionalAtualizado,
       );
+
       return situacaoProfissionalAtualizado;
     });
   }
-
   static async atualizarCompetencias(
     EDV: number,
     Id_Profile: number,
@@ -423,8 +508,8 @@ export default class AprendizService {
       }
     })
 
-    if(!Aprendiz){
-      return 
+    if (!Aprendiz) {
+      return
     }
     return Aprendiz;
   }
@@ -437,8 +522,8 @@ export default class AprendizService {
       }
     })
 
-    if(!profile){
-      return 
+    if (!profile) {
+      return
     }
 
     return await prisma.profile.findFirst({
@@ -452,7 +537,7 @@ export default class AprendizService {
         competencia: true,
         formacao_academica: true,
         cursos: true,
-        idiomas:true,
+        idiomas: true,
       },
     });
   }
@@ -667,8 +752,8 @@ export class DashboardService {
         user: {
           name: nome
             ? {
-                contains: String(nome),
-              }
+              contains: String(nome),
+            }
             : undefined,
 
           data_nascimento: filtroIdade,
@@ -680,56 +765,56 @@ export class DashboardService {
           is: {
             formacao_academica: formacao
               ? {
-                  some: {
-                    nivel_formacao: formacao,
-                  },
-                }
+                some: {
+                  nivel_formacao: formacao,
+                },
+              }
               : undefined,
 
             cursos: cursos
               ? {
-                  some: {
-                    name_Curso: {
-                      contains: String(cursos),
-                    },
+                some: {
+                  name_Curso: {
+                    contains: String(cursos),
                   },
-                }
+                },
+              }
               : undefined,
 
             competencia: competencia
               ? {
-                  some: {
-                    nome_Competencia: {
-                      contains: String(competencia),
-                    },
+                some: {
+                  nome_Competencia: {
+                    contains: String(competencia),
                   },
-                }
+                },
+              }
               : undefined,
 
             soft_skills: softskills
               ? {
-                  some: {
-                    nome_SoftSkills: softskills,
-                  },
-                }
+                some: {
+                  nome_SoftSkills: softskills,
+                },
+              }
               : undefined,
 
             idiomas: idiomas?.length
               ? {
-                  some: {
-                    nome_Idioma: {
-                      in: idiomas,
-                    },
+                some: {
+                  nome_Idioma: {
+                    in: idiomas,
                   },
-                }
+                },
+              }
               : undefined,
 
             situacao_profissional: setor
               ? {
-                  some: {
-                    nome_Setor: setor,
-                  },
-                }
+                some: {
+                  nome_Setor: setor,
+                },
+              }
               : undefined,
           },
         },
