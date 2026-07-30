@@ -24,6 +24,7 @@ interface IAprendiz {
     data_nascimento: Date;
     fotoPerfil: string | null;
     tipoUser: "APRENDIZ";
+    Ativo: boolean;
 
     data: {
         id: number;
@@ -68,7 +69,7 @@ function Dashboard() {
     const [aprendiz, setAprendiz] = useState<IAprendiz[]>([]);
     const [turma, setTurma] = useState<ITurma[]>([]);
     const [filtros, setFiltros] = useState({
-        turmas: [] as string[],
+        turmas: [] as number[],
         idadeMin: "",
         idadeMax: "",
         setores: [] as string[],
@@ -77,18 +78,56 @@ function Dashboard() {
         formacoes: [] as string[]
     });
     const fetchDashboard = async () => {
-    try {
-        const response = await api.get("/aprendiz/dashboard");
-        setDadosDashboard(response.data);
-    } catch (error) {
-        console.error("Erro ao buscar dashboard:", error);
-    }
+        try {
+            const response = await api.get("/aprendiz/dashboard");
+            setDadosDashboard(response.data);
+        } 
+        catch (error) {
+            console.error("Erro ao buscar dashboard:", error);
+        }
+    };
+    const fetchTurmas = async () => {
+        try {
+            const response = await api.get("/turma/visualizarTurmas");
+            console.log("TURMAS:", response.data);
+            setTurma(response.data);
+        } catch(error) {
+            console.error("Erro ao buscar turmas:", error);
+        }
+    };
+    const fetchAprendizes = async () => {
+        try {
+            const response = await api.get("/auth/buscaruser/APRENDIZ");
+            const usuarios = response.data.filter((usuario: IAprendiz) => usuario.tipoUser === "APRENDIZ" && usuario.Ativo === true );
+            const aprendizesComPerfil = await Promise.all(
+                usuarios.map(async (usuario: IAprendiz) => {
+                    const perfilResponse = await api.get(`/aprendiz/perfil/${usuario.EDV}`);
+                    return {
+                        ...usuario,
+                        data: perfilResponse.data.data
+                    };
+                })
+            );
+            setAprendiz(aprendizesComPerfil);
+        } 
+        catch (error) {
+            console.error(error);
+        }
     };
     useEffect(() => {
         fetchDashboard();
+        fetchTurmas();
+        fetchAprendizes();
     }, []);
+
     if (!dadosDashboard) {
-        return <div>Carregando dashboard...</div>;
+        return (
+            <div className="dashboard">
+                <Header />
+                <Filtro visible={filtro} setVisible={setFiltro} filtros={filtros} setFiltros={setFiltros} aprendizes={aprendiz} turmas={turma}/>
+                <div>Carregando dashboard...</div>
+            </div>
+        );
     }
     return (
         <div className="dashboard">

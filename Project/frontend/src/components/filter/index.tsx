@@ -48,6 +48,7 @@ interface Props {
 }
 
 function Filtro({ visible, setVisible, filtros, setFiltros, aprendizes, turmas } :Props){
+    console.log("TURMAS RECEBIDAS NO FILTRO:", turmas);
     const [aberto, setAberto] = useState<string | null>(null);
     const alternarFiltro = (nome: string) => {
         setAberto(aberto === nome ? null : nome);
@@ -64,7 +65,7 @@ function Filtro({ visible, setVisible, filtros, setFiltros, aprendizes, turmas }
         ...new Set(aprendizes?.flatMap(aprendiz => aprendiz.data?.formacao_academica?.map(formacao => formacao.name_Curso) ?? []) ?? [])
     ];
 
-    const nomesTurmas = turmas.map((turma) => ({
+    const nomesTurmas = turmas?.map((turma) => ({
         id: turma.id, nome: turma.nomeTurma
     }));
 
@@ -86,7 +87,7 @@ function Filtro({ visible, setVisible, filtros, setFiltros, aprendizes, turmas }
                 <div className='filtro-fechar'>
                     <button type="button" onClick={() => {setVisible(false); limparFiltros();}} className='filtro-fechar-button'><img src={fechar} alt="fechar" className='filtro-img-fechar'/></button>
                 </div>
-                <div className="filtro-titulo-expansivel"  onClick={() => setAberto(aberto === "turmas" ? null : "turmas")}>
+                <div className="filtro-titulo-expansivel"  onClick={() => {console.log("Abrindo turma"); setAberto(aberto === "turmas" ? null : "turmas")}}>
                     <span>Turma</span>
                     <img  src={setinha} alt="abrir filtro" className="filtro-titulo-img"/>
                 </div>
