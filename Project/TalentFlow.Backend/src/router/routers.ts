@@ -6,6 +6,7 @@ import aprendiz from "./aprendiz.ts";
 import instrutor from "./instrutor.ts";
 import turma from "./turma.ts";
 import auth from "./auth.ts";
+import historico from "./historico.ts";
 
 export default function routes(app: Express) {
   app.use(express.json());
@@ -17,6 +18,8 @@ export default function routes(app: Express) {
   app.use("/api/instrutor", instrutor);
 
   app.use("/api/turma", turma);
+  
+  app.use("/api/historico", historico);
 
   app.use(notFoundMiddleware);
 }
