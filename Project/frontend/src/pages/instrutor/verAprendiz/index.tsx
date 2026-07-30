@@ -74,6 +74,10 @@ function VerAprendiz(){
     const [filtro, setFiltro] = useState(false)
     const [aprendiz, setAprendiz] = useState<IAprendiz[]>([]);
     const [turma, setTurma] = useState<ITurma[]>([]);
+    const buscarNomeTurma = (idTurma: number) => {
+        const turmaEncontrada = turma.find((item) => item.id === idTurma);
+        return turmaEncontrada?.nomeTurma ?? "Sem turma";
+    };
     const Idade = (dataNascimento: Date) => {
         const hoje = new Date();
         let idade = hoje.getFullYear() - dataNascimento.getFullYear();
@@ -84,7 +88,7 @@ function VerAprendiz(){
         return idade;
     };
     const [filtros, setFiltros] = useState({
-        turmas: [] as string[],
+        turmas: [] as number[],
         idadeMin: "",
         idadeMax: "",
         setores: [] as string[],
@@ -99,6 +103,12 @@ function VerAprendiz(){
         .toLowerCase();
     const pesquisar = aprendiz
         .filter((item) => {
+        if (filtros.turmas.length > 0) {
+            const turmaDoAprendiz = item.data.id;
+            if (!filtros.turmas.includes(turmaDoAprendiz)) {
+                return false;
+            }
+        }
         if (filtros.setores.length > 0) {
             const setorAprendiz = item.data.situacao_profissional[0]?.nome_Setor;
             const possuiSetor = filtros.setores.includes(setorAprendiz);
@@ -106,11 +116,6 @@ function VerAprendiz(){
                 return false;
             }
         }
-        // if (filtros.turmas.length > 0) {
-        //     if (!filtros.turmas.includes()) {
-        //         return false;
-        //     }
-        // }
         if (filtros.idadeMin !== "" || filtros.idadeMax !== "") {
             const idade = Idade(item.data_nascimento);
             const idadeMin = filtros.idadeMin !== "" ? Number(filtros.idadeMin) : null;
@@ -178,7 +183,15 @@ function VerAprendiz(){
     .sort((a, b) =>
         a.name.localeCompare(b.name, "pt-BR")
     );
-        
+    const fetchTurmas = async () => {
+        try {
+            const response = await api.get("/turma/visualizarTurmas");
+            console.log("TURMAS:", response.data);
+            setTurma(response.data);
+        } catch(error) {
+            console.error("Erro ao buscar turmas:", error);
+        }
+    };
     const fetchAprendizes = async () => {
         try {
             const response = await api.get("/auth/buscaruser/APRENDIZ");
@@ -192,6 +205,7 @@ function VerAprendiz(){
                     };
                 })
             );
+            console.log("DATA DO APRENDIZ:", aprendizesComPerfil);
             console.log("APRENDIZES COMPLETOS:", aprendizesComPerfil);
             setAprendiz(aprendizesComPerfil);
 
@@ -241,6 +255,7 @@ function VerAprendiz(){
 };
     useEffect(() => {
         fetchAprendizes();
+        fetchTurmas();
     }, []); 
 
     return(
@@ -267,7 +282,7 @@ function VerAprendiz(){
                                         <span className="aprendiz-titulo" title={item.name}>{item.name}</span>
                                     </div>
                                     <div className="aprendiz-conteudo">
-                                        {/* <span className="aprendiz-span" title={item.nomeTurma || 'Sem Turma'}>{item.nomeTurma || 'Sem Turma'}</span> */}
+                                        <span className="aprendiz-span" title={buscarNomeTurma(item.data.id) || 'Sem Turma'}>{buscarNomeTurma(item.data.id)}</span>
                                         <button onClick={() => navigate(`/PerfilAprendiz/${item.EDV}`)} className="aprendiz-button">Ver Dados do Aprendiz</button>
                                     </div>
                                 </div>

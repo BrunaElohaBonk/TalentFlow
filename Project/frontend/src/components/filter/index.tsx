@@ -64,9 +64,9 @@ function Filtro({ visible, setVisible, filtros, setFiltros, aprendizes, turmas }
         ...new Set(aprendizes?.flatMap(aprendiz => aprendiz.data?.formacao_academica?.map(formacao => formacao.name_Curso) ?? []) ?? [])
     ];
 
-    const nomesTurmas = [
-        ...new Set(aprendizes?.map(ap => ap.turma?.nomeTurma).filter(Boolean) ?? [])
-    ];
+    const nomesTurmas = turmas.map((turma) => ({
+        id: turma.id, nome: turma.nomeTurma
+    }));
 
     const limparFiltros = () => {
         setFiltros({
@@ -94,12 +94,12 @@ function Filtro({ visible, setVisible, filtros, setFiltros, aprendizes, turmas }
                     <div className="filtro-checkbox">
                         <FormGroup>
                             {nomesTurmas.map((turma) => (
-                                <FormControlLabel key={turma} label={turma} control={
-                                    <Checkbox checked={filtros.turmas.includes(turma)} onChange={(e) => {
+                                <FormControlLabel key={turma.id} label={turma.nome} control={
+                                    <Checkbox checked={filtros.turmas.includes(turma.id)} onChange={(e) => {
                                         if (e.target.checked) {
-                                            setFiltros({...filtros, turmas: [ ...filtros.turmas, turma]});
+                                            setFiltros({...filtros, turmas: [ ...filtros.turmas, turma.id]});
                                         } else {
-                                            setFiltros({...filtros,turmas:filtros.turmas.filter(t=>t!==turma)});
+                                            setFiltros({...filtros, turmas: filtros.turmas.filter((id:number) => id !== turma.id)});
                                         }}}
                                     />}
                                 />

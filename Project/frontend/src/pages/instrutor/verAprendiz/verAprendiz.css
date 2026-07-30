@@ -121,7 +121,7 @@ body.dark .aprendiz-modal{
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    text-align: left; 
+    text-align: center;
 }
 
 .aprendiz-button {
