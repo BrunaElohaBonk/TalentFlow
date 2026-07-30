@@ -118,7 +118,7 @@ function AdicionarSoftSkill({
                     </div>
                     <div className="adicionarSoftSkill-botoes">
                         <button type="submit" className="adicionarSoftSkill-salvar">
-                            SALVAR MODIFICAÇÃO
+                            ADICIONAR
                         </button>
                     </div>
                 </div>

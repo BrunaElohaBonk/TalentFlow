@@ -11,11 +11,34 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import axios from "axios";
 import Filtro from "../../../components/filter";
+import api from "../../../services/api";
+
+interface ITurma {
+    id: number;
+    nomeTurma: string;
+    name_Curso: string;
+    EDV_Instrutor: number;
+    nomeInstrutor: string;
+}
+
+interface IAprendiz {
+    EDV: number;
+    name: string;
+    turma: string;
+    email: string;
+    user: string;
+    nascimento: string;
+    contato: string;
+    senha: string;
+    tipo: "aprendiz";
+}
 
 function VerAprendiz(){
     const navigate = useNavigate()
     const [busca, setBusca] = useState("");
     const [filtro, setFiltro] = useState(false)
+    const [aprendiz, setAprendiz] = useState<IAprendiz[]>([]);
+    const [turma, setTurma] = useState<ITurma[]>([]);
     const Idade = (dataNascimento: Date) => {
         const hoje = new Date();
         let idade = hoje.getFullYear() - dataNascimento.getFullYear();
@@ -121,17 +144,17 @@ function VerAprendiz(){
         a.perfil.nome.localeCompare(b.perfil.nome, "pt-BR")
     );
         
-    // const fetchAprendiz = async () => {
-    //     try {
-    //         const response = await axios.get("link backend");
-    //         console.log("API RESPONSE:", response.data);
-    //         setAprendiz(response.data.response);
-    //     } 
-    //     catch (error) {
-    //         console.error("Erro:", error);
-    //         setAprendiz(null);
-    //     }
-    // };
+    const fetchAprendiz = async () => {
+        try {
+            const response = await api.get("/perfil/:EDV");
+            console.log("API RESPONSE:", response.data);
+            setAprendiz(response.data.response);
+        } 
+        catch (error) {
+            console.error("Erro:", error);
+            setAprendiz(null);
+        }
+    };
 
     const handleDelete = async (edv) => {
         const confirm = await Swal.fire({
@@ -151,7 +174,7 @@ function VerAprendiz(){
                     text: 'Aprendiz removido com sucesso!',
                     icon: 'success'
                 })
-                // fetchAprendiz()
+                fetchAprendiz()
             } 
             catch (error) {
                 console.error('Erro ao deletar:', error)

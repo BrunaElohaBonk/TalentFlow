@@ -28,6 +28,13 @@ route.post(
   validationMiddleware(criarAprendizSchema),
   aprendizController.criar,
 );
+route.get(
+  "/aprendiz/:EDV",
+  authMiddleware,
+  roleMiddleware("INSTRUTOR"),
+  aprendizController.verAprendiz,
+);
+
 
 route.get(
   "/perfil/:EDV",
@@ -131,7 +138,7 @@ route.put(
 );
 
 route.get(
-  "/meuPerfil/:EDV/:id",
+  "/meuPerfil/:EDV",
   authMiddleware,
   roleMiddleware("APRENDIZ"),
   ownerMiddleware,

@@ -416,6 +416,18 @@ export default class AprendizService {
       return softskillAtualizado;
     });
   }
+  static async verAprendiz(EDV: number) {
+    const Aprendiz = await prisma.aprendiz.findUnique({
+      where: {
+        EDV: EDV
+      }
+    })
+
+    if(!Aprendiz){
+      return 
+    }
+    return Aprendiz;
+  }
 
   static async verPerfil(EDV: number) {
 
@@ -440,6 +452,7 @@ export default class AprendizService {
         competencia: true,
         formacao_academica: true,
         cursos: true,
+        idiomas:true,
       },
     });
   }

@@ -7,17 +7,17 @@ http://localhost:8080/api/auth/register
     "EDV": 90000001,
     "tipoUser": "INSTRUTOR",
     "name": "Carlos Henrique Silva",
-    "data_nascimento": "1990-05-20T00:00:00.000Z",
+    "data_nascimento": "20/05/1990",
     "user_bosch": "CHS001",
     "contato": "(41)999991111",
     "email_bosch": "carlos@bosch.com",
-    "password_login": "123456"
+    "password_login": "20/05/1990"
 }
 {
   "EDV": 91000002,
   "tipoUser": "INSTRUTOR",
   "name": "Fernanda Oliveira Souza",
-  "data_nascimento": "1992-07-22T00:00:00.000Z",
+  "data_nascimento": "22/07/1992",
   "user_bosch": "FOS002",
   "contato": "(41)97777-2222",
   "email_bosch": "fernanda.souza@bosch.com",
@@ -28,7 +28,7 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJFRFYiOjkxMDAwMDAyLCJ0aXBvVXNlciI6IklOU1R
   "EDV": 91000001,
   "tipoUser": "INSTRUTOR",
   "name": "Marcos Antonio Pereira",
-  "data_nascimento": "1985-03-15T00:00:00.000Z",
+  "data_nascimento": "15/03/1985",
   "user_bosch": "MAP001",
   "contato": "(41)98888-1111",
   "email_bosch": "marcos.pereira@bosch.com",
@@ -38,27 +38,27 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJFRFYiOjkxMDAwMDAyLCJ0aXBvVXNlciI6IklOU1R
   "EDV": 91001001,
   "tipoUser": "APRENDIZ",
   "name": "Julia Carolina Gabriel dos Santos",
-  "data_nascimento": "2008-01-17T00:00:00.000Z",
+  "data_nascimento": "17/01/2008",
   "user_bosch": "JCG001",
   "contato": "(41)99666-1111",
   "email_bosch": "julia.gabriel@bosch.com",
   "password_login": "Julia@123"
 }
 {
-  "EDV": 91001002,
+  "EDV": 92906816,
   "tipoUser": "APRENDIZ",
-  "name": "Lucas Henrique Almeida",
-  "data_nascimento": "2007-09-10T00:00:00.000Z",
+  "name": "Lays Arceles de souza",
+  "data_nascimento": "11/10/2005",
   "user_bosch": "LHA002",
   "contato": "(41)99555-2222",
   "email_bosch": "lucas.almeida@bosch.com",
-  "password_login": "Lucas@123"
+  "password_login": "Lays@123"
 }
 {
   "EDV": 91001003,
   "tipoUser": "APRENDIZ",
   "name": "Ana Beatriz Ferreira",
-  "data_nascimento": "2006-11-05T00:00:00.000Z",
+  "data_nascimento": "11/05/2006",
   "user_bosch": "ABF003",
   "contato": "(41)99444-3333",
   "email_bosch": "ana.ferreira@bosch.com",

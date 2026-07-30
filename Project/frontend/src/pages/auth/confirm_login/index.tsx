@@ -8,30 +8,41 @@ import Logout from '../../../components/logout/logout'
 import Swal from 'sweetalert2'
 import './confirm_login.css'
 import { useNavigate } from "react-router-dom"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import api from '../../../services/api'
-
-async function Confirm_login() {
-  const navigate = useNavigate()
+interface IDadosUser{
+    EDV: number,
+    password: string,
+    confirmPassword: string,
+} 
+function Confirm_login() {
+  const navigate = useNavigate() 
 
   const [edv, setEdv] = useState("")
+  const [usuario, setUsuario] = useState<IDadosUser | null>(null);
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [logout, setLogout] = useState(false)
 
+  const usuarioStorage = localStorage.getItem("usuario");
+  const user =
+  usuarioStorage &&
+  usuarioStorage !== "undefined"
+    ? JSON.parse(usuarioStorage)
+    : null;
+  
+  const confirmarPrimeiroAcesso = async () => {
+    const usuario = await api.post("/auth/primeiroAcesso", {
+      EDV: Number(edv),
+      password: password,
+      confirmPassword: confirmPassword,
+    });
 
-  // const usuario = {
-  //   nome: "Bruna",
-  //   dataNascimento: "21/08/2006"
-  // }
-  const usuario = await api.post
-   await api.post("/auth/primeiroAcesso", {
-    EDV: edv,
-    password: password,
-    confirmPassword: confirmPassword,
-  });
+    // navigate('/Login')
+
+  }
 
   const validarSenha = () => {
     const temMaiuscula = /[A-Z]/.test(password)
@@ -47,12 +58,15 @@ async function Confirm_login() {
       return "A senha deve possuir no mínimo 10 caracteres."
     }
 
-    if(password === usuario.dataNascimento) {
-      return "A senha não pode ser igual a data de nascimento."
+    if (user?.data_nascimento && password === user.data_nascimento) {
+      return "A senha não pode ser igual à data de nascimento.";
     }
-
-    if(password.toLowerCase() === usuario.nome.toLowerCase()) {
-      return "A senha não pode ser igual ao nome."
+    
+    if (
+      user?.nome &&
+      password.toLowerCase() === user.nome.toLowerCase()
+    ) {
+      return "A senha não pode ser igual ao nome.";
     }
 
     if(!temMaiuscula) {
@@ -78,9 +92,9 @@ async function Confirm_login() {
     return null
   }
 
-  const handleConfirmPassword = () => {
+  const handleConfirmPassword = async () => {
     const erro = validarSenha()
-
+    
     if (erro) {
       Swal.fire({
         icon: 'error',
@@ -89,10 +103,11 @@ async function Confirm_login() {
         confirmButtonColor: '#2B83D5',
         confirmButtonText: 'OK'
       })
-    
+      
       return
     }
-
+    await confirmarPrimeiroAcesso();
+    
     Swal.fire({
       icon: 'success',
       title: 'Senha alterada!',
@@ -100,9 +115,9 @@ async function Confirm_login() {
       confirmButtonColor: '#2B83D5',
       confirmButtonText: 'Continuar'
     }).then(() => {
-      navigate('/Perfil')
+      navigate("/");
     })
-    navigate('/Perfil')
+    
   }
 
   return (

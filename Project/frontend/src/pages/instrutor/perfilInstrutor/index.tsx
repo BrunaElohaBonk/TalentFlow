@@ -13,7 +13,7 @@ interface IPerfil {
     nome: string;
     email: string;
     user: string;
-    contato: number;
+    contato: string;
     nascimento: string;
 }
 
@@ -32,28 +32,14 @@ function PerfilInstrutor(){
                 nome: usuario.name,
                 email: usuario.email_bosch,
                 user: usuario.user_bosch,
-                contato: Number(usuario.contato),
+                contato: usuario.contato,
                 nascimento: formatarData(usuario.data_nascimento)
             });
         }
     }, []);
 
-    // const [perfil, setPerfil] = useState([])
-    // const fetchPerfil = async () => {
-    //     try {
-    //         const response = await axios.get('link do backend')
-    //         console.log("API RESPONSE:", response.data)
-    //         setPerfil(response.data.response || [])
-    //     } 
-    //     catch (e) {
-    //         console.error('Erro:', e)
-    //         setPerfil([])
-    //     }
-    // }
-
-    // useEffect(() => {
-    //     fetchPerfil()
-    // }, [])
+    console.log("perfil:", perfil);
+console.log("localStorage:", localStorage.getItem("perfil"));
 
     return(
         <div className="perfil">
@@ -95,7 +81,7 @@ function PerfilInstrutor(){
                                     <span className="perfil-span">Email: {perfil.email}</span>
                                     <span className="perfil-span">Data de Nascimento: {formatarData(perfil.nascimento)}</span>
                                     <span className="perfil-span">Idade: {Idade(perfil.nascimento)} anos</span>
-                                    <span className="perfil-span">Contato:Contato: {Telefone(perfil.contato)}</span>
+                                    <span className="perfil-span">Contato: {perfil?.contato ? Telefone(perfil.contato) : "Sem contato"}</span>
                                 </div>
                             </>
                         ):(

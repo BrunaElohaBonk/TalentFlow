@@ -9,7 +9,7 @@ import {
   LoginDto,
   RedefinirSenhaDto,
 } from "../DTO/authDTO.ts";
-import { Prisma, TipoHistorico } from "@prisma/client";
+import { Prisma, TipoHistorico, user_tipoUser } from "@prisma/client";
 export class UserJaExisteError extends Error {
   constructor(message = "EDV ou e-mail já cadastrado") {
     super(message);
@@ -69,6 +69,7 @@ type LoginResult =
         contato: string;
         data_nascimento: Date;
         imagem: string;
+        ativo:boolean;
       };
     };
 
@@ -128,7 +129,7 @@ export class UserService {
           },
         });
 
-        return user;
+        return {user};
       });
     } catch (error: any) {
       if (error.code === "P2002") {
@@ -160,6 +161,16 @@ export class UserService {
       return user;
     });
   }
+  static async BuscarUser(tipoUser:user_tipoUser){
+    const busca = await prisma.user.findMany({
+      where:{tipoUser :tipoUser}
+    })
+    if (!busca){
+      throw new ServerConfigError();
+    }
+    return busca;
+  }
+  
 
   static async login(data: LoginDto): Promise<LoginResult> {
     console.log(data)
@@ -209,13 +220,13 @@ export class UserService {
         contato: user.contato,
         data_nascimento: user.data_nascimento,
         imagem: user.fotoPerfil || "",
+        ativo: user.Ativo
       },
     };
   }
 
   static async primeiroAcesso(data: {
     EDV: number;
-    email: string;
     password: string;
     confirmPassword: string;
   }): Promise<void> {
@@ -236,7 +247,6 @@ export class UserService {
         EDV: data.EDV,
       },
       data: {
-        email_bosch: data.email,
         password_login: senhaCrypt,
       },
     });
