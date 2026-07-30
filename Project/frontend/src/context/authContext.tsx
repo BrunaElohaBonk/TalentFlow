@@ -39,7 +39,7 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
         console.log("User "+ usuario.user)
         localStorage.setItem(
             "usuario",
-            JSON.stringify(usuario.user)
+            JSON.stringify(usuario)
         );
         localStorage.setItem(
             "token",
