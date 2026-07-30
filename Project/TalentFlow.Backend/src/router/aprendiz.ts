@@ -138,7 +138,7 @@ route.put(
 );
 
 route.get(
-  "/meuPerfil/:EDV/:id",
+  "/meuPerfil/:EDV",
   authMiddleware,
   roleMiddleware("APRENDIZ"),
   ownerMiddleware,

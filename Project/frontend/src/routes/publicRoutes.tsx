@@ -9,6 +9,7 @@ function PublicRoute({children}: any) {
         if(usuario.user.tipo === "instrutor"){
             return <Navigate to="/Home" replace />;
         }
+        
         if(usuario.user.tipo === "aprendiz"){
             return <Navigate to="/Perfil" replace />;
         }

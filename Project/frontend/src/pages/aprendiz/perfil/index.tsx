@@ -16,9 +16,9 @@ import SoftSkill from "../soft_skill";
 import Competencia from "../competencias";
 import EditarFormacaoAcademica from '../formacao_academica/editar/editar_formacao'
 import AdicionarFormacaoAcademica from "../formacao_academica/adicionar/adicionar";
-import './perfil.css'
-import { usuarios } from "../../instrutor/verInstrutor/users";
+import './perfil.css';
 import api from "../../../services/api";
+import { useNavigate } from "react-router-dom";
 
 interface Usuario {
     edv: number;
@@ -30,48 +30,90 @@ interface Usuario {
     data_nascimento: string;
     tipo: string;
 }
+interface Perfil {
+    id: Number,
+    EDV_Aprendiz: number,
+    situacao_profissional: SituacaoProfissional[],
+    soft_skills: SoftSkills[],
+    competencia: Competencia[],
+    formacao_academica: FormacaoAcademica[],
+    cursos: Cursos[],
+    idiomas: Idiomas[]
+}
+interface SituacaoProfissional {
+    id: number;
+    bio_profissional: string;
+};
+interface SoftSkills {
+    id: number;
+    nome_SoftSkills: string;
+}
+interface Competencia {
+    id: number;
+    nome_Competencia: string;
+}
+interface Cursos {
+    id: number;
+    name_Curso: string;
+}
+interface Idiomas {
+    id: number;
+    nome_Idioma: string;
+}
+
 
 interface FormacaoAcademica {
     id: number;
-    nomeCurso: string;
-    instituicao: string;
-    situacao: string;
-    periodoAtual: number;
-    totalPeriodos: number;
-    nivel: string;
-    descricao: string;
+    name_Curso: string;
+    status_Academico: string;
 }
 
-function converterData(data: string) {
-    const [dia, mes, ano] = data.split("/")
-    return new Date(Number(ano), Number(mes) - 1, Number(dia))
+
+function Telefone(numero: number | string) {
+    const telefone = String(numero).replace(/\D/g, "");
+    return telefone.replace(
+        /^(\d{2})(\d{5})(\d{4})$/,
+        "($1) $2-$3"
+    );
 }
 
-function calcularIdade(dataNascimento: Date) {
+function Idade(data_nascimento: string) {
+    const [dia, mes, ano] = data_nascimento.split("/");
+    const nascimento = new Date(
+        Number(ano),
+        Number(mes) - 1,
+        Number(dia)
+    );
     const hoje = new Date();
-    let idade = hoje.getFullYear() - dataNascimento.getFullYear();
-    
+    let idade = hoje.getFullYear() - nascimento.getFullYear();
     const mesAtual = hoje.getMonth();
-    const mesNascimento = dataNascimento.getMonth();
-
+    const mesNascimento = nascimento.getMonth();
     if (
         mesAtual < mesNascimento ||
-        (mesAtual === mesNascimento && hoje.getDate() < dataNascimento.getDate())
+        (mesAtual === mesNascimento && hoje.getDate() < nascimento.getDate())
     ) {
         idade--;
     }
-
     return idade;
 }
 
-function formatarTelefone(numero: number) {
-    const telefone = numero.toString();
-    return telefone.replace(/^(\d{2})(\d{5})(\d{4})$/, "($1)$2-$3");
+function formatarData(data: string) {
+    if (!data) return "";
+    if (data.includes("T")) {
+        const [ano, mes, dia] = data.split("T")[0].split("-");
+
+        return `${dia}/${mes}/${ano}`;
+    }
+    if (data.includes("/")) {
+        return data;
+    }
+    return "";
 }
 
 function Perfil() {
     const { darkMode, alternarTema } = useTheme();
-    const [aprendiz, setAprendiz] = useState<Usuario | null>(null)
+    const [aprendiz, setAprendiz] = useState<Usuario | null>(null);
+    const [apireq, setApireq] = useState<Perfil | null>(null)
     const [logout, setLogout] = useState(false)
     const [situacao, setSituacao] = useState(false)
     const [formacao_academica, setFormacaoAcademica] = useState(false)
@@ -83,39 +125,44 @@ function Perfil() {
     const [editarSituacao, setEditarSituacao] = useState(false)
     const [editarFormacao, setEditarFormacao] = useState(false)
     const [adicionarFormacao, setAdicionarFormacao] = useState(false)
+    const navigate = useNavigate()
 
     useEffect(() => {
         async function carregarPerfil() {
             const usuario = localStorage.getItem("usuario");
-    
-            if (!usuario) return;
-    
+            console.log(usuario)
             const aprendizLogado = JSON.parse(usuario);
-    
+            console.log("APRENDIZ ", aprendizLogado.user);
+            setAprendiz({
+                edv: aprendizLogado.user.EDV,
+                img: aprendizLogado.user.imagem,
+                nome: aprendizLogado.user.name,
+                email: aprendizLogado.user.email_bosch,
+                user: aprendizLogado.user.user_bosch,
+                contato: aprendizLogado.user.contato,
+                data_nascimento: aprendizLogado.user.data_nascimento,
+                tipo: aprendizLogado.user.tipo
+            });
+
             try {
                 const response = await api.get(
-                    `/aprendiz/perfil/${aprendizLogado.edv}`
+                    `/aprendiz/meuPerfil/${aprendizLogado.user.EDV}`
                 );
-    
-                setAprendiz(response.data.data);
+
+                setApireq(response.data.data);
             } catch (error) {
                 console.error(error);
             }
         }
-    
+
         carregarPerfil();
     }, []);
 
-
-
     if (!aprendiz) {
-        return <h2>Carregando...</h2>
-    }
 
-    const router = async  ()=>{
-        return await api.get(`/aprediz/perfil/${aprendiz.edv}`)
+        navigate('/')
     }
-
+    console.log("a", aprendiz)
 
     return (
         <>
@@ -129,7 +176,7 @@ function Perfil() {
             <div className="perfilAprendiz-body">
                 <label htmlFor="theme" className="theme">
                     <span className="theme__toggle-wrap">
-                        <input id="theme" className="theme__toggle" type="checkbox" role="switch" name="theme" checked={darkMode} onChange={alternarTema}/>
+                        <input id="theme" className="theme__toggle" type="checkbox" role="switch" name="theme" checked={darkMode} onChange={alternarTema} />
                         <span className="theme__fill"></span>
                         <span className="theme__icon">
                             <span className="theme__icon-part"></span>
@@ -145,18 +192,18 @@ function Perfil() {
                     </span>
                 </label>
             </div>
-            <Logout visible={logout} setVisible={setLogout}/>
+            <Logout visible={logout} setVisible={setLogout} />
 
-        <SituacaoProfissional visible={situacao} setVisible={setSituacao} setEditarSituacao={setEditarSituacao}/>
-        <FormacaoAcademica visible={formacao_academica} setVisible={setFormacaoAcademica} setEditarFormacao={setEditarFormacao} setAdicionarFormacao={setAdicionarFormacao}/>
-        <CursoComplementar visible={curso_complementar} setVisible={setCursoComplementar}/>
-        <Idioma visible={idioma} setVisible={setIdioma}/>
-        <SoftSkill visible={soft_skill} setVisible={setSoftSkill}/>
-        <Competencia visible={competencia} setVisible={setCompetencia}/>
-        <EditarPerfil visible={editar} setVisible={setEditar} edv={aprendiz.edv}/>
-        <EditarSituacaoProfissional visible={editarSituacao} setVisible={setEditarSituacao} setSituacaoProfissional={setSituacao} edv={aprendiz.edv}/>
-        <EditarFormacaoAcademica visible={editarFormacao} setVisible={setEditarFormacao} setFormacaoAcademica={setFormacaoAcademica} id={1} />
-        <AdicionarFormacaoAcademica visible={adicionarFormacao} setVisible={setAdicionarFormacao} setFormacaoAcademica={setFormacaoAcademica}/>
+            <SituacaoProfissional visible={situacao} setVisible={setSituacao} setEditarSituacao={setEditarSituacao} />
+            <FormacaoAcademica visible={formacao_academica} setVisible={setFormacaoAcademica} setEditarFormacao={setEditarFormacao} setAdicionarFormacao={setAdicionarFormacao} />
+            <CursoComplementar visible={curso_complementar} setVisible={setCursoComplementar} />
+            <Idioma visible={idioma} setVisible={setIdioma} />
+            <SoftSkill visible={soft_skill} setVisible={setSoftSkill} />
+            <Competencia visible={competencia} setVisible={setCompetencia} />
+            <EditarPerfil visible={editar} setVisible={setEditar} edv={aprendiz?.edv} />
+            <EditarSituacaoProfissional visible={editarSituacao} setVisible={setEditarSituacao} setSituacaoProfissional={setSituacao} edv={aprendiz?.edv} />
+            <EditarFormacaoAcademica visible={editarFormacao} setVisible={setEditarFormacao} setFormacaoAcademica={setFormacaoAcademica} id={1} />
+            <AdicionarFormacaoAcademica visible={adicionarFormacao} setVisible={setAdicionarFormacao} setFormacaoAcademica={setFormacaoAcademica} />
 
             <main className="perfil-tela">
                 <section className="perfil-bloco">
@@ -172,23 +219,26 @@ function Perfil() {
                         </div>
                         <div className="perfil-dados-perfil">
                             <div className="perfil-cabecalho-perfil">
-                                <h1>{aprendiz.nome}</h1>
+                                <h1>{aprendiz?.nome}</h1>
                             </div>
                             <div className="perfil-informacoes">
-                                <span>Email: {aprendiz.email}</span>
-                                <span>EDV: {aprendiz.edv}</span>
-                                <span>User: {aprendiz.user}</span>
-                                <span>Data de Nascimento: {aprendiz.data_nascimento}</span>
-                                <span>Idade: {calcularIdade(converterData(aprendiz.data_nascimento))} anos</span>
-                                <span>Contato: {formatarTelefone(aprendiz.contato)}</span>
+                                <span>Email: {aprendiz?.email}</span>
+                                <span>EDV: {aprendiz?.edv}</span>
+                                <span>User: {aprendiz?.user}</span>
+                                <span>Data de Nascimento: {formatarData(aprendiz?.data_nascimento)}</span>
+                                <span>Idade: {Idade(formatarData(aprendiz?.data_nascimento))} anos</span>
+                                <span>Contato: {Telefone(aprendiz?.contato)}</span>
                             </div>
                         </div>
                     </div>
                     <div className="perfil-cards-superiores">
                         <div className="perfil-card-perfil">
                             <h3>Situação Profissional</h3>
-                            <ul>
-                                <li>Descrição da situação atual e das expectativas para o futuro.</li>
+                            <ul>{apireq?.situacao_profissional.map((situacao) => (
+                                <li key={situacao.id}>
+                                    {situacao.bio_profissional.slice(0, 50)}...
+                                </li>
+                                ))}
                             </ul>
                             <button className="perfil-btn-visualizar" onClick={() => setSituacao(true)}>
                                 <img src={icon_olho} alt="Visualizar" />
@@ -196,9 +246,11 @@ function Perfil() {
                         </div>
                         <div className="perfil-card-perfil">
                             <h3>Formação Acadêmica </h3>
-                            <ul>
-                                <li>Técnico em Informática</li>
-                                <li>ADS (cursando)</li>
+                            <ul>{apireq?.formacao_academica.map((formacao) => (
+                                <li key={formacao.id}>
+                                    {formacao.name_Curso} - {formacao.status_Academico}
+                                </li>
+                            ))}
                             </ul>
                             <button className="perfil-btn-visualizar" onClick={() => setFormacaoAcademica(true)}>
                                 <img src={icon_olho} alt="Visualizar" />
@@ -206,9 +258,13 @@ function Perfil() {
                         </div>
                         <div className="perfil-card-perfil">
                             <h3>Cursos Complementares</h3>
-                            <ul>
-                                <li>Power BI</li>
-                                <li>Excel</li>
+                            <ul>{apireq?.cursos
+                                .slice(0, 2)
+                                .map((curso) => (
+                                    <li key={curso.id}>
+                                        {curso.name_Curso}
+                                    </li>
+                                ))}
                             </ul>
                             <button className="perfil-btn-visualizar" onClick={() => setCursoComplementar(true)}>
                                 <img src={icon_olho} alt="Visualizar" />
@@ -216,9 +272,11 @@ function Perfil() {
                         </div>
                         <div className="perfil-card-perfil">
                             <h3>Idiomas</h3>
-                            <ul>
-                                <li>a</li>
-                                <li>Inglês B1</li>
+                            <ul>{apireq?.idiomas.slice(0, 2).map((idiomas) => (
+                                <li key={idiomas.id}>
+                                    {idiomas.nome_Idioma}
+                                </li>
+                            ))}
                             </ul>
                             <button className="perfil-btn-visualizar" onClick={() => setIdioma(true)}>
                                 <img src={icon_olho} alt="Visualizar" />
@@ -228,9 +286,11 @@ function Perfil() {
                     <div className="perfil-cards-inferiores">
                         <div className="perfil-card-perfil">
                             <h3>Soft Skills</h3>
-                            <ul>
-                                <li>Comunicação</li>
-                                <li>Trabalho em equipe</li>
+                            <ul>{apireq?.soft_skills.slice(0, 2).map((skill) => (
+                                <li key={skill.id}>
+                                    {skill.nome_SoftSkills}
+                                </li>
+                            ))}
                             </ul>
                             <button className="perfil-btn-visualizar" onClick={() => setSoftSkill(true)}>
                                 <img src={icon_olho} alt="Visualizar" />
@@ -238,9 +298,13 @@ function Perfil() {
                         </div>
                         <div className="perfil-card-perfil">
                             <h3>Competências</h3>
-                            <ul>
-                                <li>Análise de dados</li>
-                                <li>Gestão de projetos</li>
+                            <ul>{apireq?.competencia
+                                .slice(0, 2)
+                                .map((competencia) => (
+                                    <li key={competencia.id}>
+                                        {competencia.nome_Competencia}
+                                    </li>
+                                ))}
                             </ul>
                             <button className="perfil-btn-visualizar" onClick={() => setCompetencia(true)}>
                                 <img src={icon_olho} alt="Visualizar" />
@@ -248,7 +312,7 @@ function Perfil() {
                         </div>
                     </div>
                 </section>
-            </main>
+            </main >
         </>
     )
 }
