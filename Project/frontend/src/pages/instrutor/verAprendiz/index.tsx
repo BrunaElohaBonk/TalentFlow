@@ -28,6 +28,7 @@ interface IAprendiz {
     data_nascimento: Date;
     fotoPerfil: string | null;
     tipoUser: "APRENDIZ";
+    Ativo: boolean;
 
     data: {
         id: number;
@@ -181,14 +182,13 @@ function VerAprendiz(){
     const fetchAprendizes = async () => {
         try {
             const response = await api.get("/auth/buscaruser/APRENDIZ");
-            const usuarios = response.data;
-            console.log("response.data:", response.data);
-            console.log("é array?", Array.isArray(response.data));
+            const usuarios = response.data.filter((usuario: IAprendiz) => usuario.tipoUser === "APRENDIZ" && usuario.Ativo === true );
             const aprendizesComPerfil = await Promise.all(
-                usuarios.map(async (usuario: any) => {
+                usuarios.map(async (usuario: IAprendiz) => {
                     const perfilResponse = await api.get(`/aprendiz/perfil/${usuario.EDV}`);
                     return {
-                        ...usuario, ...perfilResponse.data
+                        ...usuario,
+                        data: perfilResponse.data.data
                     };
                 })
             );
@@ -201,34 +201,44 @@ function VerAprendiz(){
         }
     };
 
-    const handleDelete = async (EDV) => {
+    const handleDelete = async (EDV: number) => {
+        console.log("EDV aprendiz para deletar:", EDV);
+
         const confirm = await Swal.fire({
-        title: 'Tem certeza?',
-        text: 'O aprendiz será removido da lista!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Sim, remover!',
-        cancelButtonText: 'Cancelar'
-    });
+            title: 'Tem certeza?',
+            text: 'O aprendiz será removido da lista!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sim, remover!',
+            cancelButtonText: 'Cancelar'
+        });
+
         if (!confirm.isConfirmed) return;
+
         try {
-            await api.put(`/auth/deletarUser/${EDV}`);
+            const response = await api.put(`/auth/deletarUser/${EDV}`);
+
+            console.log("Resposta delete:", response.data);
+            console.log("Status:", response.status);
+
+            await fetchAprendizes();
+
             Swal.fire({
                 title: 'Removido!',
                 text: 'Aprendiz removido com sucesso!',
                 icon: 'success'
             });
-            fetchAprendizes();
-        } 
-        catch (error) {
+
+        } catch (error) {
             console.error('Erro ao remover:', error);
+
             Swal.fire({
                 title: 'Erro!',
                 text: 'Erro ao remover aprendiz',
                 icon: 'error'
             });
-        }
     }
+};
     useEffect(() => {
         fetchAprendizes();
     }, []); 
