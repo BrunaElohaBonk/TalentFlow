@@ -452,6 +452,7 @@ export default class AprendizService {
         competencia: true,
         formacao_academica: true,
         cursos: true,
+        idiomas:true,
       },
     });
   }
