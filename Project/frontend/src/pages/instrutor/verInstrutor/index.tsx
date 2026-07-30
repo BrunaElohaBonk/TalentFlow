@@ -61,7 +61,7 @@ function VerInstrutor(){
         } 
         catch (error) {
             console.error("Erro:", error);
-            setInstrutor(null);
+            setInstrutor([]);
         }
     };
 

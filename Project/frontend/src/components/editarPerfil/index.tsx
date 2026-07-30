@@ -3,19 +3,23 @@ import sair from '../../assets/img/close.png'
 import download from '../../assets/img/icon download.png'
 import { useEffect, useRef, useState } from 'react'
 import Swal from 'sweetalert2'
-import axios from 'axios';
 import { useDropzone } from "react-dropzone";
 import "react-datepicker/dist/react-datepicker.css";
 import api from '../../services/api'
 
 interface IPerfil {
-    img: File | string | null;
-    name: string;
-    EDV: number;
-    email_bosch: string;
-    user_bosch: string;
-    contato: string;
-    data_nascimento: string;
+    token: string;
+    user: {
+        EDV: number;
+        name: string;
+        user_bosch: string;
+        email_bosch: string;
+        contato: string;
+        data_nascimento: string;
+        imagem: File | string | null;
+        ativo: boolean;
+        tipo: string;
+    };
 }
 interface Props {
     visible: boolean;
@@ -49,7 +53,10 @@ function EditarPerfil({ visible, setVisible, edv }: Props){
                 setNomeArquivo(arquivo.name);
                 setPerfil((prev) => ({
                     ...prev,
-                    img: arquivo,
+                    user: {
+                        ...prev.user,
+                        imagem: arquivo,
+                    },
                 }));
             }
         },
@@ -62,14 +69,20 @@ function EditarPerfil({ visible, setVisible, edv }: Props){
     return `${dia}/${mes}/${ano}`;
 };
     const [perfil, setPerfil] = useState<IPerfil>({
-        img: null,
-        name: '',
-        EDV: 0,
-        email_bosch: '',
-        user_bosch: '',
-        contato: '',
-        data_nascimento: '',
+        token: "",
+        user: {
+            EDV: 0,
+            name: "",
+            user_bosch: "",
+            email_bosch: "",
+            contato: "",
+            data_nascimento: "",
+            imagem: null,
+            ativo: true,
+            tipo: "",
+        },
     });
+
     useEffect(() => {
         if (!visible) return;
         const usuarioSalvo = localStorage.getItem("usuario");
@@ -77,13 +90,18 @@ function EditarPerfil({ visible, setVisible, edv }: Props){
             const usuario = JSON.parse(usuarioSalvo);
             console.log("Usuário local:", usuario);
             setPerfil({
-                img: null,
-                name: usuario.name || '',
-                EDV: Number(usuario.EDV) || 0,
-                email_bosch: usuario.email_bosch || '',
-                user_bosch: usuario.user_bosch || '',
-                contato: usuario.contato || '',
-                data_nascimento: formatarData(usuario.data_nascimento),
+                token: usuario.token,
+                user: {
+                    EDV: usuario.user.EDV,
+                    name: usuario.user.name,
+                    user_bosch: usuario.user.user_bosch,
+                    email_bosch: usuario.user.email_bosch,
+                    contato: usuario.user.contato,
+                    data_nascimento: formatarData(usuario.user.data_nascimento),
+                    imagem: usuario.user.imagem,
+                    ativo: usuario.user.ativo,
+                    tipo: usuario.user.tipo,
+                },
             });
         }
     }, [visible]);
@@ -97,7 +115,7 @@ function EditarPerfil({ visible, setVisible, edv }: Props){
 
     const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const [dia, mes, ano] = perfil.data_nascimento.split("/");
+        const [dia, mes, ano] = perfil.user.data_nascimento.split("/");
         const dataNascimento = new Date(
             Number(ano),
             Number(mes) - 1,
@@ -119,7 +137,7 @@ function EditarPerfil({ visible, setVisible, edv }: Props){
             });
             return;
         }
-        if (!perfil.email_bosch || !perfil.contato || !perfil.data_nascimento) {
+        if (!perfil.user.name || !perfil.user.email_bosch || !perfil.user.contato || !perfil.user.data_nascimento) {
             Swal.fire({
                 title: 'Atenção!',
                 text: 'Preencha os campos obrigatórios!',
@@ -128,11 +146,12 @@ function EditarPerfil({ visible, setVisible, edv }: Props){
             return;
         }
         try {
-            const response = await api.put(`instrutor/editarInstrutor/${perfil.EDV}`,perfil);
+            const response = await api.put(`instrutor/editarInstrutor/${perfil.user.EDV}`,perfil);
             const usuario = JSON.parse(localStorage.getItem("usuario")!);
-            usuario.email = perfil.email_bosch;
-            usuario.contato = perfil.contato;
-            usuario.dataNascimento = perfil.data_nascimento;
+            usuario.name = perfil.user.name;
+            usuario.email = perfil.user.email_bosch;
+            usuario.contato = perfil.user.contato;
+            usuario.dataNascimento = perfil.user.data_nascimento;
             localStorage.setItem("usuario", JSON.stringify(usuario));
             Swal.fire({
                 title: "Sucesso!",
@@ -185,27 +204,27 @@ function EditarPerfil({ visible, setVisible, edv }: Props){
                     </div>
                     <div className="editarPerfil-grupo">
                         <label className="editarPerfil-label">Nome Completo</label>
-                        <input ref={nomeRef} name="name" className="editarPerfil-input" value={perfil.name}/>
+                        <input ref={nomeRef} name="name" className="editarPerfil-input" value={perfil.user.name}/>
                     </div>
                     <div className="editarPerfil-grupo">
                         <label className="editarPerfil-label">EDV</label>
-                        <input ref={edvRef} name="EDV" className="editarPerfil-input" value={perfil.EDV} disabled/>
+                        <input ref={edvRef} name="EDV" className="editarPerfil-input" value={perfil.user.EDV} disabled/>
                     </div>
                     <div className="editarPerfil-grupo">
                         <label className="editarPerfil-label">Email</label>
-                        <input ref={emailRef} name="email_bosch" className="editarPerfil-input" value={perfil.email_bosch} onChange={handleChange} onKeyDown={(e) => proximoCampo(e, userRef)}/>
+                        <input ref={emailRef} name="email_bosch" className="editarPerfil-input" value={perfil.user.email_bosch} onChange={handleChange} onKeyDown={(e) => proximoCampo(e, userRef)}/>
                     </div>
                     <div className="editarPerfil-grupo">
                         <label className="editarPerfil-label">UserID</label>
-                        <input ref={userRef} name="user_bosch" className="editarPerfil-input" value={perfil.user_bosch}/>
+                        <input ref={userRef} name="user_bosch" className="editarPerfil-input" value={perfil.user.user_bosch}/>
                     </div>
                     <div className="editarPerfil-grupo">
                         <label className="editarPerfil-label">Data de nascimento</label>
-                        <input ref={nascimentoRef} name="data_nascimento" className="editarPerfil-input" value={perfil.data_nascimento}/>
+                        <input ref={nascimentoRef} name="data_nascimento" className="editarPerfil-input" value={perfil.user.data_nascimento}/>
                     </div>
                     <div className="editarPerfil-grupo">
                         <label className="editarPerfil-label">Contato</label>
-                        <input ref={contatoRef} name="contato" className="editarPerfil-input" inputMode="numeric" value={perfil.contato || ''} onChange={handleContato} maxLength={15} onKeyDown={(e) => proximoCampo(e, salvarRef)}/>
+                        <input ref={contatoRef} name="contato" className="editarPerfil-input" inputMode="numeric" value={perfil.user.contato || ''} onChange={handleContato} maxLength={15} onKeyDown={(e) => proximoCampo(e, salvarRef)}/>
                     </div>
                     <div className="editarPerfil-botoes">
                         <button ref={salvarRef} className="editarPerfil-salvar" type="submit">SALVAR MODIFICAÇÃO</button>
