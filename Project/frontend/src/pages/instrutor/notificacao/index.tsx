@@ -7,15 +7,24 @@ import { useNotificacao } from "../../../context/notificacaoContext";
 import api from "../../../services/api";
 
 interface INotificacao {
+    tipo: string;
+    alteradoPor: number;
     id: number;
     nome: string;
     texto: string;
     dataHora: string;
 }
 
+interface IUsuario {
+    EDV: number;
+    name: string;
+    tipoUser: string;
+}
+
 function Notificacao() {
     const [busca, setBusca] = useState("");
     const [notificacoes, setNotificacoes] = useState<INotificacao[]>([]);
+    const [usuarios, setUsuarios] = useState<IUsuario[]>([]);
     const { marcarComoLida } = useNotificacao();
     const normalizar = (texto: string) =>
         texto
@@ -24,15 +33,25 @@ function Notificacao() {
             .toLowerCase();
     const formatarHistorico = (notificacao: INotificacao) => {
         if (notificacao.texto === "CREATE") {
-            return `${notificacao.nome} cadastrou um novo registro`;
+            if (notificacao.tipo === "TURMA")
+                return `Cadastrou uma nova turma: ${notificacao.nome}.`;
+            if (notificacao.tipo === "PERFIL") {
+                return `Cadastrou um novo usuário: ${notificacao.nome}.`
+            }
         }
         if (notificacao.texto === "UPDATE") {
-            return `${notificacao.nome} atualizou as informações`;
+            if (notificacao.tipo === "TURMA")
+                return `Atualizou as informações da turma ${notificacao.nome}.`;
+            if (notificacao.tipo === "PERFIL")
+                return `Atualizou as informações do perfil.`
         }
         if (notificacao.texto === "DELETE") {
-            return `${notificacao.nome} removeu um registro`;
+            if (notificacao.tipo === "TURMA")
+                return `Removeu a turma ${notificacao.nome}.`;
+            if (notificacao.tipo === "PERFIL")
+                return `Removeu o usuário ${notificacao.nome}.`
         }
-        return `${notificacao.nome} realizou uma alteração`;
+        return `Realizou uma alteração`;
     };
     const formatarData = (data: string) => {
         return new Date(data).toLocaleString("pt-BR");
@@ -40,16 +59,46 @@ function Notificacao() {
     const fetchNotificacoes = async () => {
         try {
             const response = await api.get("/historico/verHistorico");
+            console.log(response.data)
             setNotificacoes(response.data);
-        } catch (error) {
+        } 
+        catch (error) {
             console.error("Erro ao buscar histórico:", error);
             setNotificacoes([]);
+        }
+    };
+    const fetchUsuarios = async () => {
+        try {
+            const [aprendizes, instrutores] = await Promise.all([
+                api.get("/auth/buscaruser/APRENDIZ"),
+                api.get("/auth/buscaruser/INSTRUTOR")
+            ]);
+
+            const listaUsuarios = [
+                ...aprendizes.data,
+                ...instrutores.data
+            ];
+            setUsuarios(listaUsuarios);
+        } 
+        catch(error) {
+            console.error("Erro ao buscar usuários:", error);
         }
     };
     useEffect(() => {
         marcarComoLida();
         fetchNotificacoes();
+        fetchUsuarios();
     }, []);
+
+    const nomeUsuario = (edv: number | number | null) => {
+        if(!edv){
+            return "Admin";
+        }
+        const usuario = usuarios.find(
+            (item) => item.EDV === Number(edv)
+        );
+        return usuario?.name ?? "Admin";
+    };
 
     const filtro = notificacoes
         .filter((item) => {
@@ -58,6 +107,7 @@ function Notificacao() {
                 normalizar(item.nome).includes(termo) ||
                 normalizar(item.texto).includes(termo) ||
                 normalizar(item.dataHora).includes(termo) ||
+                normalizar(nomeUsuario(item.alteradoPor)).includes(termo) ||
                 item.id.toString().includes(termo)
             );
         })
@@ -79,9 +129,9 @@ function Notificacao() {
                         <h1 className="notificacao-titulo">Histórico de Atualização</h1>
                         <div className="notificacao-lista">
                             {filtro.length > 0 ? (
-                                filtro.map((notificacao) => (
-                                    <div className="notificacao-card" key={notificacao.id}>
-                                        <span className="notificacao-nome">{notificacao.nome}</span>
+                                filtro.map((notificacao, index) => (
+                                    <div className="notificacao-card" key={`${notificacao.id}-${index}`}>
+                                        <span className="notificacao-nome">{nomeUsuario(notificacao.alteradoPor)}</span>
                                         <span className="notificacao-texto">{formatarHistorico(notificacao)}</span>
                                         <span className="notificacao-texto">{formatarData(notificacao.dataHora)}</span>
                                     </div>
