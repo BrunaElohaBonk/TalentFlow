@@ -79,7 +79,7 @@ function CursoComplementar({ visible, setVisible }: Props) {
             setCursos((prev) => prev.filter((curso) => curso.id !== id));
             Swal.fire({
                 title: 'Deletada!',
-                text: 'Idioma removido com sucesso!',
+                text: 'Cursos removido com sucesso!',
                 icon: 'success'
             })
         }
@@ -87,7 +87,7 @@ function CursoComplementar({ visible, setVisible }: Props) {
             console.error('Erro ao deletar:', error)
             Swal.fire({
                 title: 'Erro!',
-                text: 'Erro ao deletar Idioma',
+                text: 'Erro ao deletar Cursos',
                 icon: 'error'
             })
         }

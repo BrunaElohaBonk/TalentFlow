@@ -1,13 +1,17 @@
 import './adicionar_competencia.css'
 import sair from '../../../../assets/img/close.png'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import { FormControl, FormControlLabel, Radio, RadioGroup } from "@mui/material";
+import api from '../../../../services/api'
 
 interface ICompetencia {
     nomeCompetencia: string;
     nivel: string;
+}
+interface user {
+    edv: number;
 }
 
 interface Props {
@@ -26,6 +30,18 @@ function AdicionarCompetencia({
         nomeCompetencia: '',
         nivel: ''
     })
+    const [aprendiz, setAprendiz] = useState<user | null>(null);
+    useEffect(() => {
+        async function carregarPerfil() {
+            const usuario = localStorage.getItem("usuario");
+            if (!usuario) return;
+            const aprendizLogado = JSON.parse(usuario);
+            const edv = aprendizLogado.user.EDV;
+            setAprendiz({ edv });
+        }
+        carregarPerfil();
+    }, []);
+
 
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement>
@@ -64,13 +80,13 @@ function AdicionarCompetencia({
         }
 
         try{
-            await axios.post(
-                `link backend`,
-                {
-                    ...competencia
-                }
-            )
+            const response = await api.get(`/aprendiz/meuPerfil/${aprendiz.edv}`);
 
+            const perfil = response.data.data;
+             await api.post(`/aprendiz/adicionarCursos/${perfil.id}`, {
+                nome_Competencia: competencia.nomeCompetencia,
+                nivel_Competencia:competencia.nivel,
+            }); 
             Swal.fire({
                 title:'Sucesso!',
                 text:'Competência adicionada com sucesso.',

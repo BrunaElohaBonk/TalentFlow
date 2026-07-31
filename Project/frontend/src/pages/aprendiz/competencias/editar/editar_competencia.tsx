@@ -64,8 +64,7 @@ function EditarCompetencia({
             return;
         }
         try{
-            await axios.put(
-                `link backend/${id}`,
+            await axios.put( `/deletarCompetencia/:${edv}/${id}`,
                 {
                     ...competencia
                 }

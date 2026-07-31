@@ -73,20 +73,35 @@ export default class aprendizController {
         const { EDV } = req.params;
 
         const formacao = await AprendizService.adicionarFormacaoAcademica(
-            Number(EDV),
-            req.body,
-            req.user!.EDV
+          Number(EDV),
+          req.body,
+          req.user!.EDV
         );
-
+        
         return res.status(201).json({
-            response: "Formação acadêmica adicionada com sucesso!",
-            data: formacao
+          response: "Formação acadêmica adicionada com sucesso!",
+          data: formacao
         });
-
-    } catch(error){
+        
+      } catch(error){
         next(error);
+      }
     }
-}
+    static async adicionarCompetencia(
+      req: Request, res: Response) {
+        const { id } = req.params;
+    
+    
+        const Competencia = await AprendizService.adicionarCompetencia(
+          Number(id),
+          req.body,
+        );
+    
+        return res.status(200).json({
+          message: "Competencia da formação adicionado!",
+          data: Competencia,
+        });
+      }
 
   static async atualizarFoto(req: Request, res: Response) {
     const { EDV } = req.params;
@@ -432,6 +447,23 @@ export default class aprendizController {
 
       return res.status(200).json({
         message: "Idioma deletado com sucesso.",
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async deletarCompetencia(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const { EDV, id } = req.params;
+
+      await AprendizService.deletarCompetencia(Number(EDV), Number(id));
+
+      return res.status(200).json({
+        message: "Competencia deletado com sucesso.",
       });
     } catch (error) {
       next(error);

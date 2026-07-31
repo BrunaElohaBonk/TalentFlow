@@ -123,6 +123,13 @@ route.put(
   aprendizController.adicionarCertificadoFormacao
 );
 
+route.post(
+  "/adicionarCompetencia/:EDV",
+  authMiddleware,
+  roleMiddleware("APRENDIZ"),
+  ownerMiddleware,
+  aprendizController.adicionarCompetencia
+);
 route.put(
   "/curso/certificado/:id",
   authMiddleware,
@@ -246,6 +253,13 @@ route.delete(
   roleMiddleware("APRENDIZ"),
   ownerMiddleware,
   aprendizController.deletarIdioma,
+);
+route.delete(
+  "/deletarCompetencia/:EDV/:id",
+  authMiddleware,
+  roleMiddleware("APRENDIZ"),
+  ownerMiddleware,
+  aprendizController.deletarCompetencia,
 );
 route.delete(
   "/deletarCursos/:EDV/:id",

@@ -38,6 +38,7 @@ function Competencia({ visible, setVisible }: Props) {
     const [competenciaSelecionada, setCompetenciaSelecionada] = useState<any>(null);
     const [editarCompetencia, setEditarCompetencia] = useState(false);
     const [adicionarCompetencia, setAdicionarCompetencia] = useState(false);
+    const [competencia, setcompetencia] = useState<Competencias[]>([]);
     const [apireq, setApireq] = useState<Perfil | null>(null);
     const [aprendiz, setAprendiz] = useState<user | null>(null);
     useEffect(() => {
@@ -59,25 +60,23 @@ function Competencia({ visible, setVisible }: Props) {
     }
 
     const handleDelete = async (id: number) => {
-
         const confirm = await Swal.fire({
             title: 'Tem certeza?',
-            text: 'O Curso Complementar será deletado!',
+            text: 'O idioma será deletado!',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Sim, deletar!',
             cancelButtonText: 'Cancelar'
         })
-
         if (!confirm.isConfirmed) {
             return
         }
-
         try {
-            await axios.delete(`link backend/${id}`)
+            await api.delete(`/aprendiz/deletarCompetencia/${apireq.EDV_Aprendiz}/${id}`);
+            setcompetencia((prev) => prev.filter((competencia) => competencia.id !== id));
             Swal.fire({
-                title: 'Deletado!',
-                text: 'Curso Complementar removido com sucesso!',
+                title: 'Deletada!',
+                text: 'competencia removido com sucesso!',
                 icon: 'success'
             })
         }
@@ -85,7 +84,7 @@ function Competencia({ visible, setVisible }: Props) {
             console.error('Erro ao deletar:', error)
             Swal.fire({
                 title: 'Erro!',
-                text: 'Erro ao deletar Curso Complementar',
+                text: 'Erro ao deletar competencia',
                 icon: 'error'
             })
         }
@@ -105,7 +104,7 @@ function Competencia({ visible, setVisible }: Props) {
                 <span className="competencia-lista-titulo">Competências</span>
                 <div className="competencia-modal">
                     {
-                        apireq.competencias.length === 0 ?
+                        apireq?.competencias?.length === 0 ?
                             <p className="competencia-vazia">Nenhuma formação acadêmica encontrada.</p>
                             :
                             apireq?.competencias?.map((item) => (
