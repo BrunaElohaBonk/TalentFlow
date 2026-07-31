@@ -139,7 +139,7 @@ function EditarPerfil({ visible, setVisible, edv }: Props){
                 text: "Seu perfil foi atualizado com sucesso!",
                 icon: "success",
             });
-            console.log(response.data);
+            
             setVisible(false);
         }
         catch (e) {

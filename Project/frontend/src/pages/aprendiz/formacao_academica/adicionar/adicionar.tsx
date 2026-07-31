@@ -2,7 +2,7 @@ import "./adicionar.css";
 import sair from "../../../../assets/img/close.png";
 import { useState } from "react";
 import Swal from "sweetalert2";
-import axios from "axios";
+import api from "../../../../services/api";
 import { FormControl, FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import { useDropzone } from "react-dropzone";
 import download from "../../../../assets/img/icon download.png";
@@ -15,20 +15,23 @@ interface IFormacao {
     periodoAtual: string;
     totalPeriodos: string;
     nivelFormacao: string;
-    descricao: string;
-    certificado: File |null;
+    certificado: File | null;
 }
 
 interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
     setFormacaoAcademica: React.Dispatch<React.SetStateAction<boolean>>;
+    edv: number;
+    atualizarFormacoes: () => void;
 }
 
 function AdicionarFormacaoAcademica({
     visible,
     setVisible,
     setFormacaoAcademica,
+    edv,
+    atualizarFormacoes
 }: Props) {
     const { darkMode } = useTheme();
     const [formacao, setFormacao] = useState<IFormacao>({
@@ -38,7 +41,6 @@ function AdicionarFormacaoAcademica({
         periodoAtual: "",
         totalPeriodos: "",
         nivelFormacao: "",
-        descricao: "",
         certificado: null,
     });
 
@@ -103,8 +105,8 @@ function AdicionarFormacaoAcademica({
             !formacao.instituicao ||
             !formacao.situacao ||
             !formacao.totalPeriodos ||
-            !formacao.nivelFormacao ||
-            !formacao.descricao
+            !formacao.nivelFormacao
+
         ) {
             Swal.fire({
                 title: "Atenção!",
@@ -131,37 +133,18 @@ function AdicionarFormacaoAcademica({
         }
 
         try {
-            const formData = new FormData();
-
-            formData.append("curso", formacao.curso);
-            formData.append("instituicao", formacao.instituicao);
-            formData.append("situacao", formacao.situacao);
-            formData.append("periodoAtual", formacao.periodoAtual);
-            formData.append("totalPeriodos", formacao.totalPeriodos);
-            formData.append(
-                "nivelFormacao",
-                formacao.nivelFormacao
-            );
-            formData.append("descricao", formacao.descricao);
-
-            if (formacao.certificado) {
-                formData.append(
-                    "certificado",
-                    formacao.certificado
-                );
-            }
-
-            const response = await axios.post(
-                "link backend",
-                formData,
+            const response = await api.post(
+                `/aprendiz/adicionarFormacao/${edv}`,
                 {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
+                    curso: formacao.curso,
+                    instituicao: formacao.instituicao,
+                    situacao: formacao.situacao,
+                    periodoAtual: formacao.periodoAtual,
+                    totalPeriodos: formacao.totalPeriodos,
+                    nivelFormacao: formacao.nivelFormacao,
+                    certificado: null
                 }
             );
-
-            console.log(response.data);
 
             Swal.fire({
                 title: "Sucesso!",
@@ -179,7 +162,6 @@ function AdicionarFormacaoAcademica({
                 periodoAtual: "",
                 totalPeriodos: "",
                 nivelFormacao: "",
-                descricao: "",
                 certificado: null,
             });
 
@@ -288,7 +270,7 @@ function AdicionarFormacaoAcademica({
                                         name="periodoAtual"
                                         className={
                                             formacao.situacao ===
-                                            "Cursando"
+                                                "Cursando"
                                                 ? "adicionarFormacao-input"
                                                 : "adicionarFormacao-input periodo-disabled"
                                         }
@@ -335,18 +317,6 @@ function AdicionarFormacaoAcademica({
                         </select>
                     </div>
 
-                    <div className="adicionarFormacao-grupo">
-                        <label className="adicionarFormacao-label">
-                            Descrição
-                        </label>
-
-                        <textarea
-                            name="descricao"
-                            className="adicionarFormacao-textarea"
-                            value={formacao.descricao}
-                            onChange={handleChange}
-                        />
-                    </div>
 
                     <div className="adicionarFormacao-grupo">
                         <label className="adicionarFormacao-label">

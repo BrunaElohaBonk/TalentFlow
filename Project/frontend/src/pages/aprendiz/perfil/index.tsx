@@ -146,15 +146,9 @@ function Perfil() {
     const [idSituacao, setIdSituacao] = useState<number | null>(null);
 
     useEffect(() => {
-        console.log("ESTADO IDIOMA:", idioma);
-    }, [idioma]);
-
-    useEffect(() => {
         async function carregarPerfil() {
             const usuario = localStorage.getItem("usuario");
-            console.log(usuario)
             const aprendizLogado = JSON.parse(usuario);
-            console.log("APRENDIZ ", aprendizLogado.user);
             setAprendiz({
                 edv: aprendizLogado.user.EDV,
                 img: aprendizLogado.user.imagem,
@@ -170,8 +164,6 @@ function Perfil() {
                 const response = await api.get(
                     `/aprendiz/meuPerfil/${aprendizLogado.user.EDV}`
                 );
-                console.log("DADOS DO PERFIL:", response.data.data);
-                console.log("SITUAÇÃO:", response.data.data.situacao_profissional);
 
                 setApireq(response.data.data);
                 setIdSituacao(response.data.data.situacao_profissional[0].id);
@@ -187,8 +179,7 @@ function Perfil() {
 
         navigate('/')
     }
-    console.log("a", aprendiz)
-    console.log("SITUAÇÃO ID:", apireq?.situacao_profissional[0]?.id);
+
     return (
         <>
             <div>
@@ -228,7 +219,7 @@ function Perfil() {
             <EditarPerfil visible={editar} setVisible={setEditar} edv={aprendiz?.edv} />
             <EditarSituacaoProfissional visible={editarSituacao} setVisible={setEditarSituacao} setSituacaoProfissional={setSituacao} edv={aprendiz?.edv ?? 0} idSituacao={apireq?.situacao_profissional?.[0]?.id ?? 0} />
             <EditarFormacaoAcademica visible={editarFormacao} setVisible={setEditarFormacao} setFormacaoAcademica={setFormacaoAcademica} id={1} />
-            <AdicionarFormacaoAcademica visible={adicionarFormacao} setVisible={setAdicionarFormacao} setFormacaoAcademica={setFormacaoAcademica} />
+            <AdicionarFormacaoAcademica visible={adicionarFormacao} setVisible={setAdicionarFormacao} setFormacaoAcademica={setFormacaoAcademica} edv={aprendiz?.edv ?? 0} />
 
             <main className="perfil-tela">
                 <section className="perfil-bloco">
@@ -270,14 +261,22 @@ function Perfil() {
                             </button>
                         </div>
                         <div className="perfil-card-perfil">
-                            <h3>Formação Acadêmica </h3>
-                            <ul>{apireq?.formacao_academica.map((formacao) => (
-                                <li key={formacao.id}>
-                                    {formacao.name_Curso} - {formacao.status_Academico}
-                                </li>
-                            ))}
+                            <h3>Formação Acadêmica</h3>
+                            <ul>
+                                {apireq?.formacao_academica
+                                    .slice(0, 2)
+                                    .map((formacao, index) => (
+                                        <li key={formacao.id}>
+                                            {formacao.name_Curso} - {formacao.status_Academico}
+                                            {index === 1 && apireq.formacao_academica.length > 2 && "..."}
+                                        </li>
+                                    ))
+                                }
                             </ul>
-                            <button className="perfil-btn-visualizar" onClick={() => setFormacaoAcademica(true)}>
+                            <button
+                                className="perfil-btn-visualizar"
+                                onClick={() => setFormacaoAcademica(true)}
+                            >
                                 <img src={icon_olho} alt="Visualizar" />
                             </button>
                         </div>
@@ -299,7 +298,7 @@ function Perfil() {
                             <h3>Idiomas</h3>
                             <ul>{apireq?.idiomas.slice(0, 2).map((idiomas) => (
                                 <li key={idiomas.id}>
-                                     {formatarIdioma(idiomas.nome_Idioma)}
+                                    {formatarIdioma(idiomas.nome_Idioma)}
                                 </li>
                             ))}
                             </ul>
