@@ -415,6 +415,42 @@ export default class aprendizController {
       next(error);
     }
   }
+  static async adicionarSoftskills(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+) {
+    const { EDV } = req.params;
+
+    const softskills = await AprendizService.adicionarSoftskills(
+        Number(EDV),
+        req.body,
+        req.user!.EDV
+    );
+
+    return res.status(201).json({
+        message: "Softskills adicionadas com sucesso!",
+        data: softskills
+    });
+}
+static async deletarSoftskill(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+) {
+    const { EDV, id } = req.params;
+
+    const softskill = await AprendizService.deletarSoftskill(
+        Number(EDV),
+        Number(id),
+        req.user!.EDV
+    );
+
+    return res.status(200).json({
+        message: "Softskill deletada com sucesso!",
+        data: softskill
+    });
+}
 
   static async deletarFormacao(
     req: Request,

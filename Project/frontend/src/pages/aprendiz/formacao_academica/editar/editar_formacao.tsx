@@ -2,7 +2,6 @@ import './editar_formacao.css'
 import sair from '../../../../assets/img/close.png'
 import { useState, useEffect } from 'react'
 import Swal from 'sweetalert2'
-import axios from 'axios'
 import { FormControl, FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import { useDropzone } from "react-dropzone";
 import download from '../../../../assets/img/icon download.png'
