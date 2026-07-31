@@ -1,14 +1,32 @@
 import './ver_idioma.css'
 import icon_fechar from '../../../../assets/img/close.png'
 
+const formatarIdioma = (idioma: string) => {
+    const idiomas: Record<string, string> = {
+        ALEMAO: "Alemão",
+        ARABE: "Árabe",
+        COREANO: "Coreano",
+        ESPANHOL: "Espanhol",
+        FRANCES: "Francês",
+        INGLES: "Inglês",
+        ITALIANO: "Italiano",
+        JAPONES: "Japonês",
+        MANDARIM: "Mandarim",
+        RUSSO: "Russo",
+        TAILANDES: "Tailandês"
+    };
+
+    return idiomas[idioma] || idioma;
+};
 interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
     idioma: {
         id: number;
-        nomeIdioma: string;
-        nivel: string;
-        certificado: File | null;
+        Id_Profile: number;
+        nome_Idioma: string;
+        nivel_Idioma: string;
+        certificado: string | null;
     };
 }
 
@@ -29,30 +47,25 @@ function IdiomaVisualizar({
                     <h2>Idioma</h2>
                     <div className="idiomaVisualizar-acoes">
                         <button className="idiomaVisualizar-fechar" onClick={() => setVisible(false)}>
-                            <img src={icon_fechar} alt="Fechar"/>
+                            <img src={icon_fechar} alt="Fechar" />
                         </button>
                     </div>
                 </div>
                 <div className="idiomaVisualizar-conteudo">
                     <div className="idiomaVisualizar-item">
                         <span>Nome do Idioma</span>
-                        <p>{idioma.nomeIdioma || "Não informado."}</p>
+                        <p>{formatarIdioma(idioma.nome_Idioma) || "Não informado."}</p>
                     </div>
                     <div className="idiomaVisualizar-item">
                         <span>Nível</span>
-                        <p>{idioma.nivel || "Não informado."}</p>
+                        <p>{idioma.nivel_Idioma || "Não informado."}</p>
                     </div>
                     <div className="idiomaVisualizar-item certificado-item">
                         <span>Certificado</span>
-                        {
-                            idioma.certificado ? (
-                                <p>
-                                    <img src={URL.createObjectURL(idioma.certificado)} alt="Certificado" className="certificado-img"/>
-                                </p>
-                            ) : (
-                                <p>Não incluído</p>
-                            )
-                        }
+
+                        <p>
+                            {idioma.certificado ?? "Não incluído"}
+                        </p>
                     </div>
                 </div>
             </div>

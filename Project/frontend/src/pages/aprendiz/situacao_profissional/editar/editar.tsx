@@ -212,7 +212,7 @@ function EditarSituacaoProfissional({ visible, setVisible, setSituacaoProfission
                     </div>
                     <div className="editarSituacao-grupo">
                         <label className="editarSituacao-label">
-                            Descrição
+                            Situação atual e expectativas para o futuro
                         </label>
                         <textarea
                             name="descricao"

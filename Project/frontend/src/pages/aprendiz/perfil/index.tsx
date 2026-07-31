@@ -20,6 +20,23 @@ import './perfil.css';
 import api from "../../../services/api";
 import { useNavigate } from "react-router-dom";
 
+const formatarIdioma = (idioma: string) => {
+    const idiomas: Record<string, string> = {
+        ALEMAO: "Alemão",
+        ARABE: "Árabe",
+        COREANO: "Coreano",
+        ESPANHOL: "Espanhol",
+        FRANCES: "Francês",
+        INGLES: "Inglês",
+        ITALIANO: "Italiano",
+        JAPONES: "Japonês",
+        MANDARIM: "Mandarim",
+        RUSSO: "Russo",
+        TAILANDES: "Tailandês"
+    };
+
+    return idiomas[idioma] || idioma;
+};
 interface Usuario {
     edv: number;
     img: string;
@@ -127,6 +144,10 @@ function Perfil() {
     const [adicionarFormacao, setAdicionarFormacao] = useState(false)
     const navigate = useNavigate()
     const [idSituacao, setIdSituacao] = useState<number | null>(null);
+
+    useEffect(() => {
+        console.log("ESTADO IDIOMA:", idioma);
+    }, [idioma]);
 
     useEffect(() => {
         async function carregarPerfil() {
@@ -278,7 +299,7 @@ function Perfil() {
                             <h3>Idiomas</h3>
                             <ul>{apireq?.idiomas.slice(0, 2).map((idiomas) => (
                                 <li key={idiomas.id}>
-                                    {idiomas.nome_Idioma}
+                                     {formatarIdioma(idiomas.nome_Idioma)}
                                 </li>
                             ))}
                             </ul>

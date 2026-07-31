@@ -19,6 +19,7 @@ interface Props {
     setIdioma: React.Dispatch<React.SetStateAction<boolean>>;
     id: number;
     edv: number;
+    carregarIdiomas: () => void;
 }
 
 function AdicionarIdioma({
@@ -26,7 +27,8 @@ function AdicionarIdioma({
     setVisible,
     setIdioma,
     id,
-    edv
+    edv,
+    carregarIdiomas
 }: Props) {
 
     const [idioma, setIdiomaState] = useState<IIdioma>({
@@ -104,23 +106,26 @@ function AdicionarIdioma({
             return;
         }
         try {
-            await api.post(`/adicionarIdioma/${id}`, {
-                    nome_Idioma: idioma.nomeIdioma,
-                    nivel_Idioma: idioma.nivel
-                 })
-            
-            Swal.fire({
+            await api.post(`/aprendiz/adicionarIdioma/${id}`, {
+                nome_Idioma: idioma.nomeIdioma,
+                nivel_Idioma: idioma.nivel
+            })
+            carregarIdiomas();
+
+            await Swal.fire({
                 title: 'Sucesso!',
                 text: 'Idioma adicionado com sucesso.',
                 icon: 'success',
                 confirmButtonColor: '#2B83D5'
             })
             setVisible(false);
-        } catch (error) {
-            console.error(error)
+
+        } catch (error: any) {
+            console.error("ERRO AO ADICIONAR IDIOMA:", error.response?.data || error);
+
             Swal.fire({
                 title: 'Erro!',
-                text: 'Não foi possível adicionar o idioma.',
+                text: error.response?.data?.message || 'Não foi possível adicionar o idioma.',
                 icon: 'error'
             })
         }
@@ -133,10 +138,12 @@ function AdicionarIdioma({
     return (
         <div className="adicionarIdioma-overlay" onClick={() => setVisible(false)}>
             <form onSubmit={handleSubmit} className="adicionarIdioma-card" onClick={(e) => e.stopPropagation()}>
-                <button type="button" className="adicionarIdioma-fechar" onClick={() => {
-                    setVisible(false)
-                    setIdioma(true)
-                }}
+                <button
+                    type="button"
+                    className="adicionarIdioma-fechar"
+                    onClick={() => {
+                        setVisible(false);
+                    }}
                 >
                     <img src={sair} alt="Fechar" />
                 </button>
@@ -255,6 +262,6 @@ function AdicionarIdioma({
             </form>
         </div>
     )
-}
 
+}
 export default AdicionarIdioma

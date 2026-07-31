@@ -137,12 +137,13 @@ route.put(
   validationMiddleware(atualizarCursoSchema),
   aprendizController.atualizarCursos,
 );
-route.post(
-  "/adicionarIdioma/:id",
+route.put(
+  "/atualizarIdiomas/:EDV/:id",
   authMiddleware,
   roleMiddleware("APRENDIZ"),
-  adicionarIdioma
+  aprendizController.atualizarIdiomas
 );
+
 route.get(
   "/meuPerfil/:EDV",
   authMiddleware,
@@ -212,5 +213,11 @@ route.get(
   roleMiddleware("INSTRUTOR"),
   aprendizController.filtrarTudoAprendiz,
 );
-
+route.delete(
+  "/deletarIdioma/:EDV/:id",
+  authMiddleware,
+  roleMiddleware("APRENDIZ"),
+  ownerMiddleware,
+  aprendizController.deletarIdioma,
+);
 export default route;

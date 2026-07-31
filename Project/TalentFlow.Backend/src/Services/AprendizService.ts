@@ -393,42 +393,42 @@ export default class AprendizService {
 
   static async atualizarIdiomas(
     EDV: number,
-    Id_Profile: number,
+    id: number,
     data: AtualizarIdiomasDto,
     usuarioEDV: number,
-  ) {
+) {
     return await prisma.$transaction(async (tx: any) => {
-      const idiomasAntigo = await tx.idiomas.findUnique({
-        where: {
-          id: data.id,
-          profile: { EDV_Aprendiz: EDV },
-        },
-      });
-      if (!idiomasAntigo) {
-        throw new Error("Perfil não encontrado.");
-      }
-      const idiomasAtualizado = await tx.idiomas.update({
-        where: {
-          id: data.id,
-          profile: { EDV_Aprendiz: EDV },
-        },
-        data,
-      });
 
-      await this.registrarHistorico(
-        tx,
-        Id_Profile,
-        TipoHistorico.IDIOMA,
-        data.id,
-        usuarioEDV,
-        idiomasAntigo,
-        idiomasAtualizado,
-      );
+        const idiomasAntigo = await tx.idiomas.findUnique({
+            where: {
+                id: id,
+            },
+        });
 
-      return idiomasAtualizado;
+        if (!idiomasAntigo) {
+            throw new Error("Idioma não encontrado.");
+        }
+
+        const idiomasAtualizado = await tx.idiomas.update({
+            where: {
+                id: id,
+            },
+            data,
+        });
+
+        await this.registrarHistorico(
+            tx,
+            idiomasAntigo.Id_Profile,
+            TipoHistorico.IDIOMA,
+            id,
+            usuarioEDV,
+            idiomasAntigo,
+            idiomasAtualizado,
+        );
+
+        return idiomasAtualizado;
     });
-  }
-
+}
   static async atualizarCursos(
     EDV: number,
     Id_Profile: number,
@@ -586,7 +586,16 @@ export default class AprendizService {
       },
     });
   }
-
+  static async deletarIdioma(EDV: number, id: number) {
+    return await prisma.idiomas.deleteMany({
+      where: {
+        id,
+        profile: {
+          EDV_Aprendiz: EDV,
+        },
+      },
+    });
+  }
   static async verCursos(EDV: number, id: number) {
     return await prisma.cursos.findMany({
       where: {

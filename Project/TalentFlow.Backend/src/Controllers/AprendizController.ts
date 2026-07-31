@@ -7,7 +7,8 @@ import { AuthRequest } from "../Middlewares/authMiddleware.ts";
 export async function adicionarIdioma(req: Request, res: Response) {
   try {
     const { id } = req.params;
-
+    console.log("ID RECEBIDO:", req.params.id);
+    console.log("BODY:", req.body);
     const idioma = await AprendizService.adicionarIdioma(
       Number(id),
       req.body
@@ -29,7 +30,7 @@ export async function adicionarIdioma(req: Request, res: Response) {
 
 export default class aprendizController {
   static async criar(req: AuthRequest, res: Response) {
-    console.log("bory "+req.body);
+    console.log("bory " + req.body);
     console.log("user" + req.user);
     const aprendiz = await AprendizService.criar(req.body, req.user!.EDV);
 
@@ -98,7 +99,7 @@ export default class aprendizController {
       data: idioma,
     });
   }
-  
+
   static async atualizarPerfil(
     req: AuthRequest, // mudar todos para AuthRequest
     res: Response,
@@ -146,9 +147,9 @@ export default class aprendizController {
     next: NextFunction,
   ) {
     const { EDV, id } = req.params;
-  
+
     console.log("PARAMS RECEBIDOS:", req.params);
-  
+
     const situacaoAtualizada =
       await AprendizService.atualizarSituacaoProfissional(
         Number(EDV),
@@ -156,7 +157,7 @@ export default class aprendizController {
         req.body,
         req.user!.EDV,
       );
-  
+
     return res.status(200).json({
       response: "Situação profissional atualizada com sucesso!",
       data: situacaoAtualizada,
@@ -182,7 +183,7 @@ export default class aprendizController {
       data: softskill,
     });
   }
-  
+
   static async atualizarCompetencias(
     req: AuthRequest,
     res: Response,
@@ -316,7 +317,7 @@ export default class aprendizController {
       data: softskills,
     });
   }
-  
+
   static async verCompetencias(
     req: AuthRequest,
     res: Response,
@@ -368,5 +369,22 @@ export default class aprendizController {
     const aprendizes = await DashboardService.filtrarTudo(req.query);
 
     return res.status(200).json(aprendizes);
+  }
+  static async deletarIdioma(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const { EDV, id } = req.params;
+
+      await AprendizService.deletarIdioma(Number(EDV), Number(id));
+
+      return res.status(200).json({
+        message: "Idioma deletado com sucesso.",
+      });
+    } catch (error) {
+      next(error);
+    }
   }
 }
