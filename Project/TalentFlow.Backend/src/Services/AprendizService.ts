@@ -477,43 +477,60 @@ export default class AprendizService {
 
       return idiomasAtualizado;
     });
-  }
-  static async atualizarCursos(
-    EDV: number,
-    Id_Profile: number,
-    data: AtualizarCursosComplementaresDto,
-    usuarioEDV: number,
-  ) {
-    return await prisma.$transaction(async (tx: any) => {
-      const cursosAntigo = await tx.cursos.findUnique({
-        where: {
-          id: data.id,
-          profile: { EDV_Aprendiz: EDV },
-        },
-      });
-      if (!cursosAntigo) {
-        throw new Error("Perfil não encontrado.");
-      }
-      const cursosAtualizado = await tx.cursos.update({
-        where: {
-          id: data.id,
-          profile: { EDV_Aprendiz: EDV },
-        },
-        data,
-      });
-      await this.registrarHistorico(
-        tx,
-        Id_Profile,
-        TipoHistorico.CURSO,
-        data.id,
-        usuarioEDV,
-        cursosAntigo,
-        cursosAtualizado,
-      );
+}
+static async atualizarCursos(
+  EDV: number,
+  Id_Profile: number,
+  data: AtualizarCursosComplementaresDto,
+  usuarioEDV: number,
+) {
+  console.log("DATA:", data);
+  console.log("DATA.ID:", data.id_Curso);
 
-      return cursosAtualizado;
+  const dataConclusao = new Date(
+    data.data_Conclusao.split("/").reverse().join("-")
+  );
+
+  return await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+
+    const cursosAntigo = await tx.cursos.findFirst({
+      where: {
+        id: data.id_Curso,
+        profile: {
+          EDV_Aprendiz: EDV,
+        },
+      },
     });
-  }
+
+    if (!cursosAntigo) {
+      throw new Error("Curso não encontrado.");
+    }
+
+    const cursosAtualizado = await tx.cursos.update({
+      where: {
+        id: data.id_Curso,
+      },
+      data: {
+        name_Curso: data.name_Curso,
+        status_Cursos: data.status_Cursos,
+        data_Conclusao: dataConclusao,
+        carga_horaria: data.carga_horaria,
+      },
+    });
+
+    await this.registrarHistorico(
+      tx,
+      Id_Profile,
+      TipoHistorico.CURSO,
+      data.id_Curso,
+      usuarioEDV,
+      cursosAntigo,
+      cursosAtualizado,
+    );
+
+    return cursosAtualizado;
+  });
+}
 
   static async atualizarSoftskills(
     EDV: number,

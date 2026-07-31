@@ -3,6 +3,7 @@ import AprendizService, {
   DashboardService,
 } from "../Services/AprendizService.ts";
 import { AuthRequest } from "../Middlewares/authMiddleware.ts";
+import { AtualizarCursosComplementaresDto } from "../DTO/aprendizDTO.ts";
 
 
 export default class aprendizController {
@@ -10,7 +11,7 @@ export default class aprendizController {
     try {
       const { id } = req.params;
       console.log("ID RECEBIDO:", req.params.id);
-      console.log("BODY:", req.body);
+      // console.log("BODY:", req.body);
       const idioma = await AprendizService.adicionarIdioma(
         Number(id),
         req.body
@@ -253,13 +254,17 @@ export default class aprendizController {
     next: NextFunction,
   ) {
     const { id, EDV } = req.params;
+    const data: AtualizarCursosComplementaresDto = req.body
+
+    console.log("bory", data)
 
     const curso = await AprendizService.atualizarCursos(
       Number(EDV),
       Number(id),
-      req.body,
+      data,
       req.user!.EDV,
     );
+    
 
     return res.status(200).json({
       response: "Curso atualizado com sucesso!",

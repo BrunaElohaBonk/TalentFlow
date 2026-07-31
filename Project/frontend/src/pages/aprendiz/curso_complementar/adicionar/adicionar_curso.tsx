@@ -2,7 +2,6 @@ import './adicionar_curso.css'
 import sair from '../../../../assets/img/close.png'
 import { useEffect, useState } from 'react'
 import Swal from 'sweetalert2'
-import axios from 'axios'
 import { FormControl, FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import { useDropzone } from "react-dropzone";
 import download from '../../../../assets/img/icon download.png'
@@ -19,6 +18,11 @@ interface cursosComplementares {
 };
 interface user {
     edv: number;
+}
+interface Perfil {
+    id: number,
+    EDV_Aprendiz: number,
+    cursos: cursosComplementares[],
 }
 
 interface Props {
@@ -43,6 +47,7 @@ function AdicionarCursoComplementar({
     })
 
     const [nomeCertificado, setNomeCertificado] = useState("");
+    const [apireq, setApireq] = useState<Perfil | null>(null);
 
     const [aprendiz, setAprendiz] = useState<user | null>(null);
 
@@ -60,6 +65,7 @@ function AdicionarCursoComplementar({
     const { getRootProps, getInputProps } = useDropzone({
         accept: {
             "image/*": [],
+            "application/pdf": []
         },
         multiple: false,
         maxFiles: 1,
@@ -126,9 +132,8 @@ function AdicionarCursoComplementar({
 
         if (
             !curso.name_Curso ||
-            !curso.status_Cursos ||
             !curso.data_Conclusao ||
-            !curso.carga_horaria
+            curso.carga_horaria === null
         ) {
 
             Swal.fire({
@@ -139,17 +144,37 @@ function AdicionarCursoComplementar({
             })
             return;
         }
+        if (!aprendiz) {
+            Swal.fire({
+                title: "Erro!",
+                text: "Usuário não encontrado.",
+                icon: "error"
+            });
+            return;
+        }
 
         try {
-             await api.put(`/atualizarCursos/${aprendiz}/${id_profile}`, {
+            const partesData = curso.data_Conclusao.split("/");
+
+
+            const dataFormatada = new Date(
+                Number(partesData[2]),
+                Number(partesData[1]) - 1,
+                Number(partesData[0])
+            );
+            const response = await api.get(`/aprendiz/meuPerfil/${aprendiz.edv}`);
+            const perfil = response.data.data;
+             await api.put(`aprendiz/atualizarCursos/${aprendiz.edv}/${perfil.id}`, {
                 id: curso.id,
                 Id_Profile: curso.Id_Profile,
-                certificado: curso.certificado,
                 name_Curso: curso.name_Curso,
                 status_Cursos: curso.status_Cursos,
-                data_Conclusao: new Date(curso.data_Conclusao),
-                carga_horaria: curso.carga_horaria
-            });
+                data_Conclusao: dataFormatada,
+                carga_horaria:  Number(curso.carga_horaria)
+            }); 
+            await api.put(`/curso/certificado/${curso.id}`,{
+                certificado: curso.certificado
+            })
 
             Swal.fire({
                 title: 'Sucesso!',
@@ -161,7 +186,10 @@ function AdicionarCursoComplementar({
             setVisible(false);
 
         } catch (error) {
-            console.error(error)
+            console.error(
+                "ERRO API:",
+                error.response?.data || error
+            );
             Swal.fire({
                 title: 'Erro!',
                 text: 'Não foi possível cadastrar o curso complementar.',
@@ -234,7 +262,7 @@ function AdicionarCursoComplementar({
                     </div>
                     <div className="adicionarCurso-grupo">
                         <label className="adicionarCurso-label">Data de Conclusão</label>
-                        <input type="text" name="data_Conclusao" maxLength={10} className="adicionarCurso-input" value={curso.data_Conclusao} onChange={handleDataConclusao} />
+                        <input type="text" name="data_Conclusao" maxLength={10} className="adicionarCurso-input" value={curso.data_Conclusao ?? ""} onChange={handleDataConclusao} />
                     </div>
                     <div className="adicionarCurso-grupo">
                         <label className="adicionarCurso-label">Carga Horária</label>
