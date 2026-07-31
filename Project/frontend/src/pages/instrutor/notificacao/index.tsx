@@ -8,11 +8,7 @@ import api from "../../../services/api";
 
 interface INotificacao {
     tipo: string;
-<<<<<<< HEAD
     alteradoPor: string;
-=======
-    alteradoPor: number;
->>>>>>> 687d80c4f2e91cc854f648f1c0b16c461deee4cb
     id: number;
     nome: string;
     texto: string;
@@ -64,11 +60,6 @@ function Notificacao() {
     const fetchNotificacoes = async () => {
         try {
             const response = await api.get("/historico/verHistorico");
-<<<<<<< HEAD
-            console.log(response.data)
-            setNotificacoes(response.data);
-        } catch (error) {
-=======
             console.log('DATAAAAA', response.data)
             const notificacoesValidas = response.data.filter(
                 (item: INotificacao) => item.alteradoPor !== null
@@ -76,7 +67,6 @@ function Notificacao() {
             setNotificacoes(notificacoesValidas);
         } 
         catch (error) {
->>>>>>> 687d80c4f2e91cc854f648f1c0b16c461deee4cb
             console.error("Erro ao buscar histórico:", error);
             setNotificacoes([]);
         }
@@ -104,16 +94,6 @@ function Notificacao() {
         fetchUsuarios();
     }, []);
 
-    const nomeUsuario = (edv: number | number | null) => {
-        if(!edv){
-            return "Admin";
-        }
-        const usuario = usuarios.find(
-            (item) => item.EDV === Number(edv)
-        );
-        return usuario?.name ?? "Admin";
-    };
-
     const filtro = notificacoes
         .filter((item) => {
             const termo = normalizar(busca.trim());
@@ -121,7 +101,7 @@ function Notificacao() {
                 normalizar(item.nome).includes(termo) ||
                 normalizar(item.texto).includes(termo) ||
                 normalizar(item.dataHora).includes(termo) ||
-                normalizar(nomeUsuario(item.alteradoPor)).includes(termo) ||
+                normalizar(item.alteradoPor).includes(termo) ||
                 item.id.toString().includes(termo)
             );
         })
@@ -143,15 +123,9 @@ function Notificacao() {
                         <h1 className="notificacao-titulo">Histórico de Atualização</h1>
                         <div className="notificacao-lista">
                             {filtro.length > 0 ? (
-<<<<<<< HEAD
-                                filtro.map((notificacao) => (
-                                    <div className="notificacao-card" key={notificacao.id}>
-                                        <span className="notificacao-nome">{notificacao.alteradoPor}</span>
-=======
                                 filtro.map((notificacao, index) => (
                                     <div className="notificacao-card" key={`${notificacao.id}-${index}`}>
-                                        <span className="notificacao-nome">{nomeUsuario(notificacao.alteradoPor)}</span>
->>>>>>> 687d80c4f2e91cc854f648f1c0b16c461deee4cb
+                                        <span className="notificacao-nome">{notificacao.alteradoPor}</span>
                                         <span className="notificacao-texto">{formatarHistorico(notificacao)}</span>
                                         <span className="notificacao-texto">{formatarData(notificacao.dataHora)}</span>
                                     </div>
