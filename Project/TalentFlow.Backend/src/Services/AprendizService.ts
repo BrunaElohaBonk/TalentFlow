@@ -329,7 +329,7 @@ export default class AprendizService {
     data: {
       name_Curso: string;
       status_Cursos: cursos_status_Cursos;
-      data_Conclusao: string;
+      data_Conclusao: Date | string;
       certificado?:string;
       carga_horaria:number;
     }

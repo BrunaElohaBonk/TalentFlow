@@ -163,10 +163,9 @@ function AdicionarCursoComplementar({
                 Number(partesData[0])
             );
             const response = await api.get(`/aprendiz/meuPerfil/${aprendiz.edv}`);
+
             const perfil = response.data.data;
-             await api.put(`/aprendiz/adicionarCursos/${aprendiz.edv}/${perfil.id}`, {
-                id: curso.id,
-                Id_Profile: curso.Id_Profile,
+             await api.post(`/aprendiz/adicionarCursos/${perfil.id}`, {
                 name_Curso: curso.name_Curso,
                 status_Cursos: curso.status_Cursos,
                 data_Conclusao: dataFormatada,

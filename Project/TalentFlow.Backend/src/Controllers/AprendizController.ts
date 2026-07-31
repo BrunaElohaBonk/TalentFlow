@@ -33,15 +33,15 @@ export default class aprendizController {
   static async adicionarCursos(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      console.log("ID RECEBIDO:", req.params.id);
-      const idioma = await AprendizService.adicionarCursos(
+      console.log("cursos",id);
+      const curso = await AprendizService.adicionarCursos(
         Number(id),
         req.body
       );
 
       res.status(201).json({
         mensagem: "Curso adicionado com sucesso.",
-        idioma
+        curso
       });
 
     } catch (error) {
