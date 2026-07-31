@@ -4,31 +4,32 @@ import AprendizService, {
 } from "../Services/AprendizService.ts";
 import { AuthRequest } from "../Middlewares/authMiddleware.ts";
 
-export async function adicionarIdioma(req: Request, res: Response) {
-  try {
-    const { id } = req.params;
-    console.log("ID RECEBIDO:", req.params.id);
-    console.log("BODY:", req.body);
-    const idioma = await AprendizService.adicionarIdioma(
-      Number(id),
-      req.body
-    );
-
-    res.status(201).json({
-      mensagem: "Idioma adicionado com sucesso.",
-      idioma
-    });
-
-  } catch (error) {
-    console.error(error);
-
-    res.status(500).json({
-      erro: "Não foi possível adicionar o idioma."
-    });
-  }
-}
 
 export default class aprendizController {
+  static async adicionarIdioma(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      console.log("ID RECEBIDO:", req.params.id);
+      console.log("BODY:", req.body);
+      const idioma = await AprendizService.adicionarIdioma(
+        Number(id),
+        req.body
+      );
+
+      res.status(201).json({
+        mensagem: "Idioma adicionado com sucesso.",
+        idioma
+      });
+
+    } catch (error) {
+      console.error(error);
+
+      res.status(500).json({
+        erro: "Não foi possível adicionar o idioma."
+      });
+    }
+  }
+
   static async criar(req: AuthRequest, res: Response) {
     console.log("bory " + req.body);
     console.log("user" + req.user);

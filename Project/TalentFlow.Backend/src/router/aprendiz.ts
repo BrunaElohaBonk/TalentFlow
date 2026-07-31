@@ -5,7 +5,7 @@ import { roleMiddleware } from "../Middlewares/roleMiddleware.ts";
 import { ownerMiddleware } from "../Middlewares/ownerMiddleware.ts";
 import { validationMiddleware } from "../Middlewares/validationMiddleware.ts";
 import { upload } from "../Middlewares/uploadMiddleware.ts";
-import { adicionarIdioma } from "../Controllers/AprendizController.js";
+
 import {
   criarAprendizSchema,
   atualizarPerfilSchema,
@@ -42,6 +42,12 @@ route.get(
   authMiddleware,
   roleMiddleware("INSTRUTOR"),
   aprendizController.verPerfil,
+);
+
+route.post(
+  "/adicionarIdioma/:id",
+  authMiddleware,
+  aprendizController.adicionarIdioma
 );
 
 route.put(
@@ -97,27 +103,27 @@ route.put(
   aprendizController.atualizarFoto,
 );
 route.put(
-    "/idioma/certificado/:id",
-    authMiddleware,
-    roleMiddleware("APRENDIZ"),
-    upload.single("certificado"),
-    aprendizController.adicionarCertificadoIdioma
+  "/idioma/certificado/:id",
+  authMiddleware,
+  roleMiddleware("APRENDIZ"),
+  upload.single("certificado"),
+  aprendizController.adicionarCertificadoIdioma
 );
 
 route.put(
-    "/formacao/certificado/:id",
-    authMiddleware,
-    roleMiddleware("APRENDIZ"),
-    upload.single("certificado"),
-    aprendizController.adicionarCertificadoFormacao
+  "/formacao/certificado/:id",
+  authMiddleware,
+  roleMiddleware("APRENDIZ"),
+  upload.single("certificado"),
+  aprendizController.adicionarCertificadoFormacao
 );
 
 route.put(
-    "/curso/certificado/:id",
-    authMiddleware,
-    roleMiddleware("APRENDIZ"),
-    upload.single("certificado"),
-    aprendizController.adicionarCertificadoCurso
+  "/curso/certificado/:id",
+  authMiddleware,
+  roleMiddleware("APRENDIZ"),
+  upload.single("certificado"),
+  aprendizController.adicionarCertificadoCurso
 );
 
 route.put(
@@ -215,6 +221,13 @@ route.get(
 );
 route.delete(
   "/deletarIdioma/:EDV/:id",
+  authMiddleware,
+  roleMiddleware("APRENDIZ"),
+  ownerMiddleware,
+  aprendizController.deletarIdioma,
+);
+route.delete(
+  "/deletarformacao/:EDV/:id",
   authMiddleware,
   roleMiddleware("APRENDIZ"),
   ownerMiddleware,
