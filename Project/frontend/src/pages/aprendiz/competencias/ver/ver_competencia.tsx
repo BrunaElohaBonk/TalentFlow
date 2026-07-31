@@ -16,6 +16,7 @@ function CompetenciaVisualizar({
     setVisible,
     competencia
 }: Props) {
+    
 
     if (!visible) {
         return null

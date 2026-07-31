@@ -5,15 +5,33 @@ import olho from '../../../assets/img/icon_olho.png'
 import icon_editar from '../../../assets/img/icon_editar.png'
 import adicionar from '../../../assets/img/icon adicionar.png'
 import fechar from '../../../assets/img/close.png'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CursoComplementarVisualizar from "./ver/ver_curso";
 import EditarCursoComplementar from "./editar/editar_curso";
 import AdicionarCursoComplementar from "./adicionar/adicionar_curso";
 import './curso_complementar.css'
+import api from "../../../services/api";
 
 interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+interface Perfil {
+    id: number,
+    EDV_Aprendiz: number,
+    cursos: cursosComplementares[],
+}
+interface cursosComplementares {
+    id: number;
+    certificado: string;
+    name_Curso: string;
+    status_Cursos: boolean;
+    data_Conclusao: Date;
+    carga_horaria: number;
+};
+interface user {
+    edv: number;
 }
 
 function CursoComplementar({ visible, setVisible }: Props) {
@@ -22,68 +40,26 @@ function CursoComplementar({ visible, setVisible }: Props) {
     const [editarCurso, setEditarCurso] = useState(false);
     const [cursoSelecionado, setCursoSelecionado] = useState<any>(null);
     const [adicionarCurso, setAdicionarCurso] = useState(false);
+    const [apireq, setApireq] = useState<Perfil | null>(null);
+    const [aprendiz, setAprendiz] = useState<user | null>(null);
+
+    useEffect(() => {
+        async function carregarPerfil() {
+            const usuario = localStorage.getItem("usuario");
+            if (!usuario) return;
+            const aprendizLogado = JSON.parse(usuario);
+            const edv = aprendizLogado.user.EDV;
+            setAprendiz({ edv });
+
+            const response = await api.get(`/aprendiz/meuPerfil/${edv}`);
+            setApireq(response.data.data)
+        }
+        carregarPerfil();
+    }, []);
 
     if (!visible) {
         return null
     }
-
-    const cursosComplementares = [
-        {
-            id: 1,
-            nomeCurso: "Power BI para Análise de Dados",
-            situacao: "Concluído",
-            dataConclusao: "15/03/2025",
-            cargaHoraria: "40 horas",
-            descricaoCurso: "Curso voltado para criação de dashboards, tratamento de dados, criação de indicadores e análise de informações utilizando Power BI.",
-            certificado: null
-        },
-        {
-            id: 2,
-            nomeCurso: "Excel Avançado",
-            situacao: "Concluído",
-            dataConclusao: "20/08/2024",
-            cargaHoraria: "30 horas",
-            descricaoCurso: "Aperfeiçoamento em fórmulas avançadas, tabelas dinâmicas, gráficos, automações e análise de dados no Microsoft Excel.",
-            certificado: null
-        },
-        {
-            id: 3,
-            nomeCurso: "Introdução à Programação com Python",
-            situacao: "Cursando",
-            dataConclusao: "",
-            cargaHoraria: "60 horas",
-            descricaoCurso: "Curso de fundamentos da programação utilizando Python, abordando lógica, estruturas de dados, funções e automação de tarefas.",
-            certificado: null
-        },
-        {
-            id: 4,
-            nomeCurso: "Fundamentos de Gestão de Projetos",
-            situacao: "Concluído",
-            dataConclusao: "10/11/2024",
-            cargaHoraria: "20 horas",
-            descricaoCurso: "Curso sobre planejamento, organização, acompanhamento de projetos, definição de metas e gerenciamento de recursos.",
-            certificado: null
-        },
-        {
-            id: 5,
-            nomeCurso: "Comunicação Empresarial",
-            situacao: "Concluído",
-            dataConclusao: "05/06/2025",
-            cargaHoraria: "15 horas",
-            descricaoCurso: "Desenvolvimento de habilidades de comunicação profissional, apresentações, escrita corporativa e relacionamento interpessoal.",
-            certificado: null
-        },
-        {
-            id: 6,
-            nomeCurso: "Segurança da Informação",
-            situacao: "Cursando",
-            dataConclusao: "",
-            cargaHoraria: "45 horas",
-            descricaoCurso: "Curso sobre conceitos de segurança digital, proteção de dados, ameaças virtuais e boas práticas de segurança da informação.",
-            certificado: null
-        }
-    ];
-
     const handleDelete = async (id: number) => {
         const confirm = await Swal.fire({
             title: 'Tem certeza?',
@@ -131,16 +107,17 @@ function CursoComplementar({ visible, setVisible }: Props) {
                 <span className="curso-lista-titulo">Cursos Complementares</span>
                 <div className="curso-modal">
                     {
-                        cursosComplementares.length === 0 ?
+                        apireq.cursos.length === 0 ?
                             <p className="curso-vazia">Nenhum curso complementar encontrado.</p>
                         :
-                        cursosComplementares.map((item) => (
+                        apireq.cursos.map((item) => (
                             <div className="curso-item" key={item.id}>
-                                <span className="curso-titulo">{item.nomeCurso}</span>
+                                <span className="curso-titulo">{item.name_Curso}</span>
                                 <div className="curso-acoes">
                                     <button type="button" className="btn-acao"
                                         onClick={() => {
                                             setCursoSelecionado(item);
+                                            console.log("item ", item)
                                             setVisualizarCurso(true);
                                         }}
                                     >
@@ -175,6 +152,7 @@ function CursoComplementar({ visible, setVisible }: Props) {
                         <EditarCursoComplementar
                             visible={editarCurso}
                             setVisible={setEditarCurso}
+                            setCursoComplementar={setVisible}
                             id={cursoSelecionado.id}
                         />
                     )
@@ -185,6 +163,7 @@ function CursoComplementar({ visible, setVisible }: Props) {
                             visible={adicionarCurso}
                             setVisible={setAdicionarCurso}
                             setCursoComplementar={setVisible}
+                            id={apireq.id}
                         />
                     )
                 }

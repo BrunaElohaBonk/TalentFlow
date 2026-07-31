@@ -1,20 +1,23 @@
 import './editar_curso.css'
 import sair from '../../../../assets/img/close.png'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import { FormControl, FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import { useDropzone } from "react-dropzone";
 import download from '../../../../assets/img/icon download.png'
+import api from '../../../../services/api'
 
 interface ICurso {
-    nomeCurso: string;
-    situacao: string;
-    dataConclusao: string;
-    cargaHoraria: string;
-    descricaoCurso: string;
-    certificado: File | null;
+    id?: number;
+    Id_Profile?: number;
+    certificado?: string;
+    name_Curso: string;
+    status_Cursos: "CONCLUIDO"|"CURSANDO" |"NAO_INFORMADO";
+    data_Conclusao: Date | null;
+    carga_horaria: number | null;
 }
+
 
 interface Props {
     visible: boolean;
@@ -30,16 +33,26 @@ function EditarCursoComplementar({
     id
 }: Props) {
 
-    const [curso, setCurso] = useState<ICurso>({
-        nomeCurso: '',
-        situacao: '',
-        dataConclusao: '',
-        cargaHoraria: '',
-        descricaoCurso: '',
-        certificado: null
-    })
+    const [curso, setCurso] = useState<ICurso>()
 
     const [nomeCertificado, setNomeCertificado] = useState("");
+    const [apireq, setApireq] = useState<Perfil | null>(null);
+    const [aprendiz, setAprendiz] = useState<user | null>(null);
+
+    useEffect(() => {
+        async function carregarPerfil() {
+            const usuario = localStorage.getItem("usuario");
+            if (!usuario) return;
+            const aprendizLogado = JSON.parse(usuario);
+            const edv = aprendizLogado.user.EDV;
+            setAprendiz({ edv });
+
+            const response = await api.get(`/aprendiz/meuPerfil/${edv}`);
+            setApireq(response.data.data)
+        }
+        carregarPerfil();
+    }, []);
+
 
     const { getRootProps, getInputProps } = useDropzone({
         accept: {
@@ -53,7 +66,7 @@ function EditarCursoComplementar({
                 setNomeCertificado(arquivo.name);
                 setCurso((prev)=>({
                     ...prev,
-                    certificado: arquivo
+                    certificado: arquivo,
                 }))
             }
         }
@@ -85,7 +98,7 @@ function EditarCursoComplementar({
     
         setCurso({
             ...curso,
-            dataConclusao: valor
+            data_Conclusao: valor
         });
     
     }
@@ -97,7 +110,7 @@ function EditarCursoComplementar({
     
         setCurso({
             ...curso,
-            situacao: e.target.value
+            status_Cursos: e.target.value
         });
     
     }
@@ -110,10 +123,9 @@ function EditarCursoComplementar({
         e.preventDefault();
 
         if(
-            !curso.nomeCurso ||
-            !curso.situacao ||
-            !curso.cargaHoraria ||
-            !curso.descricaoCurso
+            !curso.name_Curso ||
+            !curso.status_Cursos ||
+            !curso.carga_horaria 
         ){
 
             Swal.fire({
@@ -125,7 +137,7 @@ function EditarCursoComplementar({
             return;
         }
 
-        if (!curso.dataConclusao) {
+        if (!curso.data_Conclusao) {
             Swal.fire({
                 title: 'Atenção!',
                 text: 'Informe a data de conclusão.',
@@ -181,7 +193,7 @@ function EditarCursoComplementar({
                 <div className="editarCurso-container">
                     <div className="editarCurso-grupo">
                         <label className="editarCurso-label">Nome do Curso</label>
-                        <input name="nomeCurso" className="editarCurso-input" value={curso.nomeCurso} onChange={handleChange}/>
+                        <input name="nomeCurso" className="editarCurso-input" value={curso.name_Curso} onChange={handleChange}/>
                     </div>
                     <div className="editarCurso-grupo">
                         <label className="editarCurso-label">Situação</label>
@@ -189,7 +201,7 @@ function EditarCursoComplementar({
                             <RadioGroup
                                 row
                                 name="situacao"
-                                value={curso.situacao}
+                                value={curso.status_Cursos}
                                 onChange={handleSituacao}
                             >
                                 <FormControlLabel
@@ -225,14 +237,10 @@ function EditarCursoComplementar({
                     </div>
                     <div className="editarCurso-grupo">
                         <label className="editarCurso-label">Data de Conclusão</label>
-                        <input type="text" name="dataConclusao" maxLength={10} value={curso.dataConclusao} onChange={handleDataConclusao}/></div>
+                        <input type="text" name="dataConclusao" maxLength={10} value={curso.data_Conclusao} onChange={handleDataConclusao}/></div>
                     <div className="editarCurso-grupo">
                         <label className="editarCurso-label">Carga Horária</label>
-                        <input name="cargaHoraria" className="editarCurso-input" value={curso.cargaHoraria} onChange={handleChange}/>
-                    </div>
-                    <div className="editarCurso-grupo">
-                        <label className="editarCurso-label">Descrição do Curso</label>
-                        <textarea name="descricaoCurso" className="editarCurso-textarea" value={curso.descricaoCurso} onChange={handleChange}/>
+                        <input name="cargaHoraria" className="editarCurso-input" value={curso.carga_horaria} onChange={handleChange}/>
                     </div>
                     <div className="editarCurso-grupo">
                         <label className="editarCurso-label">Certificado</label>

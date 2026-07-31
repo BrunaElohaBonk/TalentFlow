@@ -11,7 +11,7 @@ http://localhost:8080/api/auth/register
     "user_bosch": "CHS001",
     "contato": "(41)999991111",
     "email_bosch": "carlos@bosch.com",
-    "password_login": "20/05/1990"
+    "password_login": "Bosch@123"
 }
 {
   "EDV": 91000002,

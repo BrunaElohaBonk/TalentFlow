@@ -57,10 +57,6 @@ function CursoComplementarVisualizar({
                         <span>Carga Horária</span>
                         <p>{curso.cargaHoraria || "Não informado."}</p>
                     </div>
-                    <div className="cursoVisualizar-item cursoVisualizar-descricao">
-                        <span>Descrição</span>
-                        <p>{curso.descricao || "Não informado."}</p>
-                    </div>
                     <div className="cursoVisualizar-item certificado-item">
                         <span>Certificado</span>
                         {
