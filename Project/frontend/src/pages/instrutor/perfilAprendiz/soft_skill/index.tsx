@@ -24,7 +24,7 @@ function SoftSkill({ visible, setVisible, softSkills }: Props) {
                 </div>
                 <span className="formacao-lista-titulo">Soft Skills</span>
                 <div className="formacao-modal">
-                    {softSkills.length === 0 ? <p className="formacao-vazia">Nenhuma formação acadêmica encontrada.</p>:
+                    {softSkills.length === 0 ? <p className="formacao-vazia">Nenhuma soft skills encontrada.</p>:
                         softSkills.map((item, index) => (
                             <div className="formacao-item" key={index}>
                                 <span className="formacao-titulo">{item.nome_SoftSkills}</span>

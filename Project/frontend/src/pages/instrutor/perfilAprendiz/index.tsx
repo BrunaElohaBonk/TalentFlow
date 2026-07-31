@@ -20,12 +20,13 @@ type NivelFormacao = "ENSINO_MEDIO" | "TECNICO" | "GRADUACAO" | "POS_GRADUACAO";
 
 interface IUsuario{
     fotoAprendiz: File | null;
-    email: string;
-    user?: string;
+    email_bosch: string;
+    user_bosch?: string;
     EDV: number;
     contato: string;
     name: string;
     data_nascimento: string;
+    Ativo: boolean;
 }
 interface IPerfilAprendiz {
     EDV: number;
@@ -75,7 +76,6 @@ interface IPerfilAprendiz {
 
 function PerfilAprendiz(){
     const navigate = useNavigate()
-    const { edv } = useParams();
     const [aprendiz, setAprendiz] = useState<IPerfilAprendiz | null>(null);
     const [usuario, setUsuario] = useState<IUsuario | null>(null);
     const [situacao, setSituacao] = useState(false)
@@ -84,16 +84,22 @@ function PerfilAprendiz(){
     const [idioma, setIdioma] = useState(false)
     const [soft_skill, setSoftSkill] = useState(false)
     const [competencia, setCompetencia] = useState(false)
-    // const fetchUsuario = async () => {
-    //      try {
-    //         const response = await api.get(`/aprendiz/aprendiz/${usuario?.EDV}`);
-    //         console.log("USUARIO:", response.data);
-    //         setAprendiz(response.data);
-    //     } 
-    //     catch (error) {
-    //         console.error(error);
-    //     }
-    // }
+    const { edv } = useParams();
+    const fetchUsuario = async () => {
+        try {
+            const response = await api.get("/auth/buscaruser/APRENDIZ");
+            const usuarioEncontrado = response.data.find(
+                (usuario: IUsuario) => usuario.EDV === Number(edv) && usuario.Ativo === true
+            );
+            console.log("USUARIO ENCONTRADO:", usuarioEncontrado);
+            if (usuarioEncontrado) {
+                setUsuario(usuarioEncontrado);
+            }
+        } 
+        catch (error) {
+            console.error("Erro ao buscar usuário:", error);
+        }
+    };
     const fetchAprendiz = async () => {
         try {
             const response = await api.get(`/aprendiz/perfil/${edv}`);
@@ -116,7 +122,7 @@ function PerfilAprendiz(){
 
     useEffect(() => {
         if(edv){
-            // fetchUsuario();
+            fetchUsuario();
             fetchAprendiz();
         }
     },[edv]);
@@ -128,7 +134,7 @@ function PerfilAprendiz(){
     return(
         <div className="dadosAprendiz">
             <Header></Header>
-            <SituacaoProfissional visible={situacao} setVisible={setSituacao} situacao={aprendiz.situacao_profissional[0]}/>
+            <SituacaoProfissional visible={situacao} setVisible={setSituacao} situacao={aprendiz.situacao_profissional}/>
             <FormacaoAcademica visible={formacao_academica} setVisible={setFormacaoAcademica} formacaoAcademica={aprendiz.formacao_academica}/>
             <CursoComplementar visible={curso_complementar} setVisible={setCursoComplementar} cursoComplementar={aprendiz.cursos_complementares}/>
             <Idioma visible={idioma} setVisible={setIdioma} idiomas={aprendiz.idiomas}/>
@@ -146,17 +152,17 @@ function PerfilAprendiz(){
                             <div className="dadosAprendiz-topo">
                                 <div className="dadosAprendiz-foto-container"><img src={icon_user} alt="icon_user" /></div>
                                 <div className="dadosAprendiz-dados-perfil">
-                                    {/* <div className="dadosAprendiz-cabecalho-perfil"><h1>{usuario?.name}</h1></div>
+                                    <div className="dadosAprendiz-cabecalho-perfil"><h1>{usuario?.name}</h1></div>
                                     {usuario && (
                                         <div className="dadosAprendiz-informacoes">
-                                            <span>Email: {usuario.email}</span>
+                                            <span>Email: {usuario.email_bosch}</span>
                                             <span>EDV: {usuario.EDV}</span>
-                                            <span>User: {usuario.user}</span>
+                                            <span>User: {usuario.user_bosch}</span>
                                             <span>Data de Nascimento: {new Date(usuario.data_nascimento).toLocaleDateString("pt-BR")}</span>
                                             <span>Idade: {calcularIdade(usuario.data_nascimento)} anos</span>
                                             <span>Contato: {formatarTelefone(usuario.contato)}</span>
                                         </div>
-                                    )} */}
+                                    )}
                                 </div>
                             </div>
                             <div className="dadosAprendiz-cards-superiores">

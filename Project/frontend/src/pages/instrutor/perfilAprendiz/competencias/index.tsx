@@ -30,7 +30,7 @@ function Competencia({ visible, setVisible, competencias }: Props) {
                 </div>
                 <span className="formacao-lista-titulo">Competências</span>
                 <div className="formacao-modal" >
-                    {competencias.length === 0 ?<p className="formacao-vazia">Nenhuma formação acadêmica encontrada.</p>:
+                    {competencias.length === 0 ?<p className="formacao-vazia">Nenhuma competencia encontrada.</p>:
                         competencias.map((item, index) => (
                             <div className="formacao-item" key={index}>
                                 <span className="formacao-titulo">{item.nome_Competencia}</span>
