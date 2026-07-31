@@ -26,8 +26,30 @@ function PerfilInstrutor(){
     const [editar, setEditar] = useState(false)
     const [perfil, setPerfil] = useState<IPerfil | null>(null);
     const { darkMode, alternarTema } = useTheme();
+
+    const carregarPerfil = () => {
+        const usuarioSalvo = localStorage.getItem("usuario");
+        if (!usuarioSalvo) return;
+        const usuario = JSON.parse(usuarioSalvo);
+        setPerfil({
+            token: usuario.token,
+            user: {
+                EDV: usuario.user.EDV,
+                name: usuario.user.name,
+                user_bosch: usuario.user.user_bosch,
+                email_bosch: usuario.user.email_bosch,
+                contato: usuario.user.contato,
+                data_nascimento: formatarData(usuario.user.data_nascimento),
+                imagem: usuario.user.imagem,
+                ativo: usuario.user.ativo,
+                tipo: usuario.user.tipo,
+            },
+        });
+    }; 
+
     useEffect(() => {
         const usuarioSalvo = localStorage.getItem("usuario");
+        carregarPerfil();
         if (usuarioSalvo) {
             const usuario = JSON.parse(usuarioSalvo);
             console.log(usuario)
@@ -54,7 +76,7 @@ console.log("localStorage:", localStorage.getItem("perfil"));
     return(
         <div className="perfil">
             <Header></Header>
-            <EditarPerfil visible={editar} setVisible={setEditar} edv={perfil?.user.EDV ?? 0}/>
+            <EditarPerfil visible={editar} setVisible={setEditar} edv={perfil?.user.EDV ?? 0} atualizarPerfil={carregarPerfil}/>
             <div className="perfil-container">
                 <Sidebar></Sidebar>
                 <div className="perfil-body">   

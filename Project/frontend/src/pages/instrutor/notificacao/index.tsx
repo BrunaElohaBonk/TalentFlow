@@ -59,6 +59,7 @@ function Notificacao() {
     const fetchNotificacoes = async () => {
         try {
             const response = await api.get("/historico/verHistorico");
+            console.log('DATAAAAA', response.data)
             const notificacoesValidas = response.data.filter(
                 (item: INotificacao) => item.alteradoPor !== null
             );
