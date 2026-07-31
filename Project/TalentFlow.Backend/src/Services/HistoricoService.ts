@@ -1,5 +1,6 @@
 import { prisma } from "../lib/prisma.ts";
 
+
 export class HistoricoService {
     static async listarHistorico() {
         const historicoPerfil = await prisma.perfilhistorico.findMany({
@@ -28,28 +29,55 @@ export class HistoricoService {
             }
         });
 
-        const perfil = historicoPerfil.map(item => ({
-            id: item.Id,
-            tipo: "PERFIL",
-            nome: item.profile?.aprendiz?.user?.name ?? "Aprendiz",
-            texto: item.Acao,
-            dataHora: item.DataAlteracao.toISOString(),
-            alteradoPor: item.EDVAlteradoPor
-        }));
+        const perfil = await Promise.all(
+            historicoPerfil.map(async (item) => {
+                const usuario = item.EDVAlteradoPor
+                    ? await prisma.user.findUnique({
+                        where: {
+                            EDV: item.EDVAlteradoPor
+                        },
+                        select: {
+                            name: true
+                        }
+                    })
+                    : null;
 
-        const turma = historicoTurma.map(item => ({
-            id: item.Id,
-            tipo: "TURMA",
-            nome: item.turmas?.nomeTurma ?? "Turma sem identificação",
-            texto: item.acao,
-            dataHora: item.dataAlteracao.toISOString(),
-            alteradoPor: item.EDVAlteradoPor
-        }));
+                return {
+                    id: item.Id,
+                    tipo: "PERFIL",
+                    nome: item.profile?.aprendiz?.user?.name ?? "Aprendiz",
+                    texto: item.Acao,
+                    dataHora: item.DataAlteracao.toISOString(),
+                    alteradoPor: usuario?.name ?? "Sistema"
+                };
+            })
+        );
 
-        return [
-            ...perfil,
-            ...turma
-        ].sort(
+        const turma = await Promise.all(
+            historicoTurma.map(async (item) => {
+                const usuario = item.EDVAlteradoPor
+                    ? await prisma.user.findUnique({
+                        where: {
+                            EDV: item.EDVAlteradoPor
+                        },
+                        select: {
+                            name: true
+                        }
+                    })
+                    : null;
+
+                return {
+                    id: item.Id,
+                    tipo: "TURMA",
+                    nome: item.turmas?.nomeTurma ?? "Turma sem identificação",
+                    texto: item.acao,
+                    dataHora: item.dataAlteracao.toISOString(),
+                    alteradoPor: usuario?.name ?? "Sistema"
+                };
+            })
+        );
+
+        return [...perfil, ...turma].sort(
             (a, b) =>
                 new Date(b.dataHora).getTime() -
                 new Date(a.dataHora).getTime()

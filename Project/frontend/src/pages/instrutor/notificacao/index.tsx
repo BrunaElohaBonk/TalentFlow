@@ -7,6 +7,8 @@ import { useNotificacao } from "../../../context/notificacaoContext";
 import api from "../../../services/api";
 
 interface INotificacao {
+    tipo: string;
+    alteradoPor: string;
     id: number;
     nome: string;
     texto: string;
@@ -24,22 +26,31 @@ function Notificacao() {
             .toLowerCase();
     const formatarHistorico = (notificacao: INotificacao) => {
         if (notificacao.texto === "CREATE") {
-            return `${notificacao.nome} cadastrou um novo registro`;
+            if (notificacao.tipo === "TURMA")
+                return `Cadastrou uma nova turma: ${notificacao.nome}.`;
+            if (notificacao.tipo === "PERFIL") {
+                return `Cadastrou um novo usuário: ${notificacao.nome}.`
+            }
         }
         if (notificacao.texto === "UPDATE") {
-            return `${notificacao.nome} atualizou as informações`;
+            if (notificacao.tipo === "TURMA")
+                return `Atualizou as informações da turma ${notificacao.nome}`;
+            if (notificacao.tipo === "PERFIL")
+                return `Atualizou as informações do perfil.`
         }
         if (notificacao.texto === "DELETE") {
-            return `${notificacao.nome} removeu um registro`;
+            return `Removeu um registro`;
         }
-        return `${notificacao.nome} realizou uma alteração`;
+        return `Realizou uma alteração`;
     };
+
     const formatarData = (data: string) => {
         return new Date(data).toLocaleString("pt-BR");
     };
     const fetchNotificacoes = async () => {
         try {
             const response = await api.get("/historico/verHistorico");
+            console.log(response.data)
             setNotificacoes(response.data);
         } catch (error) {
             console.error("Erro ao buscar histórico:", error);
@@ -81,7 +92,7 @@ function Notificacao() {
                             {filtro.length > 0 ? (
                                 filtro.map((notificacao) => (
                                     <div className="notificacao-card" key={notificacao.id}>
-                                        <span className="notificacao-nome">{notificacao.nome}</span>
+                                        <span className="notificacao-nome">{notificacao.alteradoPor}</span>
                                         <span className="notificacao-texto">{formatarHistorico(notificacao)}</span>
                                         <span className="notificacao-texto">{formatarData(notificacao.dataHora)}</span>
                                     </div>
