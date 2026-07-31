@@ -54,6 +54,7 @@ export default class AprendizService {
       },
     });
   }
+  //aa
   static async adicionarCertificadoCurso(
     id: number,
     certificado: string | undefined,
