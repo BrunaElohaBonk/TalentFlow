@@ -415,4 +415,22 @@ export default class aprendizController {
       next(error);
     }
   }
+
+  static async deletarFormacao(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const { EDV, id } = req.params;
+
+      await AprendizService.deletarFormacao(Number(EDV), Number(id));
+
+      return res.status(200).json({
+        message: "Formaçao deletada com sucesso.",
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }

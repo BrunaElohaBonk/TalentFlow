@@ -231,7 +231,7 @@ route.delete(
   authMiddleware,
   roleMiddleware("APRENDIZ"),
   ownerMiddleware,
-  aprendizController.deletarIdioma,
+  aprendizController.deletarFormacao,
 );
 route.post(
     "/adicionarFormacao/:EDV",

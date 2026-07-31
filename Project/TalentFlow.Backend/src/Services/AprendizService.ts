@@ -327,28 +327,32 @@ export default class AprendizService {
 
   static async atualizarFormacaoAcademica(
     EDV: number,
-    Id_Profile: number,
+    idFormacao: number,
     data: AtualizarFormacaoAcademicaDto,
     usuarioEDV: number,
   ) {
     return await prisma.$transaction(async (tx: any) => {
-      const formacaoAcademicaAntigo = await tx.formacao_academica.findUnique({
+      const formacaoAcademicaAntigo = await tx.formacao_academica.findFirst({
         where: {
-          id: data.id,
-          profile: { EDV_Aprendiz: EDV },
-        },
+          id: idFormacao,
+          profile: {
+            EDV_Aprendiz: EDV
+          }
+        }
       });
 
       if (!formacaoAcademicaAntigo) {
         throw new Error("Perfil não encontrado.");
       }
+
       const formacaoAcademicaAtualizado = await tx.formacao_academica.update({
         where: {
-          id: data.id,
-          profile: { EDV_Aprendiz: EDV },
+          id: idFormacao
         },
         data,
       });
+
+      const Id_Profile = formacaoAcademicaAntigo.Id_Profile;
 
       await this.registrarHistorico(
         tx,
@@ -477,60 +481,60 @@ export default class AprendizService {
 
       return idiomasAtualizado;
     });
-}
-static async atualizarCursos(
-  EDV: number,
-  Id_Profile: number,
-  data: AtualizarCursosComplementaresDto,
-  usuarioEDV: number,
-) {
-  console.log("DATA:", data);
-  console.log("DATA.ID:", data.id_Curso);
+  }
+  static async atualizarCursos(
+    EDV: number,
+    Id_Profile: number,
+    data: AtualizarCursosComplementaresDto,
+    usuarioEDV: number,
+  ) {
+    console.log("DATA:", data);
+    console.log("DATA.ID:", data.id_Curso);
 
-  const dataConclusao = new Date(
-    data.data_Conclusao.split("/").reverse().join("-")
-  );
-
-  return await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
-
-    const cursosAntigo = await tx.cursos.findFirst({
-      where: {
-        id: data.id_Curso,
-        profile: {
-          EDV_Aprendiz: EDV,
-        },
-      },
-    });
-
-    if (!cursosAntigo) {
-      throw new Error("Curso não encontrado.");
-    }
-
-    const cursosAtualizado = await tx.cursos.update({
-      where: {
-        id: data.id_Curso,
-      },
-      data: {
-        name_Curso: data.name_Curso,
-        status_Cursos: data.status_Cursos,
-        data_Conclusao: dataConclusao,
-        carga_horaria: data.carga_horaria,
-      },
-    });
-
-    await this.registrarHistorico(
-      tx,
-      Id_Profile,
-      TipoHistorico.CURSO,
-      data.id_Curso,
-      usuarioEDV,
-      cursosAntigo,
-      cursosAtualizado,
+    const dataConclusao = new Date(
+      data.data_Conclusao.split("/").reverse().join("-")
     );
 
-    return cursosAtualizado;
-  });
-}
+    return await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+
+      const cursosAntigo = await tx.cursos.findFirst({
+        where: {
+          id: data.id_Curso,
+          profile: {
+            EDV_Aprendiz: EDV,
+          },
+        },
+      });
+
+      if (!cursosAntigo) {
+        throw new Error("Curso não encontrado.");
+      }
+
+      const cursosAtualizado = await tx.cursos.update({
+        where: {
+          id: data.id_Curso,
+        },
+        data: {
+          name_Curso: data.name_Curso,
+          status_Cursos: data.status_Cursos,
+          data_Conclusao: dataConclusao,
+          carga_horaria: data.carga_horaria,
+        },
+      });
+
+      await this.registrarHistorico(
+        tx,
+        Id_Profile,
+        TipoHistorico.CURSO,
+        data.id_Curso,
+        usuarioEDV,
+        cursosAntigo,
+        cursosAtualizado,
+      );
+
+      return cursosAtualizado;
+    });
+  }
 
   static async atualizarSoftskills(
     EDV: number,
@@ -654,6 +658,16 @@ static async atualizarCursos(
   }
   static async deletarIdioma(EDV: number, id: number) {
     return await prisma.idiomas.deleteMany({
+      where: {
+        id,
+        profile: {
+          EDV_Aprendiz: EDV,
+        },
+      },
+    });
+  }
+  static async deletarFormacao(EDV: number, id: number) {
+    return await prisma.formacao_academica.deleteMany({
       where: {
         id,
         profile: {

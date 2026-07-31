@@ -78,13 +78,17 @@ interface Idiomas {
     nome_Idioma: string;
 }
 
-
 interface FormacaoAcademica {
     id: number;
+    Id_Profile: number;
     name_Curso: string;
+    nome_Institucao: string;
     status_Academico: string;
+    periodo_Atual: number;
+    total_Periodo: number;
+    nivel_formacao: string;
+    certificado: string | null;
 }
-
 
 function Telefone(numero: number | string) {
     const telefone = String(numero).replace(/\D/g, "");
@@ -144,6 +148,7 @@ function Perfil() {
     const [adicionarFormacao, setAdicionarFormacao] = useState(false)
     const navigate = useNavigate()
     const [idSituacao, setIdSituacao] = useState<number | null>(null);
+    const [formacaoSelecionada, setFormacaoSelecionada] = useState<FormacaoAcademica | null>(null);
 
     useEffect(() => {
         async function carregarPerfil() {
@@ -211,14 +216,20 @@ function Perfil() {
             <Logout visible={logout} setVisible={setLogout} />
 
             <SituacaoProfissional visible={situacao} setVisible={setSituacao} setEditarSituacao={setEditarSituacao} />
-            <FormacaoAcademica visible={formacao_academica} setVisible={setFormacaoAcademica} setEditarFormacao={setEditarFormacao} setAdicionarFormacao={setAdicionarFormacao} />
+            <FormacaoAcademica
+                visible={formacao_academica}
+                setVisible={setFormacaoAcademica}
+                setEditarFormacao={setEditarFormacao}
+                setAdicionarFormacao={setAdicionarFormacao}
+                setFormacaoSelecionada={setFormacaoSelecionada}
+            />
             <CursoComplementar visible={curso_complementar} setVisible={setCursoComplementar} />
             <Idioma visible={idioma} setVisible={setIdioma} />
             <SoftSkill visible={soft_skill} setVisible={setSoftSkill} />
             <Competencia visible={competencia} setVisible={setCompetencia} />
             <EditarPerfil visible={editar} setVisible={setEditar} edv={aprendiz?.edv} />
             <EditarSituacaoProfissional visible={editarSituacao} setVisible={setEditarSituacao} setSituacaoProfissional={setSituacao} edv={aprendiz?.edv ?? 0} idSituacao={apireq?.situacao_profissional?.[0]?.id ?? 0} />
-            <EditarFormacaoAcademica visible={editarFormacao} setVisible={setEditarFormacao} setFormacaoAcademica={setFormacaoAcademica} id={1} />
+            <EditarFormacaoAcademica visible={editarFormacao} setVisible={setEditarFormacao} setFormacaoAcademica={setFormacaoAcademica} formacaoSelecionada={formacaoSelecionada} />
             <AdicionarFormacaoAcademica visible={adicionarFormacao} setVisible={setAdicionarFormacao} setFormacaoAcademica={setFormacaoAcademica} edv={aprendiz?.edv ?? 0} />
 
             <main className="perfil-tela">

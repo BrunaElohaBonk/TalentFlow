@@ -1,14 +1,15 @@
 import './editar_formacao.css'
 import sair from '../../../../assets/img/close.png'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import { FormControl, FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import { useDropzone } from "react-dropzone";
 import download from '../../../../assets/img/icon download.png'
 import { useTheme } from '../../../../context/themeContext'
+import api from '../../../../services/api'
 
-interface IFormacao {
+interface IFormacaoEditar {
     curso: string;
     instituicao: string;
     situacao: string;
@@ -19,16 +20,33 @@ interface IFormacao {
     certificado: File | null;
 }
 
+interface Formacao {
+    id: number;
+    Id_Profile: number;
+    name_Curso: string;
+    nome_Institucao: string;
+    status_Academico: string;
+    periodo_Atual: number;
+    total_Periodo: number;
+    nivel_formacao: string;
+    certificado: string | null;
+}
+
 interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
     setFormacaoAcademica: React.Dispatch<React.SetStateAction<boolean>>;
-    id: number;
+    formacaoSelecionada: Formacao | null;
 }
 
-function EditarFormacaoAcademica({ visible, setVisible, setFormacaoAcademica, id }: Props) {
+function EditarFormacaoAcademica({
+    visible,
+    setVisible,
+    setFormacaoAcademica,
+    formacaoSelecionada
+}: Props) {
     const { darkMode } = useTheme();
-    const [formacao, setFormacao] = useState<IFormacao>({
+    const [formacao, setFormacao] = useState<IFormacaoEditar>({
         curso: '',
         instituicao: '',
         situacao: '',
@@ -45,7 +63,6 @@ function EditarFormacaoAcademica({ visible, setVisible, setFormacaoAcademica, id
         "Graduação",
         "Pós Graduação"
     ];
-    
 
     const [nomeCertificado, setNomeCertificado] = useState("");
 
@@ -67,6 +84,25 @@ function EditarFormacaoAcademica({ visible, setVisible, setFormacaoAcademica, id
             }
         },
     });
+
+    useEffect(() => {
+        if (!formacaoSelecionada) return;
+
+        setFormacao({
+            curso: formacaoSelecionada.name_Curso,
+            instituicao: formacaoSelecionada.nome_Institucao,
+            situacao:
+                formacaoSelecionada.status_Academico === "CURSANDO"
+                    ? "Cursando"
+                    : "Concluído",
+            periodoAtual: String(formacaoSelecionada.periodo_Atual),
+            totalPeriodos: String(formacaoSelecionada.total_Periodo),
+            nivelFormacao: formacaoSelecionada.nivel_formacao,
+            descricao: "",
+            certificado: null
+        });
+
+    }, [formacaoSelecionada]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         setFormacao({
@@ -101,8 +137,7 @@ function EditarFormacaoAcademica({ visible, setVisible, setFormacaoAcademica, id
             !formacao.instituicao ||
             !formacao.situacao ||
             !formacao.totalPeriodos ||
-            !formacao.nivelFormacao ||
-            !formacao.descricao
+            !formacao.nivelFormacao
         ) {
             Swal.fire({
                 title: 'Atenção!',
@@ -124,10 +159,52 @@ function EditarFormacaoAcademica({ visible, setVisible, setFormacaoAcademica, id
         }
 
         try {
-            const response = await axios.put(
-                `link backend/${id}`,
+            if (!formacaoSelecionada) return;
+
+            const usuario = localStorage.getItem("usuario");
+
+            if (!usuario) return;
+
+            const aprendiz = JSON.parse(usuario);
+            const EDV = aprendiz.user.EDV;
+
+            let nivelFormacao = "";
+
+            switch (formacao.nivelFormacao) {
+                case "Ensino Médio":
+                    nivelFormacao = "ENSINO_MEDIO";
+                    break;
+
+                case "Técnico":
+                    nivelFormacao = "TECNICO";
+                    break;
+
+                case "Graduação":
+                    nivelFormacao = "GRADUACAO";
+                    break;
+
+                case "Pós Graduação":
+                    nivelFormacao = "POS_GRADUACAO";
+                    break;
+
+                default:
+                    nivelFormacao = formacao.nivelFormacao;
+            }
+
+            const response = await api.put(
+                `/aprendiz/atualizarFormacaoAcademica/${EDV}/${formacaoSelecionada.id}`,
                 {
-                    ...formacao
+                    id: formacaoSelecionada.id,
+                    name_Curso: formacao.curso,
+                    nome_Institucao: formacao.instituicao,
+                    status_Academico:
+                        formacao.situacao === "Cursando"
+                            ? "CURSANDO"
+                            : "CONCLUIDO",
+                    periodo_Atual: Number(formacao.periodoAtual),
+                    total_Periodo: Number(formacao.totalPeriodos),
+                    nivel_formacao: nivelFormacao,
+                    certificado: formacao.certificado
                 }
             )
 
@@ -161,9 +238,9 @@ function EditarFormacaoAcademica({ visible, setVisible, setFormacaoAcademica, id
         <div className="editarFormacao-overlay" onClick={() => setVisible(false)}>
             <form onSubmit={handleSubmit} className="editarFormacao-card" onClick={(e) => e.stopPropagation()}>
                 <button type="button" className="editarFormacao-fechar" onClick={() => {
-                        setVisible(false)
-                        setFormacaoAcademica(true)
-                    }}
+                    setVisible(false)
+                    setFormacaoAcademica(true)
+                }}
                 >
                     <img src={sair} alt="Fechar" />
                 </button>
@@ -171,11 +248,11 @@ function EditarFormacaoAcademica({ visible, setVisible, setFormacaoAcademica, id
                 <div className="editarFormacao-container">
                     <div className="editarFormacao-grupo">
                         <label className="editarFormacao-label">Nome do Curso</label>
-                        <input name="curso" className="editarFormacao-input" value={formacao.curso} onChange={handleChange}/>
+                        <input name="curso" className="editarFormacao-input" value={formacao.curso} onChange={handleChange} />
                     </div>
                     <div className="editarFormacao-grupo">
                         <label className="editarFormacao-label">Nome da Instituição</label>
-                        <input name="instituicao" className="editarFormacao-input" value={formacao.instituicao} onChange={handleChange}/>
+                        <input name="instituicao" className="editarFormacao-input" value={formacao.instituicao} onChange={handleChange} />
                     </div>
                     <div className="editarFormacao-grupo">
                         <label className="editarFormacao-label">Situação</label>
@@ -232,11 +309,11 @@ function EditarFormacaoAcademica({ visible, setVisible, setFormacaoAcademica, id
                             <div className="editarFormacao-periodos">
                                 <div className="editarFormacao-periodoGrupo">
                                     <label className="editarFormacao-label">Período Atual</label>
-                                    <input name="periodoAtual" className={formacao.situacao === "Cursando" ? "editarFormacao-input" : "editarFormacao-input periodo-disabled"} value={formacao.periodoAtual} disabled={formacao.situacao !== "Cursando"} onChange={handleChange}/>
+                                    <input name="periodoAtual" className={formacao.situacao === "Cursando" ? "editarFormacao-input" : "editarFormacao-input periodo-disabled"} value={formacao.periodoAtual} disabled={formacao.situacao !== "Cursando"} onChange={handleChange} />
                                 </div>
                                 <div className="editarFormacao-periodoGrupo">
                                     <label className="editarFormacao-label">Total de Períodos</label>
-                                    <input name="totalPeriodos" className="editarFormacao-input" value={formacao.totalPeriodos} onChange={handleChange}/>
+                                    <input name="totalPeriodos" className="editarFormacao-input" value={formacao.totalPeriodos} onChange={handleChange} />
                                 </div>
                             </div>
                         </div>
@@ -253,15 +330,11 @@ function EditarFormacaoAcademica({ visible, setVisible, setFormacaoAcademica, id
                         </select>
                     </div>
                     <div className="editarFormacao-grupo">
-                        <label className="editarFormacao-label">Descrição</label>
-                        <textarea name="descricao" className="editarFormacao-textarea" value={formacao.descricao} onChange={handleChange}/>
-                    </div>
-                    <div className="editarFormacao-grupo">
                         <label className="editarFormacao-label">Certificado</label>
                         <div className="certificado-container" {...getRootProps()}>
                             <input {...getInputProps()} name="certificado" />
                             <p className="certificado-file">{nomeCertificado}</p>
-                            <img src={download} alt="upload" className="certificado-upload"/>
+                            <img src={download} alt="upload" className="certificado-upload" />
                         </div>
                     </div>
                     <div className="editarFormacao-botoes">

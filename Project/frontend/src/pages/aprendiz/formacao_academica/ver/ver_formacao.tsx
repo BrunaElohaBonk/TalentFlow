@@ -32,9 +32,7 @@ const formatarSituacao = (situacao: string) => {
 function FormacaoAcademicaVisualizar({
     visible,
     setVisible,
-    formacao,
-    edv,
-    atualizarFormacoes
+    formacao
 }: Props) {
 
     if (!visible) {
