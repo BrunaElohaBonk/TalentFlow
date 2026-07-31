@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { cursos_status_Cursos, Prisma } from "@prisma/client";
 import { prisma } from "../lib/prisma.js";
 import { NomeSoftskills } from "@prisma/client";
 import { TipoHistorico } from "@prisma/client";
@@ -322,6 +322,27 @@ export default class AprendizService {
         nome_Idioma: data.nome_Idioma,
         nivel_Idioma: data.nivel_Idioma,
         certificado: data.certificado
+      }
+    });
+  }
+  static async adicionarCursos(
+    Id_Profile: number,
+    data: {
+      name_Curso: string;
+      status_Cursos: cursos_status_Cursos;
+      data_Conclusao: string;
+      certificado?:string;
+      carga_horaria:number;
+    }
+  ) {
+    return await prisma.cursos.create({
+      data: {
+        Id_Profile,
+        name_Curso: data.name_Curso,
+        status_Cursos: data.status_Cursos,
+        data_Conclusao: data.data_Conclusao,
+        certificado:data.certificado,
+        carga_horaria:data.carga_horaria,
       }
     });
   }
@@ -659,6 +680,17 @@ export default class AprendizService {
   }
   static async deletarIdioma(EDV: number, id: number) {
     return await prisma.idiomas.deleteMany({
+      where: {
+        id,
+        profile: {
+          EDV_Aprendiz: EDV,
+        },
+      },
+    });
+  }
+  
+  static async deletarCursos(EDV: number, id: number) {
+    return await prisma.cursos.deleteMany({
       where: {
         id,
         profile: {

@@ -164,7 +164,7 @@ function AdicionarCursoComplementar({
             );
             const response = await api.get(`/aprendiz/meuPerfil/${aprendiz.edv}`);
             const perfil = response.data.data;
-             await api.put(`aprendiz/atualizarCursos/${aprendiz.edv}/${perfil.id}`, {
+             await api.put(`/aprendiz/adicionarCursos/${aprendiz.edv}/${perfil.id}`, {
                 id: curso.id,
                 Id_Profile: curso.Id_Profile,
                 name_Curso: curso.name_Curso,
@@ -172,9 +172,10 @@ function AdicionarCursoComplementar({
                 data_Conclusao: dataFormatada,
                 carga_horaria:  Number(curso.carga_horaria)
             }); 
-            await api.put(`/curso/certificado/${curso.id}`,{
-                certificado: curso.certificado
-            })
+
+            // await api.put(`/curso/certificado/${curso.id}`,{
+            //     certificado: curso.certificado
+            // })
 
             Swal.fire({
                 title: 'Sucesso!',

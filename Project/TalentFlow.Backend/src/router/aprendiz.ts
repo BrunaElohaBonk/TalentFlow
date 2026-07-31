@@ -49,6 +49,11 @@ route.post(
   authMiddleware,
   aprendizController.adicionarIdioma
 );
+route.post(
+  "/adicionarCursos/:id",
+  authMiddleware,
+  aprendizController.adicionarCursos
+);
 
 route.put(
   "/atualizarPerfil/:EDV/:idPerfil",
@@ -241,6 +246,13 @@ route.delete(
   roleMiddleware("APRENDIZ"),
   ownerMiddleware,
   aprendizController.deletarIdioma,
+);
+route.delete(
+  "/deletarCursos/:EDV/:id",
+  authMiddleware,
+  roleMiddleware("APRENDIZ"),
+  ownerMiddleware,
+  aprendizController.deletarCursos,
 );
 route.delete(
   "/deletarformacao/:EDV/:id",
