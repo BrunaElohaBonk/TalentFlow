@@ -59,8 +59,10 @@ function Notificacao() {
     const fetchNotificacoes = async () => {
         try {
             const response = await api.get("/historico/verHistorico");
-            console.log(response.data)
-            setNotificacoes(response.data);
+            const notificacoesValidas = response.data.filter(
+                (item: INotificacao) => item.alteradoPor !== null
+            );
+            setNotificacoes(notificacoesValidas);
         } 
         catch (error) {
             console.error("Erro ao buscar histórico:", error);
