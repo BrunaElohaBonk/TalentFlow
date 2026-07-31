@@ -36,23 +36,6 @@ function EditarCursoComplementar({
     const [curso, setCurso] = useState<ICurso>()
 
     const [nomeCertificado, setNomeCertificado] = useState("");
-    const [apireq, setApireq] = useState<Perfil | null>(null);
-    const [aprendiz, setAprendiz] = useState<user | null>(null);
-
-    useEffect(() => {
-        async function carregarPerfil() {
-            const usuario = localStorage.getItem("usuario");
-            if (!usuario) return;
-            const aprendizLogado = JSON.parse(usuario);
-            const edv = aprendizLogado.user.EDV;
-            setAprendiz({ edv });
-
-            const response = await api.get(`/aprendiz/meuPerfil/${edv}`);
-            setApireq(response.data.data)
-        }
-        carregarPerfil();
-    }, []);
-
 
     const { getRootProps, getInputProps } = useDropzone({
         accept: {
