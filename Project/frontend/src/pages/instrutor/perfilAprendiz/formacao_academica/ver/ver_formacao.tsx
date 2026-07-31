@@ -16,12 +16,7 @@ interface Props {
     };
 }
 
-function FormacaoAcademicaVisualizar({
-    visible,
-    setVisible,
-    formacao
-}: Props) {
-
+function FormacaoAcademicaVisualizar({ visible, setVisible, formacao}: Props) {
     if (!visible) {
         return null
     }
@@ -74,9 +69,7 @@ function FormacaoAcademicaVisualizar({
                         <span className='formacao-titulo'>Certificado</span>
                         {
                             formacao.certificado ? (
-                                <p>
-                                    <img src={URL.createObjectURL(formacao.certificado)} alt="Certificado" className="certificado-img"/>
-                                </p>
+                                <p><img src={URL.createObjectURL(formacao.certificado)} alt="Certificado" className="certificado-img"/></p>
                             ) : (
                                 <p>Não incluído</p>
                             )

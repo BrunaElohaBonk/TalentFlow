@@ -36,16 +36,19 @@ function FormacaoAcademica({ visible, setVisible, formacaoAcademica}: Props) {
                 </div>
                 <span className="formacao-lista-titulo">Formação Acadêmica</span>
                 <div className="formacao-modal">
-                    {formacaoAcademica.map((item, index) => (
-                        <div className="formacao-item" key={index}>
-                            <span className="formacao-titulo">{item.name_Curso}</span>
-                            <div className="formacao-acoes">
-                                <button type="button" className="btn-acao" onClick={() => {setFormacaoSelecionada(item); setVisualizarFormacao(true)}}>
-                                    <img src={olho} alt="Visualizar" className="icon-olho"/>
-                                </button>
-                            </div>
-                        </div>
-                    ))}
+                    {formacaoAcademica.length === 0 ? (<p className="formacao-vazia">Nenhuma formação acadêmica encontrada.</p>
+                        ) : (
+                            formacaoAcademica.map((item, index) => (
+                                <div className="formacao-item" key={index}>
+                                    <span className="formacao-titulo">{item.name_Curso}</span>
+                                    <div className="formacao-acoes">
+                                        <button  type="button"  className="btn-acao"  onClick={() => {setFormacaoSelecionada(item); setVisualizarFormacao(true)}}>
+                                            <img  src={olho}  alt="Visualizar"  className="icon-olho"/>
+                                        </button>
+                                    </div>
+                                </div>
+                            ))
+                        )}
                 </div>
                 {visualizarFormacao && formacaoSelecionada && (
                     <FormacaoAcademicaVisualizar visible={visualizarFormacao} setVisible={setVisualizarFormacao} formacao={formacaoSelecionada}/>

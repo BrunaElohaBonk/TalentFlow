@@ -32,7 +32,7 @@ function Idioma({ visible, setVisible, idiomas }: Props) {
                 </div>
                 <span className="formacao-lista-titulo">Idiomas</span>
                 <div className="formacao-modal">
-                    {idiomas.length === 0 ? <p className="formacao-vazia">Nenhuma formação acadêmica encontrada.</p>:
+                    {idiomas.length === 0 ? <p className="formacao-vazia">Nenhum idioma encontrado.</p>:
                         idiomas.map((item, index) => (
                             <div className="formacao-item" key={index}>
                                 <span className="formacao-titulo">{item.nome_Idioma}</span>

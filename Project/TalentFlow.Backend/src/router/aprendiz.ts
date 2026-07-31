@@ -34,7 +34,7 @@ route.get(
   roleMiddleware("INSTRUTOR"),
   aprendizController.verAprendiz,
 );
-
+// EDV e ID_Turma
 
 route.get(
   "/perfil/:EDV",

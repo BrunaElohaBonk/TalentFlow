@@ -25,9 +25,10 @@ interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
     edv: number;
+    atualizarPerfil: () => void;
 }
 
-function EditarPerfil({ visible, setVisible, edv }: Props){
+function EditarPerfil({ visible, setVisible, edv, atualizarPerfil }: Props){
     const nomeRef = useRef<HTMLInputElement>(null);
     const edvRef = useRef<HTMLInputElement>(null);
     const emailRef = useRef<HTMLInputElement>(null);
@@ -62,12 +63,13 @@ function EditarPerfil({ visible, setVisible, edv }: Props){
         },
     });
     const formatarData = (data: string) => {
-    if (!data) return "";
-
-    const [ano, mes, dia] = data.split("T")[0].split("-");
-
-    return `${dia}/${mes}/${ano}`;
-};
+        if (!data) return "";
+        if (data.includes("/")) {
+            return data;
+        }
+        const [ano, mes, dia] = data.split("T")[0].split("-");
+        return `${dia}/${mes}/${ano}`;
+    };
     const [perfil, setPerfil] = useState<IPerfil>({
         token: "",
         user: {
@@ -106,11 +108,16 @@ function EditarPerfil({ visible, setVisible, edv }: Props){
         }
     }, [visible]);
     
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setPerfil({
-            ...perfil,
-            [e.target.name]: e.target.value
-        });
+    const handleChange = (
+        e: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        setPerfil((prev) => ({
+            ...prev,
+            user: {
+                ...prev.user,
+                [e.target.name]: e.target.value,
+            },
+        }));
     };
 
     const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
@@ -146,13 +153,16 @@ function EditarPerfil({ visible, setVisible, edv }: Props){
             return;
         }
         try {
-            const response = await api.put(`instrutor/editarInstrutor/${perfil.user.EDV}`,perfil);
+            const response = await api.put(`instrutor/editarInstrutor/${perfil.user.EDV}`, perfil.user);
+            console.log(response.status);
+            console.log(response.data);
             const usuario = JSON.parse(localStorage.getItem("usuario")!);
-            usuario.name = perfil.user.name;
-            usuario.email = perfil.user.email_bosch;
-            usuario.contato = perfil.user.contato;
-            usuario.dataNascimento = perfil.user.data_nascimento;
+            usuario.user.name = perfil.user.name;
+            usuario.user.email_bosch = perfil.user.email_bosch;
+            usuario.user.contato = perfil.user.contato;
+            usuario.user.data_nascimento = perfil.user.data_nascimento;
             localStorage.setItem("usuario", JSON.stringify(usuario));
+            atualizarPerfil();
             Swal.fire({
                 title: "Sucesso!",
                 text: "Seu perfil foi atualizado com sucesso!",
@@ -161,8 +171,11 @@ function EditarPerfil({ visible, setVisible, edv }: Props){
             console.log(response.data);
             setVisible(false);
         }
-        catch (e) {
-            console.error("Erro ao atualizar:", e);
+        catch (error) {
+            console.log(error.response?.status);
+            console.log(error.response?.data);
+            console.log(error.response);
+
             Swal.fire({
                 title: "Erro!",
                 text: "Não foi possível atualizar o seu perfil.",
@@ -170,6 +183,28 @@ function EditarPerfil({ visible, setVisible, edv }: Props){
             });
         }
     }
+    const formatarDataDigitada = (valor: string) => {
+        let data = valor.replace(/\D/g, ""); 
+        if (data.length > 8) {
+            data = data.substring(0, 8);
+        }
+        if (data.length > 4) {
+            data = data.replace(/^(\d{2})(\d{2})(\d+)/, "$1/$2/$3");
+        } 
+        else if (data.length > 2) {
+            data = data.replace(/^(\d{2})(\d+)/, "$1/$2");
+        }
+        return data;
+    };
+    const handleDataNascimento = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setPerfil((prev) => ({
+            ...prev,
+            user: {
+                ...prev.user,
+                data_nascimento: formatarDataDigitada(e.target.value),
+            },
+        }));
+    };
     const formatarContato = (contato: string | number) => {
         let value = String(contato).replace(/\D/g, "");
         if (value.length > 11) {
@@ -183,7 +218,10 @@ function EditarPerfil({ visible, setVisible, edv }: Props){
     const handleContato = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPerfil((prev) => ({
             ...prev,
-            contato: formatarContato(e.target.value),
+            user: {
+                ...prev.user,
+                contato: formatarContato(e.target.value),
+            },
         }));
     };
 
@@ -204,7 +242,7 @@ function EditarPerfil({ visible, setVisible, edv }: Props){
                     </div>
                     <div className="editarPerfil-grupo">
                         <label className="editarPerfil-label">Nome Completo</label>
-                        <input ref={nomeRef} name="name" className="editarPerfil-input" value={perfil.user.name}/>
+                        <input ref={nomeRef} name="name" className="editarPerfil-input" value={perfil.user.name} onChange={handleChange}/>
                     </div>
                     <div className="editarPerfil-grupo">
                         <label className="editarPerfil-label">EDV</label>
@@ -216,11 +254,11 @@ function EditarPerfil({ visible, setVisible, edv }: Props){
                     </div>
                     <div className="editarPerfil-grupo">
                         <label className="editarPerfil-label">UserID</label>
-                        <input ref={userRef} name="user_bosch" className="editarPerfil-input" value={perfil.user.user_bosch}/>
+                        <input ref={userRef} name="user_bosch" className="editarPerfil-input" value={perfil.user.user_bosch} onChange={handleChange}/>
                     </div>
                     <div className="editarPerfil-grupo">
                         <label className="editarPerfil-label">Data de nascimento</label>
-                        <input ref={nascimentoRef} name="data_nascimento" className="editarPerfil-input" value={perfil.user.data_nascimento}/>
+                        <input ref={nascimentoRef} name="data_nascimento" className="editarPerfil-input" value={perfil.user.data_nascimento} onChange={handleDataNascimento} maxLength={10}/>
                     </div>
                     <div className="editarPerfil-grupo">
                         <label className="editarPerfil-label">Contato</label>

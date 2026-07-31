@@ -20,12 +20,13 @@ type NivelFormacao = "ENSINO_MEDIO" | "TECNICO" | "GRADUACAO" | "POS_GRADUACAO";
 
 interface IUsuario{
     fotoAprendiz: File | null;
-    email: string;
-    user?: string;
+    email_bosch: string;
+    user_bosch?: string;
     EDV: number;
     contato: string;
     name: string;
     data_nascimento: string;
+    Ativo: boolean;
 }
 interface IPerfilAprendiz {
     EDV: number;
@@ -75,7 +76,6 @@ interface IPerfilAprendiz {
 
 function PerfilAprendiz(){
     const navigate = useNavigate()
-    const { edv } = useParams();
     const [aprendiz, setAprendiz] = useState<IPerfilAprendiz | null>(null);
     const [usuario, setUsuario] = useState<IUsuario | null>(null);
     const [situacao, setSituacao] = useState(false)
@@ -84,23 +84,38 @@ function PerfilAprendiz(){
     const [idioma, setIdioma] = useState(false)
     const [soft_skill, setSoftSkill] = useState(false)
     const [competencia, setCompetencia] = useState(false)
+    const { edv } = useParams();
     const fetchUsuario = async () => {
-         try {
-            const response = await api.get(`/aprendiz/${usuario?.EDV}`);
-            console.log("USUARIO:", response.data);
-            setAprendiz(response.data);
+        try {
+            const response = await api.get("/auth/buscaruser/APRENDIZ");
+            const usuarioEncontrado = response.data.find(
+                (usuario: IUsuario) => usuario.EDV === Number(edv) && usuario.Ativo === true
+            );
+            console.log("USUARIO ENCONTRADO:", usuarioEncontrado);
+            if (usuarioEncontrado) {
+                setUsuario(usuarioEncontrado);
+            }
         } 
         catch (error) {
-            console.error(error);
+            console.error("Erro ao buscar usuário:", error);
         }
-    }
+    };
     const fetchAprendiz = async () => {
         try {
             const response = await api.get(`/aprendiz/perfil/${edv}`);
-            console.log("PERFIL:", response.data);
-            setAprendiz(response.data.data);
-        } 
-        catch(error) {
+            const perfil = response.data.data;
+            console.log("PERFIL:", perfil);
+            setAprendiz({
+                ...perfil,
+                situacao_profissional: perfil.situacao_profissional ?? {},
+                formacao_academica: perfil.formacao_academica ?? [],
+                cursos_complementares: perfil.cursos ?? [],
+                idiomas: perfil.idiomas ?? [],
+                soft_skills: perfil.soft_skills ?? [],
+                competencias: perfil.competencia ?? []
+            });
+
+        } catch(error) {
             console.error("Erro ao buscar perfil:", error);
         }
     };
@@ -140,9 +155,9 @@ function PerfilAprendiz(){
                                     <div className="dadosAprendiz-cabecalho-perfil"><h1>{usuario?.name}</h1></div>
                                     {usuario && (
                                         <div className="dadosAprendiz-informacoes">
-                                            <span>Email: {usuario.email}</span>
+                                            <span>Email: {usuario.email_bosch}</span>
                                             <span>EDV: {usuario.EDV}</span>
-                                            <span>User: {usuario.user}</span>
+                                            <span>User: {usuario.user_bosch}</span>
                                             <span>Data de Nascimento: {new Date(usuario.data_nascimento).toLocaleDateString("pt-BR")}</span>
                                             <span>Idade: {calcularIdade(usuario.data_nascimento)} anos</span>
                                             <span>Contato: {formatarTelefone(usuario.contato)}</span>
@@ -153,7 +168,7 @@ function PerfilAprendiz(){
                             <div className="dadosAprendiz-cards-superiores">
                                 <div className="dadosAprendiz-card-perfil">
                                     <h3>Situação Profissional</h3>
-                                    <ul><li>{aprendiz.situacao_profissional.bio_profissional}</li></ul>
+                                    <ul><li>{aprendiz.situacao_profissional?.[0]?.bio_profissional}</li></ul>
                                     <button className="dadosAprendiz-btn-visualizar" onClick={() => setSituacao(true)}><img src={icon_olho} alt="Visualizar" /></button>
                                 </div>
                                 <div className="dadosAprendiz-card-perfil">
