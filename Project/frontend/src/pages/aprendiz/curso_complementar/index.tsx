@@ -34,12 +34,14 @@ interface user {
     edv: number;
 }
 
+
 function CursoComplementar({ visible, setVisible }: Props) {
  
     const [visualizarCurso, setVisualizarCurso] = useState(false);
     const [editarCurso, setEditarCurso] = useState(false);
     const [cursoSelecionado, setCursoSelecionado] = useState<any>(null);
     const [adicionarCurso, setAdicionarCurso] = useState(false);
+    const [cursos, setCursos] = useState<cursosComplementares[]>([]);
     const [apireq, setApireq] = useState<Perfil | null>(null);
     const [aprendiz, setAprendiz] = useState<user | null>(null);
 
@@ -63,31 +65,29 @@ function CursoComplementar({ visible, setVisible }: Props) {
     const handleDelete = async (id: number) => {
         const confirm = await Swal.fire({
             title: 'Tem certeza?',
-            text: 'O Curso Complementar será deletado!',
+            text: 'O idioma será deletado!',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Sim, deletar!',
             cancelButtonText: 'Cancelar'
         })
-
         if (!confirm.isConfirmed) {
             return
         }
-
         try {
-            await axios.delete(`link backend/${id}`)
+            await api.delete(`/aprendiz/deletarCursos/${apireq.EDV_Aprendiz}/${id}`);
+            setCursos((prev) => prev.filter((curso) => curso.id !== id));
             Swal.fire({
-                title: 'Deletado!',
-                text: 'Curso Complementar removido com sucesso!',
+                title: 'Deletada!',
+                text: 'Idioma removido com sucesso!',
                 icon: 'success'
             })
         }
-
         catch (error) {
             console.error('Erro ao deletar:', error)
             Swal.fire({
                 title: 'Erro!',
-                text: 'Erro ao deletar Curso Complementar',
+                text: 'Erro ao deletar Idioma',
                 icon: 'error'
             })
         }
@@ -153,7 +153,8 @@ function CursoComplementar({ visible, setVisible }: Props) {
                             visible={editarCurso}
                             setVisible={setEditarCurso}
                             setCursoComplementar={setVisible}
-                            id={cursoSelecionado.id}
+                            id_curso= {cursoSelecionado.id}
+                            id_perfil={apireq.id}
                         />
                     )
                 }

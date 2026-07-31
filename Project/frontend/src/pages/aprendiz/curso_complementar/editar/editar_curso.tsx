@@ -9,12 +9,12 @@ import download from '../../../../assets/img/icon download.png'
 import api from '../../../../services/api'
 
 interface ICurso {
-    id?: number;
+    id_Curso?: number;
     Id_Profile?: number;
-    certificado?: string;
+    certificado?: string | null;
     name_Curso: string;
-    status_Cursos: "CONCLUIDO"|"CURSANDO" |"NAO_INFORMADO";
-    data_Conclusao: Date | null;
+    status_Cursos: "CONCLUIDO" | "CURSANDO" | "NAO_INFORMADO";
+    data_Conclusao: string | null;
     carga_horaria: number | null;
 }
 
@@ -23,99 +23,117 @@ interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
     setCursoComplementar: React.Dispatch<React.SetStateAction<boolean>>;
-    id: number;
+    id_perfil: number;
+    id_curso: number;
 }
 
 function EditarCursoComplementar({
     visible,
     setVisible,
     setCursoComplementar,
-    id
+    id_perfil,
+    id_curso,
 }: Props) {
+    const [arquivoCertificado, setArquivoCertificado] = useState<File | null>(null);
 
-    const [curso, setCurso] = useState<ICurso>()
+
+    const [curso, setCurso] = useState<ICurso>({
+        id_Curso: id_curso,
+        Id_Profile: id_perfil,
+        certificado: null,
+        name_Curso: "",
+        status_Cursos: "CURSANDO",
+        data_Conclusao: null,
+        carga_horaria: 0
+    })
 
     const [nomeCertificado, setNomeCertificado] = useState("");
 
     const { getRootProps, getInputProps } = useDropzone({
         accept: {
             "image/*": [],
+
         },
-        multiple:false,
-        maxFiles:1,
-        onDrop:(acceptedFiles)=>{
-            if(acceptedFiles.length > 0){
+        multiple: false,
+        maxFiles: 1,
+        onDrop: (acceptedFiles) => {
+            if (acceptedFiles.length > 0) {
                 const arquivo = acceptedFiles[0];
+
+                setArquivoCertificado(arquivo);
                 setNomeCertificado(arquivo.name);
-                setCurso((prev)=>({
-                    ...prev,
-                    certificado: arquivo,
-                }))
             }
         }
+
     })
 
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-    )=>{
+    ) => {
 
-        setCurso({
-            ...curso,
-            [e.target.name]: e.target.value
-        })
+        const { name, value } = e.target;
+
+        setCurso(prev => ({
+            ...prev,
+            [name]:
+                name === "carga_horaria"
+                    ? Number(value)
+                    : value
+        }));
+
     }
 
     const handleDataConclusao = (
         e: React.ChangeEvent<HTMLInputElement>
     ) => {
-    
+
         let valor = e.target.value.replace(/\D/g, "");
-    
+
         if (valor.length > 2) {
             valor = valor.replace(/^(\d{2})(\d)/, "$1/$2");
         }
-    
+
         if (valor.length > 5) {
             valor = valor.replace(/^(\d{2})\/(\d{2})(\d)/, "$1/$2/$3");
         }
-    
+
         setCurso({
             ...curso,
             data_Conclusao: valor
         });
-    
+
     }
-    
+
 
     const handleSituacao = (
         e: React.ChangeEvent<HTMLInputElement>
     ) => {
-    
+
         setCurso({
             ...curso,
             status_Cursos: e.target.value
         });
-    
+
     }
-    
+
 
     const handleSubmit = async (
-        e:React.FormEvent<HTMLFormElement>
-    )=>{
+        e: React.FormEvent<HTMLFormElement>
+    ) => {
 
         e.preventDefault();
 
-        if(
+        if (
             !curso.name_Curso ||
             !curso.status_Cursos ||
-            !curso.carga_horaria 
-        ){
+            !curso.carga_horaria
+        ) {
 
             Swal.fire({
-                title:'Atenção!',
-                text:'Preencha todos os campos obrigatórios.',
-                icon:'warning',
-                confirmButtonColor:'#2B83D5'
+                title: 'Atenção!',
+                text: 'Preencha todos os campos obrigatórios.',
+                icon: 'warning',
+                confirmButtonColor: '#2B83D5'
             })
             return;
         }
@@ -128,55 +146,71 @@ function EditarCursoComplementar({
                 confirmButtonColor: '#2B83D5'
             })
             return;
-        }        
+        }
 
-        try{
-            await axios.put(
-                `link backend/${id}`,
+        try {
+            const usuario = localStorage.getItem("usuario");
+            if (!usuario) return;
+            const aprendizLogado = JSON.parse(usuario);
+            const edv = aprendizLogado.user.EDV;
+            console.log(curso.Id_Profile)
+
+            await api.put(
+                `http://localhost:8080/api/aprendiz/atualizarCursos/${edv}/${id_perfil}`,
                 {
-                    ...curso
+                    id_Curso: curso.id_Curso,
+                    Id_Profile: curso.Id_Profile,
+                    name_Curso: curso.name_Curso,
+                    status_Cursos: curso.status_Cursos,
+                    data_Conclusao: curso.data_Conclusao,
+                    carga_horaria: curso.carga_horaria,
                 }
             )
+            // const formData = new FormData();
+
+            // formData.append("certificado", arquivoCertificado!);
+
+            // await api.post(`/curso/certificado/${id_perfil}`, formData);
 
             Swal.fire({
-                title:'Sucesso!',
-                text:'Curso complementar atualizado com sucesso.',
-                icon:'success',
-                confirmButtonColor:'#2B83D5'
+                title: 'Sucesso!',
+                text: 'Curso complementar atualizado com sucesso.',
+                icon: 'success',
+                confirmButtonColor: '#2B83D5'
             })
 
             setVisible(false);
 
-        }catch(error){
+        } catch (error) {
             console.error(error)
 
             Swal.fire({
-                title:'Erro!',
-                text:'Não foi possível atualizar o curso complementar.',
-                icon:'error'
+                title: 'Erro!',
+                text: 'Não foi possível atualizar o curso complementar.',
+                icon: 'error'
             })
         }
     }
 
-    if(!visible){
+    if (!visible) {
         return null
     }
 
-    return(
+    return (
         <div className="editarCurso-overlay" onClick={() => setVisible(false)}>
             <form onSubmit={handleSubmit} className="editarCurso-card" onClick={(e) => e.stopPropagation()}>
-                <button type="button" className="editarCurso-fechar" onClick={()=>{
-                        setVisible(false)
-                        setCursoComplementar(true)
-                    }}
+                <button type="button" className="editarCurso-fechar" onClick={() => {
+                    setVisible(false)
+                    setCursoComplementar(true)
+                }}
                 >
-                    <img src={sair} alt="Fechar"/>
+                    <img src={sair} alt="Fechar" />
                 </button>
                 <span className="editarCurso-titulo">Curso Complementar</span>
                 <div className="editarCurso-container">
                     <div className="editarCurso-grupo">
                         <label className="editarCurso-label">Nome do Curso</label>
-                        <input name="nomeCurso" className="editarCurso-input" value={curso.name_Curso} onChange={handleChange}/>
+                        <input name="name_Curso" className="editarCurso-input" value={curso.name_Curso} onChange={handleChange} />
                     </div>
                     <div className="editarCurso-grupo">
                         <label className="editarCurso-label">Situação</label>
@@ -188,13 +222,13 @@ function EditarCursoComplementar({
                                 onChange={handleSituacao}
                             >
                                 <FormControlLabel
-                                    value="Concluído"
+                                    value="CONCLUIDO"
                                     control={
                                         <Radio
                                             sx={{
-                                                color:"#2B83D5",
-                                                "&.Mui-checked":{
-                                                    color:"#2B83D5"
+                                                color: "#2B83D5",
+                                                "&.Mui-checked": {
+                                                    color: "#2B83D5"
                                                 }
                                             }}
                                         />
@@ -202,13 +236,13 @@ function EditarCursoComplementar({
                                     label="Concluído"
                                 />
                                 <FormControlLabel
-                                    value="Cursando"
+                                    value="CURSANDO"
                                     control={
                                         <Radio
                                             sx={{
-                                                color:"#2B83D5",
-                                                "&.Mui-checked":{
-                                                    color:"#2B83D5"
+                                                color: "#2B83D5",
+                                                "&.Mui-checked": {
+                                                    color: "#2B83D5"
                                                 }
                                             }}
                                         />
@@ -220,19 +254,19 @@ function EditarCursoComplementar({
                     </div>
                     <div className="editarCurso-grupo">
                         <label className="editarCurso-label">Data de Conclusão</label>
-                        <input type="text" name="dataConclusao" maxLength={10} value={curso.data_Conclusao} onChange={handleDataConclusao}/></div>
+                        <input type="text" name="data_Conclusao" maxLength={10} value={curso.data_Conclusao ?? ""} onChange={handleDataConclusao} /></div>
                     <div className="editarCurso-grupo">
                         <label className="editarCurso-label">Carga Horária</label>
-                        <input name="cargaHoraria" className="editarCurso-input" value={curso.carga_horaria} onChange={handleChange}/>
+                        <input name="carga_horaria" className="editarCurso-input" value={curso.carga_horaria} onChange={handleChange} />
                     </div>
                     <div className="editarCurso-grupo">
                         <label className="editarCurso-label">Certificado</label>
                         <div className="certificado-container"
                             {...getRootProps()}
                         >
-                            <input {...getInputProps()}/>
+                            <input {...getInputProps()} />
                             <p className="certificado-file">{nomeCertificado}</p>
-                            <img src={download} className="certificado-upload" alt="upload"/>
+                            <img src={download} className="certificado-upload" alt="upload" />
                         </div>
                     </div>
                     <div className="editarCurso-botoes">

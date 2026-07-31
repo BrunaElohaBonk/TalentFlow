@@ -30,6 +30,28 @@ export default class aprendizController {
       });
     }
   }
+  static async adicionarCursos(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      console.log("ID RECEBIDO:", req.params.id);
+      const idioma = await AprendizService.adicionarCursos(
+        Number(id),
+        req.body
+      );
+
+      res.status(201).json({
+        mensagem: "Curso adicionado com sucesso.",
+        idioma
+      });
+
+    } catch (error) {
+      console.error(error);
+
+      res.status(500).json({
+        erro: "Não foi possível adicionar o Curso."
+      });
+    }
+  }
 
   static async criar(req: AuthRequest, res: Response) {
     console.log("bory " + req.body);
@@ -410,6 +432,23 @@ export default class aprendizController {
 
       return res.status(200).json({
         message: "Idioma deletado com sucesso.",
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async deletarCursos(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const { EDV, id } = req.params;
+
+      await AprendizService.deletarCursos(Number(EDV), Number(id));
+
+      return res.status(200).json({
+        message: "Curso deletado com sucesso.",
       });
     } catch (error) {
       next(error);
