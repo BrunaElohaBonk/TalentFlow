@@ -20,6 +20,33 @@ import './perfil.css';
 import api from "../../../services/api";
 import { useNavigate } from "react-router-dom";
 
+const formatarSoftSkill = (skill: string) => {
+    const softSkills: Record<string, string> = {
+        COMUNICACAO: "Comunicação",
+        TRABALHO_EM_EQUIPE: "Trabalho em Equipe",
+        LIDERANCA: "Liderança",
+        EMPATIA: "Empatia",
+        PROATIVIDADE: "Proatividade",
+        RESOLUCAO_DE_PROBLEMAS: "Resolução de Problemas",
+        PENSAMENTO_CRITICO: "Pensamento Crítico",
+        GESTAO_DO_TEMPO: "Gestão do Tempo",
+        ORGANIZACAO: "Organização",
+        CRIATIVIDADE: "Criatividade",
+        NEGOCIACAO: "Negociação",
+        RESILIENCIA: "Resiliência",
+        ESCUTA_ATIVA: "Escuta Ativa",
+        RESPONSABILIDADE: "Responsabilidade",
+        AUTONOMIA: "Autonomia",
+        APRENDIZADO_CONTINUO: "Aprendizado Contínuo",
+        INOVACAO: "Inovação",
+        ORATORIA: "Oratória",
+        COMPROMETIMENTO: "Comprometimento",
+        NAO_INFORMADO: "Não informado"
+    };
+
+    return softSkills[skill] || skill;
+};
+
 const formatarIdioma = (idioma: string) => {
     const idiomas: Record<string, string> = {
         ALEMAO: "Alemão",
@@ -323,7 +350,7 @@ function Perfil() {
                             <h3>Soft Skills</h3>
                             <ul>{apireq?.soft_skills.slice(0, 2).map((skill) => (
                                 <li key={skill.id}>
-                                    {skill.nome_SoftSkills}
+                                     {formatarSoftSkill(skill.nome_SoftSkills)}
                                 </li>
                             ))}
                             </ul>

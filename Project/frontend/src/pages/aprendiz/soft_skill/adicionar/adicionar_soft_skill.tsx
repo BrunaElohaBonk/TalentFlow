@@ -152,13 +152,14 @@ function AdicionarSoftSkill({
                 converterSoftSkill
             );
 
-
             await api.post(
                 `/aprendiz/adicionarSoftskills/${edv}`,
                 {
-                    softSkills: softSkillsEnum
+                    softskills: softSkillsSelecionadas.map(
+                        skill => converterSoftSkill(skill)
+                    )
                 }
-            );
+            )
 
 
             await carregarSoftSkills();
@@ -175,7 +176,7 @@ function AdicionarSoftSkill({
             setVisible(false);
 
 
-        } catch (error:any) {
+        } catch (error: any) {
             console.log("ERRO COMPLETO:", error.response?.data);
 
             Swal.fire({
@@ -194,8 +195,8 @@ function AdicionarSoftSkill({
 
 
     return (
-        <div 
-            className="adicionarSoftSkill-overlay" 
+        <div
+            className="adicionarSoftSkill-overlay"
             onClick={() => setVisible(false)}
         >
 
@@ -205,9 +206,9 @@ function AdicionarSoftSkill({
                 onClick={(e) => e.stopPropagation()}
             >
 
-                <button 
-                    type="button" 
-                    className="adicionarSoftSkill-fechar" 
+                <button
+                    type="button"
+                    className="adicionarSoftSkill-fechar"
                     onClick={() => {
                         setVisible(false);
                         setSoftSkill(true);
@@ -228,8 +229,8 @@ function AdicionarSoftSkill({
 
                         {softSkills.map((skill) => (
 
-                            <label 
-                                key={skill} 
+                            <label
+                                key={skill}
                                 className="adicionarSoftSkill-item"
                             >
 
@@ -254,8 +255,8 @@ function AdicionarSoftSkill({
 
                     <div className="adicionarSoftSkill-botoes">
 
-                        <button 
-                            type="submit" 
+                        <button
+                            type="submit"
                             className="adicionarSoftSkill-salvar"
                         >
                             ADICIONAR

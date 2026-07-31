@@ -17,6 +17,32 @@ interface SoftSkill {
     id: number;
     nome_SoftSkills: string;
 }
+const formatarSoftSkill = (skill: string) => {
+    const softSkills: Record<string, string> = {
+        COMUNICACAO: "Comunicação",
+        TRABALHO_EM_EQUIPE: "Trabalho em Equipe",
+        LIDERANCA: "Liderança",
+        EMPATIA: "Empatia",
+        PROATIVIDADE: "Proatividade",
+        RESOLUCAO_DE_PROBLEMAS: "Resolução de Problemas",
+        PENSAMENTO_CRITICO: "Pensamento Crítico",
+        GESTAO_DO_TEMPO: "Gestão do Tempo",
+        ORGANIZACAO: "Organização",
+        CRIATIVIDADE: "Criatividade",
+        NEGOCIACAO: "Negociação",
+        RESILIENCIA: "Resiliência",
+        ESCUTA_ATIVA: "Escuta Ativa",
+        RESPONSABILIDADE: "Responsabilidade",
+        AUTONOMIA: "Autonomia",
+        APRENDIZADO_CONTINUO: "Aprendizado Contínuo",
+        INOVACAO: "Inovação",
+        ORATORIA: "Oratória",
+        COMPROMETIMENTO: "Comprometimento",
+        NAO_INFORMADO: "Não informado"
+    };
+
+    return softSkills[skill] || skill;
+};
 
 function SoftSkill({ visible, setVisible, edv }: Props) {
 
@@ -151,7 +177,7 @@ function SoftSkill({ visible, setVisible, edv }: Props) {
                                 >
 
                                     <span className="soft-skill-titulo">
-                                        {item.nome_SoftSkills}
+                                        {formatarSoftSkill(item.nome_SoftSkills)}
                                     </span>
 
 
