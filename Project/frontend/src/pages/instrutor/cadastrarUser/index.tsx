@@ -204,7 +204,16 @@ function CadastrarUser() {
                         <span className="user-titulo">Cadastrar Usuário</span>
                         <div className="user-conteudo">
                             <div className="user-row">
-                                <input ref={edvRef} name="edv" type="number" placeholder="EDV" value={user.edv || ''} onChange={handleChange} className="user-input" onKeyDown={(e) => proximoCampo(e, nameRef)}/>
+                                <input ref={edvRef} name="edv" type="text" inputMode="numeric" placeholder="EDV" value={user.edv || ""} className="user-input" maxLength={8}
+                                    onChange={(e) => {
+                                        const value = e.target.value.replace(/\D/g, "").slice(0, 8);
+                                        setUser((prev) => ({
+                                            ...prev,
+                                            edv: value === "" ? 0 : Number(value),
+                                        }));
+                                    }}
+                                    onKeyDown={(e) => proximoCampo(e, nameRef)}
+                                />
                                 <input ref={nameRef} name="name" placeholder="Nome Completo" value={user.name} onChange={handleChange} className="user-input" onKeyDown={(e) => proximoCampo(e, userRef)}/>
                             </div>
                             <div className="user-row">
