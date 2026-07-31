@@ -11,13 +11,15 @@ interface ISituacao {
 interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
-    situacao: ISituacao;
+    situacao: ISituacao[];
 }
 
 function SituacaoProfissional({visible, setVisible, situacao}: Props) {
     if (!visible) {
         return null
     }
+
+    const dados = situacao[0];
 
     return (
         <div className="situacao-overlay" onClick={() => setVisible(false)}>
@@ -29,19 +31,19 @@ function SituacaoProfissional({visible, setVisible, situacao}: Props) {
                 <div className="situacao-conteudo">
                     <div className="situacao-item">
                         <span className='formacao-titulo'>Nome do Setor</span>
-                        <p>{situacao.nome_Setor || "Não informado."}</p>
+                        <p>{dados?.nome_Setor || "Não informado."}</p>
                     </div>
                     <div className="situacao-item">
                         <span className='formacao-titulo'>Nome do Líder</span>
-                        <p>{situacao.nome_Lider || "Não informado."}</p>
+                        <p>{dados?.nome_Lider || "Não informado."}</p>
                     </div>
                     <div className="situacao-item">
                         <span className='formacao-titulo'>Cumprindo Estágio?</span>
-                        <p>{situacao.cumprido_Estagio ? "Sim" : "Não"}</p>
+                        <p>{dados?.cumprido_Estagio ? "Sim" : "Não"}</p>
                     </div>
                     <div className="situacao-item situacao-descricao">
                         <span className='formacao-titulo'>Situação atual e expectativas para o futuro</span>
-                        <p>{situacao.bio_profissional || "Não informado."}</p>
+                        <p>{dados?.bio_profissional || "Não informado."}</p>
                     </div>
                 </div>
             </div>

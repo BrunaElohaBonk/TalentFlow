@@ -84,30 +84,39 @@ function PerfilAprendiz(){
     const [idioma, setIdioma] = useState(false)
     const [soft_skill, setSoftSkill] = useState(false)
     const [competencia, setCompetencia] = useState(false)
-    const fetchUsuario = async () => {
-         try {
-            const response = await api.get(`/aprendiz/${usuario?.EDV}`);
-            console.log("USUARIO:", response.data);
-            setAprendiz(response.data);
-        } 
-        catch (error) {
-            console.error(error);
-        }
-    }
+    // const fetchUsuario = async () => {
+    //      try {
+    //         const response = await api.get(`/aprendiz/aprendiz/${usuario?.EDV}`);
+    //         console.log("USUARIO:", response.data);
+    //         setAprendiz(response.data);
+    //     } 
+    //     catch (error) {
+    //         console.error(error);
+    //     }
+    // }
     const fetchAprendiz = async () => {
         try {
             const response = await api.get(`/aprendiz/perfil/${edv}`);
-            console.log("PERFIL:", response.data);
-            setAprendiz(response.data.data);
-        } 
-        catch(error) {
+            const perfil = response.data.data;
+            console.log("PERFIL:", perfil);
+            setAprendiz({
+                ...perfil,
+                situacao_profissional: perfil.situacao_profissional ?? {},
+                formacao_academica: perfil.formacao_academica ?? [],
+                cursos_complementares: perfil.cursos ?? [],
+                idiomas: perfil.idiomas ?? [],
+                soft_skills: perfil.soft_skills ?? [],
+                competencias: perfil.competencia ?? []
+            });
+
+        } catch(error) {
             console.error("Erro ao buscar perfil:", error);
         }
     };
 
     useEffect(() => {
         if(edv){
-            fetchUsuario();
+            // fetchUsuario();
             fetchAprendiz();
         }
     },[edv]);
@@ -119,7 +128,7 @@ function PerfilAprendiz(){
     return(
         <div className="dadosAprendiz">
             <Header></Header>
-            <SituacaoProfissional visible={situacao} setVisible={setSituacao} situacao={aprendiz.situacao_profissional}/>
+            <SituacaoProfissional visible={situacao} setVisible={setSituacao} situacao={aprendiz.situacao_profissional[0]}/>
             <FormacaoAcademica visible={formacao_academica} setVisible={setFormacaoAcademica} formacaoAcademica={aprendiz.formacao_academica}/>
             <CursoComplementar visible={curso_complementar} setVisible={setCursoComplementar} cursoComplementar={aprendiz.cursos_complementares}/>
             <Idioma visible={idioma} setVisible={setIdioma} idiomas={aprendiz.idiomas}/>
@@ -137,7 +146,7 @@ function PerfilAprendiz(){
                             <div className="dadosAprendiz-topo">
                                 <div className="dadosAprendiz-foto-container"><img src={icon_user} alt="icon_user" /></div>
                                 <div className="dadosAprendiz-dados-perfil">
-                                    <div className="dadosAprendiz-cabecalho-perfil"><h1>{usuario?.name}</h1></div>
+                                    {/* <div className="dadosAprendiz-cabecalho-perfil"><h1>{usuario?.name}</h1></div>
                                     {usuario && (
                                         <div className="dadosAprendiz-informacoes">
                                             <span>Email: {usuario.email}</span>
@@ -147,13 +156,13 @@ function PerfilAprendiz(){
                                             <span>Idade: {calcularIdade(usuario.data_nascimento)} anos</span>
                                             <span>Contato: {formatarTelefone(usuario.contato)}</span>
                                         </div>
-                                    )}
+                                    )} */}
                                 </div>
                             </div>
                             <div className="dadosAprendiz-cards-superiores">
                                 <div className="dadosAprendiz-card-perfil">
                                     <h3>Situação Profissional</h3>
-                                    <ul><li>{aprendiz.situacao_profissional.bio_profissional}</li></ul>
+                                    <ul><li>{aprendiz.situacao_profissional?.[0]?.bio_profissional}</li></ul>
                                     <button className="dadosAprendiz-btn-visualizar" onClick={() => setSituacao(true)}><img src={icon_olho} alt="Visualizar" /></button>
                                 </div>
                                 <div className="dadosAprendiz-card-perfil">

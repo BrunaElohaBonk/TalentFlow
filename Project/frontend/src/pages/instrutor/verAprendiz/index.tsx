@@ -29,11 +29,9 @@ interface IAprendiz {
     fotoPerfil: string | null;
     tipoUser: "APRENDIZ";
     Ativo: boolean;
+    idTurma: number;
 
     data: {
-        id: number;
-        EDV_Aprendiz: number;
-
         situacao_profissional: {
             nome_Setor: string;
             nome_Lider: string;
@@ -75,7 +73,10 @@ function VerAprendiz(){
     const [aprendiz, setAprendiz] = useState<IAprendiz[]>([]);
     const [turma, setTurma] = useState<ITurma[]>([]);
     const buscarNomeTurma = (idTurma: number) => {
+        console.log("idTurma:", idTurma);
         const turmaEncontrada = turma.find((item) => item.id === idTurma);
+        console.log("Encontrada:", turmaEncontrada);
+    
         return turmaEncontrada?.nomeTurma ?? "Sem turma";
     };
     const Idade = (dataNascimento: Date) => {
@@ -104,7 +105,7 @@ function VerAprendiz(){
     const pesquisar = aprendiz
         .filter((item) => {
         if (filtros.turmas.length > 0) {
-            const turmaDoAprendiz = item.data.id;
+            const turmaDoAprendiz = item.idTurma;
             if (!filtros.turmas.includes(turmaDoAprendiz)) {
                 return false;
             }
@@ -174,10 +175,10 @@ function VerAprendiz(){
             normalizar(item.name).includes(termo) ||
             normalizar(item.email_bosch).includes(termo) ||
             normalizar(item.user_bosch).includes(termo) ||
-            // normalizar(item.perfil.turma).includes(termo) ||
+            normalizar(buscarNomeTurma(item.idTurma)).includes(termo) ||
             item.EDV.toString().includes(termo) ||
             item.contato.toString().includes(termo) ||
-            item.data_nascimento.toLocaleDateString("pt-BR").includes(termo)
+            new Date(item.data_nascimento).toLocaleDateString("pt-BR").includes(termo)
         );
     })
     .sort((a, b) =>
@@ -197,10 +198,13 @@ function VerAprendiz(){
             const response = await api.get("/auth/buscaruser/APRENDIZ");
             const usuarios = response.data.filter((usuario: IAprendiz) => usuario.tipoUser === "APRENDIZ" && usuario.Ativo === true );
             const aprendizesComPerfil = await Promise.all(
-                usuarios.map(async (usuario: IAprendiz) => {
+                usuarios.map(async (usuario) => {
                     const perfilResponse = await api.get(`/aprendiz/perfil/${usuario.EDV}`);
+                    const turmaResponse = await api.get(`/aprendiz/aprendiz/${usuario.EDV}`);
+
                     return {
                         ...usuario,
+                        idTurma: turmaResponse.data.data.Id_Turma,
                         data: perfilResponse.data.data
                     };
                 })
@@ -282,7 +286,7 @@ function VerAprendiz(){
                                         <span className="aprendiz-titulo" title={item.name}>{item.name}</span>
                                     </div>
                                     <div className="aprendiz-conteudo">
-                                        <span className="aprendiz-span" title={buscarNomeTurma(item.data.id) || 'Sem Turma'}>{buscarNomeTurma(item.data.id)}</span>
+                                        <span className="aprendiz-span" title={buscarNomeTurma(item.idTurma) || 'Sem Turma'}>{buscarNomeTurma(item.idTurma)}</span>
                                         <button onClick={() => navigate(`/PerfilAprendiz/${item.EDV}`)} className="aprendiz-button">Ver Dados do Aprendiz</button>
                                     </div>
                                 </div>
