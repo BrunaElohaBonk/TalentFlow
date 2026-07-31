@@ -34,12 +34,15 @@ function Notificacao() {
         }
         if (notificacao.texto === "UPDATE") {
             if (notificacao.tipo === "TURMA")
-                return `Atualizou as informações da turma ${notificacao.nome}`;
+                return `Atualizou as informações da turma ${notificacao.nome}.`;
             if (notificacao.tipo === "PERFIL")
                 return `Atualizou as informações do perfil.`
         }
         if (notificacao.texto === "DELETE") {
-            return `Removeu um registro`;
+            if (notificacao.tipo === "TURMA")
+                return `Removeu a turma ${notificacao.nome}.`;
+            if (notificacao.tipo === "PERFIL")
+                return `Removeu o usuário ${notificacao.nome}.`
         }
         return `Realizou uma alteração`;
     };

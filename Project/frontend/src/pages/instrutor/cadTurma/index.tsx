@@ -102,6 +102,13 @@ function CadTurma() {
                 icon: 'success'
             });
 
+            setTurma({
+                nomeTurma: '',
+                name_Curso: '',
+                EDV_Instrutor: '',
+                nomeInstrutor: '',
+            });
+
             console.log(response.data);
 
         } catch (e: any) {
@@ -113,6 +120,7 @@ function CadTurma() {
             });
         }
     };
+
     return (
         <div className="cadTurma">
             <Header />
@@ -148,10 +156,21 @@ function CadTurma() {
                             <input
                                 ref={edvInstrutorRef}
                                 name="EDV_Instrutor"
-                                type="number"
+                                type="text"
+                                inputMode="numeric"
+                                pattern="[0-9]*"
                                 placeholder="EDV do Instrutor"
                                 value={turma.EDV_Instrutor}
-                                onChange={handleChange}
+                                onChange={(e) => {
+                                    const valor = e.target.value
+                                        .replace(/\D/g, "")
+                                        .slice(0, 8);
+                                
+                                    setTurma((prev) => ({
+                                        ...prev,
+                                        EDV_Instrutor: valor,
+                                    }));
+                                }}
                                 className="cadTurma-input"
                                 onKeyDown={(e) => proximoCampo(e, instrutorRef)}
                             />
