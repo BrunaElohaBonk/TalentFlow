@@ -225,7 +225,7 @@ function Perfil() {
             />
             <CursoComplementar visible={curso_complementar} setVisible={setCursoComplementar} />
             <Idioma visible={idioma} setVisible={setIdioma} />
-            <SoftSkill visible={soft_skill} setVisible={setSoftSkill} />
+            <SoftSkill visible={soft_skill} setVisible={setSoftSkill} edv={aprendiz?.edv ?? 0} />
             <Competencia visible={competencia} setVisible={setCompetencia} />
             <EditarPerfil visible={editar} setVisible={setEditar} edv={aprendiz?.edv} />
             <EditarSituacaoProfissional visible={editarSituacao} setVisible={setEditarSituacao} setSituacaoProfissional={setSituacao} edv={aprendiz?.edv ?? 0} idSituacao={apireq?.situacao_profissional?.[0]?.id ?? 0} />

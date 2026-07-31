@@ -187,6 +187,22 @@ route.get(
   aprendizController.verSoftskills,
 );
 
+route.post(
+  "/adicionarSoftskills/:EDV",
+  authMiddleware,
+  roleMiddleware("APRENDIZ"),
+  ownerMiddleware,
+  aprendizController.adicionarSoftskills
+);
+
+route.delete(
+  "/deletarSoftskills/:EDV/:id",
+  authMiddleware,
+  roleMiddleware("APRENDIZ"),
+  ownerMiddleware,
+  aprendizController.deletarSoftskill
+);
+
 route.get(
   "/minhasCompetencias/:EDV/:id",
   authMiddleware,

@@ -1,5 +1,6 @@
 import { cursos_status_Cursos, Prisma } from "@prisma/client";
 import { prisma } from "../lib/prisma.js";
+import { NomeSoftskills } from "@prisma/client";
 import { TipoHistorico } from "@prisma/client";
 import { idiomas_nome_Idioma, idiomas_nivel_Idioma } from "@prisma/client";
 import {
@@ -708,6 +709,79 @@ export default class AprendizService {
       },
     });
   }
+  static async adicionarSoftskills(
+    EDV: number,
+    data: any,
+    usuarioEDV: number
+  ) {
+
+    return await prisma.$transaction(async (tx) => {
+
+      const perfil = await tx.profile.findFirst({
+        where: {
+          EDV_Aprendiz: EDV
+        }
+      });
+
+
+      if (!perfil) {
+        throw new Error("Perfil não encontrado.");
+      }
+
+
+      const softskills = await Promise.all(
+        data.softskills.map((nome: string) =>
+          tx.soft_skills.create({
+            data: {
+              Id_Profile: perfil.id,
+              nome_SoftSkills: nome as NomeSoftskills
+            }
+          })
+        )
+      );
+      return softskills;
+    });
+  }
+  static async deletarSoftskill(
+    EDV: number,
+    id: number,
+    usuarioEDV: number
+) {
+
+    return await prisma.$transaction(async (tx) => {
+
+        const softskill = await tx.soft_skills.findUnique({
+            where: {
+                id: id
+            }
+        });
+
+
+        if (!softskill) {
+            throw new Error("Softskill não encontrada.");
+        }
+
+
+        const perfil = await tx.profile.findUnique({
+            where: {
+                id: softskill.Id_Profile
+            }
+        });
+
+
+        if (!perfil || perfil.EDV_Aprendiz !== EDV) {
+            throw new Error("Acesso negado.");
+        }
+
+
+        return await tx.soft_skills.delete({
+            where: {
+                id: id
+            }
+        });
+
+    });
+}
   static async verCursos(EDV: number, id: number) {
     return await prisma.cursos.findMany({
       where: {
