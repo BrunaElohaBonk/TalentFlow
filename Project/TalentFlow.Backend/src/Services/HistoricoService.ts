@@ -42,10 +42,21 @@ export class HistoricoService {
                     })
                     : null;
 
+                // pega nome pelo relacionamento
+                let nome = item.profile?.aprendiz?.user?.name;
+
+
+                // se não existir, pega do JSON Dados
+                if (!nome) {
+                    const dados = item.Dados as any;
+
+                    nome = dados?.user?.name;
+                }
+
                 return {
                     id: item.Id,
                     tipo: "PERFIL",
-                    nome: item.profile?.aprendiz?.user?.name ?? "Aprendiz",
+                    nome: nome ?? "Usuário não encontrado",
                     texto: item.Acao,
                     dataHora: item.DataAlteracao.toISOString(),
                     alteradoPor: usuario?.name ?? "Sistema"
