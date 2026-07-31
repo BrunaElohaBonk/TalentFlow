@@ -233,4 +233,10 @@ route.delete(
   ownerMiddleware,
   aprendizController.deletarIdioma,
 );
+route.post(
+    "/adicionarFormacao/:EDV",
+    authMiddleware,
+    roleMiddleware("APRENDIZ"),
+    aprendizController.adicionarFormacaoAcademica
+);
 export default route;

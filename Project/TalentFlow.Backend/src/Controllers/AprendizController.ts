@@ -41,7 +41,29 @@ export default class aprendizController {
       data: aprendiz,
     });
   }
+  static async adicionarFormacaoAcademica(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+) {
+    try {
+        const { EDV } = req.params;
 
+        const formacao = await AprendizService.adicionarFormacaoAcademica(
+            Number(EDV),
+            req.body,
+            req.user!.EDV
+        );
+
+        return res.status(201).json({
+            response: "Formação acadêmica adicionada com sucesso!",
+            data: formacao
+        });
+
+    } catch(error){
+        next(error);
+    }
+}
 
   static async atualizarFoto(req: Request, res: Response) {
     const { EDV } = req.params;

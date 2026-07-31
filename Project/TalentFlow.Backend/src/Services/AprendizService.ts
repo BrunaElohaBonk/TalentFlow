@@ -10,6 +10,7 @@ import {
   AtualizarPerfilDto,
   AtualizarSituacaoProfissionalDto,
   AtualizarSoftSkillsDto,
+  CriarFormacaoAcademicaDto,
 } from "../DTO/aprendizDTO.ts";
 
 
@@ -108,6 +109,53 @@ export default class AprendizService {
       data: {
         certificado,
       },
+    });
+  }
+  static async adicionarFormacaoAcademica(
+    EDV: number,
+    data: CriarFormacaoAcademicaDto,
+    usuarioEDV: number
+  ) {
+    return await prisma.$transaction(async (tx: any) => {
+
+      const perfil = await tx.profile.findUnique({
+        where: {
+          EDV_Aprendiz: EDV
+        }
+      });
+
+      if (!perfil) {
+        throw new Error("Perfil não encontrado.");
+      }
+
+      const statusMap = {
+        "Concluído": "CONCLUIDO",
+        "Cursando": "CURSANDO"
+      } as const;
+
+      const nivelMap = {
+        "Ensino Médio": "ENSINO_MEDIO",
+        "Técnico": "TECNICO",
+        "Graduação": "GRADUACAO",
+        "Pós Graduação": "POS_GRADUACAO"
+      } as const;
+
+      const formacao = await tx.formacao_academica.create({
+        data: {
+          Id_Profile: perfil.id,
+          name_Curso: data.curso,
+          nome_Institucao: data.instituicao,
+          status_Academico:
+            statusMap[data.situacao as keyof typeof statusMap],
+          nivel_formacao:
+            nivelMap[data.nivelFormacao as keyof typeof nivelMap],
+          periodo_Atual: Number(data.periodoAtual || 0),
+          total_Periodo: Number(data.totalPeriodos),
+          certificado: data.certificado ?? null
+        }
+      });
+
+      return formacao;
     });
   }
 
@@ -397,39 +445,39 @@ export default class AprendizService {
     id: number,
     data: AtualizarIdiomasDto,
     usuarioEDV: number,
-) {
+  ) {
     return await prisma.$transaction(async (tx: any) => {
 
-        const idiomasAntigo = await tx.idiomas.findUnique({
-            where: {
-                id: id,
-            },
-        });
+      const idiomasAntigo = await tx.idiomas.findUnique({
+        where: {
+          id: id,
+        },
+      });
 
-        if (!idiomasAntigo) {
-            throw new Error("Idioma não encontrado.");
-        }
+      if (!idiomasAntigo) {
+        throw new Error("Idioma não encontrado.");
+      }
 
-        const idiomasAtualizado = await tx.idiomas.update({
-            where: {
-                id: id,
-            },
-            data,
-        });
+      const idiomasAtualizado = await tx.idiomas.update({
+        where: {
+          id: id,
+        },
+        data,
+      });
 
-        await this.registrarHistorico(
-            tx,
-            idiomasAntigo.Id_Profile,
-            TipoHistorico.IDIOMA,
-            id,
-            usuarioEDV,
-            idiomasAntigo,
-            idiomasAtualizado,
-        );
+      await this.registrarHistorico(
+        tx,
+        idiomasAntigo.Id_Profile,
+        TipoHistorico.IDIOMA,
+        id,
+        usuarioEDV,
+        idiomasAntigo,
+        idiomasAtualizado,
+      );
 
-        return idiomasAtualizado;
+      return idiomasAtualizado;
     });
-}
+  }
   static async atualizarCursos(
     EDV: number,
     Id_Profile: number,

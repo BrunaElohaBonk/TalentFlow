@@ -76,3 +76,17 @@ export interface AtualizarCompetenciasDto {
     nivel_Competencia:string;
 
 }
+export interface CriarFormacaoAcademicaDto {
+    curso: string;
+    instituicao: string;
+    situacao: "Concluído" | "Cursando";
+    periodoAtual?: number;
+    totalPeriodos: number;
+    nivelFormacao:
+        | "Ensino Médio"
+        | "Técnico"
+        | "Graduação"
+        | "Pós Graduação";
+    descricao: string;
+    certificado?: string | null;
+}
