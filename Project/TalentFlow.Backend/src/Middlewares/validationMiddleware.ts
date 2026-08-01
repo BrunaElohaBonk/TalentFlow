@@ -15,7 +15,7 @@ export function validationMiddleware(
         console.log("HEADERS:", req.headers["content-type"]);
         
         const resultado = schema.safeParse(req.body);
-
+        
         if(!resultado.success){
 
 

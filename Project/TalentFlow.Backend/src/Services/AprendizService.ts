@@ -328,15 +328,16 @@ export default class AprendizService {
   static async  adicionarCompetencia(
     Id_Profile: number,
     data: {
-      nome_Competencia: string;
+      nome_Competencia:string;
       nivel_Competencia:string;
-    }
+    },
+    
   ) {
     return await prisma.competencia.create({
       data: {
         Id_Profile,
         nome_Competencia: data.nome_Competencia,
-        nivel_Competencia:data.nivel_Competencia,
+        nivel_Competencia: data.nivel_Competencia,
       }
     });
   }

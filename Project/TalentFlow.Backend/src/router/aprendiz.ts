@@ -18,267 +18,48 @@ import {
 } from "../DTO/schemas/aprendizSchema.ts";
 
 const route = express.Router();
-route.post(
-  "/criar",
-  (req, res, next) => {
-    console.log("ENTROU NA ROTA CRIAR APRENDIZ");
-    next();
-  },
-  authMiddleware,
-  roleMiddleware("INSTRUTOR"),
-  validationMiddleware(criarAprendizSchema),
-  aprendizController.criar,
-);
-route.get(
-  "/aprendiz/:EDV",
-  authMiddleware,
-  roleMiddleware("INSTRUTOR"),
-  aprendizController.verAprendiz,
-);
+//Rotas do Instrutor
+route.post("/criar",authMiddleware,roleMiddleware("INSTRUTOR"),validationMiddleware(criarAprendizSchema),aprendizController.criar);
+route.get("/aprendiz/:EDV",authMiddleware,roleMiddleware("INSTRUTOR"),aprendizController.verAprendiz);
+route.get("/perfil/:EDV",authMiddleware,roleMiddleware("INSTRUTOR"),aprendizController.verPerfil);
+route.get("/dashboard",authMiddleware,roleMiddleware("INSTRUTOR"),aprendizController.filtrarApredizDashboart);
+route.get("/filtros",authMiddleware,roleMiddleware("INSTRUTOR"),aprendizController.filtrarTudoAprendiz);
 
+//Rotas do aprendiz
+route.get("/meuPerfil/:EDV",authMiddleware,roleMiddleware("APRENDIZ"),ownerMiddleware,aprendizController.verPerfil);
 
-route.get(
-  "/perfil/:EDV",
-  authMiddleware,
-  roleMiddleware("INSTRUTOR"),
-  aprendizController.verPerfil,
-);
+route.post("/adicionarIdioma/:id",authMiddleware,roleMiddleware("APRENDIZ"),aprendizController.adicionarIdioma);
+route.post("/adicionarCursos/:id",authMiddleware,roleMiddleware("APRENDIZ"),aprendizController.adicionarCursos);
+route.post("/adicionarCompetencia/:EDV/:id",authMiddleware,roleMiddleware("APRENDIZ"),ownerMiddleware,aprendizController.adicionarCompetencia);
+route.post("/adicionarSoftskills/:EDV",authMiddleware,roleMiddleware("APRENDIZ"),ownerMiddleware,aprendizController.adicionarSoftskills,);
+route.post("/adicionarFormacao/:EDV",authMiddleware,roleMiddleware("APRENDIZ"),aprendizController.adicionarFormacaoAcademica);
 
-route.post(
-  "/adicionarIdioma/:id",
-  authMiddleware,
-  aprendizController.adicionarIdioma
-);
-route.post(
-  "/adicionarCursos/:id",
-  authMiddleware,
-  aprendizController.adicionarCursos
-);
+route.put("/atualizarPerfil/:EDV/:idPerfil",authMiddleware,roleMiddleware("APRENDIZ"),ownerMiddleware,validationMiddleware(atualizarPerfilSchema),aprendizController.atualizarPerfil);
+route.put("/atualizarFormacaoAcademica/:EDV/:id",authMiddleware,roleMiddleware("APRENDIZ"),ownerMiddleware,validationMiddleware(atualizarFormacaoSchema),aprendizController.atualizarFormacaoAcademica);
+route.put("/atualizarSituacaoProfissional/:EDV/:id",authMiddleware,roleMiddleware("APRENDIZ"),ownerMiddleware,validationMiddleware(atualizarSituacaoProfissionalSchema),aprendizController.atualizarSituacaoProfissional);
+route.put("/atualizarSoftskills/:EDV/:id",authMiddleware,roleMiddleware("APRENDIZ"),ownerMiddleware,validationMiddleware(atualizarSoftSkillsSchema),aprendizController.atualizarSoftskills,);
+route.put("/atualizarCompetencias/:EDV/:id",authMiddleware,roleMiddleware("APRENDIZ"),ownerMiddleware,validationMiddleware(atualizarCompetenciaSchema),aprendizController.atualizarCompetencias);
 
-route.put(
-  "/atualizarPerfil/:EDV/:idPerfil",
-  authMiddleware,
-  roleMiddleware("APRENDIZ"),
-  ownerMiddleware,
-  validationMiddleware(atualizarPerfilSchema),
-  aprendizController.atualizarPerfil,
-);
+route.put("/atualizarIdiomas/:EDV/:id",authMiddleware,roleMiddleware("APRENDIZ"),ownerMiddleware,validationMiddleware(atualizarIdiomaSchema),aprendizController.atualizarIdiomas);
+route.put("/atualizarCursos/:EDV/:id",authMiddleware,roleMiddleware("APRENDIZ"),ownerMiddleware,validationMiddleware(atualizarCursoSchema),aprendizController.atualizarCursos);
+route.put("/atualizarIdiomas/:EDV/:id",authMiddleware,roleMiddleware("APRENDIZ"),aprendizController.atualizarIdiomas,);
 
-route.put(
-  "/atualizarFormacaoAcademica/:EDV/:id",
-  authMiddleware,
-  roleMiddleware("APRENDIZ"),
-  ownerMiddleware,
-  validationMiddleware(atualizarFormacaoSchema),
-  aprendizController.atualizarFormacaoAcademica,
-);
+route.put("/foto/:EDV",authMiddleware,roleMiddleware("APRENDIZ"),upload.single("foto"),aprendizController.atualizarFoto,);
+route.put("/idioma/certificado/:id",authMiddleware,roleMiddleware("APRENDIZ"),upload.single("certificado"),aprendizController.adicionarCertificadoIdioma);
+route.put("/formacao/certificado/:id",authMiddleware,roleMiddleware("APRENDIZ"), upload.single("certificado"),aprendizController.adicionarCertificadoFormacao);
+route.put("/curso/certificado/:id",authMiddleware,roleMiddleware("APRENDIZ"),upload.single("certificado"),aprendizController.adicionarCertificadoCurso);
 
-route.put(
-  "/atualizarSituacaoProfissional/:EDV/:id",
-  authMiddleware,
-  roleMiddleware("APRENDIZ"),
-  ownerMiddleware,
-  validationMiddleware(atualizarSituacaoProfissionalSchema),
-  aprendizController.atualizarSituacaoProfissional,
-);
+route.get("/minhaFormacao/:EDV/:id",authMiddleware,roleMiddleware("APRENDIZ"),ownerMiddleware,aprendizController.verFormacaoAcademica);
+route.get("/minhaSituacao/:EDV/:id",authMiddleware,roleMiddleware("APRENDIZ"),ownerMiddleware,aprendizController.verSituacaoProfissional);
+route.get("/minhasSoftskills/:EDV/:id",authMiddleware,roleMiddleware("APRENDIZ"),ownerMiddleware,aprendizController.verSoftskills);
+route.get("/minhasCompetencias/:EDV/:id",authMiddleware,roleMiddleware("APRENDIZ"),ownerMiddleware,aprendizController.verCompetencias);
+route.get("/meusIdiomas/:EDV/:id",authMiddleware,roleMiddleware("APRENDIZ"),ownerMiddleware,aprendizController.verIdiomas);
+route.get("/meusCursos/:EDV/:id",authMiddleware,roleMiddleware("APRENDIZ"),ownerMiddleware,aprendizController.verCursos);
 
-route.put(
-  "/atualizarSoftskills/:EDV/:id",
-  authMiddleware,
-  roleMiddleware("APRENDIZ"),
-  ownerMiddleware,
-  validationMiddleware(atualizarSoftSkillsSchema),
-  aprendizController.atualizarSoftskills,
-);
+route.delete("/deletarSoftskills/:EDV/:id",authMiddleware,roleMiddleware("APRENDIZ"),ownerMiddleware,aprendizController.deletarSoftskill,);
+route.delete("/deletarIdioma/:EDV/:id",authMiddleware,roleMiddleware("APRENDIZ"),ownerMiddleware, aprendizController.deletarIdioma);
+route.delete("/deletarCompetencia/:EDV/:id",authMiddleware,roleMiddleware("APRENDIZ"), ownerMiddleware, aprendizController.deletarCompetencia);
+route.delete("/deletarCursos/:EDV/:id",authMiddleware,roleMiddleware("APRENDIZ"),ownerMiddleware,aprendizController.deletarCursos);
+route.delete("/deletarformacao/:EDV/:id",authMiddleware,roleMiddleware("APRENDIZ"),ownerMiddleware,aprendizController.deletarFormacao);
 
-route.put(
-  "/atualizarCompetencias/:EDV/:id",
-  authMiddleware,
-  roleMiddleware("APRENDIZ"),
-  ownerMiddleware,
-  validationMiddleware(atualizarCompetenciaSchema),
-  aprendizController.atualizarCompetencias,
-);
-
-route.put(
-  "/foto/:EDV",
-  authMiddleware,
-  roleMiddleware("APRENDIZ"),
-  upload.single("foto"),
-  aprendizController.atualizarFoto,
-);
-route.put(
-  "/idioma/certificado/:id",
-  authMiddleware,
-  roleMiddleware("APRENDIZ"),
-  upload.single("certificado"),
-  aprendizController.adicionarCertificadoIdioma
-);
-
-route.put(
-  "/formacao/certificado/:id",
-  authMiddleware,
-  roleMiddleware("APRENDIZ"),
-  upload.single("certificado"),
-  aprendizController.adicionarCertificadoFormacao
-);
-
-route.post(
-  "/adicionarCompetencia/:EDV",
-  authMiddleware,
-  roleMiddleware("APRENDIZ"),
-  ownerMiddleware,
-  aprendizController.adicionarCompetencia
-);
-route.put(
-  "/curso/certificado/:id",
-  authMiddleware,
-  roleMiddleware("APRENDIZ"),
-  upload.single("certificado"),
-  aprendizController.adicionarCertificadoCurso
-);
-
-route.put(
-  "/atualizarIdiomas/:EDV/:id",
-  authMiddleware,
-  roleMiddleware("APRENDIZ"),
-  ownerMiddleware,
-  validationMiddleware(atualizarIdiomaSchema),
-  aprendizController.atualizarIdiomas,
-);
-
-route.put(
-  "/atualizarCursos/:EDV/:id",
-  authMiddleware,
-  roleMiddleware("APRENDIZ"),
-  ownerMiddleware,
-  validationMiddleware(atualizarCursoSchema),
-  aprendizController.atualizarCursos,
-);
-route.put(
-  "/atualizarIdiomas/:EDV/:id",
-  authMiddleware,
-  roleMiddleware("APRENDIZ"),
-  aprendizController.atualizarIdiomas
-);
-
-route.get(
-  "/meuPerfil/:EDV",
-  authMiddleware,
-  roleMiddleware("APRENDIZ"),
-  ownerMiddleware,
-  aprendizController.verPerfil,
-);
-
-route.get(
-  "/minhaFormacao/:EDV/:id",
-  authMiddleware,
-  roleMiddleware("APRENDIZ"),
-  ownerMiddleware,
-  aprendizController.verFormacaoAcademica,
-);
-
-route.get(
-  "/minhaSituacao/:EDV/:id",
-  authMiddleware,
-  roleMiddleware("APRENDIZ"),
-  ownerMiddleware,
-  aprendizController.verSituacaoProfissional,
-);
-
-route.get(
-  "/minhasSoftskills/:EDV/:id",
-  authMiddleware,
-  roleMiddleware("APRENDIZ"),
-  ownerMiddleware,
-  aprendizController.verSoftskills,
-);
-
-route.post(
-  "/adicionarSoftskills/:EDV",
-  authMiddleware,
-  roleMiddleware("APRENDIZ"),
-  ownerMiddleware,
-  aprendizController.adicionarSoftskills
-);
-
-route.delete(
-  "/deletarSoftskills/:EDV/:id",
-  authMiddleware,
-  roleMiddleware("APRENDIZ"),
-  ownerMiddleware,
-  aprendizController.deletarSoftskill
-);
-
-route.get(
-  "/minhasCompetencias/:EDV/:id",
-  authMiddleware,
-  roleMiddleware("APRENDIZ"),
-  ownerMiddleware,
-  aprendizController.verCompetencias,
-);
-
-route.get(
-  "/meusIdiomas/:EDV/:id",
-  authMiddleware,
-  roleMiddleware("APRENDIZ"),
-  ownerMiddleware,
-  aprendizController.verIdiomas,
-);
-
-route.get(
-  "/meusCursos/:EDV/:id",
-  authMiddleware,
-  roleMiddleware("APRENDIZ"),
-  ownerMiddleware,
-  aprendizController.verCursos,
-);
-
-route.get(
-  "/dashboard",
-  authMiddleware,
-  roleMiddleware("INSTRUTOR"),
-  aprendizController.filtrarApredizDashboart,
-);
-
-route.get(
-  "/filtros",
-  authMiddleware,
-  roleMiddleware("INSTRUTOR"),
-  aprendizController.filtrarTudoAprendiz,
-);
-route.delete(
-  "/deletarIdioma/:EDV/:id",
-  authMiddleware,
-  roleMiddleware("APRENDIZ"),
-  ownerMiddleware,
-  aprendizController.deletarIdioma,
-);
-route.delete(
-  "/deletarCompetencia/:EDV/:id",
-  authMiddleware,
-  roleMiddleware("APRENDIZ"),
-  ownerMiddleware,
-  aprendizController.deletarCompetencia,
-);
-route.delete(
-  "/deletarCursos/:EDV/:id",
-  authMiddleware,
-  roleMiddleware("APRENDIZ"),
-  ownerMiddleware,
-  aprendizController.deletarCursos,
-);
-route.delete(
-  "/deletarformacao/:EDV/:id",
-  authMiddleware,
-  roleMiddleware("APRENDIZ"),
-  ownerMiddleware,
-  aprendizController.deletarFormacao,
-);
-route.post(
-    "/adicionarFormacao/:EDV",
-    authMiddleware,
-    roleMiddleware("APRENDIZ"),
-    aprendizController.adicionarFormacaoAcademica
-);
 export default route;

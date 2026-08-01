@@ -165,23 +165,24 @@ z.object({
 
 export const atualizarCompetenciaSchema =
 z.object({
-
+    id: z.coerce.number(),
+    
     nome_Competencia:
-        z.string()
-        .min(
-            2,
-            "Competência obrigatória"
-        ),
-
-
+    z.string()
+    .min(
+        2,
+        "Competência obrigatória"
+    ),
+    
     nivel_Competencia:
-        z.enum([
-            "BASICO",
-            "INTERMEDIARIO",
-            "AVANÇADO"
-        ])
-
+    z.enum([
+        "BASICO",
+        "INTERMEDIARIO",
+        "AVANÇADO"
+    ])
+    
 });
+console.log()
 
 
 

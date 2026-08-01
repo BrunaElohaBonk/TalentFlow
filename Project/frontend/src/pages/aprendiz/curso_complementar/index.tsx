@@ -75,7 +75,7 @@ function CursoComplementar({ visible, setVisible }: Props) {
             return
         }
         try {
-            await api.delete(`/aprendiz/deletarCursos/${apireq.EDV_Aprendiz}/${id}`);
+            await api.delete(`/aprendiz/deletarCursos/${apireq?.EDV_Aprendiz}/${id}`);
             setCursos((prev) => prev.filter((curso) => curso.id !== id));
             Swal.fire({
                 title: 'Deletada!',
@@ -107,10 +107,10 @@ function CursoComplementar({ visible, setVisible }: Props) {
                 <span className="curso-lista-titulo">Cursos Complementares</span>
                 <div className="curso-modal">
                     {
-                        apireq.cursos.length === 0 ?
+                        apireq?.cursos?.length === 0 ?
                             <p className="curso-vazia">Nenhum curso complementar encontrado.</p>
                         :
-                        apireq.cursos.map((item) => (
+                        apireq?.cursos?.map((item) => (
                             <div className="curso-item" key={item.id}>
                                 <span className="curso-titulo">{item.name_Curso}</span>
                                 <div className="curso-acoes">
@@ -154,7 +154,7 @@ function CursoComplementar({ visible, setVisible }: Props) {
                             setVisible={setEditarCurso}
                             setCursoComplementar={setVisible}
                             id_curso= {cursoSelecionado.id}
-                            id_perfil={apireq.id}
+                            id_perfil={apireq?.id} 
                         />
                     )
                 }
@@ -164,7 +164,7 @@ function CursoComplementar({ visible, setVisible }: Props) {
                             visible={adicionarCurso}
                             setVisible={setAdicionarCurso}
                             setCursoComplementar={setVisible}
-                            id={apireq.id}
+                            id={apireq?.id}
                         />
                     )
                 }

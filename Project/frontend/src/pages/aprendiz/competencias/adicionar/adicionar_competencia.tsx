@@ -1,202 +1,194 @@
-import './adicionar_competencia.css'
-import sair from '../../../../assets/img/close.png'
-import { useEffect, useState } from 'react'
-import Swal from 'sweetalert2'
-import axios from 'axios'
-import { FormControl, FormControlLabel, Radio, RadioGroup } from "@mui/material";
-import api from '../../../../services/api'
+import "./adicionar_competencia.css";
+import sair from "../../../../assets/img/close.png";
+import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
+import {
+  FormControl,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+} from "@mui/material";
+import api from "../../../../services/api";
 
 interface ICompetencia {
-    nomeCompetencia: string;
-    nivel: string;
+  nomeCompetencia: string;
+  nivel: "BASICO"|"INTERMEDIARIO"| "AVANÇADO"
 }
-interface user {
-    edv: number;
-}
+
 
 interface Props {
-    visible: boolean;
-    setVisible: React.Dispatch<React.SetStateAction<boolean>>;
-    setCompetencia: React.Dispatch<React.SetStateAction<boolean>>;
+  visible: boolean;
+  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  onSuccess: () => void;
+  id:number;
+  edv:number;
 }
 
-function AdicionarCompetencia({
-    visible,
-    setVisible,
-    setCompetencia
-}: Props) {
+function AdicionarCompetencia({ visible, setVisible, onSuccess, id,edv }: Props) {
+  const [competencia, setCompetenciaState] = useState<ICompetencia>({nomeCompetencia: "",nivel: 'BASICO'});
+  
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCompetenciaState({
+      ...competencia,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-    const [competencia, setCompetenciaState] = useState<ICompetencia>({
-        nomeCompetencia: '',
-        nivel: ''
-    })
-    const [aprendiz, setAprendiz] = useState<user | null>(null);
-    useEffect(() => {
-        async function carregarPerfil() {
-            const usuario = localStorage.getItem("usuario");
-            if (!usuario) return;
-            const aprendizLogado = JSON.parse(usuario);
-            const edv = aprendizLogado.user.EDV;
-            setAprendiz({ edv });
-        }
-        carregarPerfil();
-    }, []);
+  const handleNivel = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCompetenciaState({
+      ...competencia,
+      nivel: e.target.value,
+    });
+  };
 
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-    const handleChange = (
-        e: React.ChangeEvent<HTMLInputElement>
-    ) => {
-        setCompetenciaState({
-            ...competencia,
-            [e.target.name]: e.target.value
-        })
+    if (!competencia.nomeCompetencia || !competencia.nivel) {
+      Swal.fire({
+        title: "Atenção!",
+        text: "Preencha todos os campos obrigatórios.",
+        icon: "warning",
+        confirmButtonColor: "#2B83D5",
+      });
+      return;
     }
 
-    const handleNivel = (
-        e: React.ChangeEvent<HTMLInputElement>
-    ) => {
-        setCompetenciaState({
-            ...competencia,
-            nivel: e.target.value
-        })
+    try {
+      await api.post(
+        `/aprendiz/adicionarCompetencia/${edv}/${id}`,
+        {
+          nome_Competencia: competencia.nomeCompetencia,
+          nivel_Competencia: competencia.nivel,
+        },
+      );
+      Swal.fire({
+        title: "Sucesso!",
+        text: "Competência adicionada com sucesso.",
+        icon: "success",
+        confirmButtonColor: "#2B83D5",
+      });
+      setVisible(false);
+onSuccess();
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        title: "Erro!",
+        text: "Não foi possível adicionar a competência.",
+        icon: "error",
+      });
     }
+  };
 
-    const handleSubmit = async (
-        e: React.FormEvent<HTMLFormElement>
-    ) => {
-        e.preventDefault();
+  if (!visible) {
+    return null;
+  }
 
-        if(
-            !competencia.nomeCompetencia ||
-            !competencia.nivel
-        ){
-            Swal.fire({
-                title:'Atenção!',
-                text:'Preencha todos os campos obrigatórios.',
-                icon:'warning',
-                confirmButtonColor:'#2B83D5'
-            })
-            return;
-        }
-
-        try{
-            const response = await api.get(`/aprendiz/meuPerfil/${aprendiz.edv}`);
-
-            const perfil = response.data.data;
-             await api.post(`/aprendiz/adicionarCursos/${perfil.id}`, {
-                nome_Competencia: competencia.nomeCompetencia,
-                nivel_Competencia:competencia.nivel,
-            }); 
-            Swal.fire({
-                title:'Sucesso!',
-                text:'Competência adicionada com sucesso.',
-                icon:'success',
-                confirmButtonColor:'#2B83D5'
-            })
+  return (
+    <div
+      className="adicionarCompetencia-overlay"
+      onClick={() => setVisible(false)}
+    >
+      <form
+        onSubmit={handleSubmit}
+        className="adicionarCompetencia-card"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          type="button"
+          className="adicionarCompetencia-fechar"
+          onClick={() => {
             setVisible(false);
-
-        }catch(error){
-            console.error(error)
-            Swal.fire({
-                title:'Erro!',
-                text:'Não foi possível adicionar a competência.',
-                icon:'error'
-            })
-        }
-    }
-
-    if(!visible){
-        return null
-    }
-
-    return(
-        <div className="adicionarCompetencia-overlay" onClick={() => setVisible(false)}>
-            <form onSubmit={handleSubmit} className="adicionarCompetencia-card" onClick={(e) => e.stopPropagation()}>
-                <button type="button" className="adicionarCompetencia-fechar" onClick={()=>{
-                        setVisible(false)
-                        setCompetencia(true)
-                    }}
-                >
-                    <img src={sair} alt="Fechar"/>
-                </button>
-                <span className="adicionarCompetencia-titulo">Competência</span>
-                <div className="adicionarCompetencia-container">
-                    <div className="adicionarCompetencia-grupo">
-                        <label className="adicionarCompetencia-label">Nome da Competência</label>
-                        <input name="nomeCompetencia" className="adicionarCompetencia-input" value={competencia.nomeCompetencia} onChange={handleChange}/>
-                    </div>
-                    <div className="adicionarCompetencia-grupo">
-                        <label className="adicionarCompetencia-label">Nível</label>
-                        <FormControl className="adicionarCompetencia-radio">
-                            <RadioGroup
-                                row
-                                name="nivel"
-                                value={competencia.nivel}
-                                onChange={handleNivel}
-                            >
-                                <FormControlLabel
-                                    value="Básico"
-                                    control={
-                                        <Radio
-                                            sx={{
-                                                color:"#2B83D5",
-                                                "&.Mui-checked":{
-                                                    color:"#2B83D5"
-                                                },
-                                                "& .MuiSvgIcon-root":{
-                                                    fontSize:24
-                                                }
-                                            }}
-                                        />
-                                    }
-                                    label="Básico"
-                                />
-                                <FormControlLabel
-                                    value="Intermediário"
-                                    control={
-                                        <Radio
-                                            sx={{
-                                                color:"#2B83D5",
-                                                "&.Mui-checked":{
-                                                    color:"#2B83D5"
-                                                },
-                                                "& .MuiSvgIcon-root":{
-                                                    fontSize:24
-                                                }
-                                            }}
-                                        />
-                                    }
-                                    label="Intermediário"
-                                />
-                                <FormControlLabel
-                                    value="Avançado"
-                                    control={
-                                        <Radio
-                                            sx={{
-                                                color:"#2B83D5",
-                                                "&.Mui-checked":{
-                                                    color:"#2B83D5"
-                                                },
-                                                "& .MuiSvgIcon-root":{
-                                                    fontSize:24
-                                                }
-                                            }}
-                                        />
-                                    }
-                                    label="Avançado"
-                                />
-                            </RadioGroup>
-                        </FormControl>
-                    </div>
-                    <div className="adicionarCompetencia-botoes">
-                        <button type="submit" className="adicionarCompetencia-salvar">
-                            ADICIONAR
-                        </button>
-                    </div>
-                </div>
-            </form>
+          }}
+        >
+          <img src={sair} alt="Fechar" />
+        </button>
+        <span className="adicionarCompetencia-titulo">Competência</span>
+        <div className="adicionarCompetencia-container">
+          <div className="adicionarCompetencia-grupo">
+            <label className="adicionarCompetencia-label">
+              Nome da Competência
+            </label>
+            <input
+              name="nomeCompetencia"
+              className="adicionarCompetencia-input"
+              value={competencia.nomeCompetencia}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="adicionarCompetencia-grupo">
+            <label className="adicionarCompetencia-label">Nível</label>
+            <FormControl className="adicionarCompetencia-radio">
+              <RadioGroup
+                row
+                name="nivel"
+                value={competencia.nivel}
+                onChange={handleNivel}
+              >
+                <FormControlLabel
+                  value="BASICO"
+                  
+                  control={
+                    <Radio
+                      sx={{
+                        color: "#2B83D5",
+                        "&.Mui-checked": {
+                          color: "#2B83D5",
+                        },
+                        "& .MuiSvgIcon-root": {
+                          fontSize: 24,
+                        },
+                      }}
+                    />
+                  }
+                  label="Básico"
+                />
+                <FormControlLabel
+                  value="INTERMEDIARIO"
+                  control={
+                    <Radio
+                      sx={{
+                        color: "#2B83D5",
+                        "&.Mui-checked": {
+                          color: "#2B83D5",
+                        },
+                        "& .MuiSvgIcon-root": {
+                          fontSize: 24,
+                        },
+                      }}
+                    />
+                  }
+                  label="Intermediário"
+                />
+                <FormControlLabel
+                  value="AVANÇADO"
+                  control={
+                    <Radio
+                      sx={{
+                        color: "#2B83D5",
+                        "&.Mui-checked": {
+                          color: "#2B83D5",
+                        },
+                        "& .MuiSvgIcon-root": {
+                          fontSize: 24,
+                        },
+                      }}
+                    />
+                  }
+                  label="Avançado"
+                />
+              </RadioGroup>
+            </FormControl>
+          </div>
+          <div className="adicionarCompetencia-botoes">
+            <button type="submit" className="adicionarCompetencia-salvar">
+              ADICIONAR
+            </button>
+          </div>
         </div>
-    )   
+      </form>
+    </div>
+  );
 }
 
-export default AdicionarCompetencia
+export default AdicionarCompetencia;
