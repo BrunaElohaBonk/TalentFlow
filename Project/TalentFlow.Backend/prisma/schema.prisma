@@ -183,6 +183,7 @@ enum NomeSetor {
   ETS
   HSE
   ESPAÇO_SAUDE
+  NAO_INFORMADO
 }
 
 enum NomeSoftskills {
@@ -205,6 +206,7 @@ enum NomeSoftskills {
   INOVACAO
   ORATORIA
   COMPROMETIMENTO
+  NAO_INFORMADO
 }
 enum idiomas_nome_Idioma {
   ALEMAO
@@ -218,16 +220,19 @@ enum idiomas_nome_Idioma {
   MANDARIM
   RUSSO
   TAILANDES
+  NAO_INFORMADO
 }
 
 enum cursos_status_Cursos {
   CONCLUIDO
   CURSANDO
+  NAO_INFORMADO
 }
 
 enum formacao_academica_status_Academico {
   CONCLUIDO
   CURSANDO
+  NAO_INFORMADO
 }
 
 enum idiomas_nivel_Idioma {
@@ -235,6 +240,7 @@ enum idiomas_nivel_Idioma {
   INTERMEDIARIO
   AVANCADO
   FLUENTE
+  NAO_INFORMADO
 }
 
 enum formacao_academica_nivel_formacao {
@@ -242,6 +248,7 @@ enum formacao_academica_nivel_formacao {
   TECNICO
   GRADUACAO
   POS_GRADUACAO
+  NAO_INFORMADO
 }
 
 enum TipoHistorico {
@@ -253,6 +260,7 @@ enum TipoHistorico {
   SOFTSKILL
   SITUACAO_PROFISSIONAL
   IDIOMA
+  NAO_INFORMADO
 }
 model turmahistorico {
   Id             Int             @id @default(autoincrement())

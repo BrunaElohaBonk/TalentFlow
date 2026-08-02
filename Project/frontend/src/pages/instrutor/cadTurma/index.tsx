@@ -102,6 +102,13 @@ function CadTurma() {
                 icon: 'success'
             });
 
+            setTurma({
+                nomeTurma: '',
+                name_Curso: '',
+                EDV_Instrutor: '',
+                nomeInstrutor: '',
+            });
+
             console.log(response.data);
 
         } catch (e: any) {
@@ -113,66 +120,81 @@ function CadTurma() {
             });
         }
     };
+
+    const buscarInstrutor = async (edv: string) => {
+        console.log("Buscando EDV:", edv);
+
+        try {
+            const response = await api.get(`/buscaruser/INSTRUTOR`);
+
+            console.log("Resposta API:", response.data);
+
+            const instrutorEncontrado = response.data.find(
+                (instrutor: any) => Number(instrutor.EDV) === Number(edv)
+            );
+
+            console.log("Encontrado:", instrutorEncontrado);
+
+            if (instrutorEncontrado) {
+                setTurma((prev) => ({
+                    ...prev,
+                    nomeInstrutor: instrutorEncontrado.name
+                }));
+            }
+
+        } 
+        catch (error) {
+            console.log("Erro:", error);
+        }
+    };
+
     return (
         <div className="cadTurma">
             <Header />
             <div className="cadTurma-container">
                 <Sidebar />
                 <div className="cadTurma-body">
-                    <form
-                        onSubmit={handleSubmit}
-                        className="cadTurma-form"
-                    >
-                        <span className="cadTurma-titulo">
-                            Cadastrar Turma
-                        </span>
+                    <form onSubmit={handleSubmit} className="cadTurma-form">
+                        <span className="cadTurma-titulo">Cadastrar Turma</span>
                         <div className="cadTurma-conteudo">
-                            <input
-                                ref={nameRef}
-                                name="nomeTurma"
-                                placeholder="Nome da Turma"
-                                value={turma.nomeTurma}
-                                onChange={handleChange}
-                                className="cadTurma-input"
-                                onKeyDown={(e) => proximoCampo(e, courseRef)}
-                            />
-                            <input
-                                ref={courseRef}
-                                name="name_Curso"
-                                placeholder="Curso"
-                                value={turma.name_Curso}
-                                onChange={handleChange}
-                                className="cadTurma-input"
-                                onKeyDown={(e) => proximoCampo(e, edvInstrutorRef)}
-                            />
+                            <input ref={nameRef} name="nomeTurma" placeholder="Nome da Turma" value={turma.nomeTurma} onChange={handleChange} className="cadTurma-input" onKeyDown={(e) => proximoCampo(e, courseRef)}/>
+                            <input ref={courseRef} name="name_Curso" placeholder="Curso" value={turma.name_Curso} onChange={handleChange} className="cadTurma-input" onKeyDown={(e) => proximoCampo(e, edvInstrutorRef)}/>
                             <input
                                 ref={edvInstrutorRef}
                                 name="EDV_Instrutor"
-                                type="number"
+                                type="text"
+                                inputMode="numeric"
+                                pattern="[0-9]*"
                                 placeholder="EDV do Instrutor"
                                 value={turma.EDV_Instrutor}
-                                onChange={handleChange}
+                                onChange={(e) => {
+                                    const valor = e.target.value
+                                        .replace(/\D/g, "")
+                                        .slice(0, 8);
+
+                                    setTurma((prev) => ({
+                                        ...prev,
+                                        EDV_Instrutor: valor,
+                                    }));
+
+                                    if (valor.length === 8) {
+                                        buscarInstrutor(valor);
+                                    }
+                                }}
                                 className="cadTurma-input"
                                 onKeyDown={(e) => proximoCampo(e, instrutorRef)}
-                            />
-                            <input
-                                ref={instrutorRef}
-                                name="nomeInstrutor"
-                                placeholder="Nome do Instrutor"
-                                value={turma.nomeInstrutor}
-                                onChange={handleChange}
+                            />                            
+                            <input 
+                                ref={instrutorRef} 
+                                name="nomeInstrutor" 
+                                placeholder="Nome do Instrutor" 
+                                value={turma.nomeInstrutor} 
+                                readOnly
                                 className="cadTurma-input"
-                                onKeyDown={(e) => proximoCampo(e, salvarRef)}
                             />
                         </div>
                         <div className="cadTurma-button">
-                            <button
-                                ref={salvarRef}
-                                type="submit"
-                                className="cadTurma-salvar"
-                            >
-                                CONFIRMAR
-                            </button>
+                            <button ref={salvarRef} type="submit" className="cadTurma-salvar">CONFIRMAR</button>
                         </div>
                     </form>
                 </div>

@@ -2,8 +2,8 @@ import './editar.css'
 import sair from '../../../../assets/img/close.png'
 import { useState } from 'react'
 import Swal from 'sweetalert2'
-import axios from 'axios'
 import { FormControl, FormControlLabel, Radio, RadioGroup } from "@mui/material";
+import api from '../../../../services/api'
 
 interface ISituacao {
     setor: string;
@@ -16,16 +16,19 @@ interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
     setSituacaoProfissional: React.Dispatch<React.SetStateAction<boolean>>;
+    onSuccess: () => void;
     edv: number;
+    idSituacao?: number;
 }
 
-function EditarSituacaoProfissional({ visible, setVisible, setSituacaoProfissional, edv }: Props) {
+function EditarSituacaoProfissional({ visible, setVisible, setSituacaoProfissional, edv, onSuccess,idSituacao }: Props) {
     const [situacao, setSituacao] = useState<ISituacao>({
         setor: '',
         lider: '',
         estagio: '',
         descricao: ''
     })
+
 
     const setores = [
         "Engenharia",
@@ -46,17 +49,30 @@ function EditarSituacaoProfissional({ visible, setVisible, setSituacaoProfission
         "ETS",
         "HSE",
         "Espaço Saúde"
-    ];    
+    ];
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleChange = (
+        e: React.ChangeEvent<
+            HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+        >
+    ) => {
         setSituacao({
             ...situacao,
-            [e.target.name]: e.target.value
-        })
-    }
+            [e.target.name]: e.target.value,
+        });
+    };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
+        e.preventDefault();
+    
+        if (!idSituacao || idSituacao === 0) {
+            Swal.fire({
+                title: "Erro",
+                text: "Não foi encontrada uma situação profissional para editar.",
+                icon: "error"
+            });
+            return;
+        }
         if (!situacao.setor || !situacao.lider || !situacao.estagio || !situacao.descricao) {
             Swal.fire({
                 title: 'Atenção!',
@@ -66,16 +82,17 @@ function EditarSituacaoProfissional({ visible, setVisible, setSituacaoProfission
             })
             return
         }
-
+        
         try {
-            // BACKEND
-            // Enviar EDV e informações da situação profissional para o banco.
-            const response = await axios.put(
-                `link backend/${edv}`,
+        
+            await api.put(`/aprendiz/atualizarSituacaoProfissional/${edv}/${idSituacao}`,
                 {
-                    ...situacao
+                    nome_Setor: situacao.setor,
+                    nome_Lider: situacao.lider,
+                    cumprido_Estagio: situacao.estagio === "Sim",
+                    bio_profissional: situacao.descricao,
                 }
-            )
+            );
 
             Swal.fire({
                 title: 'Sucesso!',
@@ -84,8 +101,8 @@ function EditarSituacaoProfissional({ visible, setVisible, setSituacaoProfission
                 confirmButtonColor: '#2B83D5'
             })
 
-            console.log(response.data)
             setVisible(false)
+            onSuccess();
         } catch (error) {
             console.error('Erro ao atualizar:', error)
             Swal.fire({
@@ -102,12 +119,12 @@ function EditarSituacaoProfissional({ visible, setVisible, setSituacaoProfission
     return (
         <div className="editarSituacao-overlay" onClick={() => setVisible(false)}>
             <form onSubmit={handleSubmit} className="editarSituacao-card" onClick={(e) => e.stopPropagation()}>
-                <button 
-                    type="button" 
+                <button
+                    type="button"
                     onClick={() => {
                         setVisible(false)
                         setSituacaoProfissional(true)
-                    }} 
+                    }}
                     className="editarSituacao-fechar"
                 >
                     <img src={sair} alt="Fechar" />
@@ -133,7 +150,7 @@ function EditarSituacaoProfissional({ visible, setVisible, setSituacaoProfission
                         <label className="editarSituacao-label">
                             Nome do Líder
                         </label>
-                        <input 
+                        <input
                             name="lider"
                             className="editarSituacao-input"
                             value={situacao.lider}
@@ -145,9 +162,9 @@ function EditarSituacaoProfissional({ visible, setVisible, setSituacaoProfission
                             Cumprindo estágio?
                         </label>
                         <FormControl className="editarSituacao-radio">
-                            <RadioGroup row name="estagio"value={situacao.estagio} onChange={handleChange}>
-                                <FormControlLabel 
-                                    value="Sim" 
+                            <RadioGroup row name="estagio" value={situacao.estagio} onChange={handleChange}>
+                                <FormControlLabel
+                                    value="Sim"
                                     sx={{
                                         "& .MuiFormControlLabel-label": {
                                             fontFamily: "'Poppins', sans-serif",
@@ -156,18 +173,18 @@ function EditarSituacaoProfissional({ visible, setVisible, setSituacaoProfission
                                         }
                                     }}
                                     control={
-                                        <Radio 
-                                            sx={{ 
-                                                color: "#2B83D5", 
-                                                "&.Mui-checked": { color: "#2B83D5" }, 
-                                                "& .MuiSvgIcon-root": { fontSize: 24 } 
-                                            }} 
+                                        <Radio
+                                            sx={{
+                                                color: "#2B83D5",
+                                                "&.Mui-checked": { color: "#2B83D5" },
+                                                "& .MuiSvgIcon-root": { fontSize: 24 }
+                                            }}
                                         />
-                                    } 
-                                    label="Sim" 
+                                    }
+                                    label="Sim"
                                 />
-                                <FormControlLabel 
-                                    value="Não" 
+                                <FormControlLabel
+                                    value="Não"
                                     sx={{
                                         "& .MuiFormControlLabel-label": {
                                             fontFamily: "'Poppins', sans-serif",
@@ -176,22 +193,22 @@ function EditarSituacaoProfissional({ visible, setVisible, setSituacaoProfission
                                         }
                                     }}
                                     control={
-                                        <Radio 
-                                            sx={{ 
-                                                color: "#2B83D5", 
-                                                "&.Mui-checked": { color: "#2B83D5" }, 
-                                                "& .MuiSvgIcon-root": { fontSize: 24 } 
-                                            }} 
+                                        <Radio
+                                            sx={{
+                                                color: "#2B83D5",
+                                                "&.Mui-checked": { color: "#2B83D5" },
+                                                "& .MuiSvgIcon-root": { fontSize: 24 }
+                                            }}
                                         />
-                                    } 
-                                    label="Não" 
+                                    }
+                                    label="Não"
                                 />
                             </RadioGroup>
                         </FormControl>
                     </div>
                     <div className="editarSituacao-grupo">
                         <label className="editarSituacao-label">
-                            Descrição
+                            Situação atual e expectativas para o futuro
                         </label>
                         <textarea
                             name="descricao"

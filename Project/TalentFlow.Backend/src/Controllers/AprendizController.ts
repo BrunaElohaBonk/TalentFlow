@@ -3,10 +3,52 @@ import AprendizService, {
   DashboardService,
 } from "../Services/AprendizService.ts";
 import { AuthRequest } from "../Middlewares/authMiddleware.ts";
+import { AtualizarCursosComplementaresDto } from "../DTO/aprendizDTO.ts";
 
 export default class aprendizController {
+  static async adicionarIdioma(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      console.log("ID RECEBIDO:", req.params.id);
+      // console.log("BODY:", req.body);
+      const idioma = await AprendizService.adicionarIdioma(
+        Number(id),
+        req.body,
+      );
+
+      res.status(201).json({
+        mensagem: "Idioma adicionado com sucesso.",
+        idioma,
+      });
+    } catch (error) {
+      console.error(error);
+
+      res.status(500).json({
+        erro: "Não foi possível adicionar o idioma.",
+      });
+    }
+  }
+  static async adicionarCursos(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      console.log("cursos", id);
+      const curso = await AprendizService.adicionarCursos(Number(id), req.body);
+
+      res.status(201).json({
+        mensagem: "Curso adicionado com sucesso.",
+        curso,
+      });
+    } catch (error) {
+      console.error(error);
+
+      res.status(500).json({
+        erro: "Não foi possível adicionar o Curso.",
+      });
+    }
+  }
+
   static async criar(req: AuthRequest, res: Response) {
-    console.log("bory "+req.body);
+    console.log("bory " + req.body);
     console.log("user" + req.user);
     const aprendiz = await AprendizService.criar(req.body, req.user!.EDV);
 
@@ -16,7 +58,41 @@ export default class aprendizController {
       data: aprendiz,
     });
   }
+  static async adicionarFormacaoAcademica(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ) {
+    try {
+      const { EDV } = req.params;
 
+      const formacao = await AprendizService.adicionarFormacaoAcademica(
+        Number(EDV),
+        req.body,
+        req.user!.EDV,
+      );
+
+      return res.status(201).json({
+        response: "Formação acadêmica adicionada com sucesso!",
+        data: formacao,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async adicionarCompetencia(req: Request, res: Response) {
+    const { id } = req.params;
+
+    const Competencia = await AprendizService.adicionarCompetencia(
+      Number(id),
+      req.body,
+    );
+
+    return res.status(200).json({
+      message: "Competencia da formação adicionado!",
+      data: Competencia,
+    });
+  }
 
   static async atualizarFoto(req: Request, res: Response) {
     const { EDV } = req.params;
@@ -75,6 +151,7 @@ export default class aprendizController {
       data: idioma,
     });
   }
+
   static async atualizarPerfil(
     req: AuthRequest, // mudar todos para AuthRequest
     res: Response,
@@ -123,6 +200,8 @@ export default class aprendizController {
   ) {
     const { EDV, id } = req.params;
 
+    console.log("PARAMS RECEBIDOS:", req.params);
+
     const situacaoAtualizada =
       await AprendizService.atualizarSituacaoProfissional(
         Number(EDV),
@@ -133,7 +212,6 @@ export default class aprendizController {
 
     return res.status(200).json({
       response: "Situação profissional atualizada com sucesso!",
-
       data: situacaoAtualizada,
     });
   }
@@ -157,6 +235,7 @@ export default class aprendizController {
       data: softskill,
     });
   }
+
   static async atualizarCompetencias(
     req: AuthRequest,
     res: Response,
@@ -203,11 +282,14 @@ export default class aprendizController {
     next: NextFunction,
   ) {
     const { id, EDV } = req.params;
+    const data: AtualizarCursosComplementaresDto = req.body;
+
+    console.log("bory", data);
 
     const curso = await AprendizService.atualizarCursos(
       Number(EDV),
       Number(id),
-      req.body,
+      data,
       req.user!.EDV,
     );
 
@@ -290,6 +372,7 @@ export default class aprendizController {
       data: softskills,
     });
   }
+
   static async verCompetencias(
     req: AuthRequest,
     res: Response,
@@ -297,10 +380,7 @@ export default class aprendizController {
   ) {
     const { EDV, id } = req.params;
 
-    const competencias = await AprendizService.verCompetencias(
-      Number(EDV),
-      Number(id),
-    );
+    const competencias = await AprendizService.verCompetencias(Number(EDV),Number(id),);
 
     return res.status(200).json({
       data: competencias,
@@ -341,5 +421,102 @@ export default class aprendizController {
     const aprendizes = await DashboardService.filtrarTudo(req.query);
 
     return res.status(200).json(aprendizes);
+  }
+  static async deletarIdioma(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { EDV, id } = req.params;
+
+      await AprendizService.deletarIdioma(Number(EDV), Number(id));
+
+      return res.status(200).json({
+        message: "Idioma deletado com sucesso.",
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async deletarCompetencia(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) {
+    try {
+      const { EDV, id } = req.params;
+
+      await AprendizService.deletarCompetencia(Number(EDV), Number(id));
+
+      return res.status(200).json({
+        message: "Competencia deletado com sucesso.",
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async adicionarSoftskills(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ) {
+    const { EDV } = req.params;
+
+    const softskills = await AprendizService.adicionarSoftskills(
+      Number(EDV),
+      req.body,
+      req.user!.EDV,
+    );
+
+    return res.status(201).json({
+      message: "Softskills adicionadas com sucesso!",
+      data: softskills,
+    });
+  }
+  static async deletarSoftskill(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ) {
+    const { EDV, id } = req.params;
+
+    const softskill = await AprendizService.deletarSoftskill(
+      Number(EDV),
+      Number(id),
+      req.user!.EDV,
+    );
+
+    return res.status(200).json({
+      message: "Softskill deletada com sucesso!",
+      data: softskill,
+    });
+  }
+  static async deletarCursos(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { EDV, id } = req.params;
+
+      await AprendizService.deletarCursos(Number(EDV), Number(id));
+
+      return res.status(200).json({
+        message: "Curso deletado com sucesso.",
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async deletarFormacao(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) {
+    try {
+      const { EDV, id } = req.params;
+
+      await AprendizService.deletarFormacao(Number(EDV), Number(id));
+
+      return res.status(200).json({
+        message: "Formaçao deletada com sucesso.",
+      });
+    } catch (error) {
+      next(error);
+    }
   }
 }

@@ -4,10 +4,18 @@ import logo from "../../assets/img/logo.png";
 import './header.css'
 
 interface Usuario {
-    EDV: number;
-    name: string;
-    user: string;
-    email: string;
+    token: string;
+    user: {
+        EDV: number;
+        name: string;
+        user_bosch: string;
+        email_bosch: string;
+        contato: string;
+        data_nascimento: string;
+        imagem: string;
+        ativo: boolean;
+        tipo: string;
+    };
 }
 
 function Header(){
@@ -25,7 +33,7 @@ function Header(){
             <div className="header-content">
                 <div className="header-user">
                     {usuario && (
-                        <span>Olá, {usuario.name}</span>
+                        <span>Olá, {usuario.user.name}</span>
                     )}
                 </div>
 

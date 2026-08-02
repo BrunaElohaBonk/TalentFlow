@@ -165,23 +165,24 @@ z.object({
 
 export const atualizarCompetenciaSchema =
 z.object({
-
+    id: z.coerce.number(),
+    
     nome_Competencia:
-        z.string()
-        .min(
-            2,
-            "Competência obrigatória"
-        ),
-
-
+    z.string()
+    .min(
+        2,
+        "Competência obrigatória"
+    ),
+    
     nivel_Competencia:
-        z.enum([
-            "BASICO",
-            "INTERMEDIARIO",
-            "AVANÇADO"
-        ])
-
+    z.enum([
+        "BASICO",
+        "INTERMEDIARIO",
+        "AVANÇADO"
+    ])
+    
 });
+console.log()
 
 
 
@@ -224,32 +225,19 @@ z.object({
 
 // CURSOS
 
-export const atualizarCursoSchema =
-z.object({
+export const atualizarCursoSchema = z.object({
+    id: z.coerce.number(),
 
-    name_Curso:
-        z.string()
-        .min(
-            2,
-            "Nome do curso obrigatório"
-        ),
+    Id_Profile: z.coerce.number(),
 
+    name_Curso: z.string().min(2),
 
-    status_Cursos:
-        z.enum([
-            "CONCLUIDO",
-            "CURSANDO"
-        ]),
+    status_Cursos: z.enum([
+        "CONCLUIDO",
+        "CURSANDO"
+    ]),
 
+    data_Conclusao: z.string(),
 
-    data_Conclusao:
-        z.string(),
-
-
-    carga_horaria:
-        z.number()
-        .positive(
-            "Carga horária inválida"
-        )
-
+    carga_horaria: z.coerce.number().positive()
 });

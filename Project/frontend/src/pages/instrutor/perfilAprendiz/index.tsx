@@ -12,47 +12,121 @@ import icon_olho from '../../../assets/img/icon_olho.png'
 import icon_user from '../../../assets/img/icon_user.png'
 import voltar from '../../../assets/img/voltar.png'
 import { useNavigate, useParams } from "react-router-dom";
-import { aprendizes } from "../verAprendiz/aprendizes";
 import api from "../../../services/api";
 
-interface IAprendizPerfil {
-    edv: number;
-    img: string;
-    nome: string;
-    email: string;
-    user: string;
-    contato: number;
-    nascimento: Date;
-    turma: number;
+type NivelIdioma ="BASICO" | "INTERMEDIARIO" | "AVANCADO" | "FLUENTE";
 
-    situacaoProfissional: any;
-    formacaoAcademica: any[];
-    cursosComplementares: any[];
-    idiomas: any[];
-    softskills: any[];
-    competencias: any[];
+type NivelFormacao = "ENSINO_MEDIO" | "TECNICO" | "GRADUACAO" | "POS_GRADUACAO";
+
+interface IUsuario{
+    fotoAprendiz: File | null;
+    email_bosch: string;
+    user_bosch?: string;
+    EDV: number;
+    contato: string;
+    name: string;
+    data_nascimento: string;
+    Ativo: boolean;
+}
+interface IPerfilAprendiz {
+    EDV: number;
+    id: number;
+    situacao_profissional: {
+        nome_Setor?: string;
+        nome_Lider?: string;
+        cumprido_Estagio?: boolean;
+        bio_profissional?: string;
+    };
+
+    formacao_academica: {
+        id: number;
+        name_Curso: string;
+        nome_Institucao: string;
+        status_Academico: "CONCLUIDO" | "CURSANDO";
+        periodo_Atual: number;
+        total_Periodo: number;
+        nivel_formacao: NivelFormacao;
+    }[];
+
+    cursos_complementares: {
+        id: number;
+        name_Curso: string;
+        status_Cursos: "CONCLUIDO" | "CURSANDO";
+        data_Conclusao: string;
+        carga_horaria: number;
+    }[];
+
+    idiomas: {
+        id: number;
+        nome_Idioma: string;
+        nivel_Idioma: NivelIdioma;
+    }[];
+
+    soft_skills: {
+        id: number;
+        nome_SoftSkills: string[];
+    }[];
+
+    competencias: {
+        id: number;
+        nome_Competencia: string;
+        nivel_Competencia: string;
+    }[];
 }
 
 function PerfilAprendiz(){
     const navigate = useNavigate()
-    const { edv , id_profile} = useParams();
-    type Aprendiz = (typeof aprendizes)[number];
-    const [aprendiz, setAprendiz] = useState<Aprendiz | null>(null)
+    const [aprendiz, setAprendiz] = useState<IPerfilAprendiz | null>(null);
+    const [usuario, setUsuario] = useState<IUsuario | null>(null);
     const [situacao, setSituacao] = useState(false)
     const [formacao_academica, setFormacaoAcademica] = useState(false)
     const [curso_complementar, setCursoComplementar] = useState(false)
     const [idioma, setIdioma] = useState(false)
     const [soft_skill, setSoftSkill] = useState(false)
     const [competencia, setCompetencia] = useState(false)
-    useEffect(() => {
-        const dados = aprendizes.find(
-            a => a.perfil.edv === Number(edv)
-        );
-
-        if (dados) {
-            setAprendiz(dados);
+    const { edv } = useParams();
+    const fetchUsuario = async () => {
+        try {
+            const response = await api.get("/auth/buscaruser/APRENDIZ");
+            const usuarioEncontrado = response.data.find(
+                (usuario: IUsuario) => usuario.EDV === Number(edv) && usuario.Ativo === true
+            );
+            console.log("USUARIO ENCONTRADO:", usuarioEncontrado);
+            if (usuarioEncontrado) {
+                setUsuario(usuarioEncontrado);
+            }
+        } 
+        catch (error) {
+            console.error("Erro ao buscar usuário:", error);
         }
-    }, [edv]);
+    };
+    const fetchAprendiz = async () => {
+        try {
+            const response = await api.get(`/aprendiz/perfil/${edv}`);
+            const perfil = response.data.data;
+            console.log("PERFIL:", perfil);
+            setAprendiz({
+                ...perfil,
+                situacao_profissional: perfil.situacao_profissional ?? {},
+                formacao_academica: perfil.formacao_academica ?? [],
+                cursos_complementares: perfil.cursos ?? [],
+                idiomas: perfil.idiomas ?? [],
+                soft_skills: perfil.soft_skills ?? [],
+                competencias: perfil.competencia ?? []
+            });
+
+        } catch(error) {
+            console.error("Erro ao buscar perfil:", error);
+        }
+    };
+
+    useEffect(() => {
+        if(edv){
+            fetchUsuario();
+            fetchAprendiz();
+        }
+    },[edv]);
+
     if (!aprendiz) {
         return <h2>Carregando...</h2>;
     }
@@ -60,11 +134,11 @@ function PerfilAprendiz(){
     return(
         <div className="dadosAprendiz">
             <Header></Header>
-            <SituacaoProfissional visible={situacao} setVisible={setSituacao} situacao={aprendiz.situacaoProfissional}/>
-            <FormacaoAcademica visible={formacao_academica} setVisible={setFormacaoAcademica} formacaoAcademica={aprendiz.formacaoAcademica}/>
-            <CursoComplementar visible={curso_complementar} setVisible={setCursoComplementar} cursoComplementar={aprendiz.cursosComplementares}/>
+            <SituacaoProfissional visible={situacao} setVisible={setSituacao} situacao={aprendiz.situacao_profissional}/>
+            <FormacaoAcademica visible={formacao_academica} setVisible={setFormacaoAcademica} formacaoAcademica={aprendiz.formacao_academica}/>
+            <CursoComplementar visible={curso_complementar} setVisible={setCursoComplementar} cursoComplementar={aprendiz.cursos_complementares}/>
             <Idioma visible={idioma} setVisible={setIdioma} idiomas={aprendiz.idiomas}/>
-            <SoftSkill visible={soft_skill} setVisible={setSoftSkill} softSkills={aprendiz.softskills}/>
+            <SoftSkill visible={soft_skill} setVisible={setSoftSkill} softSkills={aprendiz.soft_skills}/>
             <Competencia visible={competencia} setVisible={setCompetencia} competencias={aprendiz.competencias}/>
         
             <div className="dadosAprendiz-container">
@@ -78,41 +152,43 @@ function PerfilAprendiz(){
                             <div className="dadosAprendiz-topo">
                                 <div className="dadosAprendiz-foto-container"><img src={icon_user} alt="icon_user" /></div>
                                 <div className="dadosAprendiz-dados-perfil">
-                                    <div className="dadosAprendiz-cabecalho-perfil"><h1>{aprendiz.nome}</h1></div>
-                                    <div className="dadosAprendiz-informacoes">
-                                        <span>Email: {aprendiz.email}</span>
-                                        <span>EDV: {aprendiz.edv}</span>
-                                        <span>User: {aprendiz.user}</span>
-                                        <span>Data de Nascimento: {aprendiz.nascimento.toLocaleDateString("pt-BR")}</span>
-                                        <span>Idade: {calcularIdade(aprendiz.nascimento)} anos</span>
-                                        <span>Contato: {formatarTelefone(aprendiz.contato)}</span>
-                                    </div>
+                                    <div className="dadosAprendiz-cabecalho-perfil"><h1>{usuario?.name}</h1></div>
+                                    {usuario && (
+                                        <div className="dadosAprendiz-informacoes">
+                                            <span>Email: {usuario.email_bosch}</span>
+                                            <span>EDV: {usuario.EDV}</span>
+                                            <span>User: {usuario.user_bosch}</span>
+                                            <span>Data de Nascimento: {new Date(usuario.data_nascimento).toLocaleDateString("pt-BR")}</span>
+                                            <span>Idade: {calcularIdade(usuario.data_nascimento)} anos</span>
+                                            <span>Contato: {formatarTelefone(usuario.contato)}</span>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                             <div className="dadosAprendiz-cards-superiores">
                                 <div className="dadosAprendiz-card-perfil">
                                     <h3>Situação Profissional</h3>
-                                    <ul><li>{aprendiz.situacaoProfissional.descricaoEstagio}</li></ul>
+                                    <ul><li>{aprendiz.situacao_profissional?.[0]?.bio_profissional}</li></ul>
                                     <button className="dadosAprendiz-btn-visualizar" onClick={() => setSituacao(true)}><img src={icon_olho} alt="Visualizar" /></button>
                                 </div>
                                 <div className="dadosAprendiz-card-perfil">
                                     <h3>Formação Acadêmica</h3>
-                                    <ul><li>{aprendiz.formacaoAcademica.map((formacao, index) => (
-                                        <li key={index} title={formacao.nomeCurso}>{formacao.nomeCurso}</li>))
+                                    <ul><li>{aprendiz.formacao_academica.map((formacao, index) => (
+                                        <li key={index} title={formacao.name_Curso}>{formacao.name_Curso}</li>))
                                     }</li></ul>
                                     <button className="dadosAprendiz-btn-visualizar" onClick={() => setFormacaoAcademica(true)}><img src={icon_olho} alt="Visualizar" /></button>
                                 </div>
                                 <div className="dadosAprendiz-card-perfil">
                                     <h3>Cursos Complementares</h3>
-                                    <ul>{aprendiz.cursosComplementares.map((curso, index) => (
-                                        <li key={index} title={curso.nomeCurso}>{curso.nomeCurso}</li>))
+                                    <ul>{aprendiz.cursos_complementares.map((curso, index) => (
+                                        <li key={index} title={curso.name_Curso}>{curso.name_Curso}</li>))
                                     }</ul>
                                     <button className="dadosAprendiz-btn-visualizar" onClick={() => setCursoComplementar(true)}><img src={icon_olho} alt="Visualizar" /></button>
                                 </div>
                                 <div className="dadosAprendiz-card-perfil">
                                     <h3>Idiomas</h3>
                                     <ul> {aprendiz.idiomas.map((idioma, index) => (
-                                        <li key={index} title={idioma.idioma}>{idioma.idioma} - {idioma.nivel}</li>))
+                                        <li key={index} title={idioma.nome_Idioma}>{idioma.nome_Idioma} - {idioma.nivel_Idioma}</li>))
                                     }</ul>
                                     <button className="dadosAprendiz-btn-visualizar" onClick={() => setIdioma(true)}><img src={icon_olho} alt="Visualizar" /></button>
                                 </div>
@@ -120,15 +196,15 @@ function PerfilAprendiz(){
                             <div className="dadosAprendiz-cards-inferiores">
                                 <div className="dadosAprendiz-card-perfil">
                                     <h3>Soft Skills</h3>
-                                    <ul>{aprendiz.softskills.map((skill, index) => (
-                                        <li key={index} title={skill.nome}>{skill.nome}</li>))
+                                    <ul>{aprendiz.soft_skills.map((skill, index) => (
+                                        <li key={index} title={skill.nome_SoftSkills.join(", ")}>{skill.nome_SoftSkills.join(", ")}</li>))
                                     }</ul>
                                     <button className="dadosAprendiz-btn-visualizar" onClick={() => setSoftSkill(true)}><img src={icon_olho} alt="Visualizar" /></button>
                                 </div>
                                 <div className="dadosAprendiz-card-perfil">
                                     <h3>Competências</h3>
                                     <ul>{aprendiz.competencias.map((competencia, index) => (
-                                        <li key={index} title={`${competencia.nome} - ${competencia.nivel}`}>{competencia.nome} - {competencia.nivel}</li>))
+                                        <li key={index} title={`${competencia.nome_Competencia} - ${competencia.nivel_Competencia}`}>{competencia.nome_Competencia} - {competencia.nivel_Competencia}</li>))
                                     }</ul>
                                     <button className="dadosAprendiz-btn-visualizar" onClick={() => setCompetencia(true)}><img src={icon_olho} alt="Visualizar" /></button>
                                 </div>
@@ -140,20 +216,21 @@ function PerfilAprendiz(){
         </div>
     )
 }
+
 export default PerfilAprendiz
 
-function calcularIdade(dataNascimento: Date) {
+function calcularIdade(dataNascimento:string){
+    const nascimento = new Date(dataNascimento);
     const hoje = new Date();
-    let idade = hoje.getFullYear() - dataNascimento.getFullYear();
-    const mesAtual = hoje.getMonth();
-    const mesNascimento = dataNascimento.getMonth();
-    if ( mesAtual < mesNascimento ||(mesAtual === mesNascimento && hoje.getDate() < dataNascimento.getDate())) {
+    let idade = hoje.getFullYear() - nascimento.getFullYear();
+    const mes = hoje.getMonth();
+    const mesNascimento = nascimento.getMonth();
+    if(mes < mesNascimento || (mes === mesNascimento && hoje.getDate() < nascimento.getDate())){
         idade--;
     }
     return idade;
 }
 
-function formatarTelefone(numero: number) {
-    const telefone = numero.toString();
-    return telefone.replace(/^(\d{2})(\d{5})(\d{4})$/, "($1)$2-$3");
+function formatarTelefone(numero:string){
+    return numero.replace(/^(\d{2})(\d{5})(\d{4})$/, "($1) $2-$3");
 }

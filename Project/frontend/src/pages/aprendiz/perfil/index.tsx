@@ -20,6 +20,50 @@ import './perfil.css';
 import api from "../../../services/api";
 import { useNavigate } from "react-router-dom";
 
+const formatarSoftSkill = (skill: string) => {
+    const softSkills: Record<string, string> = {
+        COMUNICACAO: "Comunicação",
+        TRABALHO_EM_EQUIPE: "Trabalho em Equipe",
+        LIDERANCA: "Liderança",
+        EMPATIA: "Empatia",
+        PROATIVIDADE: "Proatividade",
+        RESOLUCAO_DE_PROBLEMAS: "Resolução de Problemas",
+        PENSAMENTO_CRITICO: "Pensamento Crítico",
+        GESTAO_DO_TEMPO: "Gestão do Tempo",
+        ORGANIZACAO: "Organização",
+        CRIATIVIDADE: "Criatividade",
+        NEGOCIACAO: "Negociação",
+        RESILIENCIA: "Resiliência",
+        ESCUTA_ATIVA: "Escuta Ativa",
+        RESPONSABILIDADE: "Responsabilidade",
+        AUTONOMIA: "Autonomia",
+        APRENDIZADO_CONTINUO: "Aprendizado Contínuo",
+        INOVACAO: "Inovação",
+        ORATORIA: "Oratória",
+        COMPROMETIMENTO: "Comprometimento",
+        NAO_INFORMADO: "Não informado"
+    };
+
+    return softSkills[skill] || skill;
+};
+
+const formatarIdioma = (idioma: string) => {
+    const idiomas: Record<string, string> = {
+        ALEMAO: "Alemão",
+        ARABE: "Árabe",
+        COREANO: "Coreano",
+        ESPANHOL: "Espanhol",
+        FRANCES: "Francês",
+        INGLES: "Inglês",
+        ITALIANO: "Italiano",
+        JAPONES: "Japonês",
+        MANDARIM: "Mandarim",
+        RUSSO: "Russo",
+        TAILANDES: "Tailandês"
+    };
+
+    return idiomas[idioma] || idioma;
+};
 interface Usuario {
     edv: number;
     img: string;
@@ -31,16 +75,16 @@ interface Usuario {
     tipo: string;
 }
 interface Perfil {
-    id: Number,
+    id: number,
     EDV_Aprendiz: number,
-    situacao_profissional: SituacaoProfissional[],
+    situacao_profissional: ISituacaoProfissional[],
     soft_skills: SoftSkills[],
     competencia: Competencia[],
     formacao_academica: FormacaoAcademica[],
     cursos: Cursos[],
     idiomas: Idiomas[]
 }
-interface SituacaoProfissional {
+interface ISituacaoProfissional {
     id: number;
     bio_profissional: string;
 };
@@ -61,13 +105,17 @@ interface Idiomas {
     nome_Idioma: string;
 }
 
-
 interface FormacaoAcademica {
     id: number;
+    Id_Profile: number;
     name_Curso: string;
+    nome_Institucao: string;
     status_Academico: string;
+    periodo_Atual: number;
+    total_Periodo: number;
+    nivel_formacao: string;
+    certificado: string | null;
 }
-
 
 function Telefone(numero: number | string) {
     const telefone = String(numero).replace(/\D/g, "");
@@ -125,35 +173,31 @@ function Perfil() {
     const [editarSituacao, setEditarSituacao] = useState(false)
     const [editarFormacao, setEditarFormacao] = useState(false)
     const [adicionarFormacao, setAdicionarFormacao] = useState(false)
+    const [EDV, setEDV] = useState(0)
     const navigate = useNavigate()
+    const [formacaoSelecionada, setFormacaoSelecionada] = useState<FormacaoAcademica | null>(null);
 
+    async function carregarPerfil() {
+        const usuario = localStorage.getItem("usuario");
+        const aprendizLogado = JSON.parse(usuario??"");
+        setAprendiz({
+            edv: aprendizLogado.user.EDV,
+            img: aprendizLogado.user.imagem,
+            nome: aprendizLogado.user.name,
+            email: aprendizLogado.user.email_bosch,
+            user: aprendizLogado.user.user_bosch,
+            contato: aprendizLogado.user.contato,
+            data_nascimento: aprendizLogado.user.data_nascimento,
+            tipo: aprendizLogado.user.tipo
+        });
+        const response = await api.get(
+        `/aprendiz/meuPerfil/${aprendizLogado.user.EDV}`
+        );
+        setEDV(aprendizLogado.user.EDV)
+
+        setApireq(response.data.data);
+    }
     useEffect(() => {
-        async function carregarPerfil() {
-            const usuario = localStorage.getItem("usuario");
-            console.log(usuario)
-            const aprendizLogado = JSON.parse(usuario);
-            console.log("APRENDIZ ", aprendizLogado.user);
-            setAprendiz({
-                edv: aprendizLogado.user.EDV,
-                img: aprendizLogado.user.imagem,
-                nome: aprendizLogado.user.name,
-                email: aprendizLogado.user.email_bosch,
-                user: aprendizLogado.user.user_bosch,
-                contato: aprendizLogado.user.contato,
-                data_nascimento: aprendizLogado.user.data_nascimento,
-                tipo: aprendizLogado.user.tipo
-            });
-
-            try {
-                const response = await api.get(
-                    `/aprendiz/meuPerfil/${aprendizLogado.user.EDV}`
-                );
-
-                setApireq(response.data.data);
-            } catch (error) {
-                console.error(error);
-            }
-        }
 
         carregarPerfil();
     }, []);
@@ -162,7 +206,6 @@ function Perfil() {
 
         navigate('/')
     }
-    console.log("a", aprendiz)
 
     return (
         <>
@@ -194,16 +237,16 @@ function Perfil() {
             </div>
             <Logout visible={logout} setVisible={setLogout} />
 
-            <SituacaoProfissional visible={situacao} setVisible={setSituacao} setEditarSituacao={setEditarSituacao} />
-            <FormacaoAcademica visible={formacao_academica} setVisible={setFormacaoAcademica} setEditarFormacao={setEditarFormacao} setAdicionarFormacao={setAdicionarFormacao} />
-            <CursoComplementar visible={curso_complementar} setVisible={setCursoComplementar} />
-            <Idioma visible={idioma} setVisible={setIdioma} />
-            <SoftSkill visible={soft_skill} setVisible={setSoftSkill} />
-            <Competencia visible={competencia} setVisible={setCompetencia} />
-            <EditarPerfil visible={editar} setVisible={setEditar} edv={aprendiz?.edv} />
-            <EditarSituacaoProfissional visible={editarSituacao} setVisible={setEditarSituacao} setSituacaoProfissional={setSituacao} edv={aprendiz?.edv} />
-            <EditarFormacaoAcademica visible={editarFormacao} setVisible={setEditarFormacao} setFormacaoAcademica={setFormacaoAcademica} id={1} />
-            <AdicionarFormacaoAcademica visible={adicionarFormacao} setVisible={setAdicionarFormacao} setFormacaoAcademica={setFormacaoAcademica} />
+            <SituacaoProfissional visible={situacao} setVisible={setSituacao} setEditarSituacao={setEditarSituacao} onSuccess={carregarPerfil}/>
+            <FormacaoAcademica visible={formacao_academica} setVisible={setFormacaoAcademica} setEditarFormacao={setEditarFormacao} setAdicionarFormacao={setAdicionarFormacao} setFormacaoSelecionada={setFormacaoSelecionada} onSuccess={carregarPerfil} />
+            <CursoComplementar visible={curso_complementar} setVisible={setCursoComplementar} onSuccess={carregarPerfil} />
+            <Idioma visible={idioma} setVisible={setIdioma} onSuccess={carregarPerfil} />
+            <SoftSkill visible={soft_skill} setVisible={setSoftSkill} edv={EDV} onSuccess={carregarPerfil} />
+            <Competencia visible={competencia} setVisible={setCompetencia} onSuccess={carregarPerfil} />
+            <EditarPerfil visible={editar} setVisible={setEditar} edv={EDV} onSuccess={carregarPerfil}/>
+            <EditarSituacaoProfissional visible={editarSituacao} setVisible={setEditarSituacao} setSituacaoProfissional={setSituacao} edv={EDV} idSituacao={apireq?.situacao_profissional?.[0]?.id ?? 0} onSuccess={carregarPerfil}/>
+            <EditarFormacaoAcademica visible={editarFormacao} setVisible={setEditarFormacao} setFormacaoAcademica={setFormacaoAcademica} formacaoSelecionada={formacaoSelecionada}onSuccess={carregarPerfil} />
+            <AdicionarFormacaoAcademica visible={adicionarFormacao} setVisible={setAdicionarFormacao} setFormacaoAcademica={setFormacaoAcademica} edv={EDV} onSuccess={carregarPerfil} />
 
             <main className="perfil-tela">
                 <section className="perfil-bloco">
@@ -225,9 +268,9 @@ function Perfil() {
                                 <span>Email: {aprendiz?.email}</span>
                                 <span>EDV: {aprendiz?.edv}</span>
                                 <span>User: {aprendiz?.user}</span>
-                                <span>Data de Nascimento: {formatarData(aprendiz?.data_nascimento)}</span>
-                                <span>Idade: {Idade(formatarData(aprendiz?.data_nascimento))} anos</span>
-                                <span>Contato: {Telefone(aprendiz?.contato)}</span>
+                            <span>Data de Nascimento: {formatarData(aprendiz?.data_nascimento ?? "")}</span>
+                                <span>Idade: {Idade(formatarData(aprendiz?.data_nascimento ?? ""))} anos</span>
+                                <span>Contato: {Telefone(aprendiz?.contato ?? "")}</span>
                             </div>
                         </div>
                     </div>
@@ -238,21 +281,29 @@ function Perfil() {
                                 <li key={situacao.id}>
                                     {situacao.bio_profissional.slice(0, 50)}...
                                 </li>
-                                ))}
+                            ))}
                             </ul>
                             <button className="perfil-btn-visualizar" onClick={() => setSituacao(true)}>
                                 <img src={icon_olho} alt="Visualizar" />
                             </button>
                         </div>
                         <div className="perfil-card-perfil">
-                            <h3>Formação Acadêmica </h3>
-                            <ul>{apireq?.formacao_academica.map((formacao) => (
-                                <li key={formacao.id}>
-                                    {formacao.name_Curso} - {formacao.status_Academico}
-                                </li>
-                            ))}
+                            <h3>Formação Acadêmica</h3>
+                            <ul>
+                                {apireq?.formacao_academica
+                                    .slice(0, 2)
+                                    .map((formacao, index) => (
+                                        <li key={formacao.id}>
+                                            {formacao.name_Curso} - {formacao.status_Academico}
+                                            {index === 1 && apireq.formacao_academica.length > 2 && "..."}
+                                        </li>
+                                    ))
+                                }
                             </ul>
-                            <button className="perfil-btn-visualizar" onClick={() => setFormacaoAcademica(true)}>
+                            <button
+                                className="perfil-btn-visualizar"
+                                onClick={() => setFormacaoAcademica(true)}
+                            >
                                 <img src={icon_olho} alt="Visualizar" />
                             </button>
                         </div>
@@ -274,7 +325,7 @@ function Perfil() {
                             <h3>Idiomas</h3>
                             <ul>{apireq?.idiomas.slice(0, 2).map((idiomas) => (
                                 <li key={idiomas.id}>
-                                    {idiomas.nome_Idioma}
+                                    {formatarIdioma(idiomas.nome_Idioma)}
                                 </li>
                             ))}
                             </ul>
@@ -288,7 +339,7 @@ function Perfil() {
                             <h3>Soft Skills</h3>
                             <ul>{apireq?.soft_skills.slice(0, 2).map((skill) => (
                                 <li key={skill.id}>
-                                    {skill.nome_SoftSkills}
+                                     {formatarSoftSkill(skill.nome_SoftSkills)}
                                 </li>
                             ))}
                             </ul>

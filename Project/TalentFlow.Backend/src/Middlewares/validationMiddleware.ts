@@ -11,11 +11,11 @@ export function validationMiddleware(
         res: Response,
         next: NextFunction
     ) => {
-        console.log("BODY:", req.body);
+        // console.log("BODY:", req.body);
         console.log("HEADERS:", req.headers["content-type"]);
         
         const resultado = schema.safeParse(req.body);
-
+        
         if(!resultado.success){
 
 
