@@ -17,7 +17,7 @@ import {
   atualizarCursoSchema,
 } from "../DTO/schemas/aprendizSchema.ts";
 
-const route = express.Ro
+const route = express.Router();
 //Rotas do Instrutor
 route.post("/criar",authMiddleware,roleMiddleware("INSTRUTOR"),validationMiddleware(criarAprendizSchema),aprendizController.criar);
 route.get("/aprendiz/:EDV",authMiddleware,roleMiddleware("INSTRUTOR"),aprendizController.verAprendiz); // EDV e ID_Turma
