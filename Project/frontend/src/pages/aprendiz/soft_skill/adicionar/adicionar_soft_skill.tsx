@@ -1,275 +1,225 @@
-import './adicionar_soft_skill.css'
-import sair from '../../../../assets/img/close.png'
-import { useState } from 'react'
-import Swal from 'sweetalert2'
+import "./adicionar_soft_skill.css";
+import sair from "../../../../assets/img/close.png";
+import { useState } from "react";
+import Swal from "sweetalert2";
 import api from "../../../../services/api";
 
 interface Props {
-    visible: boolean;
-    setVisible: React.Dispatch<React.SetStateAction<boolean>>;
-    setSoftSkill: React.Dispatch<React.SetStateAction<boolean>>;
-    edv: number;
-    carregarSoftSkills: () => void;
+  visible: boolean;
+  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  setSoftSkill: React.Dispatch<React.SetStateAction<boolean>>;
+  onSuccess: () => void;
+  edv: number;
+  carregarSoftSkills: () => void;
 }
 
 function AdicionarSoftSkill({
-    visible,
-    setVisible,
-    setSoftSkill,
-    edv,
-    carregarSoftSkills
+  visible,
+  setVisible,
+  setSoftSkill,
+  onSuccess,
+  edv,
+  carregarSoftSkills,
 }: Props) {
+  const [softSkillsSelecionadas, setSoftSkillsSelecionadas] = useState<
+    string[]
+  >([]);
 
-    const [softSkillsSelecionadas, setSoftSkillsSelecionadas] = useState<string[]>([]);
+  const softSkills = [
+    "Comunicação",
+    "Trabalho em Equipe",
+    "Liderança",
+    "Empatia",
+    "Proatividade",
+    "Resolução de Problemas",
+    "Pensamento Crítico",
+    "Gestão do Tempo",
+    "Organização",
+    "Criatividade",
+    "Negociação",
+    "Resiliência",
+    "Escuta Ativa",
+    "Responsabilidade",
+    "Autonomia",
+    "Aprendizado Contínuo",
+    "Inovação",
+    "Oratória",
+    "Comprometimento",
+  ];
 
-    const softSkills = [
-        "Comunicação",
-        "Trabalho em Equipe",
-        "Liderança",
-        "Empatia",
-        "Proatividade",
-        "Resolução de Problemas",
-        "Pensamento Crítico",
-        "Gestão do Tempo",
-        "Organização",
-        "Criatividade",
-        "Negociação",
-        "Resiliência",
-        "Escuta Ativa",
-        "Responsabilidade",
-        "Autonomia",
-        "Aprendizado Contínuo",
-        "Inovação",
-        "Oratória",
-        "Comprometimento"
-    ];
+  const converterSoftSkill = (skill: string) => {
+    switch (skill) {
+      case "Comunicação":
+        return "COMUNICACAO";
 
+      case "Trabalho em Equipe":
+        return "TRABALHO_EM_EQUIPE";
 
-    const converterSoftSkill = (skill: string) => {
+      case "Liderança":
+        return "LIDERANCA";
 
-        switch (skill) {
-            case "Comunicação":
-                return "COMUNICACAO";
+      case "Empatia":
+        return "EMPATIA";
 
-            case "Trabalho em Equipe":
-                return "TRABALHO_EM_EQUIPE";
+      case "Proatividade":
+        return "PROATIVIDADE";
 
-            case "Liderança":
-                return "LIDERANCA";
+      case "Resolução de Problemas":
+        return "RESOLUCAO_DE_PROBLEMAS";
 
-            case "Empatia":
-                return "EMPATIA";
+      case "Pensamento Crítico":
+        return "PENSAMENTO_CRITICO";
 
-            case "Proatividade":
-                return "PROATIVIDADE";
+      case "Gestão do Tempo":
+        return "GESTAO_DO_TEMPO";
 
-            case "Resolução de Problemas":
-                return "RESOLUCAO_DE_PROBLEMAS";
+      case "Organização":
+        return "ORGANIZACAO";
 
-            case "Pensamento Crítico":
-                return "PENSAMENTO_CRITICO";
+      case "Criatividade":
+        return "CRIATIVIDADE";
 
-            case "Gestão do Tempo":
-                return "GESTAO_DO_TEMPO";
+      case "Negociação":
+        return "NEGOCIACAO";
 
-            case "Organização":
-                return "ORGANIZACAO";
+      case "Resiliência":
+        return "RESILIENCIA";
 
-            case "Criatividade":
-                return "CRIATIVIDADE";
+      case "Escuta Ativa":
+        return "ESCUTA_ATIVA";
 
-            case "Negociação":
-                return "NEGOCIACAO";
+      case "Responsabilidade":
+        return "RESPONSABILIDADE";
 
-            case "Resiliência":
-                return "RESILIENCIA";
+      case "Autonomia":
+        return "AUTONOMIA";
 
-            case "Escuta Ativa":
-                return "ESCUTA_ATIVA";
+      case "Aprendizado Contínuo":
+        return "APRENDIZADO_CONTINUO";
 
-            case "Responsabilidade":
-                return "RESPONSABILIDADE";
+      case "Inovação":
+        return "INOVACAO";
 
-            case "Autonomia":
-                return "AUTONOMIA";
+      case "Oratória":
+        return "ORATORIA";
 
-            case "Aprendizado Contínuo":
-                return "APRENDIZADO_CONTINUO";
+      case "Comprometimento":
+        return "COMPROMETIMENTO";
 
-            case "Inovação":
-                return "INOVACAO";
+      default:
+        return "NAO_INFORMADO";
+    }
+  };
 
-            case "Oratória":
-                return "ORATORIA";
+  const handleSelecionar = (skill: string) => {
+    if (softSkillsSelecionadas.includes(skill)) {
+      setSoftSkillsSelecionadas(
+        softSkillsSelecionadas.filter((item) => item !== skill),
+      );
+    } else {
+      setSoftSkillsSelecionadas([...softSkillsSelecionadas, skill]);
+    }
+  };
 
-            case "Comprometimento":
-                return "COMPROMETIMENTO";
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-            default:
-                return "NAO_INFORMADO";
-        }
-    };
+    if (softSkillsSelecionadas.length === 0) {
+      Swal.fire({
+        title: "Atenção!",
+        text: "Selecione pelo menos uma competência.",
+        icon: "warning",
+        confirmButtonColor: "#2B83D5",
+      });
 
-
-    const handleSelecionar = (skill: string) => {
-
-        if (softSkillsSelecionadas.includes(skill)) {
-
-            setSoftSkillsSelecionadas(
-                softSkillsSelecionadas.filter(item => item !== skill)
-            );
-
-        } else {
-
-            setSoftSkillsSelecionadas([
-                ...softSkillsSelecionadas,
-                skill
-            ]);
-        }
-    };
-
-
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-
-        e.preventDefault();
-
-        if (softSkillsSelecionadas.length === 0) {
-
-            Swal.fire({
-                title: 'Atenção!',
-                text: 'Selecione pelo menos uma competência.',
-                icon: 'warning',
-                confirmButtonColor: '#2B83D5'
-            });
-
-            return;
-        }
-
-
-        try {
-
-            const softSkillsEnum = softSkillsSelecionadas.map(
-                converterSoftSkill
-            );
-
-            await api.post(
-                `/aprendiz/adicionarSoftskills/${edv}`,
-                {
-                    softskills: softSkillsSelecionadas.map(
-                        skill => converterSoftSkill(skill)
-                    )
-                }
-            )
-
-
-            await carregarSoftSkills();
-
-
-            Swal.fire({
-                title: 'Sucesso!',
-                text: 'Softskills adicionadas com sucesso.',
-                icon: 'success',
-                confirmButtonColor: '#2B83D5'
-            });
-
-
-            setVisible(false);
-
-
-        } catch (error: any) {
-            console.log("ERRO COMPLETO:", error.response?.data);
-
-            Swal.fire({
-                title: 'Erro!',
-                text: 'Não foi possível adicionar as softskills.',
-                icon: 'error',
-                confirmButtonColor: '#2B83D5'
-            });
-        }
-    };
-
-
-    if (!visible) {
-        return null;
+      return;
     }
 
+    try {
+      const softSkillsEnum = softSkillsSelecionadas.map(converterSoftSkill);
 
-    return (
-        <div
-            className="adicionarSoftSkill-overlay"
-            onClick={() => setVisible(false)}
+      await api.post(`/aprendiz/adicionarSoftskills/${edv}`, {
+        softskills: softSkillsSelecionadas.map((skill) =>
+          converterSoftSkill(skill),
+        ),
+      });
+
+      await carregarSoftSkills();
+
+      Swal.fire({
+        title: "Sucesso!",
+        text: "Softskills adicionadas com sucesso.",
+        icon: "success",
+        confirmButtonColor: "#2B83D5",
+      });
+
+      setVisible(false);
+      onSuccess();
+    } catch (error: any) {
+      console.log("ERRO COMPLETO:", error.response?.data);
+
+      Swal.fire({
+        title: "Erro!",
+        text: "Não foi possível adicionar as softskills.",
+        icon: "error",
+        confirmButtonColor: "#2B83D5",
+      });
+    }
+  };
+
+  if (!visible) {
+    return null;
+  }
+
+  return (
+    <div
+      className="adicionarSoftSkill-overlay"
+      onClick={() => setVisible(false)}
+    >
+      <form
+        className="adicionarSoftSkill-card"
+        onSubmit={handleSubmit}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          type="button"
+          className="adicionarSoftSkill-fechar"
+          onClick={() => {
+            setVisible(false);
+            setSoftSkill(true);
+          }}
         >
+          <img src={sair} alt="Fechar" />
+        </button>
 
-            <form
-                className="adicionarSoftSkill-card"
-                onSubmit={handleSubmit}
-                onClick={(e) => e.stopPropagation()}
-            >
+        <span className="adicionarSoftSkill-titulo">Adicionar SoftSkills</span>
 
-                <button
-                    type="button"
-                    className="adicionarSoftSkill-fechar"
-                    onClick={() => {
-                        setVisible(false);
-                        setSoftSkill(true);
-                    }}
-                >
-                    <img src={sair} alt="Fechar" />
-                </button>
+        <div className="adicionarSoftSkill-container">
+          <div className="adicionarSoftSkill-lista">
+            {softSkills.map((skill) => (
+              <label key={skill} className="adicionarSoftSkill-item">
+                <input
+                  type="checkbox"
+                  checked={softSkillsSelecionadas.includes(skill)}
+                  onChange={() => handleSelecionar(skill)}
+                />
 
+                <span className="adicionarSoftSkill-quadrado"></span>
 
-                <span className="adicionarSoftSkill-titulo">
-                    Adicionar SoftSkills
-                </span>
+                <span className="adicionarSoftSkill-texto">{skill}</span>
+              </label>
+            ))}
+          </div>
 
-
-                <div className="adicionarSoftSkill-container">
-
-                    <div className="adicionarSoftSkill-lista">
-
-                        {softSkills.map((skill) => (
-
-                            <label
-                                key={skill}
-                                className="adicionarSoftSkill-item"
-                            >
-
-                                <input
-                                    type="checkbox"
-                                    checked={softSkillsSelecionadas.includes(skill)}
-                                    onChange={() => handleSelecionar(skill)}
-                                />
-
-                                <span className="adicionarSoftSkill-quadrado"></span>
-
-                                <span className="adicionarSoftSkill-texto">
-                                    {skill}
-                                </span>
-
-                            </label>
-
-                        ))}
-
-                    </div>
-
-
-                    <div className="adicionarSoftSkill-botoes">
-
-                        <button
-                            type="submit"
-                            className="adicionarSoftSkill-salvar"
-                        >
-                            ADICIONAR
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </form>
-
+          <div className="adicionarSoftSkill-botoes">
+            <button type="submit" className="adicionarSoftSkill-salvar">
+              ADICIONAR
+            </button>
+          </div>
         </div>
-    )
+      </form>
+    </div>
+  );
 }
 
 export default AdicionarSoftSkill;

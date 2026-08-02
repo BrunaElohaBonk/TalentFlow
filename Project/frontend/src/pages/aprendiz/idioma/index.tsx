@@ -31,6 +31,7 @@ const formatarIdioma = (idioma: string) => {
 interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    onSuccess: () => void;
 }
 interface Idioma {
     id: number;
@@ -39,7 +40,7 @@ interface Idioma {
     nivel_Idioma: string;
     certificado: string | null;
 }
-function Idioma({ visible, setVisible }: Props) {
+function Idioma({ visible, setVisible,onSuccess }: Props) {
 
     const [visualizarIdioma, setVisualizarIdioma] = useState(false);
     const [editarIdioma, setEditarIdioma] = useState(false);
@@ -82,12 +83,16 @@ function Idioma({ visible, setVisible }: Props) {
 
     useEffect(() => {
         if (visible) {
-            carregarIdiomas();
+           carregarIdiomas();
         }
     }, [visible]);
 
     if (!visible) {
         return null
+    }
+     async function atualizarTudo() {
+        await carregarIdiomas();
+        onSuccess();
     }
 
     const handleDelete = async (id: number) => {
@@ -110,6 +115,7 @@ function Idioma({ visible, setVisible }: Props) {
                 text: 'Idioma removido com sucesso!',
                 icon: 'success'
             })
+            onSuccess()
         }
         catch (error) {
             console.error('Erro ao deletar:', error)
@@ -182,6 +188,7 @@ function Idioma({ visible, setVisible }: Props) {
                             visible={visualizarIdioma}
                             setVisible={setVisualizarIdioma}
                             idioma={idiomaSelecionado}
+                            onSuccess={atualizarTudo}
                         />
                     )
                 }
@@ -191,6 +198,7 @@ function Idioma({ visible, setVisible }: Props) {
                             visible={editarIdioma}
                             setVisible={setEditarIdioma}
                             setIdioma={setVisible}
+                            onSuccess={atualizarTudo}
                             id={idiomaSelecionado.id}
                             edv={edv}
                             idiomaAtual={idiomaSelecionado}
@@ -203,6 +211,7 @@ function Idioma({ visible, setVisible }: Props) {
                             visible={adicionarIdioma}
                             setVisible={setAdicionarIdioma}
                             setIdioma={setVisible}
+                            onSuccess={atualizarTudo}
                             id={idProfile}
                             edv={edv}
                             carregarIdiomas={carregarIdiomas}

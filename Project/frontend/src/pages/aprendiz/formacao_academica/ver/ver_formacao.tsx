@@ -4,6 +4,7 @@ import icon_fechar from '../../../../assets/img/close.png'
 interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    onSuccess: () => void;
     formacao: {
         id: number;
         Id_Profile: number;
@@ -32,12 +33,14 @@ const formatarSituacao = (situacao: string) => {
 function FormacaoAcademicaVisualizar({
     visible,
     setVisible,
+    onSuccess,
     formacao
 }: Props) {
 
     if (!visible) {
         return null;
     }
+    onSuccess()
 
     return (
         <div 

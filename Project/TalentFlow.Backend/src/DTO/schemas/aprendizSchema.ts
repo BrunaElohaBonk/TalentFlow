@@ -226,7 +226,7 @@ z.object({
 // CURSOS
 
 export const atualizarCursoSchema = z.object({
-    id_Curso: z.coerce.number(),
+    id: z.coerce.number(),
 
     Id_Profile: z.coerce.number(),
 

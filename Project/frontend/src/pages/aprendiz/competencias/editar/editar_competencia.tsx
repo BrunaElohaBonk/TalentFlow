@@ -11,8 +11,8 @@ import {
 import api from "../../../../services/api";
 
 interface ICompetencia {
-  id:number,
-  nivel_Competencia: "BASICO"|"INTERMEDIARIO"|"AVANÇADO";
+  id: number;
+  nivel_Competencia: "BASICO" | "INTERMEDIARIO" | "AVANÇADO";
   nome_Competencia: string;
 }
 
@@ -20,22 +20,31 @@ interface Props {
   visible: boolean;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
   setCompetencia: React.Dispatch<React.SetStateAction<boolean>>;
+  onSuccess: () => void;
   id_profile: number;
   edv: number;
 
   competenciaAtual: {
-    id:number,
-    nivel_Competencia:"BASICO"|"INTERMEDIARIO"|"AVANÇADO";
-    nome_Competencia:string;
-
+    id: number;
+    nivel_Competencia: "BASICO" | "INTERMEDIARIO" | "AVANÇADO";
+    nome_Competencia: string;
   };
 }
 
-function EditarCompetencia({ visible, setVisible, setCompetencia, competenciaAtual,id_profile,edv}: Props) {  
+function EditarCompetencia({
+  visible,
+  setVisible,
+  setCompetencia,
+  competenciaAtual,
+  id_profile,
+  edv,
+  onSuccess,
+}: Props) {
   const [competencia, setCompetenciaState] = useState<ICompetencia>({
     id: competenciaAtual.id,
-    nivel_Competencia: competenciaAtual.nivel_Competencia,    
-    nome_Competencia: competenciaAtual.nome_Competencia});
+    nivel_Competencia: competenciaAtual.nivel_Competencia,
+    nome_Competencia: competenciaAtual.nome_Competencia,
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCompetenciaState({
@@ -63,12 +72,10 @@ function EditarCompetencia({ visible, setVisible, setCompetencia, competenciaAtu
       return;
     }
     try {
-        console.log("bory",competencia)
       await api.put(`/aprendiz/atualizarCompetencias/${edv}/${id_profile}`, {
-        id:competencia.id,
+        id: competencia.id,
         nome_Competencia: competencia.nome_Competencia,
-        nivel_Competencia: competencia.nivel_Competencia
-        
+        nivel_Competencia: competencia.nivel_Competencia,
       });
       Swal.fire({
         title: "Sucesso!",
@@ -77,7 +84,8 @@ function EditarCompetencia({ visible, setVisible, setCompetencia, competenciaAtu
         confirmButtonColor: "#2B83D5",
       });
       setVisible(false);
-    } catch (error:any) {
+      onSuccess();
+    } catch (error: any) {
       console.error("Detalhe do erro:", error.response?.data);
       Swal.fire({
         title: "Erro!",

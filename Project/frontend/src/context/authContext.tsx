@@ -36,7 +36,6 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
             return;
         }
         setUsuario(usuario);
-        console.log("User "+ usuario.user)
         localStorage.setItem(
             "usuario",
             JSON.stringify(usuario)

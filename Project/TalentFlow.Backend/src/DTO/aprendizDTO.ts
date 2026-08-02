@@ -45,7 +45,7 @@ export interface AtualizarFormacaoAcademicaDto {
 
 export interface AtualizarCursosComplementaresDto {
 
-    id_Curso:number;
+    id:number;
     Id_Profile:number;
     name_Curso:string;
     status_Cursos:

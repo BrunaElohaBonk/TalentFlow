@@ -17,6 +17,7 @@ interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
     setIdioma: React.Dispatch<React.SetStateAction<boolean>>;
+    onSuccess: () => void;
     id: number;
     edv: number;
     carregarIdiomas: () => void;
@@ -26,6 +27,7 @@ function AdicionarIdioma({
     visible,
     setVisible,
     setIdioma,
+    onSuccess,
     id,
     edv,
     carregarIdiomas
@@ -110,8 +112,7 @@ function AdicionarIdioma({
                 nome_Idioma: idioma.nomeIdioma,
                 nivel_Idioma: idioma.nivel
             })
-            carregarIdiomas();
-
+            
             await Swal.fire({
                 title: 'Sucesso!',
                 text: 'Idioma adicionado com sucesso.',
@@ -119,7 +120,8 @@ function AdicionarIdioma({
                 confirmButtonColor: '#2B83D5'
             })
             setVisible(false);
-
+            carregarIdiomas();
+            onSuccess()
         } catch (error: any) {
             console.error("ERRO AO ADICIONAR IDIOMA:", error.response?.data || error);
 

@@ -21,6 +21,7 @@ const formatarIdioma = (idioma: string) => {
 interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    onSuccess: () => void;
     idioma: {
         id: number;
         Id_Profile: number;
@@ -33,12 +34,14 @@ interface Props {
 function IdiomaVisualizar({
     visible,
     setVisible,
+    onSuccess,
     idioma
 }: Props) {
 
     if (!visible) {
         return null
     }
+    onSuccess();
 
     return (
         <div className="idiomaVisualizar-overlay" onClick={() => setVisible(false)}>

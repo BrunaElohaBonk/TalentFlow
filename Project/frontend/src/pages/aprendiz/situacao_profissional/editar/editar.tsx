@@ -16,11 +16,12 @@ interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
     setSituacaoProfissional: React.Dispatch<React.SetStateAction<boolean>>;
+    onSuccess: () => void;
     edv: number;
     idSituacao?: number;
 }
 
-function EditarSituacaoProfissional({ visible, setVisible, setSituacaoProfissional, edv, idSituacao }: Props) {
+function EditarSituacaoProfissional({ visible, setVisible, setSituacaoProfissional, edv, onSuccess,idSituacao }: Props) {
     const [situacao, setSituacao] = useState<ISituacao>({
         setor: '',
         lider: '',
@@ -81,15 +82,10 @@ function EditarSituacaoProfissional({ visible, setVisible, setSituacaoProfission
             })
             return
         }
-        console.log({
-            edv,
-            idSituacao,
-            situacao
-        });
+        
         try {
-            // BACKEND
-            // Enviar EDV e informações da situação profissional para o banco.
-            const response = await api.put(`/aprendiz/atualizarSituacaoProfissional/${edv}/${idSituacao}`,
+        
+            await api.put(`/aprendiz/atualizarSituacaoProfissional/${edv}/${idSituacao}`,
                 {
                     nome_Setor: situacao.setor,
                     nome_Lider: situacao.lider,
@@ -105,8 +101,8 @@ function EditarSituacaoProfissional({ visible, setVisible, setSituacaoProfission
                 confirmButtonColor: '#2B83D5'
             })
 
-            console.log(response.data)
             setVisible(false)
+            onSuccess();
         } catch (error) {
             console.error('Erro ao atualizar:', error)
             Swal.fire({

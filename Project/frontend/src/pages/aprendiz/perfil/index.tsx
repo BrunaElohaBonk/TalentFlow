@@ -173,34 +173,31 @@ function Perfil() {
     const [editarSituacao, setEditarSituacao] = useState(false)
     const [editarFormacao, setEditarFormacao] = useState(false)
     const [adicionarFormacao, setAdicionarFormacao] = useState(false)
+    const [EDV, setEDV] = useState(0)
     const navigate = useNavigate()
     const [formacaoSelecionada, setFormacaoSelecionada] = useState<FormacaoAcademica | null>(null);
 
+    async function carregarPerfil() {
+        const usuario = localStorage.getItem("usuario");
+        const aprendizLogado = JSON.parse(usuario??"");
+        setAprendiz({
+            edv: aprendizLogado.user.EDV,
+            img: aprendizLogado.user.imagem,
+            nome: aprendizLogado.user.name,
+            email: aprendizLogado.user.email_bosch,
+            user: aprendizLogado.user.user_bosch,
+            contato: aprendizLogado.user.contato,
+            data_nascimento: aprendizLogado.user.data_nascimento,
+            tipo: aprendizLogado.user.tipo
+        });
+        const response = await api.get(
+        `/aprendiz/meuPerfil/${aprendizLogado.user.EDV}`
+        );
+        setEDV(aprendizLogado.user.EDV)
+
+        setApireq(response.data.data);
+    }
     useEffect(() => {
-        async function carregarPerfil() {
-            const usuario = localStorage.getItem("usuario");
-            const aprendizLogado = JSON.parse(usuario??"");
-            setAprendiz({
-                edv: aprendizLogado.user.EDV,
-                img: aprendizLogado.user.imagem,
-                nome: aprendizLogado.user.name,
-                email: aprendizLogado.user.email_bosch,
-                user: aprendizLogado.user.user_bosch,
-                contato: aprendizLogado.user.contato,
-                data_nascimento: aprendizLogado.user.data_nascimento,
-                tipo: aprendizLogado.user.tipo
-            });
-
-            try {
-                const response = await api.get(
-                    `/aprendiz/meuPerfil/${aprendizLogado.user.EDV}`
-                );
-
-                setApireq(response.data.data);
-            } catch (error) {
-                console.error(error);
-            }
-        }
 
         carregarPerfil();
     }, []);
@@ -240,24 +237,16 @@ function Perfil() {
             </div>
             <Logout visible={logout} setVisible={setLogout} />
 
-            <SituacaoProfissional visible={situacao} setVisible={setSituacao} setEditarSituacao={setEditarSituacao} />
-            <FormacaoAcademica
-                visible={formacao_academica}
-                setVisible={setFormacaoAcademica}
-                setEditarFormacao={setEditarFormacao}
-                setAdicionarFormacao={setAdicionarFormacao}
-                setFormacaoSelecionada={setFormacaoSelecionada}
-            />
-            <CursoComplementar visible={curso_complementar} setVisible={setCursoComplementar} />
-            <Idioma visible={idioma} setVisible={setIdioma} />
-            <SoftSkill visible={soft_skill} setVisible={setSoftSkill} edv={aprendiz?.edv ?? 0} />
-            <Competencia visible={competencia} setVisible={setCompetencia} />
-            <EditarPerfil visible={editar} setVisible={setEditar} edv={aprendiz?.edv ?? 0} />
-            <EditarSituacaoProfissional visible={editarSituacao} setVisible={setEditarSituacao} setSituacaoProfissional={setSituacao} edv={aprendiz?.edv ?? 0} idSituacao={apireq?.situacao_profissional?.[0]?.id ?? 0} />
-            <EditarFormacaoAcademica visible={editarFormacao} setVisible={setEditarFormacao} setFormacaoAcademica={setFormacaoAcademica} formacaoSelecionada={formacaoSelecionada} />
-            <AdicionarFormacaoAcademica visible={adicionarFormacao} setVisible={setAdicionarFormacao} setFormacaoAcademica={setFormacaoAcademica} edv={aprendiz?.edv ?? 0} atualizarFormacoes={function (): void {
-                throw new Error("Function not implemented.");
-            } } />
+            <SituacaoProfissional visible={situacao} setVisible={setSituacao} setEditarSituacao={setEditarSituacao} onSuccess={carregarPerfil}/>
+            <FormacaoAcademica visible={formacao_academica} setVisible={setFormacaoAcademica} setEditarFormacao={setEditarFormacao} setAdicionarFormacao={setAdicionarFormacao} setFormacaoSelecionada={setFormacaoSelecionada} onSuccess={carregarPerfil} />
+            <CursoComplementar visible={curso_complementar} setVisible={setCursoComplementar} onSuccess={carregarPerfil} />
+            <Idioma visible={idioma} setVisible={setIdioma} onSuccess={carregarPerfil} />
+            <SoftSkill visible={soft_skill} setVisible={setSoftSkill} edv={EDV} onSuccess={carregarPerfil} />
+            <Competencia visible={competencia} setVisible={setCompetencia} onSuccess={carregarPerfil} />
+            <EditarPerfil visible={editar} setVisible={setEditar} edv={EDV} onSuccess={carregarPerfil}/>
+            <EditarSituacaoProfissional visible={editarSituacao} setVisible={setEditarSituacao} setSituacaoProfissional={setSituacao} edv={EDV} idSituacao={apireq?.situacao_profissional?.[0]?.id ?? 0} onSuccess={carregarPerfil}/>
+            <EditarFormacaoAcademica visible={editarFormacao} setVisible={setEditarFormacao} setFormacaoAcademica={setFormacaoAcademica} formacaoSelecionada={formacaoSelecionada}onSuccess={carregarPerfil} />
+            <AdicionarFormacaoAcademica visible={adicionarFormacao} setVisible={setAdicionarFormacao} setFormacaoAcademica={setFormacaoAcademica} edv={EDV} onSuccess={carregarPerfil} />
 
             <main className="perfil-tela">
                 <section className="perfil-bloco">

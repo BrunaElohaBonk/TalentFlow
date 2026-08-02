@@ -15,6 +15,7 @@ interface Props {
     setEditarFormacao: React.Dispatch<React.SetStateAction<boolean>>;
     setAdicionarFormacao: React.Dispatch<React.SetStateAction<boolean>>;
     setFormacaoSelecionada: React.Dispatch<React.SetStateAction<Formacao | null>>;
+    onSuccess: () => void;
 }
 
 interface Formacao {
@@ -32,6 +33,7 @@ interface Formacao {
 function FormacaoAcademica({
     visible,
     setVisible,
+    onSuccess,
     setEditarFormacao,
     setAdicionarFormacao,
     setFormacaoSelecionada
@@ -74,6 +76,10 @@ function FormacaoAcademica({
     if (!visible) {
         return null;
     }
+     async function atualizarTudo() {
+        await carregarFormacoes();
+        onSuccess();
+    }
 
     const handleDelete = async (id: number) => {
         const confirm = await Swal.fire({
@@ -99,6 +105,7 @@ function FormacaoAcademica({
                 text: "Formação removida com sucesso!",
                 icon: "success",
             });
+            onSuccess();
         } catch (error) {
             console.error(error);
 
@@ -191,6 +198,7 @@ function FormacaoAcademica({
                         <FormacaoAcademicaVisualizar
                             visible={visualizarFormacao}
                             setVisible={setVisualizarFormacao}
+                            onSuccess={atualizarTudo}
                             formacao={formacaoVisualizar}
                             edv={edv}
                             atualizarFormacoes={carregarFormacoes}

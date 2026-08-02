@@ -36,10 +36,12 @@ interface Props {
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
     setFormacaoAcademica: React.Dispatch<React.SetStateAction<boolean>>;
     formacaoSelecionada: Formacao | null;
+    onSuccess: () => void;
 }
 
 function EditarFormacaoAcademica({
     visible,
+    onSuccess,
     setVisible,
     setFormacaoAcademica,
     formacaoSelecionada
@@ -214,9 +216,9 @@ function EditarFormacaoAcademica({
                 confirmButtonColor: '#2B83D5'
             })
 
-            console.log(response.data)
-
+            
             setVisible(false)
+            onSuccess();
 
         } catch (error) {
             console.error('Erro ao atualizar:', error)

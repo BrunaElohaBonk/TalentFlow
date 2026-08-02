@@ -1,6 +1,6 @@
 import './editar_curso.css'
 import sair from '../../../../assets/img/close.png'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Swal from 'sweetalert2'
 import { FormControl, FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import { useDropzone } from "react-dropzone";
@@ -8,7 +8,7 @@ import download from '../../../../assets/img/icon download.png'
 import api from '../../../../services/api'
 
 interface ICurso {
-    id_Curso?: number;
+    id?: number;
     Id_Profile?: number;
     certificado?: string | null;
     name_Curso: string;
@@ -22,9 +22,11 @@ interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
     setCursoComplementar: React.Dispatch<React.SetStateAction<boolean>>;
+    onSuccess: () => void;
+    edv:number,
     id_perfil: number;
     cursoAtual:{
-        id_Cursos:number;
+        id:number;
         Id_Profile:number;
         name_Curso:string;
         status_Cursos:
@@ -39,14 +41,16 @@ function EditarCursoComplementar({
     visible,
     setVisible,
     setCursoComplementar,
+    onSuccess,
     cursoAtual,
+    edv,
     id_perfil,
 }: Props) {
     const [arquivoCertificado, setArquivoCertificado] = useState<File | null>(null);
 
 
     const [curso, setCurso] = useState<ICurso>({
-        id_Curso: cursoAtual.id_Curso,
+        id: cursoAtual.id,
         Id_Profile: cursoAtual.Id_Profile,
         certificado: null,
         name_Curso: cursoAtual.name_Curso,
@@ -54,9 +58,9 @@ function EditarCursoComplementar({
         data_Conclusao: cursoAtual.data_Conclusao,
         carga_horaria: cursoAtual.carga_horaria
     })
-
+    
     const [nomeCertificado, setNomeCertificado] = useState("");
-
+    
     const { getRootProps, getInputProps } = useDropzone({
         accept: {
             "image/*": [],
@@ -157,16 +161,11 @@ function EditarCursoComplementar({
         }
 
         try {
-            const usuario = localStorage.getItem("usuario");
-            if (!usuario) return;
-            const aprendizLogado = JSON.parse(usuario);
-            const edv = aprendizLogado.user.EDV;
-            console.log(curso.Id_Profile)
-
+            
             await api.put(
-                `http://localhost:8080/api/aprendiz/atualizarCursos/${edv}/${id_perfil}`,
+                `/aprendiz/atualizarCursos/${edv}/${id_perfil}`,
                 {
-                    id_Curso: curso.id_Curso,
+                    id: curso.id,
                     Id_Profile: curso.Id_Profile,
                     name_Curso: curso.name_Curso,
                     status_Cursos: curso.status_Cursos,
@@ -174,6 +173,7 @@ function EditarCursoComplementar({
                     carga_horaria: curso.carga_horaria,
                 }
             )
+            console.log(curso)
             // const formData = new FormData();
 
             // formData.append("certificado", arquivoCertificado!);
@@ -188,6 +188,7 @@ function EditarCursoComplementar({
             })
 
             setVisible(false);
+            onSuccess();
 
         } catch (error) {
             console.error(error)

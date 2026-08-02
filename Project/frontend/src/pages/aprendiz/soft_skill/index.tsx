@@ -10,6 +10,7 @@ import api from "../../../services/api";
 interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    onSuccess: () => void;
     edv: number;
 }
 
@@ -44,7 +45,7 @@ const formatarSoftSkill = (skill: string) => {
     return softSkills[skill] || skill;
 };
 
-function SoftSkill({ visible, setVisible, edv }: Props) {
+function SoftSkill({ visible, setVisible, edv, onSuccess}: Props) {
 
     const [adicionarSoftSkill, setAdicionarSoftSkill] = useState(false);
     const [softSkills, setSoftSkills] = useState<SoftSkill[]>([]);
@@ -74,7 +75,10 @@ function SoftSkill({ visible, setVisible, edv }: Props) {
     if (!visible) {
         return null;
     }
-
+     async function atualizarTudo() {
+        await carregarSoftSkills();
+        onSuccess();
+    }
 
     const handleDelete = async (id: number) => {
 
@@ -107,6 +111,7 @@ function SoftSkill({ visible, setVisible, edv }: Props) {
                 text: 'Soft Skill removida com sucesso!',
                 icon: 'success'
             });
+            onSuccess();
 
 
         } catch (error) {
@@ -207,6 +212,7 @@ function SoftSkill({ visible, setVisible, edv }: Props) {
                             visible={adicionarSoftSkill}
                             setVisible={setAdicionarSoftSkill}
                             setSoftSkill={setVisible}
+                            onSuccess={atualizarTudo}
                             edv={edv}
                             carregarSoftSkills={carregarSoftSkills}
                         />

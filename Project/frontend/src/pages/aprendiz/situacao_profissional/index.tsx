@@ -17,30 +17,27 @@ interface SituacaoProfissional {
     cumprido_Estagio: boolean;
     bio_profissional: string;
 };
-interface user {
-    edv: number;
-}
 
-function SituacaoProfissional({ visible, setVisible, setEditarSituacao }: any) {
+
+function SituacaoProfissional({ visible, setVisible, setEditarSituacao,onSuccess }: any) {
     const [apireq, setApireq] = useState<Perfil | null>(null);
-    const [aprendiz, setAprendiz] = useState<user | null>(null);
-    useEffect(() => {
-        async function carregarPerfil() {
-            const usuario = localStorage.getItem("usuario");
-            if (!usuario) return;
-            const aprendizLogado = JSON.parse(usuario);
-            const edv = aprendizLogado.user.EDV;
-            setAprendiz({ edv });
 
-            const response = await api.get(`/aprendiz/meuPerfil/${edv}`);
-            setApireq(response.data.data)
-        }
+    async function carregarPerfil() {
+        const usuario = localStorage.getItem("usuario");
+        if (!usuario) return;
+        const aprendizLogado = JSON.parse(usuario);
+        const edv = aprendizLogado.user.EDV;
+        const response = await api.get(`/aprendiz/meuPerfil/${edv}`);
+        setApireq(response.data.data)
+    }
+    useEffect(() => {
         carregarPerfil();
     }, []);
     if (!visible) {
 
         return null
     }
+    onSuccess()
 
     return (
         <>

@@ -527,7 +527,7 @@ export default class AprendizService {
     usuarioEDV: number,
   ) {
     console.log("DATA:", data);
-    console.log("DATA.ID:", data.id_Curso);
+    console.log("DATA.ID:", data.id);
 
     const dataConclusao = new Date(
       data.data_Conclusao.split("/").reverse().join("-")
@@ -537,7 +537,7 @@ export default class AprendizService {
 
       const cursosAntigo = await tx.cursos.findFirst({
         where: {
-          id: data.id_Curso,
+          id: data.id,
           profile: {
             EDV_Aprendiz: EDV,
           },
@@ -550,7 +550,7 @@ export default class AprendizService {
 
       const cursosAtualizado = await tx.cursos.update({
         where: {
-          id: data.id_Curso,
+          id: data.id,
         },
         data: {
           name_Curso: data.name_Curso,
@@ -564,7 +564,7 @@ export default class AprendizService {
         tx,
         Id_Profile,
         TipoHistorico.CURSO,
-        data.id_Curso,
+        data.id,
         usuarioEDV,
         cursosAntigo,
         cursosAtualizado,

@@ -14,6 +14,7 @@ import api from "../../../services/api";
 interface Props {
   visible: boolean;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  onSuccess: () => void;
 }
 
 interface Competencias {
@@ -23,7 +24,7 @@ interface Competencias {
   nivel_Competencia: string;
 }
 
-function Competencia({ visible, setVisible }: Props) {
+function Competencia({ visible, setVisible, onSuccess }: Props) {
   const [visualizarCompetencia, setVisualizarCompetencia] = useState(false);
   const [competenciaSelecionada, setCompetenciaSelecionada] = useState<any>(null);
   const [editarCompetencia, setEditarCompetencia] = useState(false);
@@ -38,25 +39,29 @@ function Competencia({ visible, setVisible }: Props) {
     const aprendizLogado = JSON.parse(usuario);
     const edv = aprendizLogado.user.EDV;
     setEdv(edv);
-    
+
     const perfil = await api.get(`/aprendiz/meuPerfil/${edv}`);
     setIdProfile(perfil.data.data.id);
-    
-    const minhasCompetencias = await api.get( `/aprendiz/minhasCompetencias/${edv}/${perfil.data.data.id}`,
+
+    const minhasCompetencias = await api.get(
+      `/aprendiz/minhasCompetencias/${edv}/${perfil.data.data.id}`,
     );
     setcompetencia(minhasCompetencias.data.data);
   }
 
   useEffect(() => {
-      if (visible) {
-        carregarCompetencia();
+    if (visible) {
+      carregarCompetencia();
     }
   }, [visible]);
 
   if (!visible) {
     return null;
   }
-
+  async function atualizarTudo() {
+    await carregarCompetencia();
+    onSuccess();
+  }
   const handleDelete = async (id: number) => {
     const confirm = await Swal.fire({
       title: "Tem certeza?",
@@ -79,6 +84,7 @@ function Competencia({ visible, setVisible }: Props) {
         text: "competencia removido com sucesso!",
         icon: "success",
       });
+      onSuccess();
     } catch (error) {
       console.error("Erro ao deletar:", error);
       Swal.fire({
@@ -111,9 +117,7 @@ function Competencia({ visible, setVisible }: Props) {
         <span className="competencia-lista-titulo">Competências</span>
         <div className="competencia-modal">
           {competencia.length === 0 ? (
-            <p className="competencia-vazia">
-              Nenhuma competencia encontrada.
-            </p>
+            <p className="competencia-vazia">Nenhuma competencia encontrada.</p>
           ) : (
             competencia.map((item) => (
               <div className="competencia-item" key={item.id}>
@@ -157,6 +161,7 @@ function Competencia({ visible, setVisible }: Props) {
           <CompetenciaVisualizar
             visible={visualizarCompetencia}
             setVisible={setVisualizarCompetencia}
+            onSuccess={atualizarTudo}
             competencia={competenciaSelecionada}
           />
         )}
@@ -165,8 +170,8 @@ function Competencia({ visible, setVisible }: Props) {
             visible={editarCompetencia}
             setVisible={setEditarCompetencia}
             setCompetencia={setVisible}
-            id={competenciaSelecionada.id} 
-            id_profile={id_Profile} 
+            onSuccess={atualizarTudo}
+            id_profile={id_Profile}
             edv={edv}
             competenciaAtual={competenciaSelecionada}
           />
@@ -175,9 +180,9 @@ function Competencia({ visible, setVisible }: Props) {
           <AdicionarCompetencia
             visible={adicionarCompetencia}
             setVisible={setAdicionarCompetencia}
-            id={id_Profile} 
+            id={id_Profile}
             edv={edv}
-            onSuccess={carregarCompetencia}
+            onSuccess={atualizarTudo}
           />
         )}
       </div>

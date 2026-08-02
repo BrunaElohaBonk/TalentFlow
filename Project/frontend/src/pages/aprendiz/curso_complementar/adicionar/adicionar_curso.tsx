@@ -1,6 +1,6 @@
 import './adicionar_curso.css'
 import sair from '../../../../assets/img/close.png'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Swal from 'sweetalert2'
 import { FormControl, FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import { useDropzone } from "react-dropzone";
@@ -22,6 +22,7 @@ interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
     setCursoComplementar: React.Dispatch<React.SetStateAction<boolean>>;
+    onSuccess: () => void;
     id_profile: number
     edv:number
 }
@@ -30,6 +31,7 @@ function AdicionarCursoComplementar({
     visible,
     setVisible,
     setCursoComplementar,
+    onSuccess,
     id_profile,
     edv
 }: Props) {
@@ -143,6 +145,7 @@ function AdicionarCursoComplementar({
                 carga_horaria:  Number(curso.carga_horaria)
             }); 
 
+
             Swal.fire({
                 title: 'Sucesso!',
                 text: 'Curso complementar cadastrado com sucesso.',
@@ -151,8 +154,9 @@ function AdicionarCursoComplementar({
             })
 
             setVisible(false);
+            onSuccess();
 
-        } catch (error:any) {
+        } catch (error) {
             console.error(
                 "ERRO API:",
                 error.response?.data || error
@@ -174,7 +178,6 @@ function AdicionarCursoComplementar({
             <form onSubmit={handleSubmit} className="adicionarCurso-card" onClick={(e) => e.stopPropagation()}>
                 <button type="button" className="adicionarCurso-fechar" onClick={() => {
                     setVisible(false)
-                    setCursoComplementar(true)
                 }}
                 >
                     <img src={sair} alt="Fechar" />

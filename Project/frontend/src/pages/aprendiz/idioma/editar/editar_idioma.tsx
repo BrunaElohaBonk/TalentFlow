@@ -17,6 +17,7 @@ interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
     setIdioma: React.Dispatch<React.SetStateAction<boolean>>;
+    onSuccess: () => void;
     id: number;
     edv: number;
     idiomaAtual: {
@@ -29,6 +30,7 @@ interface Props {
 function EditarIdioma({
     visible,
     setVisible,
+    onSuccess,
     id,
     edv,
     idiomaAtual
@@ -103,17 +105,18 @@ function EditarIdioma({
                     certificado: idioma.certificado
                 }
             );
-
-
+            
+            
             Swal.fire({
                 title: 'Sucesso!',
                 text: 'Idioma atualizado com sucesso.',
                 icon: 'success',
                 confirmButtonColor: '#2B83D5'
             });
-
-
+            
+            
             setVisible(false);
+            onSuccess();
 
 
         } catch (error: any) {

@@ -22,16 +22,16 @@ interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
     setFormacaoAcademica: React.Dispatch<React.SetStateAction<boolean>>;
+    onSuccess: () => void;
     edv: number;
-    atualizarFormacoes: () => void;
 }
 
 function AdicionarFormacaoAcademica({
     visible,
     setVisible,
     setFormacaoAcademica,
-    edv,
-    atualizarFormacoes
+    onSuccess,
+    edv
 }: Props) {
     const { darkMode } = useTheme();
     const [formacao, setFormacao] = useState<IFormacao>({
@@ -133,7 +133,7 @@ function AdicionarFormacaoAcademica({
         }
 
         try {
-            const response = await api.post(
+             await api.post(
                 `/aprendiz/adicionarFormacao/${edv}`,
                 {
                     curso: formacao.curso,
@@ -154,6 +154,7 @@ function AdicionarFormacaoAcademica({
             });
 
             setVisible(false);
+            onSuccess();
 
             setFormacao({
                 curso: "",

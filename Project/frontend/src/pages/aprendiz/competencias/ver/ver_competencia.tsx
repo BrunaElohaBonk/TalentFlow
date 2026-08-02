@@ -4,6 +4,7 @@ import icon_fechar from "../../../../assets/img/close.png";
 interface Props {
   visible: boolean;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  onSuccess: () => void;
   competencia: {
     id: 3;
     nivel_Competencia: string;
@@ -11,12 +12,13 @@ interface Props {
   };
 }
 
-function CompetenciaVisualizar({ visible, setVisible, competencia }: Props) {
+function CompetenciaVisualizar({ visible, setVisible, competencia,onSuccess }: Props) {
   
 
   if (!visible) {
     return null;
   }
+  onSuccess()
 
   return (
     <div

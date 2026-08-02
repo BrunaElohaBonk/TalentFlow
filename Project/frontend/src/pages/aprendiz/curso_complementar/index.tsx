@@ -14,10 +14,11 @@ import api from "../../../services/api";
 interface Props {
   visible: boolean;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  onSuccess: () => void;
 }
 
 interface Cursos {
-    id_Cursos:number;
+    id:number;
     Id_Profile:number;
     name_Curso:string;
     status_Cursos: "CONCLUIDO" | "CURSANDO"|"NAO_INFORMADO";
@@ -27,7 +28,7 @@ interface Cursos {
 }
 
 
-function CursoComplementar({ visible, setVisible }: Props) {
+function CursoComplementar({ visible, setVisible, onSuccess }: Props) {
   const [visualizarCurso, setVisualizarCurso] = useState(false);
   const [editarCurso, setEditarCurso] = useState(false);
   const [cursoSelecionado, setCursoSelecionado] = useState<Cursos | null>(null);
@@ -43,7 +44,7 @@ function CursoComplementar({ visible, setVisible }: Props) {
       const EDV = aprendizLogado.user.EDV;
       setEdv(EDV);
 
-      const perfil = await api.get(`/aprendiz/meuPerfil/${edv}`);
+      const perfil = await api.get(`/aprendiz/meuPerfil/${EDV}`);
       setIdProfile(perfil.data.data.id);
       const response = await api.get(
         `/aprendiz/meusCursos/${EDV}/${perfil.data.data.id}`,
@@ -59,10 +60,14 @@ function CursoComplementar({ visible, setVisible }: Props) {
   if (!visible) {
     return null;
   }
+   async function atualizarTudo() {
+        await carregarCursos();
+        onSuccess();
+    }
   const handleDelete = async (id: number) => {
     const confirm = await Swal.fire({
       title: "Tem certeza?",
-      text: "O idioma será deletado!",
+      text: "O Curso será deletado!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Sim, deletar!",
@@ -73,8 +78,10 @@ function CursoComplementar({ visible, setVisible }: Props) {
     }
     try {
       await api.delete(`/aprendiz/deletarCursos/${edv}/${id}`);
+      await atualizarTudo();
+      
       setCurso((prev) =>
-        prev.filter((curso) => curso.id_Cursos !== id),);
+        prev.filter((curso) => curso.id !== id),);
       Swal.fire({
         title: "Deletada!",
         text: "Cursos removido com sucesso!",
@@ -115,7 +122,7 @@ function CursoComplementar({ visible, setVisible }: Props) {
             <p className="curso-vazia">Nenhum curso complementar encontrado.</p>
           ) : (
             curso?.map((item) => (
-              <div className="curso-item" key={item.id_Cursos}>
+              <div className="curso-item" key={item.id}>
                 <span className="curso-titulo">{item.name_Curso}</span>
                 <div className="curso-acoes">
                   <button
@@ -141,7 +148,7 @@ function CursoComplementar({ visible, setVisible }: Props) {
                   <button
                     type="button"
                     className="btn-acao"
-                    onClick={() => handleDelete(item.id_Cursos)}
+                    onClick={() => handleDelete(item.id)}
                   >
                     <img src={lixeira} alt="Excluir" />
                   </button>
@@ -154,13 +161,16 @@ function CursoComplementar({ visible, setVisible }: Props) {
           <CursoComplementarVisualizar
             visible={visualizarCurso}
             setVisible={setVisualizarCurso}
+            onSuccess={atualizarTudo}
             curso={cursoSelecionado}
-          />
-        )}
+            />
+          )}
         {editarCurso && cursoSelecionado && (
           <EditarCursoComplementar
             visible={editarCurso}
             setVisible={setEditarCurso}
+            onSuccess={atualizarTudo}
+            edv={edv}
             setCursoComplementar={setVisible}
             cursoAtual={cursoSelecionado}
             id_perfil={idProfile}
@@ -171,6 +181,7 @@ function CursoComplementar({ visible, setVisible }: Props) {
             visible={adicionarCurso}
             setVisible={setAdicionarCurso}
             setCursoComplementar={setVisible}
+            onSuccess={atualizarTudo}
             id_profile={idProfile}
             edv={edv}
           />

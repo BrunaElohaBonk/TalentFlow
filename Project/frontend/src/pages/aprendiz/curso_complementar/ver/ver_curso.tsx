@@ -4,8 +4,9 @@ import icon_fechar from '../../../../assets/img/close.png'
 interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    onSuccess: () => void;
     curso: {
-        id_Cursos:number;
+        id:number;
         Id_Profile:number;
         name_Curso:string;
         status_Cursos: "CONCLUIDO" | "CURSANDO"|"NAO_INFORMADO";
@@ -20,12 +21,14 @@ interface Props {
 function CursoComplementarVisualizar({
     visible,
     setVisible,
+    onSuccess,
     curso
 }: Props) {
 
     if (!visible) {
         return null
     }
+    onSuccess()
 
     return (
         <div className="cursoVisualizar-overlay" onClick={() => setVisible(false)}>
