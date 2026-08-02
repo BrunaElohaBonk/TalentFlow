@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "../../../components/header"
 import Sidebar from "../../../components/sidebar"
 import './verAprendiz.css'
@@ -6,10 +6,8 @@ import user from '../../../assets/img/icon_user.png'
 import lupa from '../../../assets/img/pesquisar.png'
 import lixeira from '../../../assets/img/lixeira.png'
 import filter from '../../../assets/img/filter.png'
-import { aprendizes } from "./aprendizes";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import axios from "axios";
 import Filtro from "../../../components/filter";
 import api from "../../../services/api";
 
@@ -24,14 +22,49 @@ interface ITurma {
 interface IAprendiz {
     EDV: number;
     name: string;
-    turma: string;
-    email: string;
-    user: string;
-    nascimento: string;
+    email_bosch: string;
+    user_bosch: string;
     contato: string;
-    senha: string;
-    tipo: "aprendiz";
+    data_nascimento: Date;
+    fotoPerfil: string | null;
+    tipoUser: "APRENDIZ";
+    Ativo: boolean;
+    idTurma: number;
+
+    data: {
+        situacao_profissional: {
+            nome_Setor: string;
+            nome_Lider: string;
+            cumprido_Estagio: boolean;
+            bio_profissional: string;
+        }[];
+
+        formacao_academica: {
+            id: number;
+            name_Curso: string;
+            nome_Institucao: string;
+            status_Academico: "CONCLUIDO" | "CURSANDO";
+            periodo_Atual: number;
+            total_Periodo: number;
+            nivel_formacao: string;
+        }[];
+
+        cursos_complementares: {
+            id: number;
+            name_Curso: string;
+            status_Cursos: "CONCLUIDO" | "CURSANDO";
+            data_Conclusao: string;
+            carga_horaria: number;
+        }[];
+
+        idiomas: {
+            id: number;
+            nome_Idioma: string;
+            nivel_Idioma: string;
+        }[];
+    };
 }
+
 
 function VerAprendiz(){
     const navigate = useNavigate()
@@ -39,6 +72,13 @@ function VerAprendiz(){
     const [filtro, setFiltro] = useState(false)
     const [aprendiz, setAprendiz] = useState<IAprendiz[]>([]);
     const [turma, setTurma] = useState<ITurma[]>([]);
+    const buscarNomeTurma = (idTurma: number) => {
+        console.log("idTurma:", idTurma);
+        const turmaEncontrada = turma.find((item) => item.id === idTurma);
+        console.log("Encontrada:", turmaEncontrada);
+    
+        return turmaEncontrada?.nomeTurma ?? "Sem turma";
+    };
     const Idade = (dataNascimento: Date) => {
         const hoje = new Date();
         let idade = hoje.getFullYear() - dataNascimento.getFullYear();
@@ -49,7 +89,7 @@ function VerAprendiz(){
         return idade;
     };
     const [filtros, setFiltros] = useState({
-        turmas: [] as string[],
+        turmas: [] as number[],
         idadeMin: "",
         idadeMax: "",
         setores: [] as string[],
@@ -62,22 +102,23 @@ function VerAprendiz(){
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
         .toLowerCase();
-    const pesquisar = aprendizes
+    const pesquisar = aprendiz
         .filter((item) => {
+        if (filtros.turmas.length > 0) {
+            const turmaDoAprendiz = item.idTurma;
+            if (!filtros.turmas.includes(turmaDoAprendiz)) {
+                return false;
+            }
+        }
         if (filtros.setores.length > 0) {
-            const setorAprendiz = item.situacaoProfissional.nomeSetor;
+            const setorAprendiz = item.data.situacao_profissional[0]?.nome_Setor;
             const possuiSetor = filtros.setores.includes(setorAprendiz);
             if (!possuiSetor) {
                 return false;
             }
         }
-        if (filtros.turmas.length > 0) {
-            if (!filtros.turmas.includes(item.perfil.turma)) {
-                return false;
-            }
-        }
         if (filtros.idadeMin !== "" || filtros.idadeMax !== "") {
-            const idade = Idade(item.perfil.nascimento);
+            const idade = Idade(item.data_nascimento);
             const idadeMin = filtros.idadeMin !== "" ? Number(filtros.idadeMin) : null;
             const idadeMax = filtros.idadeMax !== "" ? Number(filtros.idadeMax) : null;
             if (idadeMin !== null && idadeMax === null) {
@@ -104,8 +145,8 @@ function VerAprendiz(){
             }
         }
         if (filtros.idiomas.length > 0) {
-            const idiomasAprendiz = item.idiomas.map(
-                i => i.idioma
+            const idiomasAprendiz = item.data.idiomas.map(
+                i => i.nome_Idioma
             );
             const possuiIdioma = filtros.idiomas.some(idioma => idiomasAprendiz.includes(idioma));
             if (!possuiIdioma) {
@@ -113,14 +154,14 @@ function VerAprendiz(){
             }
         }
         if (filtros.formacoes.length > 0) {
-            const formacoesAprendiz = item.formacaoAcademica.map(f => f.nomeCurso);
+            const formacoesAprendiz = item.data.formacao_academica.map(f => f.name_Curso);
             const possuiFormacao = filtros.formacoes.some(formacao => formacoesAprendiz.includes(formacao));
             if (!possuiFormacao) {
                 return false;
             }
         }
         if (filtros.estagio !== null) {
-            const estaEmEstagio = item.situacaoProfissional.cumprindoEstagio; 
+            const estaEmEstagio = item.data.situacao_profissional[0]?.cumprido_Estagio; 
             if (estaEmEstagio !== filtros.estagio) {
                 return false;
             }
@@ -131,66 +172,100 @@ function VerAprendiz(){
         const termo = normalizar(busca.trim());
         if (termo === "") return true;
         return (
-            normalizar(item.perfil.nome).includes(termo) ||
-            normalizar(item.perfil.email).includes(termo) ||
-            normalizar(item.perfil.user).includes(termo) ||
-            normalizar(item.perfil.turma).includes(termo) ||
-            item.perfil.edv.toString().includes(termo) ||
-            item.perfil.contato.toString().includes(termo) ||
-            item.perfil.nascimento.toLocaleDateString("pt-BR").includes(termo)
+            normalizar(item.name).includes(termo) ||
+            normalizar(item.email_bosch).includes(termo) ||
+            normalizar(item.user_bosch).includes(termo) ||
+            normalizar(buscarNomeTurma(item.idTurma)).includes(termo) ||
+            item.EDV.toString().includes(termo) ||
+            item.contato.toString().includes(termo) ||
+            new Date(item.data_nascimento).toLocaleDateString("pt-BR").includes(termo)
         );
     })
     .sort((a, b) =>
-        a.perfil.nome.localeCompare(b.perfil.nome, "pt-BR")
+        a.name.localeCompare(b.name, "pt-BR")
     );
-        
-    const fetchAprendiz = async () => {
+    const fetchTurmas = async () => {
         try {
-            const response = await api.get("/perfil/:EDV");
-            console.log("API RESPONSE:", response.data);
-            setAprendiz(response.data.response);
+            const response = await api.get("/turma/visualizarTurmas");
+            console.log("TURMAS:", response.data);
+            setTurma(response.data);
+        } catch(error) {
+            console.error("Erro ao buscar turmas:", error);
+        }
+    };
+    const fetchAprendizes = async () => {
+        try {
+            const response = await api.get("/auth/buscaruser/APRENDIZ");
+            const usuarios = response.data.filter((usuario: IAprendiz) => usuario.tipoUser === "APRENDIZ" && usuario.Ativo === true );
+            const aprendizesComPerfil = await Promise.all(
+                usuarios.map(async (usuario) => {
+                    const perfilResponse = await api.get(`/aprendiz/perfil/${usuario.EDV}`);
+                    const turmaResponse = await api.get(`/aprendiz/aprendiz/${usuario.EDV}`);
+
+                    return {
+                        ...usuario,
+                        idTurma: turmaResponse.data.data.Id_Turma,
+                        data: perfilResponse.data.data
+                    };
+                })
+            );
+            console.log("DATA DO APRENDIZ:", aprendizesComPerfil);
+            console.log("APRENDIZES COMPLETOS:", aprendizesComPerfil);
+            setAprendiz(aprendizesComPerfil);
+
         } 
         catch (error) {
-            console.error("Erro:", error);
-            setAprendiz(null);
+            console.error(error);
         }
     };
 
-    const handleDelete = async (edv) => {
+    const handleDelete = async (EDV: number) => {
+        console.log("EDV aprendiz para deletar:", EDV);
+
         const confirm = await Swal.fire({
             title: 'Tem certeza?',
-            text: 'O aprendiz será deletado!',
+            text: 'O aprendiz será removido da lista!',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Sim, deletar!',
+            confirmButtonText: 'Sim, remover!',
             cancelButtonText: 'Cancelar'
-        })
+        });
 
-        if (!confirm.isConfirmed) return
-            try {
-                await axios.delete(`link backend/${edv}`)
-                Swal.fire({
-                    title: 'Deletado!',
-                    text: 'Aprendiz removido com sucesso!',
-                    icon: 'success'
-                })
-                fetchAprendiz()
-            } 
-            catch (error) {
-                console.error('Erro ao deletar:', error)
-                Swal.fire({
-                    title: 'Erro!',
-                    text: 'Erro ao deletar aprendiz',
-                    icon: 'error'
-                })
-            }
+        if (!confirm.isConfirmed) return;
+
+        try {
+            const response = await api.put(`/auth/deletarUser/${EDV}`);
+
+            console.log("Resposta delete:", response.data);
+            console.log("Status:", response.status);
+
+            await fetchAprendizes();
+
+            Swal.fire({
+                title: 'Removido!',
+                text: 'Aprendiz removido com sucesso!',
+                icon: 'success'
+            });
+
+        } catch (error) {
+            console.error('Erro ao remover:', error);
+
+            Swal.fire({
+                title: 'Erro!',
+                text: 'Erro ao remover aprendiz',
+                icon: 'error'
+            });
     }
-
+};
+    useEffect(() => {
+        fetchAprendizes();
+        fetchTurmas();
+    }, []); 
 
     return(
         <div className="aprendiz">
             <Header></Header>
-            <Filtro visible={filtro} setVisible={setFiltro} filtros={filtros} setFiltros={setFiltros}/>
+            <Filtro visible={filtro} setVisible={setFiltro} filtros={filtros} setFiltros={setFiltros} aprendizes={aprendiz} turmas={turma}/>
             <div className="aprendiz-container">
                 <Sidebar/>
                 <div className="aprendiz-body">
@@ -203,16 +278,16 @@ function VerAprendiz(){
                     </div>
                     <div className="aprendiz-card-area">
                         {pesquisar.length > 0 ? (
-                            pesquisar.map((aprendizes) => (
-                                <div className="aprendiz-modal" key={aprendizes.perfil.edv}>
-                                    <button className="aprendiz-btn-delete" onClick={() => handleDelete(aprendizes.perfil.edv)}><img src={lixeira} alt="deletar" className="aprendiz-deletar"/></button>
+                            pesquisar.map((item) => (
+                                <div className="aprendiz-modal" key={item.EDV}>
+                                    <button className="aprendiz-btn-delete" onClick={() => handleDelete(item.EDV)}><img src={lixeira} alt="deletar" className="aprendiz-deletar"/></button>
                                     <div className="aprendiz-header">
                                         <img src={user} alt="user" className="aprendiz-img"/>
-                                        <span className="aprendiz-titulo" title={aprendizes.perfil.nome}>{aprendizes.perfil.nome}</span>
+                                        <span className="aprendiz-titulo" title={item.name}>{item.name}</span>
                                     </div>
                                     <div className="aprendiz-conteudo">
-                                        <span className="aprendiz-span" title={aprendizes.perfil.turma || 'Sem Turma'}>{aprendizes.perfil.turma || 'Sem Turma'}</span>
-                                        <button onClick={() => navigate(`/PerfilAprendiz/${aprendizes.perfil.edv}`)} className="aprendiz-button">Ver Dados do Aprendiz</button>
+                                        <span className="aprendiz-span" title={buscarNomeTurma(item.idTurma) || 'Sem Turma'}>{buscarNomeTurma(item.idTurma)}</span>
+                                        <button onClick={() => navigate(`/PerfilAprendiz/${item.EDV}`)} className="aprendiz-button">Ver Dados do Aprendiz</button>
                                     </div>
                                 </div>
                             ))

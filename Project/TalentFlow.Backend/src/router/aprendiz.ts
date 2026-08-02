@@ -17,11 +17,11 @@ import {
   atualizarCursoSchema,
 } from "../DTO/schemas/aprendizSchema.ts";
 
-const route = express.Router();
+const route = express.Ro
 //Rotas do Instrutor
 route.post("/criar",authMiddleware,roleMiddleware("INSTRUTOR"),validationMiddleware(criarAprendizSchema),aprendizController.criar);
-route.get("/aprendiz/:EDV",authMiddleware,roleMiddleware("INSTRUTOR"),aprendizController.verAprendiz);
-route.get("/perfil/:EDV",authMiddleware,roleMiddleware("INSTRUTOR"),aprendizController.verPerfil);
+route.get("/aprendiz/:EDV",authMiddleware,roleMiddleware("INSTRUTOR"),aprendizController.verAprendiz); // EDV e ID_Turma
+route.get("/perfil/:EDV",authMiddleware,roleMiddleware("INSTRUTOR"),aprendizController.verPerfil); // retorna objetos do perfil e id
 route.get("/dashboard",authMiddleware,roleMiddleware("INSTRUTOR"),aprendizController.filtrarApredizDashboart);
 route.get("/filtros",authMiddleware,roleMiddleware("INSTRUTOR"),aprendizController.filtrarTudoAprendiz);
 

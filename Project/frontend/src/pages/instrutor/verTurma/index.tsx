@@ -17,6 +17,7 @@ interface ITurma {
     name_Curso: string;
     EDV_Instrutor: number;
     nomeInstrutor: string;
+    Ativo: boolean;
 }
 
 function VerTurma(){
@@ -45,7 +46,10 @@ function VerTurma(){
         try {
             const response = await api.get("/turma/visualizarTurmas");
             const lista = response.data.response ?? response.data;
-            setTurmas(lista);
+            const turminha = lista.filter(
+                (item: ITurma) => item.Ativo === true
+            );
+            setTurmas(turminha);
         } 
         catch (error) {
             console.error("Erro:", error);

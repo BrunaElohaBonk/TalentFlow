@@ -1,42 +1,73 @@
 import './filter.css'
-import { aprendizes } from '../../pages/instrutor/verAprendiz/aprendizes'
-import { turmas } from '../../pages/instrutor/verTurma/turma'
-import { Modal, Box, Typography, FormControl, InputLabel, Select, MenuItem, FormGroup, FormControlLabel, Checkbox, Button, FormLabel } from "@mui/material";
+import { Box,  FormControl, FormGroup, FormControlLabel, Checkbox, Button } from "@mui/material";
 import { useState } from 'react';
 import fechar from '../../assets/img/close.png'
 import setinha from '../../assets/img/setinha.png'
 
-function Filtro({ visible, setVisible, filtros, setFiltros } :any){
+interface ISituacaoProfissional {
+    nome_Setor: string;
+    nome_Lider: string;
+    cumprido_Estagio: boolean;
+    bio_profissional: string;
+}
+
+interface IFormacaoAcademica {
+    name_Curso: string;
+}
+
+interface IIdioma {
+    nome_Idioma: string;
+    nivel_Idioma: string;
+}
+
+interface ITurma {
+    id: number;
+    nomeTurma: string;
+    name_Curso: string;
+    EDV_Instrutor: number;
+    nomeInstrutor: string;
+}
+
+interface IAprendiz {
+    EDV: number;
+    turma?: ITurma;
+    data: {
+        situacao_profissional: ISituacaoProfissional[];
+        idiomas: IIdioma[];
+        formacao_academica: IFormacaoAcademica[];
+    };
+}
+
+interface Props {
+  visible: boolean;
+  filtros: any;
+  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  setFiltros: React.Dispatch<React.SetStateAction<any>>;
+  aprendizes: IAprendiz[];
+  turmas: ITurma[];
+}
+
+function Filtro({ visible, setVisible, filtros, setFiltros, aprendizes, turmas } :Props){
+    console.log("TURMAS RECEBIDAS NO FILTRO:", turmas);
     const [aberto, setAberto] = useState<string | null>(null);
     const alternarFiltro = (nome: string) => {
         setAberto(aberto === nome ? null : nome);
     };
     const setores = [
-        "Engenharia",
-        "RH",
-        "TEF",
-        "BDO",
-        "BD",
-        "Logística",
-        "CRIN"
+        ...new Set(aprendizes?.flatMap(aprendiz => aprendiz.data.situacao_profissional.map(s => s.nome_Setor)) ?? [])
     ];
 
     const idiomas = [
-        "Alemão",
-        "Italiano",
-        "Inglês",
-        "Espanhol",
-        "Francês",
-        "Russo"
+        ...new Set(aprendizes?.flatMap(aprendiz => aprendiz.data?.idiomas?.map(idioma => idioma.nome_Idioma) ?? []) ?? [])
     ];
 
-     const formacoes = [
-        ...new Set(
-            aprendizes.flatMap(ap =>
-                ap.formacaoAcademica.map(f => f.nomeCurso)
-            )
-        )
+    const formacoes = [
+        ...new Set(aprendizes?.flatMap(aprendiz => aprendiz.data?.formacao_academica?.map(formacao => formacao.name_Curso) ?? []) ?? [])
     ];
+
+    const nomesTurmas = turmas?.map((turma) => ({
+        id: turma.id, nome: turma.nomeTurma
+    }));
 
     const limparFiltros = () => {
         setFiltros({
@@ -56,20 +87,20 @@ function Filtro({ visible, setVisible, filtros, setFiltros } :any){
                 <div className='filtro-fechar'>
                     <button type="button" onClick={() => {setVisible(false); limparFiltros();}} className='filtro-fechar-button'><img src={fechar} alt="fechar" className='filtro-img-fechar'/></button>
                 </div>
-                <div className="filtro-titulo-expansivel"  onClick={() => setAberto(aberto === "turmas" ? null : "turmas")}>
+                <div className="filtro-titulo-expansivel"  onClick={() => {console.log("Abrindo turma"); setAberto(aberto === "turmas" ? null : "turmas")}}>
                     <span>Turma</span>
                     <img  src={setinha} alt="abrir filtro" className="filtro-titulo-img"/>
                 </div>
                 <div className={`filtro-expansao ${aberto === "turmas" ? "mostrar" : ""}`}>
                     <div className="filtro-checkbox">
                         <FormGroup>
-                            {turmas.map((turma) => (
+                            {nomesTurmas.map((turma) => (
                                 <FormControlLabel key={turma.id} label={turma.nome} control={
-                                    <Checkbox checked={filtros.turmas?.includes(turma.nome) ?? false} onChange={(e) => {
+                                    <Checkbox checked={filtros.turmas.includes(turma.id)} onChange={(e) => {
                                         if (e.target.checked) {
-                                            setFiltros({...filtros, turmas: [...(filtros.turmas ?? []), turma.nome]});
+                                            setFiltros({...filtros, turmas: [ ...filtros.turmas, turma.id]});
                                         } else {
-                                            setFiltros({...filtros, turmas: (filtros.turmas ?? []).filter(t => t !== turma.nome)});
+                                            setFiltros({...filtros, turmas: filtros.turmas.filter((id:number) => id !== turma.id)});
                                         }}}
                                     />}
                                 />

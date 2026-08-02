@@ -8,32 +8,64 @@ import { useEffect, useState } from "react"
 import { useTheme } from '../../../context/themeContext'
 
 interface IPerfil {
-    edv: number;
-    img: string;
-    nome: string;
-    email: string;
-    user: string;
-    contato: string;
-    nascimento: string;
+    token: string;
+    user: {
+        EDV: number;
+        name: string;
+        user_bosch: string;
+        email_bosch: string;
+        contato: string;
+        data_nascimento: string;
+        imagem: File | string | null;
+        ativo: boolean;
+        tipo: string;
+    };
 }
 
 function PerfilInstrutor(){
     const [editar, setEditar] = useState(false)
     const [perfil, setPerfil] = useState<IPerfil | null>(null);
     const { darkMode, alternarTema } = useTheme();
+
+    const carregarPerfil = () => {
+        const usuarioSalvo = localStorage.getItem("usuario");
+        if (!usuarioSalvo) return;
+        const usuario = JSON.parse(usuarioSalvo);
+        setPerfil({
+            token: usuario.token,
+            user: {
+                EDV: usuario.user.EDV,
+                name: usuario.user.name,
+                user_bosch: usuario.user.user_bosch,
+                email_bosch: usuario.user.email_bosch,
+                contato: usuario.user.contato,
+                data_nascimento: formatarData(usuario.user.data_nascimento),
+                imagem: usuario.user.imagem,
+                ativo: usuario.user.ativo,
+                tipo: usuario.user.tipo,
+            },
+        });
+    }; 
+
     useEffect(() => {
         const usuarioSalvo = localStorage.getItem("usuario");
+        carregarPerfil();
         if (usuarioSalvo) {
             const usuario = JSON.parse(usuarioSalvo);
             console.log(usuario)
             setPerfil({
-                edv: usuario.EDV,
-                img: usuario.imagem,
-                nome: usuario.name,
-                email: usuario.email_bosch,
-                user: usuario.user_bosch,
-                contato: usuario.contato,
-                nascimento: formatarData(usuario.data_nascimento)
+                token: usuario.token,
+                user: {
+                    EDV: usuario.user.EDV,
+                    name: usuario.user.name,
+                    user_bosch: usuario.user.user_bosch,
+                    email_bosch: usuario.user.email_bosch,
+                    contato: usuario.user.contato,
+                    data_nascimento: formatarData(usuario.user.data_nascimento),
+                    imagem: usuario.user.imagem,
+                    ativo: usuario.user.ativo,
+                    tipo: usuario.user.tipo,
+                },
             });
         }
     }, []);
@@ -44,7 +76,7 @@ console.log("localStorage:", localStorage.getItem("perfil"));
     return(
         <div className="perfil">
             <Header></Header>
-            <EditarPerfil visible={editar} setVisible={setEditar} edv={perfil?.edv ?? 0}/>
+            <EditarPerfil visible={editar} setVisible={setEditar} edv={perfil?.user.EDV ?? 0} atualizarPerfil={carregarPerfil}/>
             <div className="perfil-container">
                 <Sidebar></Sidebar>
                 <div className="perfil-body">   
@@ -73,15 +105,15 @@ console.log("localStorage:", localStorage.getItem("perfil"));
                             <>
                                 <div className="perfil-header">
                                     <img src={user} alt="user" className="perfil-user"/>
-                                    <span className="perfil-titulo" title={perfil.nome}>{perfil.nome}</span>
+                                    <span className="perfil-titulo" title={perfil.user.name}>{perfil.user.name}</span>
                                 </div>
                                 <div className="perfil-conteudo">
-                                    <span className="perfil-span">EDV: {perfil.edv}</span>
-                                    <span className="perfil-span">User: {perfil.user}</span>
-                                    <span className="perfil-span">Email: {perfil.email}</span>
-                                    <span className="perfil-span">Data de Nascimento: {formatarData(perfil.nascimento)}</span>
-                                    <span className="perfil-span">Idade: {Idade(perfil.nascimento)} anos</span>
-                                    <span className="perfil-span">Contato: {perfil?.contato ? Telefone(perfil.contato) : "Sem contato"}</span>
+                                    <span className="perfil-span">EDV: {perfil.user.EDV}</span>
+                                    <span className="perfil-span">User: {perfil.user.user_bosch}</span>
+                                    <span className="perfil-span">Email: {perfil.user.email_bosch}</span>
+                                    <span className="perfil-span">Data de Nascimento: {formatarData(perfil.user.data_nascimento)}</span>
+                                    <span className="perfil-span">Idade: {Idade(perfil.user.data_nascimento)} anos</span>
+                                    <span className="perfil-span">Contato: {perfil?.user.contato ? Telefone(perfil.user.contato) : "Sem contato"}</span>
                                 </div>
                             </>
                         ):(

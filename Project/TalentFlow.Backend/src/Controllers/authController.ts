@@ -37,11 +37,9 @@ class AuthController {
     req: AuthRequest,
     res: Response
   ) {
-    const data  = req.params.tipoUser as user_tipoUser;
-    await UserService.BuscarUser(data);
-    return res.status(200).send({
-      response: "Sucesso ao Buscar User!",
-    });
+    const data = req.params.tipoUser as user_tipoUser;
+    const usuarios = await UserService.BuscarUser(data);
+    return res.status(200).json(usuarios);
   }
 
 

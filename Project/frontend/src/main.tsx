@@ -6,6 +6,7 @@ import { NotificacaoProvider } from './context/notificacaoContext.tsx'
 import { AuthProvider } from './context/authContext.tsx'
 import { BrowserRouter } from 'react-router-dom'
 import { ThemeProvider } from './context/themeContext.tsx'
+import VerificadorNotificacao from './pages/instrutor/notificacao/notificacao.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -14,6 +15,7 @@ createRoot(document.getElementById('root')!).render(
         <AuthProvider>
           <NotificacaoProvider>
                 <App />
+                <VerificadorNotificacao></VerificadorNotificacao>
           </NotificacaoProvider>
         </AuthProvider>
       </BrowserRouter>

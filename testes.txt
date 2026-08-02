@@ -14,13 +14,13 @@ http://localhost:8080/api/auth/register
     "password_login": "Bosch@123"
 }
 {
-  "EDV": 91000002,
+  "EDV": 92906812,
   "tipoUser": "INSTRUTOR",
-  "name": "Fernanda Oliveira Souza",
-  "data_nascimento": "22/07/1992",
-  "user_bosch": "FOS002",
+  "name": "Lasnine Miranda dos Santos",
+  "data_nascimento": "08/01/2008",
+  "user_bosch": "SLN6CT",
   "contato": "(41)97777-2222",
-  "email_bosch": "fernanda.souza@bosch.com",
+  "email_bosch": "lasnine.santos@bosch.com",
   "password_login": "Bosch@123"
 }
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJFRFYiOjkxMDAwMDAyLCJ0aXBvVXNlciI6IklOU1RSVVRPUiIsIm5hbWUiOiJGZXJuYW5kYSBPbGl2ZWlyYSBTb3V6YSIsImlhdCI6MTc4NTE1NjExNiwiZXhwIjoxNzg1MzI4OTE2fQ.8FRtYw8xTVkO0iDWb_AmWyVSJA_odPKCyMjWtuxvqR4
