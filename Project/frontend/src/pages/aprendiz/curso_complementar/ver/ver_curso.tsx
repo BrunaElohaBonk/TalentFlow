@@ -4,26 +4,31 @@ import icon_fechar from '../../../../assets/img/close.png'
 interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    onSuccess: () => void;
     curso: {
-        id: number;
-        curso: string;
-        situacao: string;
-        dataConclusao: string;
-        cargaHoraria: string;
-        descricao: string;
-        certificado: File | null;
+        id:number;
+        Id_Profile:number;
+        name_Curso:string;
+        status_Cursos: "CONCLUIDO" | "CURSANDO"|"NAO_INFORMADO";
+        data_Conclusao:string;
+        carga_horaria:number;
+        certificado?: string |null;
+
     };
 }
+
 
 function CursoComplementarVisualizar({
     visible,
     setVisible,
+    onSuccess,
     curso
 }: Props) {
 
     if (!visible) {
         return null
     }
+    onSuccess()
 
     return (
         <div className="cursoVisualizar-overlay" onClick={() => setVisible(false)}>
@@ -32,40 +37,36 @@ function CursoComplementarVisualizar({
                     <h2>Curso Complementar</h2>
                     <div className="cursoVisualizar-acoes">
                         <button className="cursoVisualizar-fechar" onClick={() => setVisible(false)}>
-                            <img src={icon_fechar} alt="Fechar"/>
+                            <img src={icon_fechar} alt="Fechar" />
                         </button>
                     </div>
                 </div>
                 <div className="cursoVisualizar-conteudo">
                     <div className="cursoVisualizar-item">
                         <span>Nome do Curso</span>
-                        <p>{curso.curso || "Não informado."}</p>
+                        <p>{curso.name_Curso || "Não informado."}</p>
                     </div>
                     <div className="cursoVisualizar-item">
                         <span>Situação</span>
-                        <p>{curso.situacao || "Não informado."}</p>
+                        <p>{curso.status_Cursos || "Não informado."}</p>
                     </div>
                     {
-                        curso.situacao === "Concluído" && (
+                        curso.status_Cursos === "CONCLUIDO" && (
                             <div className="cursoVisualizar-item">
                                 <span>Data de Conclusão</span>
-                                <p>{curso.dataConclusao || "Não informado."}</p>
+                                <p>{formatarData(curso.data_Conclusao) || "Não informado."}</p>
                             </div>
                         )
                     }
                     <div className="cursoVisualizar-item">
                         <span>Carga Horária</span>
-                        <p>{curso.cargaHoraria || "Não informado."}</p>
-                    </div>
-                    <div className="cursoVisualizar-item cursoVisualizar-descricao">
-                        <span>Descrição</span>
-                        <p>{curso.descricao || "Não informado."}</p>
+                        <p>{curso.carga_horaria || "Não informado."}</p>
                     </div>
                     <div className="cursoVisualizar-item certificado-item">
                         <span>Certificado</span>
                         {
                             curso.certificado ? (
-                                <p><img alt="Certificado" className="certificado-img"/></p>
+                                <p><img alt="Certificado" className="certificado-img" /></p>
                             ) : (
                                 <p>Não incluído</p>
                             )
@@ -78,3 +79,16 @@ function CursoComplementarVisualizar({
 }
 
 export default CursoComplementarVisualizar
+
+function formatarData(data: string) {
+    if (!data) return "";
+    if (data.includes("T")) {
+        const [ano, mes, dia] = data.split("T")[0].split("-");
+
+        return `${dia}/${mes}/${ano}`;
+    }
+    if (data.includes("/")) {
+        return data;
+    }
+    return "";
+}

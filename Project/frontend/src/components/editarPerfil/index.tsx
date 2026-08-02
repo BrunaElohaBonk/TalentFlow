@@ -24,11 +24,12 @@ interface IPerfil {
 interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    onSuccess: () => void;
     edv: number;
     atualizarPerfil: () => void;
 }
 
-function EditarPerfil({ visible, setVisible, edv, atualizarPerfil }: Props){
+function EditarPerfil({ visible, setVisible, edv,onSuccess }: Props){
     const nomeRef = useRef<HTMLInputElement>(null);
     const edvRef = useRef<HTMLInputElement>(null);
     const emailRef = useRef<HTMLInputElement>(null);
@@ -73,7 +74,7 @@ function EditarPerfil({ visible, setVisible, edv, atualizarPerfil }: Props){
     const [perfil, setPerfil] = useState<IPerfil>({
         token: "",
         user: {
-            EDV: 0,
+            EDV: edv,
             name: "",
             user_bosch: "",
             email_bosch: "",
@@ -168,7 +169,7 @@ function EditarPerfil({ visible, setVisible, edv, atualizarPerfil }: Props){
                 text: "Seu perfil foi atualizado com sucesso!",
                 icon: "success",
             });
-            console.log(response.data);
+            
             setVisible(false);
         }
         catch (error) {

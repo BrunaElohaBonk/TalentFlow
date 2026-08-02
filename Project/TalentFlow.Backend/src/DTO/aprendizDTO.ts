@@ -36,7 +36,7 @@ export interface AtualizarFormacaoAcademicaDto {
     name_Curso:string;
     nome_Institucao:string;
     status_Academico:
-    "CONCLUIDO" | "CURSANDO";
+    "CONCLUIDO" | "CURSANDO"|"NAO_INFORMADO";
     periodo_Atual:number;
     total_Periodo:number;
     nivel_formacao:NivelFormacao;
@@ -46,9 +46,10 @@ export interface AtualizarFormacaoAcademicaDto {
 export interface AtualizarCursosComplementaresDto {
 
     id:number;
+    Id_Profile:number;
     name_Curso:string;
     status_Cursos:
-    "CONCLUIDO" | "CURSANDO";
+    "CONCLUIDO" | "CURSANDO"|"NAO_INFORMADO";
     data_Conclusao:string;
     carga_horaria:number;
 
@@ -75,4 +76,18 @@ export interface AtualizarCompetenciasDto {
     nome_Competencia:string;
     nivel_Competencia:string;
 
+}
+export interface CriarFormacaoAcademicaDto {
+    curso: string;
+    instituicao: string;
+    situacao: "Concluído" | "Cursando";
+    periodoAtual?: number;
+    totalPeriodos: number;
+    nivelFormacao:
+        | "Ensino Médio"
+        | "Técnico"
+        | "Graduação"
+        | "Pós Graduação";
+    descricao: string;
+    certificado?: string | null;
 }
