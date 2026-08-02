@@ -302,7 +302,7 @@ export default class aprendizController {
 
   static async verAprendiz(req: Request, res: Response) {
     const { EDV } = req.params;
-
+    console.log("aprendiz",EDV)
     const perfil = await AprendizService.verAprendiz(Number(EDV));
 
     if (!perfil) {
@@ -316,11 +316,14 @@ export default class aprendizController {
 
   static async verPerfil(req: Request, res: Response, next: NextFunction) {
     const { EDV } = req.params;
+    console.log("perfil",EDV)
 
     const perfil = await AprendizService.verPerfil(Number(EDV));
 
     if (!perfil) {
-      throw new Error("Perfil não encontrado");
+       return res.status(404).json({
+        message: "Perfil não encontrado",
+      }); 
     }
 
     return res.status(200).json({

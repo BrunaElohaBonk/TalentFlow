@@ -125,7 +125,8 @@ function CadTurma() {
         console.log("Buscando EDV:", edv);
 
         try {
-            const response = await api.get(`/buscaruser/INSTRUTOR`);
+
+            const response = await api.get(`/auth/buscarUser/INSTRUTOR`);
 
             console.log("Resposta API:", response.data);
 

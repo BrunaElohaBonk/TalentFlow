@@ -196,14 +196,15 @@ function VerAprendiz(){
     const fetchAprendizes = async () => {
         try {
             const response = await api.get("/auth/buscaruser/APRENDIZ");
-            const usuarios = response.data.filter((usuario: IAprendiz) => usuario.tipoUser === "APRENDIZ" && usuario.Ativo === true );
+            const userAprendiz = response.data.filter((usuario: IAprendiz) => usuario.tipoUser === "APRENDIZ" && usuario.Ativo === true );
             const aprendizesComPerfil = await Promise.all(
-                usuarios.map(async (usuario) => {
-                    const perfilResponse = await api.get(`/aprendiz/perfil/${usuario.EDV}`);
-                    const turmaResponse = await api.get(`/aprendiz/aprendiz/${usuario.EDV}`);
+                userAprendiz.map(async (user) => {
+                    console.log("edvs",user.EDV, user.tipoUser)
+                    const perfilResponse = await api.get(`/aprendiz/perfil/${user.EDV}`);
+                    const turmaResponse = await api.get(`/aprendiz/aprendiz/${user.EDV}`);
 
                     return {
-                        ...usuario,
+                        ...user,
                         idTurma: turmaResponse.data.data.Id_Turma,
                         data: perfilResponse.data.data
                     };

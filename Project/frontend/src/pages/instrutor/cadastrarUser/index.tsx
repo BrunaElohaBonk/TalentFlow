@@ -137,7 +137,7 @@ function CadastrarUser() {
                             Authorization:`Bearer ${token}`
                         }
                     }
-                );
+                );  
             }
 
             Swal.fire({
