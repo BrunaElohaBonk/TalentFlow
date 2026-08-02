@@ -1,96 +1,127 @@
 import Swal from "sweetalert2";
-import axios from "axios";
 import lixeira from '../../../assets/img/lixeira.png'
 import olho from '../../../assets/img/icon_olho.png'
 import icon_editar from '../../../assets/img/icon_editar.png'
 import adicionar from '../../../assets/img/icon adicionar.png'
 import fechar from '../../../assets/img/close.png'
 import IdiomaVisualizar from "./ver/ver_idioma";
-import { useState } from "react";
 import EditarIdioma from "./editar/editar_idioma";
 import AdicionarIdioma from "./adicionar/adicionar_idioma";
 import './idioma.css'
+import { useEffect, useState } from "react";
+import api from "../../../services/api";
 
+const formatarIdioma = (idioma: string) => {
+    const idiomas: Record<string, string> = {
+        ALEMAO: "Alemão",
+        ARABE: "Árabe",
+        COREANO: "Coreano",
+        ESPANHOL: "Espanhol",
+        FRANCES: "Francês",
+        INGLES: "Inglês",
+        ITALIANO: "Italiano",
+        JAPONES: "Japonês",
+        MANDARIM: "Mandarim",
+        RUSSO: "Russo",
+        TAILANDES: "Tailandês"
+    };
+
+    return idiomas[idioma] || idioma;
+};
 interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    onSuccess: () => void;
 }
-
-function Idioma({ visible, setVisible }: Props) {
+interface Idioma {
+    id: number;
+    Id_Profile: number;
+    nome_Idioma: string;
+    nivel_Idioma: string;
+    certificado: string | null;
+}
+function Idioma({ visible, setVisible,onSuccess }: Props) {
 
     const [visualizarIdioma, setVisualizarIdioma] = useState(false);
     const [editarIdioma, setEditarIdioma] = useState(false);
     const [adicionarIdioma, setAdicionarIdioma] = useState(false);
-    const [idiomaSelecionado, setIdiomaSelecionado] = useState<any>(null);
+    const [idiomaSelecionado, setIdiomaSelecionado] = useState<Idioma | null>(null);
+    const [idiomas, setIdiomas] = useState<Idioma[]>([]);
+    const [edv, setEdv] = useState(0);
+    const [idProfile, setIdProfile] = useState(0);
+
+    const carregarIdiomas = async () => {
+
+        try {
+
+            const usuario = localStorage.getItem("usuario");
+
+            if (!usuario) return;
+
+            const aprendizLogado = JSON.parse(usuario);
+
+            const EDV = aprendizLogado.user.EDV;
+
+            setEdv(EDV);
+
+            const perfil = await api.get(`/aprendiz/meuPerfil/${EDV}`);
+
+            setIdProfile(perfil.data.data.id);
+
+            const response = await api.get(
+                `/aprendiz/meusIdiomas/${EDV}/${perfil.data.data.id}`
+            );
+
+            setIdiomas(response.data.data);
+
+        } catch (error) {
+            console.error(error);
+        }
+
+    };
+
+
+    useEffect(() => {
+        if (visible) {
+           carregarIdiomas();
+        }
+    }, [visible]);
 
     if (!visible) {
         return null
     }
-
-    const idiomas = [
-        {
-            id: 1,
-            nomeIdioma: "Inglês",
-            nivel: "Intermediário (B1)",
-            situacao: "Cursando",
-            instituicao: "Wizard",
-            dataInicio: "10/02/2025",
-            dataConclusao: "",
-            descricao: "Curso de inglês com foco em conversação, compreensão auditiva, leitura e escrita para situações profissionais e acadêmicas.",
-            certificado: null
-        },
-        {
-            id: 2,
-            nomeIdioma: "Espanhol",
-            nivel: "Básico (A2)",
-            situacao: "Concluído",
-            instituicao: "Centro de Idiomas",
-            dataInicio: "05/03/2024",
-            dataConclusao: "15/12/2024",
-            descricao: "Curso de espanhol abordando vocabulário, gramática, interpretação de textos e comunicação em situações do cotidiano.",
-            certificado: null
-        },
-        {
-            id: 3,
-            nomeIdioma: "Alemão",
-            nivel: "Iniciante (A1)",
-            situacao: "Cursando",
-            instituicao: "Goethe-Institut",
-            dataInicio: "20/01/2025",
-            dataConclusao: "",
-            descricao: "Curso introdutório de alemão com foco em fundamentos da língua, pronúncia, vocabulário básico e comunicação inicial.",
-            certificado: null
-        }
-    ];
+     async function atualizarTudo() {
+        await carregarIdiomas();
+        onSuccess();
+    }
 
     const handleDelete = async (id: number) => {
-
         const confirm = await Swal.fire({
             title: 'Tem certeza?',
-            text: 'A Formação Acadêmica será deletada!',
+            text: 'O idioma será deletado!',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Sim, deletar!',
             cancelButtonText: 'Cancelar'
         })
-
         if (!confirm.isConfirmed) {
             return
         }
-
         try {
-            await axios.delete(`link backend/${id}`)
+            await api.delete(`/aprendiz/deletarIdioma/${edv}/${id}`);
+            setIdiomas((prev) => prev.filter((idioma) => idioma.id !== id));
             Swal.fire({
                 title: 'Deletada!',
-                text: 'Formação Acadêmica removida com sucesso!',
+                text: 'Idioma removido com sucesso!',
                 icon: 'success'
             })
+            onSuccess()
         }
         catch (error) {
             console.error('Erro ao deletar:', error)
             Swal.fire({
                 title: 'Erro!',
-                text: 'Erro ao deletar Formação Acadêmica',
+                text: 'Erro ao deletar Idioma',
                 icon: 'error'
             })
         }
@@ -100,10 +131,20 @@ function Idioma({ visible, setVisible }: Props) {
         <div className="idioma-container" onClick={() => setVisible(false)}>
             <div className="idioma-body" onClick={(e) => e.stopPropagation()}>
                 <div className="idioma-header">
-                    <button type="button" className="btn-header" onClick={() => setAdicionarIdioma(true)}>
+                    <button
+                        type="button"
+                        className="btn-header"
+                        onClick={() => {
+                            setAdicionarIdioma(true);
+                        }}
+                    >
                         <img src={adicionar} alt="adicionar" />
                     </button>
-                    <button className="btn-header" onClick={() => setVisible(false)}>
+                    <button className="btn-header" onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setVisible(false);
+                    }}>
                         <img src={fechar} alt="fechar" className="icon-fechar-img" />
                     </button>
                 </div>
@@ -111,28 +152,30 @@ function Idioma({ visible, setVisible }: Props) {
                 <div className="idioma-modal">
                     {
                         idiomas.length === 0 ?
-                            <p className="idioma-vazia">Nenhuma formação acadêmica encontrada.</p>
+                            <p className="idioma-vazia">Nenhum idioma encontrado.</p>
                             :
                             idiomas.map((item) => (
                                 <div className="idioma-item" key={item.id}>
-                                    <span className="idioma-titulo">{item.nomeIdioma}</span>
+                                    <span className="idioma-titulo">
+                                        {formatarIdioma(item.nome_Idioma)}
+                                    </span>
                                     <div className="idioma-acoes">
                                         <button type="button" className="btn-acao" onClick={() => {
-                                                setIdiomaSelecionado(item);
-                                                setVisualizarIdioma(true);
-                                            }}
+                                            setIdiomaSelecionado(item);
+                                            setVisualizarIdioma(true);
+                                        }}
                                         >
-                                            <img src={olho} alt="Visualizar" className="icon-olho"/>
+                                            <img src={olho} alt="Visualizar" className="icon-olho" />
                                         </button>
                                         <button type="button" className="btn-acao" onClick={() => {
-                                                setIdiomaSelecionado(item);
-                                                setEditarIdioma(true);
-                                            }}
+                                            setIdiomaSelecionado(item);
+                                            setEditarIdioma(true);
+                                        }}
                                         >
-                                            <img src={icon_editar} alt="Editar"/>
+                                            <img src={icon_editar} alt="Editar" />
                                         </button>
                                         <button type="button" className="btn-acao" onClick={() => handleDelete(item.id)}>
-                                            <img src={lixeira} alt="Excluir"/>
+                                            <img src={lixeira} alt="Excluir" />
                                         </button>
                                     </div>
                                 </div>
@@ -141,11 +184,12 @@ function Idioma({ visible, setVisible }: Props) {
                 </div>
                 {
                     visualizarIdioma && idiomaSelecionado && (
-                    <IdiomaVisualizar
-                        visible={visualizarIdioma}
-                        setVisible={setVisualizarIdioma}
-                        idioma={idiomaSelecionado}
-                    />
+                        <IdiomaVisualizar
+                            visible={visualizarIdioma}
+                            setVisible={setVisualizarIdioma}
+                            idioma={idiomaSelecionado}
+                            onSuccess={atualizarTudo}
+                        />
                     )
                 }
                 {
@@ -154,7 +198,10 @@ function Idioma({ visible, setVisible }: Props) {
                             visible={editarIdioma}
                             setVisible={setEditarIdioma}
                             setIdioma={setVisible}
+                            onSuccess={atualizarTudo}
                             id={idiomaSelecionado.id}
+                            edv={edv}
+                            idiomaAtual={idiomaSelecionado}
                         />
                     )
                 }
@@ -164,13 +211,15 @@ function Idioma({ visible, setVisible }: Props) {
                             visible={adicionarIdioma}
                             setVisible={setAdicionarIdioma}
                             setIdioma={setVisible}
+                            onSuccess={atualizarTudo}
                             id={idProfile}
                             edv={edv}
+                            carregarIdiomas={carregarIdiomas}
                         />
                     )
                 }
             </div>
-        </div>
+        </div >
     )
 }
 

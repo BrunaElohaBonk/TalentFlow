@@ -1,5 +1,6 @@
-import { Prisma } from "@prisma/client";
+import { cursos_status_Cursos, Prisma } from "@prisma/client";
 import { prisma } from "../lib/prisma.js";
+import { NomeSoftskills } from "@prisma/client";
 import { TipoHistorico } from "@prisma/client";
 import { idiomas_nome_Idioma, idiomas_nivel_Idioma } from "@prisma/client";
 import {
@@ -10,7 +11,9 @@ import {
   AtualizarPerfilDto,
   AtualizarSituacaoProfissionalDto,
   AtualizarSoftSkillsDto,
+  CriarFormacaoAcademicaDto,
 } from "../DTO/aprendizDTO.ts";
+
 
 
 
@@ -54,6 +57,7 @@ export default class AprendizService {
       },
     });
   }
+  //aa
   static async adicionarCertificadoCurso(
     id: number,
     certificado: string | undefined,
@@ -106,6 +110,53 @@ export default class AprendizService {
       data: {
         certificado,
       },
+    });
+  }
+  static async adicionarFormacaoAcademica(
+    EDV: number,
+    data: CriarFormacaoAcademicaDto,
+    usuarioEDV: number
+  ) {
+    return await prisma.$transaction(async (tx: any) => {
+
+      const perfil = await tx.profile.findUnique({
+        where: {
+          EDV_Aprendiz: EDV
+        }
+      });
+
+      if (!perfil) {
+        throw new Error("Perfil não encontrado.");
+      }
+
+      const statusMap = {
+        "Concluído": "CONCLUIDO",
+        "Cursando": "CURSANDO"
+      } as const;
+
+      const nivelMap = {
+        "Ensino Médio": "ENSINO_MEDIO",
+        "Técnico": "TECNICO",
+        "Graduação": "GRADUACAO",
+        "Pós Graduação": "POS_GRADUACAO"
+      } as const;
+
+      const formacao = await tx.formacao_academica.create({
+        data: {
+          Id_Profile: perfil.id,
+          name_Curso: data.curso,
+          nome_Institucao: data.instituicao,
+          status_Academico:
+            statusMap[data.situacao as keyof typeof statusMap],
+          nivel_formacao:
+            nivelMap[data.nivelFormacao as keyof typeof nivelMap],
+          periodo_Atual: Number(data.periodoAtual || 0),
+          total_Periodo: Number(data.totalPeriodos),
+          certificado: data.certificado ?? null
+        }
+      });
+
+      return formacao;
     });
   }
 
@@ -274,31 +325,72 @@ export default class AprendizService {
       }
     });
   }
+  static async  adicionarCompetencia(
+    Id_Profile: number,
+    data: {
+      nome_Competencia:string;
+      nivel_Competencia:string;
+    },
+    
+  ) {
+    return await prisma.competencia.create({
+      data: {
+        Id_Profile,
+        nome_Competencia: data.nome_Competencia,
+        nivel_Competencia: data.nivel_Competencia,
+      }
+    });
+  }
+  static async adicionarCursos(
+    Id_Profile: number,
+    data: {
+      name_Curso: string;
+      status_Cursos: cursos_status_Cursos;
+      data_Conclusao: Date | string;
+      certificado?:string;
+      carga_horaria:number;
+    }
+  ) {
+    return await prisma.cursos.create({
+      data: {
+        Id_Profile,
+        name_Curso: data.name_Curso,
+        status_Cursos: data.status_Cursos,
+        data_Conclusao: data.data_Conclusao,
+        certificado:data.certificado,
+        carga_horaria:data.carga_horaria,
+      }
+    });
+  }
 
   static async atualizarFormacaoAcademica(
     EDV: number,
-    Id_Profile: number,
+    idFormacao: number,
     data: AtualizarFormacaoAcademicaDto,
     usuarioEDV: number,
   ) {
     return await prisma.$transaction(async (tx: any) => {
-      const formacaoAcademicaAntigo = await tx.formacao_academica.findUnique({
+      const formacaoAcademicaAntigo = await tx.formacao_academica.findFirst({
         where: {
-          id: data.id,
-          profile: { EDV_Aprendiz: EDV },
-        },
+          id: idFormacao,
+          profile: {
+            EDV_Aprendiz: EDV
+          }
+        }
       });
 
       if (!formacaoAcademicaAntigo) {
         throw new Error("Perfil não encontrado.");
       }
+
       const formacaoAcademicaAtualizado = await tx.formacao_academica.update({
         where: {
-          id: data.id,
-          profile: { EDV_Aprendiz: EDV },
+          id: idFormacao
         },
         data,
       });
+
+      const Id_Profile = formacaoAcademicaAntigo.Id_Profile;
 
       await this.registrarHistorico(
         tx,
@@ -392,33 +484,34 @@ export default class AprendizService {
 
   static async atualizarIdiomas(
     EDV: number,
-    Id_Profile: number,
+    id: number,
     data: AtualizarIdiomasDto,
     usuarioEDV: number,
   ) {
     return await prisma.$transaction(async (tx: any) => {
+
       const idiomasAntigo = await tx.idiomas.findUnique({
         where: {
-          id: data.id,
-          profile: { EDV_Aprendiz: EDV },
+          id: id,
         },
       });
+
       if (!idiomasAntigo) {
-        throw new Error("Perfil não encontrado.");
+        throw new Error("Idioma não encontrado.");
       }
+
       const idiomasAtualizado = await tx.idiomas.update({
         where: {
-          id: data.id,
-          profile: { EDV_Aprendiz: EDV },
+          id: id,
         },
         data,
       });
 
       await this.registrarHistorico(
         tx,
-        Id_Profile,
+        idiomasAntigo.Id_Profile,
         TipoHistorico.IDIOMA,
-        data.id,
+        id,
         usuarioEDV,
         idiomasAntigo,
         idiomasAtualizado,
@@ -427,30 +520,46 @@ export default class AprendizService {
       return idiomasAtualizado;
     });
   }
-
   static async atualizarCursos(
     EDV: number,
     Id_Profile: number,
     data: AtualizarCursosComplementaresDto,
     usuarioEDV: number,
   ) {
-    return await prisma.$transaction(async (tx: any) => {
-      const cursosAntigo = await tx.cursos.findUnique({
+    console.log("DATA:", data);
+    console.log("DATA.ID:", data.id);
+
+    const dataConclusao = new Date(
+      data.data_Conclusao.split("/").reverse().join("-")
+    );
+
+    return await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+
+      const cursosAntigo = await tx.cursos.findFirst({
         where: {
           id: data.id,
-          profile: { EDV_Aprendiz: EDV },
+          profile: {
+            EDV_Aprendiz: EDV,
+          },
         },
       });
+
       if (!cursosAntigo) {
-        throw new Error("Perfil não encontrado.");
+        throw new Error("Curso não encontrado.");
       }
+
       const cursosAtualizado = await tx.cursos.update({
         where: {
           id: data.id,
-          profile: { EDV_Aprendiz: EDV },
         },
-        data,
+        data: {
+          name_Curso: data.name_Curso,
+          status_Cursos: data.status_Cursos,
+          data_Conclusao: dataConclusao,
+          carga_horaria: data.carga_horaria,
+        },
       });
+
       await this.registrarHistorico(
         tx,
         Id_Profile,
@@ -585,7 +694,121 @@ export default class AprendizService {
       },
     });
   }
+  static async deletarIdioma(EDV: number, id: number) {
+    return await prisma.idiomas.deleteMany({
+      where: {
+        id,
+        profile: {
+          EDV_Aprendiz: EDV,
+        },
+      },
+    });
+  }
+  static async deletarCompetencia(EDV: number, id: number) {
+    return await prisma.competencia.deleteMany({
+      where: {
+        id,
+        profile: {
+          EDV_Aprendiz: EDV,
+        },
+      },
+    });
+  }
+  
+  static async deletarCursos(EDV: number, id: number) {
+    return await prisma.cursos.deleteMany({
+      where: {
+        id,
+        profile: {
+          EDV_Aprendiz: EDV,
+        },
+      },
+    });
+  }
+  static async deletarFormacao(EDV: number, id: number) {
+    return await prisma.formacao_academica.deleteMany({
+      where: {
+        id,
+        profile: {
+          EDV_Aprendiz: EDV,
+        },
+      },
+    });
+  }
+ 
+  static async adicionarSoftskills(
+    EDV: number,
+    data: any,
+    usuarioEDV: number
+  ) {
 
+    return await prisma.$transaction(async (tx) => {
+
+      const perfil = await tx.profile.findFirst({
+        where: {
+          EDV_Aprendiz: EDV
+        }
+      });
+
+
+      if (!perfil) {
+        throw new Error("Perfil não encontrado.");
+      }
+
+
+      const softskills = await Promise.all(
+        data.softskills.map((nome: string) =>
+          tx.soft_skills.create({
+            data: {
+              Id_Profile: perfil.id,
+              nome_SoftSkills: nome as NomeSoftskills
+            }
+          })
+        )
+      );
+      return softskills;
+    });
+  }
+  static async deletarSoftskill(
+    EDV: number,
+    id: number,
+    usuarioEDV: number
+) {
+
+    return await prisma.$transaction(async (tx) => {
+
+        const softskill = await tx.soft_skills.findUnique({
+            where: {
+                id: id
+            }
+        });
+
+
+        if (!softskill) {
+            throw new Error("Softskill não encontrada.");
+        }
+
+
+        const perfil = await tx.profile.findUnique({
+            where: {
+                id: softskill.Id_Profile
+            }
+        });
+
+
+        if (!perfil || perfil.EDV_Aprendiz !== EDV) {
+            throw new Error("Acesso negado.");
+        }
+
+
+        return await tx.soft_skills.delete({
+            where: {
+                id: id
+            }
+        });
+
+    });
+}
   static async verCursos(EDV: number, id: number) {
     return await prisma.cursos.findMany({
       where: {
