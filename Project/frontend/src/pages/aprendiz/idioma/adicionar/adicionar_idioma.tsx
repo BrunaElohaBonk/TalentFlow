@@ -106,7 +106,7 @@ function AdicionarIdioma({
             return;
         }
         try {
-            await api.post(`/aprendiz/adicionarIdioma/${id}`, {
+            await api.post(`/aprendiz/adicionarIdioma/${edv}/${id}`, {
                 nome_Idioma: idioma.nomeIdioma,
                 nivel_Idioma: idioma.nivel
             })

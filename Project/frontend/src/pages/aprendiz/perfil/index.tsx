@@ -75,7 +75,7 @@ interface Usuario {
     tipo: string;
 }
 interface Perfil {
-    id: Number,
+    id: number,
     EDV_Aprendiz: number,
     situacao_profissional: ISituacaoProfissional[],
     soft_skills: SoftSkills[],
@@ -174,13 +174,12 @@ function Perfil() {
     const [editarFormacao, setEditarFormacao] = useState(false)
     const [adicionarFormacao, setAdicionarFormacao] = useState(false)
     const navigate = useNavigate()
-    const [idSituacao, setIdSituacao] = useState<number | null>(null);
     const [formacaoSelecionada, setFormacaoSelecionada] = useState<FormacaoAcademica | null>(null);
 
     useEffect(() => {
         async function carregarPerfil() {
             const usuario = localStorage.getItem("usuario");
-            const aprendizLogado = JSON.parse(usuario);
+            const aprendizLogado = JSON.parse(usuario??"");
             setAprendiz({
                 edv: aprendizLogado.user.EDV,
                 img: aprendizLogado.user.imagem,
@@ -198,7 +197,6 @@ function Perfil() {
                 );
 
                 setApireq(response.data.data);
-                setIdSituacao(response.data.data.situacao_profissional[0].id);
             } catch (error) {
                 console.error(error);
             }
@@ -254,10 +252,12 @@ function Perfil() {
             <Idioma visible={idioma} setVisible={setIdioma} />
             <SoftSkill visible={soft_skill} setVisible={setSoftSkill} edv={aprendiz?.edv ?? 0} />
             <Competencia visible={competencia} setVisible={setCompetencia} />
-            <EditarPerfil visible={editar} setVisible={setEditar} edv={aprendiz?.edv} />
+            <EditarPerfil visible={editar} setVisible={setEditar} edv={aprendiz?.edv ?? 0} />
             <EditarSituacaoProfissional visible={editarSituacao} setVisible={setEditarSituacao} setSituacaoProfissional={setSituacao} edv={aprendiz?.edv ?? 0} idSituacao={apireq?.situacao_profissional?.[0]?.id ?? 0} />
             <EditarFormacaoAcademica visible={editarFormacao} setVisible={setEditarFormacao} setFormacaoAcademica={setFormacaoAcademica} formacaoSelecionada={formacaoSelecionada} />
-            <AdicionarFormacaoAcademica visible={adicionarFormacao} setVisible={setAdicionarFormacao} setFormacaoAcademica={setFormacaoAcademica} edv={aprendiz?.edv ?? 0} />
+            <AdicionarFormacaoAcademica visible={adicionarFormacao} setVisible={setAdicionarFormacao} setFormacaoAcademica={setFormacaoAcademica} edv={aprendiz?.edv ?? 0} atualizarFormacoes={function (): void {
+                throw new Error("Function not implemented.");
+            } } />
 
             <main className="perfil-tela">
                 <section className="perfil-bloco">
@@ -279,9 +279,9 @@ function Perfil() {
                                 <span>Email: {aprendiz?.email}</span>
                                 <span>EDV: {aprendiz?.edv}</span>
                                 <span>User: {aprendiz?.user}</span>
-                                <span>Data de Nascimento: {formatarData(aprendiz?.data_nascimento)}</span>
-                                <span>Idade: {Idade(formatarData(aprendiz?.data_nascimento))} anos</span>
-                                <span>Contato: {Telefone(aprendiz?.contato)}</span>
+                            <span>Data de Nascimento: {formatarData(aprendiz?.data_nascimento ?? "")}</span>
+                                <span>Idade: {Idade(formatarData(aprendiz?.data_nascimento ?? ""))} anos</span>
+                                <span>Contato: {Telefone(aprendiz?.contato ?? "")}</span>
                             </div>
                         </div>
                     </div>

@@ -60,7 +60,6 @@ function FormacaoAcademica({
                 response.data.data.formacao_academica
             );
 
-            console.log("FORMACOES API:", response.data.data.formacao_academica);
         } catch (error) {
             console.error(error);
         }

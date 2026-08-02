@@ -2,7 +2,6 @@ import './editar_curso.css'
 import sair from '../../../../assets/img/close.png'
 import { useEffect, useState } from 'react'
 import Swal from 'sweetalert2'
-import axios from 'axios'
 import { FormControl, FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import { useDropzone } from "react-dropzone";
 import download from '../../../../assets/img/icon download.png'
@@ -24,27 +23,36 @@ interface Props {
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
     setCursoComplementar: React.Dispatch<React.SetStateAction<boolean>>;
     id_perfil: number;
-    id_curso: number;
+    cursoAtual:{
+        id_Cursos:number;
+        Id_Profile:number;
+        name_Curso:string;
+        status_Cursos:
+        "CONCLUIDO" | "CURSANDO"|"NAO_INFORMADO";
+        data_Conclusao:string;
+        carga_horaria:number;
+        certificado?: string|null;
+    }
 }
 
 function EditarCursoComplementar({
     visible,
     setVisible,
     setCursoComplementar,
+    cursoAtual,
     id_perfil,
-    id_curso,
 }: Props) {
     const [arquivoCertificado, setArquivoCertificado] = useState<File | null>(null);
 
 
     const [curso, setCurso] = useState<ICurso>({
-        id_Curso: id_curso,
-        Id_Profile: id_perfil,
+        id_Curso: cursoAtual.id_Curso,
+        Id_Profile: cursoAtual.Id_Profile,
         certificado: null,
-        name_Curso: "",
-        status_Cursos: "CURSANDO",
-        data_Conclusao: null,
-        carga_horaria: 0
+        name_Curso: cursoAtual.name_Curso,
+        status_Cursos: cursoAtual.status_Cursos,
+        data_Conclusao: cursoAtual.data_Conclusao,
+        carga_horaria: cursoAtual.carga_horaria
     })
 
     const [nomeCertificado, setNomeCertificado] = useState("");
@@ -254,10 +262,10 @@ function EditarCursoComplementar({
                     </div>
                     <div className="editarCurso-grupo">
                         <label className="editarCurso-label">Data de Conclusão</label>
-                        <input type="text" name="data_Conclusao" maxLength={10} value={curso.data_Conclusao ?? ""} onChange={handleDataConclusao} /></div>
+                        <input type="text" name="data_Conclusao" maxLength={10} value={formatarData(curso.data_Conclusao ?? "")} onChange={handleDataConclusao} /></div>
                     <div className="editarCurso-grupo">
                         <label className="editarCurso-label">Carga Horária</label>
-                        <input name="carga_horaria" className="editarCurso-input" value={curso.carga_horaria} onChange={handleChange} />
+                        <input name="carga_horaria" className="editarCurso-input" value={curso.carga_horaria ?? 0} onChange={handleChange} />
                     </div>
                     <div className="editarCurso-grupo">
                         <label className="editarCurso-label">Certificado</label>
@@ -279,3 +287,16 @@ function EditarCursoComplementar({
 }
 
 export default EditarCursoComplementar
+
+function formatarData(data: string) {
+    if (!data) return "";
+    if (data.includes("T")) {
+        const [ano, mes, dia] = data.split("T")[0].split("-");
+
+        return `${dia}/${mes}/${ano}`;
+    }
+    if (data.includes("/")) {
+        return data;
+    }
+    return "";
+}

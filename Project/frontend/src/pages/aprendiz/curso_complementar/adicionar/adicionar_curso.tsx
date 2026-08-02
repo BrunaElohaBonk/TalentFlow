@@ -16,27 +16,22 @@ interface cursosComplementares {
     data_Conclusao: string;
     carga_horaria: number | null;
 };
-interface user {
-    edv: number;
-}
-interface Perfil {
-    id: number,
-    EDV_Aprendiz: number,
-    cursos: cursosComplementares[],
-}
+
 
 interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
     setCursoComplementar: React.Dispatch<React.SetStateAction<boolean>>;
     id_profile: number
+    edv:number
 }
 
 function AdicionarCursoComplementar({
     visible,
     setVisible,
     setCursoComplementar,
-    id_profile
+    id_profile,
+    edv
 }: Props) {
     const [curso, setCurso] = useState<cursosComplementares>({
         name_Curso: "",
@@ -46,21 +41,7 @@ function AdicionarCursoComplementar({
         certificado: "",
     })
 
-    const [nomeCertificado, setNomeCertificado] = useState("");
-    const [apireq, setApireq] = useState<Perfil | null>(null);
-
-    const [aprendiz, setAprendiz] = useState<user | null>(null);
-
-    useEffect(() => {
-        async function carregarPerfil() {
-            const usuario = localStorage.getItem("usuario");
-            if (!usuario) return;
-            const aprendizLogado = JSON.parse(usuario);
-            const edv = aprendizLogado.user.EDV;
-            setAprendiz({ edv });
-        }
-        carregarPerfil();
-    }, []);
+    const [nomeCertificado, setNomeCertificado] = useState("");   
 
     const { getRootProps, getInputProps } = useDropzone({
         accept: {
@@ -144,14 +125,6 @@ function AdicionarCursoComplementar({
             })
             return;
         }
-        if (!aprendiz) {
-            Swal.fire({
-                title: "Erro!",
-                text: "Usuário não encontrado.",
-                icon: "error"
-            });
-            return;
-        }
 
         try {
             const partesData = curso.data_Conclusao.split("/");
@@ -162,19 +135,13 @@ function AdicionarCursoComplementar({
                 Number(partesData[1]) - 1,
                 Number(partesData[0])
             );
-            const response = await api.get(`/aprendiz/meuPerfil/${aprendiz.edv}`);
-
-            const perfil = response.data.data;
-             await api.post(`/aprendiz/adicionarCursos/${perfil.id}`, {
+            
+             await api.post(`/aprendiz/adicionarCursos/${edv}/${id_profile}`, {
                 name_Curso: curso.name_Curso,
                 status_Cursos: curso.status_Cursos,
                 data_Conclusao: dataFormatada,
                 carga_horaria:  Number(curso.carga_horaria)
             }); 
-
-            // await api.put(`/curso/certificado/${curso.id}`,{
-            //     certificado: curso.certificado
-            // })
 
             Swal.fire({
                 title: 'Sucesso!',
@@ -185,7 +152,7 @@ function AdicionarCursoComplementar({
 
             setVisible(false);
 
-        } catch (error) {
+        } catch (error:any) {
             console.error(
                 "ERRO API:",
                 error.response?.data || error
@@ -266,7 +233,7 @@ function AdicionarCursoComplementar({
                     </div>
                     <div className="adicionarCurso-grupo">
                         <label className="adicionarCurso-label">Carga Horária</label>
-                        <input name="carga_horaria" className="adicionarCurso-input" value={curso.carga_horaria} onChange={handleChange} />
+                        <input name="carga_horaria" className="adicionarCurso-input" value={curso.carga_horaria?? ""} onChange={handleChange} />
                     </div>
                     <div className="adicionarCurso-grupo">
                         <label className="adicionarCurso-label">Certificado</label>

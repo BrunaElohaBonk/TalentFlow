@@ -5,13 +5,12 @@ interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
     curso: {
-        id_Cursos: number;
-        Id_Profile: number;
-        carga_horaria: string;
-        status_Cursos: "CONCLUIDO"|"CURSANDO"|"NAO_INFORMADO";
-        data_Conclusao: string;
-        name_Curso: string;
-        descricao: string;
+        id_Cursos:number;
+        Id_Profile:number;
+        name_Curso:string;
+        status_Cursos: "CONCLUIDO" | "CURSANDO"|"NAO_INFORMADO";
+        data_Conclusao:string;
+        carga_horaria:number;
         certificado?: string |null;
 
     };

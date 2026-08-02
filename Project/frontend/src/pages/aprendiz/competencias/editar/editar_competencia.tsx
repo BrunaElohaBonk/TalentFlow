@@ -31,8 +31,7 @@ interface Props {
   };
 }
 
-function EditarCompetencia({ visible, setVisible, setCompetencia, competenciaAtual,id_profile,edv}: Props) {
-    console.log("miser",competenciaAtual)
+function EditarCompetencia({ visible, setVisible, setCompetencia, competenciaAtual,id_profile,edv}: Props) {  
   const [competencia, setCompetenciaState] = useState<ICompetencia>({
     id: competenciaAtual.id,
     nivel_Competencia: competenciaAtual.nivel_Competencia,    

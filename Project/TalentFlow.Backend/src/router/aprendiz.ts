@@ -28,11 +28,11 @@ route.get("/filtros",authMiddleware,roleMiddleware("INSTRUTOR"),aprendizControll
 //Rotas do aprendiz
 route.get("/meuPerfil/:EDV",authMiddleware,roleMiddleware("APRENDIZ"),ownerMiddleware,aprendizController.verPerfil);
 
-route.post("/adicionarIdioma/:id",authMiddleware,roleMiddleware("APRENDIZ"),aprendizController.adicionarIdioma);
-route.post("/adicionarCursos/:id",authMiddleware,roleMiddleware("APRENDIZ"),aprendizController.adicionarCursos);
+route.post("/adicionarIdioma/:EDV/:id",authMiddleware,roleMiddleware("APRENDIZ"),ownerMiddleware,aprendizController.adicionarIdioma);
+route.post("/adicionarCursos/:EDV/:id",authMiddleware,roleMiddleware("APRENDIZ"),ownerMiddleware,aprendizController.adicionarCursos);
 route.post("/adicionarCompetencia/:EDV/:id",authMiddleware,roleMiddleware("APRENDIZ"),ownerMiddleware,aprendizController.adicionarCompetencia);
 route.post("/adicionarSoftskills/:EDV",authMiddleware,roleMiddleware("APRENDIZ"),ownerMiddleware,aprendizController.adicionarSoftskills,);
-route.post("/adicionarFormacao/:EDV",authMiddleware,roleMiddleware("APRENDIZ"),aprendizController.adicionarFormacaoAcademica);
+route.post("/adicionarFormacao/:EDV",authMiddleware,roleMiddleware("APRENDIZ"),ownerMiddleware,aprendizController.adicionarFormacaoAcademica);
 
 route.put("/atualizarPerfil/:EDV/:idPerfil",authMiddleware,roleMiddleware("APRENDIZ"),ownerMiddleware,validationMiddleware(atualizarPerfilSchema),aprendizController.atualizarPerfil);
 route.put("/atualizarFormacaoAcademica/:EDV/:id",authMiddleware,roleMiddleware("APRENDIZ"),ownerMiddleware,validationMiddleware(atualizarFormacaoSchema),aprendizController.atualizarFormacaoAcademica);

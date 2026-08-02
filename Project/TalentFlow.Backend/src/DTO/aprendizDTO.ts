@@ -36,7 +36,7 @@ export interface AtualizarFormacaoAcademicaDto {
     name_Curso:string;
     nome_Institucao:string;
     status_Academico:
-    "CONCLUIDO" | "CURSANDO";
+    "CONCLUIDO" | "CURSANDO"|"NAO_INFORMADO";
     periodo_Atual:number;
     total_Periodo:number;
     nivel_formacao:NivelFormacao;
@@ -49,7 +49,7 @@ export interface AtualizarCursosComplementaresDto {
     Id_Profile:number;
     name_Curso:string;
     status_Cursos:
-    "CONCLUIDO" | "CURSANDO";
+    "CONCLUIDO" | "CURSANDO"|"NAO_INFORMADO";
     data_Conclusao:string;
     carga_horaria:number;
 

@@ -129,7 +129,6 @@ function Idioma({ visible, setVisible }: Props) {
                         type="button"
                         className="btn-header"
                         onClick={() => {
-                            console.log("ID PROFILE:", idProfile);
                             setAdicionarIdioma(true);
                         }}
                     >
@@ -138,7 +137,6 @@ function Idioma({ visible, setVisible }: Props) {
                     <button className="btn-header" onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        console.log("CLICOU FECHAR");
                         setVisible(false);
                     }}>
                         <img src={fechar} alt="fechar" className="icon-fechar-img" />

@@ -88,7 +88,6 @@ function Competencia({ visible, setVisible }: Props) {
       });
     }
   };
-  console.log("n",competencia)
 
   return (
     <div className="competencia-container" onClick={() => setVisible(false)}>
