@@ -199,7 +199,10 @@ function Dashboard() {
     const dashboardFiltrado = {
         setores: Object.values(
             aprendizesFiltrados.reduce((acc: any, item) => {
-                const setor = item.data.situacao_profissional[0]?.nome_Setor ?? "NAO_INFORMADO";
+                const setor = item.data.situacao_profissional[0]?.nome_Setor?.trim();
+                if (!setor || setor === "NAO_INFORMADO" || setor === "NÃO_INFORMADO" || setor === "Não informado") {
+                    return acc;
+                }
                 if (!acc[setor]) {
                     acc[setor] = {
                         setor,
@@ -210,6 +213,7 @@ function Dashboard() {
                 return acc;
             }, {})
         ),
+        
         estagio: {
             quantidade: quantidadeEstagio,
             naoEstagiando: aprendizesFiltrados.length - quantidadeEstagio
@@ -218,32 +222,36 @@ function Dashboard() {
         competencias: Object.values(
             aprendizesFiltrados.reduce((acc: any, item) => {
                 item.data.competencia?.forEach(comp => {
-                    if (!acc[comp.nome_Competencia]) {
-                        acc[comp.nome_Competencia] = {
-                            competencia: comp.nome_Competencia,
+                    const competencia = comp.nome_Competencia?.trim();
+                    if (!competencia || competencia === "NAO_INFORMADO" || competencia === "NÃO_INFORMADO" || competencia === "Não informado") {
+                        return;
+                    }
+                    if (!acc[competencia]) {
+                        acc[competencia] = {
+                            competencia,
                             quantidade: 0
                         };
                     }
-
-                    acc[comp.nome_Competencia].quantidade++;
+                    acc[competencia].quantidade++;
                 });
-
                 return acc;
             }, {})
         ),
         idiomas: Object.values(
             aprendizesFiltrados.reduce((acc: any, item) => {
-                item.data.idiomas.forEach(idioma => {
-                    if (!acc[idioma.nome_Idioma]) {
-                        acc[idioma.nome_Idioma] = {
-                            idioma: idioma.nome_Idioma,
+                item.data.idiomas?.forEach(idioma => {
+                    const nomeIdioma = idioma.nome_Idioma?.trim();
+                    if (!nomeIdioma || nomeIdioma === "NAO_INFORMADO" || nomeIdioma === "NÃO_INFORMADO" || nomeIdioma === "Não informado") {
+                        return;
+                    }
+                    if (!acc[nomeIdioma]) {
+                        acc[nomeIdioma] = {
+                            idioma: nomeIdioma,
                             quantidade: 0
                         };
                     }
-
-                    acc[idioma.nome_Idioma].quantidade++;
+                    acc[nomeIdioma].quantidade++;
                 });
-
                 return acc;
             }, {})
         ),
@@ -253,6 +261,7 @@ function Dashboard() {
         }
     };
 
+    console.log("Setores filtrados:", dashboardFiltrado.setores);
     const fetchAprendizes = async () => {
         try {
             const response = await api.get("/auth/buscaruser/APRENDIZ");
