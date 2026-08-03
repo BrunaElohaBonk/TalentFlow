@@ -200,6 +200,7 @@ function VerAprendiz(){
         try {
             const response = await api.get("/auth/buscaruser/APRENDIZ");
             const userAprendiz = response.data.filter((usuario: IAprendiz) => usuario.tipoUser === "APRENDIZ" && usuario.Ativo === true );
+            console.log("USUARIO APRENDIZ:", userAprendiz);
             const aprendizesComPerfil = await Promise.all(
                 userAprendiz.map(async (user : any) => {
                     console.log("edvs",user.EDV, user.tipoUser)
@@ -286,7 +287,11 @@ function VerAprendiz(){
                                 <div className="aprendiz-modal" key={item.EDV}>
                                     <button className="aprendiz-btn-delete" onClick={() => handleDelete(item.EDV)}><img src={lixeira} alt="deletar" className="aprendiz-deletar"/></button>
                                     <div className="aprendiz-header">
-                                        <img src={user} alt="user" className="aprendiz-img"/>
+                                        <img
+                                            src={item.fotoPerfil ? item.fotoPerfil : user}
+                                            alt="user"
+                                            className="aprendiz-img"
+                                        />
                                         <span className="aprendiz-titulo" title={item.name}>{item.name}</span>
                                     </div>
                                     <div className="aprendiz-conteudo">

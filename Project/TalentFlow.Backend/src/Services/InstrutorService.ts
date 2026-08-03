@@ -3,6 +3,7 @@ import { InstrutorDto } from "../DTO/instrutorDTO.ts";
 import { TipoHistorico } from "@prisma/client";
 export default class InstrutorService {
   static async editar(EDV: number, data: InstrutorDto, usuarioEDV: number) {
+    console.log("DATA NO SERVICE:", data);
 
     return await prisma.$transaction(async (tx) => {
 
@@ -30,8 +31,8 @@ export default class InstrutorService {
             email_bosch: data.email_bosch,
             contato: data.contato,
             data_nascimento: dataNascimento,
+            fotoPerfil: data.fotoPerfil,
         };
-
 
         const user = await tx.user.update({
             where: {

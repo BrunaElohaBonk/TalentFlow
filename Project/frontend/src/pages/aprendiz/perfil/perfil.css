@@ -32,6 +32,13 @@ body.dark label{
     width: 32px;
 }
 
+.perfil-user {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
 .perfil-tela {
     width: 100%;
     display: flex;

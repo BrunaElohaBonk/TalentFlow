@@ -16,7 +16,7 @@ interface IPerfil {
         email_bosch: string;
         contato: string;
         data_nascimento: string;
-        imagem: File | string | null;
+        fotoPerfil: File | string | null;
         ativo: boolean;
         tipo: string;
     };
@@ -40,7 +40,7 @@ function PerfilInstrutor(){
                 email_bosch: usuario.user.email_bosch,
                 contato: usuario.user.contato,
                 data_nascimento: formatarData(usuario.user.data_nascimento),
-                imagem: usuario.user.imagem,
+                fotoPerfil: usuario.user.fotoPerfil,
                 ativo: usuario.user.ativo,
                 tipo: usuario.user.tipo,
             },
@@ -53,6 +53,7 @@ function PerfilInstrutor(){
         if (usuarioSalvo) {
             const usuario = JSON.parse(usuarioSalvo);
             console.log(usuario)
+            console.log("Imagem salva no localStorage:", usuario.user.imagem);
             setPerfil({
                 token: usuario.token,
                 user: {
@@ -62,7 +63,7 @@ function PerfilInstrutor(){
                     email_bosch: usuario.user.email_bosch,
                     contato: usuario.user.contato,
                     data_nascimento: formatarData(usuario.user.data_nascimento),
-                    imagem: usuario.user.imagem,
+                    fotoPerfil: usuario.user.imagem,
                     ativo: usuario.user.ativo,
                     tipo: usuario.user.tipo,
                 },
@@ -104,7 +105,15 @@ console.log("localStorage:", localStorage.getItem("perfil"));
                         {perfil ? (
                             <>
                                 <div className="perfil-header">
-                                    <img src={user} alt="user" className="perfil-user"/>
+                                    <img
+                                        src={
+                                            perfil.user.fotoPerfil && typeof perfil.user.fotoPerfil === "string"
+                                                ? perfil.user.fotoPerfil
+                                                : user
+                                        }
+                                        alt="Perfil"
+                                        className="perfil-user"
+                                    />
                                     <span className="perfil-titulo" title={perfil.user.name}>{perfil.user.name}</span>
                                 </div>
                                 <div className="perfil-conteudo">

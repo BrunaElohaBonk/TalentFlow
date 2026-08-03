@@ -19,7 +19,7 @@ type NivelIdioma ="BASICO" | "INTERMEDIARIO" | "AVANCADO" | "FLUENTE";
 type NivelFormacao = "ENSINO_MEDIO" | "TECNICO" | "GRADUACAO" | "POS_GRADUACAO";
 
 interface IUsuario{
-    fotoAprendiz: File | null;
+    fotoPerfil: string | null;
     email_bosch: string;
     user_bosch?: string;
     EDV: number;
@@ -154,7 +154,7 @@ function PerfilAprendiz(){
                                 <button onClick={() => navigate('/Aprendiz')}><img src={voltar} alt="voltar" /></button>
                             </div>
                             <div className="dadosAprendiz-topo">
-                                <div className="dadosAprendiz-foto-container"><img src={icon_user} alt="icon_user" /></div>
+                                <div className="dadosAprendiz-foto-container"><img src={usuario?.fotoPerfil ? usuario.fotoPerfil : icon_user} alt="user" className="dadosAprendiz-img"/></div>
                                 <div className="dadosAprendiz-dados-perfil">
                                     <div className="dadosAprendiz-cabecalho-perfil"><h1>{usuario?.name}</h1></div>
                                     {usuario && (

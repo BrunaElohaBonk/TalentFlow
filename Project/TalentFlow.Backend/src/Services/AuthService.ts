@@ -162,11 +162,22 @@ export class UserService {
   }
   static async BuscarUser(tipoUser:user_tipoUser){
     const busca = await prisma.user.findMany({
-      where:{tipoUser :tipoUser}
-    })
-    if (!busca){
-      throw new ServerConfigError();
-    }
+      where:{
+        tipoUser: tipoUser
+      },
+      select:{
+        EDV:true,
+        name:true,
+        user_bosch:true,
+        email_bosch:true,
+        contato:true,
+        data_nascimento:true,
+        fotoPerfil:true,
+        Ativo:true,
+        tipoUser:true
+      }
+    });
+
     return busca;
   }
   

@@ -27,6 +27,13 @@ body.dark .aprendiz-modal{
     padding: 30px;
 }
 
+.aprendiz-img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
 .aprendiz-pesquisa{
     position: relative;
     width: 100%;

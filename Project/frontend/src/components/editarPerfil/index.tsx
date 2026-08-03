@@ -16,7 +16,7 @@ interface IPerfil {
         email_bosch: string;
         contato: string;
         data_nascimento: string;
-        imagem: File | string | null;
+        fotoPerfil: File | string | null;
         ativo: boolean;
         tipo: string;
     };
@@ -51,15 +51,24 @@ function EditarPerfil({ visible, setVisible, edv, onSuccess, atualizarPerfil }: 
         maxFiles: 1,
         onDrop: (acceptedFiles) => {
             if (acceptedFiles.length > 0) {
+
                 const arquivo = acceptedFiles[0];
+
                 setNomeArquivo(arquivo.name);
-                setPerfil((prev) => ({
-                    ...prev,
-                    user: {
-                        ...prev.user,
-                        imagem: arquivo,
-                    },
-                }));
+
+                const reader = new FileReader();
+
+                reader.onloadend = () => {
+                    setPerfil((prev) => ({
+                        ...prev,
+                        user:{
+                            ...prev.user,
+                            fotoPerfil: reader.result as string
+                        }
+                    }));
+                };
+
+                reader.readAsDataURL(arquivo);
             }
         },
     });
@@ -80,7 +89,7 @@ function EditarPerfil({ visible, setVisible, edv, onSuccess, atualizarPerfil }: 
             email_bosch: "",
             contato: "",
             data_nascimento: "",
-            imagem: null,
+            fotoPerfil: null,
             ativo: true,
             tipo: "",
         },
@@ -101,7 +110,7 @@ function EditarPerfil({ visible, setVisible, edv, onSuccess, atualizarPerfil }: 
                     email_bosch: usuario.user.email_bosch,
                     contato: usuario.user.contato,
                     data_nascimento: formatarData(usuario.user.data_nascimento),
-                    imagem: usuario.user.imagem,
+                    fotoPerfil: usuario.user.fotoPerfil,
                     ativo: usuario.user.ativo,
                     tipo: usuario.user.tipo,
                 },
@@ -154,6 +163,7 @@ function EditarPerfil({ visible, setVisible, edv, onSuccess, atualizarPerfil }: 
             return;
         }
         try {
+            console.log("DADOS ENVIADOS:", perfil.user);
             const response = await api.put(`instrutor/editarInstrutor/${perfil.user.EDV}`, perfil.user);
             console.log(response.status);
             console.log(response.data);
@@ -162,6 +172,7 @@ function EditarPerfil({ visible, setVisible, edv, onSuccess, atualizarPerfil }: 
             usuario.user.email_bosch = perfil.user.email_bosch;
             usuario.user.contato = perfil.user.contato;
             usuario.user.data_nascimento = perfil.user.data_nascimento;
+            usuario.user.imagem = perfil.user.fotoPerfil;
             localStorage.setItem("usuario", JSON.stringify(usuario));
             atualizarPerfil();
             Swal.fire({

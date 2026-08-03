@@ -145,7 +145,7 @@ model turma {
 model user {
   EDV                   Int                     @id
   tipoUser              user_tipoUser
-  fotoPerfil            String?
+  fotoPerfil            String?                 @db.LongText
   name                  String
   data_nascimento       DateTime
   user_bosch            String?                 @unique(map: "User_user_bosch_key")

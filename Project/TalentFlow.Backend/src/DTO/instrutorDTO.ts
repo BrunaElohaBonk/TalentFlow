@@ -7,5 +7,5 @@ export interface InstrutorDto {
     data_nascimento?: string;
     contato?: string;
     password_login?: string;
-    fotoInstrutor?: File;
+    fotoPerfil ?: string;
 }

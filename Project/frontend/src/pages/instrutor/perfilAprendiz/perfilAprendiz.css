@@ -21,6 +21,13 @@
     overflow: auto;
 }
 
+.dadosAprendiz-img {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
 .dadosAprendiz-tela {
     position: relative;
     width: 100%;
