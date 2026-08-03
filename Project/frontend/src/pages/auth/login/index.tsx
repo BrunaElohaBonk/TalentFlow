@@ -150,8 +150,28 @@ function Login() {
           return
         }
       }
-    } catch(e){
-      console.error(e)
+    } 
+    catch(e: any){
+      console.error(e);
+
+      if (e.response?.status === 401) {
+        Swal.fire({
+          icon: "error",
+          title: "Erro",
+          text: "EDV ou senha inválidos.",
+          confirmButtonColor: "#2B83D5",
+          confirmButtonText: "OK"
+        });
+        return;
+      }
+
+      Swal.fire({
+        icon: "error",
+        title: "Erro",
+        text: "Erro ao realizar login.",
+        confirmButtonColor: "#2B83D5",
+        confirmButtonText: "OK"
+      });
     }
   }
 

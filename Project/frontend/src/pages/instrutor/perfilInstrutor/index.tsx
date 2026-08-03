@@ -45,7 +45,8 @@ function PerfilInstrutor(){
                 tipo: usuario.user.tipo,
             },
         });
-    }; 
+    };
+
 
     useEffect(() => {
         const usuarioSalvo = localStorage.getItem("usuario");
@@ -71,8 +72,7 @@ function PerfilInstrutor(){
         }
     }, []);
 
-    console.log("perfil:", perfil);
-console.log("localStorage:", localStorage.getItem("perfil"));
+
 
     return(
         <div className="perfil">

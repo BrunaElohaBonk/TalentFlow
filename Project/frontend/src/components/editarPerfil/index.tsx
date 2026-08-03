@@ -172,7 +172,7 @@ function EditarPerfil({ visible, setVisible, edv, onSuccess, atualizarPerfil }: 
             usuario.user.email_bosch = perfil.user.email_bosch;
             usuario.user.contato = perfil.user.contato;
             usuario.user.data_nascimento = perfil.user.data_nascimento;
-            usuario.user.imagem = perfil.user.fotoPerfil;
+            usuario.user.fotoPerfil  = perfil.user.fotoPerfil;
             localStorage.setItem("usuario", JSON.stringify(usuario));
             atualizarPerfil();
             Swal.fire({
