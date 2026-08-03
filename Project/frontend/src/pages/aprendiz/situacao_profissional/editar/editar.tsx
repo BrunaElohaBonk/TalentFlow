@@ -92,7 +92,7 @@ function EditarSituacaoProfissional({ visible, setVisible, setSituacaoProfission
                     cumprido_Estagio: situacao.estagio === "Sim",
                     bio_profissional: situacao.descricao,
                 }
-            );
+            ); 
 
             Swal.fire({
                 title: 'Sucesso!',
@@ -113,7 +113,7 @@ function EditarSituacaoProfissional({ visible, setVisible, setSituacaoProfission
             })
         }
     }
-
+    
     if (!visible) return null;
 
     return (
