@@ -93,6 +93,9 @@ export function GraficoCompetencias({ dados }: Props) {
                     dataKey="competencia"
                     width={140}
                     interval={0}
+                    tickFormatter={(valor) =>
+                        valor.length > 15 ? `${valor.substring(0, 15)}...` : valor
+                    }
                 />
                 <Tooltip />
                 <Bar

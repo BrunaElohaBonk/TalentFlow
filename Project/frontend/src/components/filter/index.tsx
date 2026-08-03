@@ -75,6 +75,7 @@ function Filtro({ visible, setVisible, filtros, setFiltros, aprendizes, turmas }
             idadeMin: "",
             idadeMax: "",
             idiomas: [],
+            estagio: null,
             formacoes: []
         });
     };
