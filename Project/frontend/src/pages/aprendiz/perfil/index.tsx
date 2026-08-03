@@ -243,7 +243,7 @@ function Perfil() {
             <Idioma visible={idioma} setVisible={setIdioma} onSuccess={carregarPerfil} />
             <SoftSkill visible={soft_skill} setVisible={setSoftSkill} edv={EDV} onSuccess={carregarPerfil} />
             <Competencia visible={competencia} setVisible={setCompetencia} onSuccess={carregarPerfil} />
-            <EditarPerfil visible={editar} setVisible={setEditar} edv={EDV} onSuccess={carregarPerfil}/>
+            <EditarPerfil visible={editar} setVisible={setEditar} edv={EDV} onSuccess={carregarPerfil} atualizarPerfil={carregarPerfil}/>
             <EditarSituacaoProfissional visible={editarSituacao} setVisible={setEditarSituacao} setSituacaoProfissional={setSituacao} edv={EDV} idSituacao={apireq?.situacao_profissional?.[0]?.id ?? 0} onSuccess={carregarPerfil}/>
             <EditarFormacaoAcademica visible={editarFormacao} setVisible={setEditarFormacao} setFormacaoAcademica={setFormacaoAcademica} formacaoSelecionada={formacaoSelecionada}onSuccess={carregarPerfil} />
             <AdicionarFormacaoAcademica visible={adicionarFormacao} setVisible={setAdicionarFormacao} setFormacaoAcademica={setFormacaoAcademica} edv={EDV} onSuccess={carregarPerfil} />

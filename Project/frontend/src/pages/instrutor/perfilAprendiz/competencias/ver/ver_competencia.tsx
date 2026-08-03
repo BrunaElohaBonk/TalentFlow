@@ -5,8 +5,9 @@ interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
     competencia: {
-        nome: string;
-        nivel: string;
+        id: number;
+        nome_Competencia: string;
+        nivel_Competencia: string;
     };
 }
 
@@ -34,11 +35,11 @@ function CompetenciaVisualizar({
                 <div className="competenciaVisualizar-conteudo">
                     <div className="competenciaVisualizar-item">
                         <span className='formacao-titulo'>Nome da Competência</span>
-                        <p>{competencia.nome || "Não informado."}</p>
+                        <p>{competencia.nome_Competencia || "Não informado."}</p>
                     </div>
                     <div className="competenciaVisualizar-item">
                         <span className='formacao-titulo'>Nível</span>
-                        <p>{competencia.nivel || "Não informado."}</p>
+                        <p>{competencia.nivel_Competencia || "Não informado."}</p>
                     </div>
                 </div>
             </div>

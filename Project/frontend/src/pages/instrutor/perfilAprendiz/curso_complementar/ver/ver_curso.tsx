@@ -1,15 +1,16 @@
 import './ver_curso.css'
 import icon_fechar from '../../../../../assets/img/close.png'
+import CursoComplementar from '..';
 
 interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
     cursosComplementares: {
-        nomeCurso: string;
-        status: boolean;
-        dataConclusao: Date | string | null;
-        cargaHoraria: number;
-        descricaoCurso: string;
+        id: number;
+        name_Curso: string;
+        status_Cursos: "CONCLUIDO" | "CURSANDO";
+        data_Conclusao: string;
+        carga_horaria: number;
         certificado: string | null;
     };
 }
@@ -38,39 +39,34 @@ function CursoComplementarVisualizar({
                 <div className="cursoVisualizar-conteudo">
                     <div className="cursoVisualizar-item">
                         <span className='formacao-titulo'>Nome do Curso</span>
-                        <p>{cursosComplementares.nomeCurso || "Não informado."}</p>
+                        <p>{cursosComplementares.name_Curso || "Não informado."}</p>
                     </div>
                     <div className="cursoVisualizar-item">
                         <span className='formacao-titulo'>Situação</span>
-                        <p>{cursosComplementares.status ? "Concluído" : "Cursando"}</p>
+                        <p>{cursosComplementares.status_Cursos ? "Concluído" : "Cursando"}</p>
                     </div>
 
                     {
-                        cursosComplementares.status && (
+                        cursosComplementares.status_Cursos && (
                             <div className="cursoVisualizar-item">
                                 <span className='formacao-titulo'>Data de Conclusão</span>
-                                <p>{cursosComplementares.dataConclusao  ? new Date(cursosComplementares.dataConclusao).toLocaleDateString("pt-BR"):"Não informado."}</p>
+                                <p>{cursosComplementares.data_Conclusao  ? new Date(cursosComplementares.data_Conclusao).toLocaleDateString("pt-BR"):"Não informado."}</p>
                             </div>
                         )
                     }
                     <div className="cursoVisualizar-item">
                         <span className='formacao-titulo'>Carga Horária</span>
-                        <p>{cursosComplementares.cargaHoraria || "Não informado."}</p>
-                    </div>
-                    <div className="cursoVisualizar-item cursoVisualizar-descricao">
-                        <span className='formacao-titulo'>Descrição</span>
-                        <p>{cursosComplementares.descricaoCurso || "Não informado."}</p>
+                        <p>{cursosComplementares.carga_horaria || "Não informado."}</p>
                     </div>
                     <div className="cursoVisualizar-item certificado-item">
                         <span className='formacao-titulo'>Certificado</span>
-                        <p>{cursosComplementares.certificado || "Não informado"}</p>
-                        {/* {
+                        {
                             cursosComplementares.certificado ? (
-                                <p><img alt="Certificado" className="certificado-img"/></p>
+                                <p><img alt="Certificado" className="certificado-img" /></p>
                             ) : (
                                 <p>Não incluído</p>
                             )
-                        } */}
+                        }
                     </div>
                 </div>
             </div>

@@ -10,6 +10,7 @@ interface ICurso {
     status_Cursos: "CONCLUIDO" | "CURSANDO";
     data_Conclusao: string;
     carga_horaria: number;
+    certificado: string | null;
 }
 
 interface Props {

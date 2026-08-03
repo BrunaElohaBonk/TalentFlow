@@ -29,7 +29,7 @@ interface Props {
     atualizarPerfil: () => void;
 }
 
-function EditarPerfil({ visible, setVisible, edv,onSuccess }: Props){
+function EditarPerfil({ visible, setVisible, edv, onSuccess, atualizarPerfil }: Props){
     const nomeRef = useRef<HTMLInputElement>(null);
     const edvRef = useRef<HTMLInputElement>(null);
     const emailRef = useRef<HTMLInputElement>(null);
@@ -172,7 +172,7 @@ function EditarPerfil({ visible, setVisible, edv,onSuccess }: Props){
             
             setVisible(false);
         }
-        catch (error) {
+        catch (error : any) {
             console.log(error.response?.status);
             console.log(error.response?.data);
             console.log(error.response);

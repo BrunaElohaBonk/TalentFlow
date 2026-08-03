@@ -17,6 +17,7 @@ interface ITurma {
     name_Curso: string;
     EDV_Instrutor: number;
     nomeInstrutor: string;
+    Ativo: boolean;
 }
 
 interface IAprendiz {
@@ -188,7 +189,7 @@ function VerAprendiz(){
         try {
             const response = await api.get("/turma/visualizarTurmas");
             console.log("TURMAS:", response.data);
-            setTurma(response.data);
+            setTurma(response.data.filter((turma: ITurma) => turma.Ativo));
         } catch(error) {
             console.error("Erro ao buscar turmas:", error);
         }

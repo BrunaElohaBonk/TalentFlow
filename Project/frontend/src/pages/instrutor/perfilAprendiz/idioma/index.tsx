@@ -9,6 +9,7 @@ interface IIdiomas{
     id: number;
     nome_Idioma: string;
     nivel_Idioma: NivelIdioma;
+    certificado: string | null;
 }
 interface Props {
     visible: boolean;

@@ -36,7 +36,7 @@ interface IPerfilAprendiz {
         nome_Lider?: string;
         cumprido_Estagio?: boolean;
         bio_profissional?: string;
-    };
+    }[];
 
     formacao_academica: {
         id: number;
@@ -46,6 +46,7 @@ interface IPerfilAprendiz {
         periodo_Atual: number;
         total_Periodo: number;
         nivel_formacao: NivelFormacao;
+        certificado: string | null;
     }[];
 
     cursos_complementares: {
@@ -54,17 +55,19 @@ interface IPerfilAprendiz {
         status_Cursos: "CONCLUIDO" | "CURSANDO";
         data_Conclusao: string;
         carga_horaria: number;
+        certificado: string | null;
     }[];
 
     idiomas: {
         id: number;
         nome_Idioma: string;
         nivel_Idioma: NivelIdioma;
+        certificado: string | null;
     }[];
 
     soft_skills: {
         id: number;
-        nome_SoftSkills: string[];
+        nome_SoftSkills: string;
     }[];
 
     competencias: {
@@ -105,16 +108,17 @@ function PerfilAprendiz(){
             const response = await api.get(`/aprendiz/perfil/${edv}`);
             const perfil = response.data.data;
             console.log("PERFIL:", perfil);
+            console.log('Situação Profissional:', perfil.situacao_profissional);
             setAprendiz({
                 ...perfil,
-                situacao_profissional: perfil.situacao_profissional ?? {},
+                situacao_profissional: perfil.situacao_profissional ?? [],
                 formacao_academica: perfil.formacao_academica ?? [],
                 cursos_complementares: perfil.cursos ?? [],
                 idiomas: perfil.idiomas ?? [],
                 soft_skills: perfil.soft_skills ?? [],
                 competencias: perfil.competencia ?? []
             });
-
+            console.log('Softskil', perfil.soft_skills);
         } catch(error) {
             console.error("Erro ao buscar perfil:", error);
         }
@@ -168,7 +172,7 @@ function PerfilAprendiz(){
                             <div className="dadosAprendiz-cards-superiores">
                                 <div className="dadosAprendiz-card-perfil">
                                     <h3>Situação Profissional</h3>
-                                    <ul><li>{aprendiz.situacao_profissional?.[0]?.bio_profissional}</li></ul>
+                                    <ul><li>{aprendiz.situacao_profissional[0]?.bio_profissional}</li></ul>
                                     <button className="dadosAprendiz-btn-visualizar" onClick={() => setSituacao(true)}><img src={icon_olho} alt="Visualizar" /></button>
                                 </div>
                                 <div className="dadosAprendiz-card-perfil">
@@ -197,7 +201,7 @@ function PerfilAprendiz(){
                                 <div className="dadosAprendiz-card-perfil">
                                     <h3>Soft Skills</h3>
                                     <ul>{aprendiz.soft_skills.map((skill, index) => (
-                                        <li key={index} title={skill.nome_SoftSkills.join(", ")}>{skill.nome_SoftSkills.join(", ")}</li>))
+                                        <li key={index} title={skill.nome_SoftSkills}>{skill.nome_SoftSkills}</li>))
                                     }</ul>
                                     <button className="dadosAprendiz-btn-visualizar" onClick={() => setSoftSkill(true)}><img src={icon_olho} alt="Visualizar" /></button>
                                 </div>

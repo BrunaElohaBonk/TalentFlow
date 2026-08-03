@@ -3,7 +3,7 @@ import './soft_skill.css'
 
 interface ISoft{
     id: number;
-    nome_SoftSkills: string[];
+    nome_SoftSkills: string;
 }
 interface Props {
     visible: boolean;

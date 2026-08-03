@@ -11,7 +11,7 @@ interface ISituacao {
 interface Props {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
-    situacao: ISituacao;
+    situacao: ISituacao[];
 }
 
 function SituacaoProfissional({visible, setVisible, situacao}: Props) {

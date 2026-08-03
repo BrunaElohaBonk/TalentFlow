@@ -13,6 +13,7 @@ interface ITurma {
     name_Curso: string;
     EDV_Instrutor: number;
     nomeInstrutor: string;
+    Ativo: true;
 }
 
 interface IUser {
@@ -60,7 +61,7 @@ function CadastrarUser() {
         try {
             const response = await api.get("turma/visualizarTurmas");
             console.log("Turmas API:", response.data);
-            setTurmas(response.data);
+            setTurmas(response.data.filter((turma: ITurma) => turma.Ativo));
         }
         catch (e) {
             console.log("Erro ao buscar turmas:", e);

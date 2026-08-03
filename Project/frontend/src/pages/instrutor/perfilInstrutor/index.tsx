@@ -76,7 +76,7 @@ console.log("localStorage:", localStorage.getItem("perfil"));
     return(
         <div className="perfil">
             <Header></Header>
-            <EditarPerfil visible={editar} setVisible={setEditar} edv={perfil?.user.EDV ?? 0} atualizarPerfil={carregarPerfil}/>
+            <EditarPerfil visible={editar} setVisible={setEditar} edv={perfil?.user.EDV ?? 0} onSuccess={carregarPerfil} atualizarPerfil={carregarPerfil}/>
             <div className="perfil-container">
                 <Sidebar></Sidebar>
                 <div className="perfil-body">   

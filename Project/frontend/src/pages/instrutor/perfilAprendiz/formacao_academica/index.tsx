@@ -13,6 +13,7 @@ interface IFormacao {
     periodo_Atual: number;
     total_Periodo: number;
     nivel_formacao: NivelFormacao;
+    certificado: string | File | null;
 }
 interface Props {
     visible: boolean;

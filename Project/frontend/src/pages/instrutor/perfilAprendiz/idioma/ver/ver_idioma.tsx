@@ -1,9 +1,12 @@
 import './ver_idioma.css'
 import icon_fechar from '../../../../../assets/img/close.png'
 
+type NivelIdioma ="BASICO" | "INTERMEDIARIO" | "AVANCADO" | "FLUENTE";
+
 interface IIdiomas{
-     idioma: string;
-    nivel: string;
+    id: number;
+    nome_Idioma: string;
+    nivel_Idioma: NivelIdioma;
     certificado: string | null;
 }
 interface Props {
@@ -36,24 +39,17 @@ function IdiomaVisualizar({
                 <div className="idiomaVisualizar-conteudo">
                     <div className="idiomaVisualizar-item">
                         <span className='formacao-titulo'>Nome do Idioma</span>
-                        <p>{idioma.idioma || "Não informado."}</p>
+                        <p>{idioma.nome_Idioma || "Não informado."}</p>
                     </div>
                     <div className="idiomaVisualizar-item">
                         <span className='formacao-titulo'>Nível</span>
-                        <p>{idioma.nivel || "Não informado."}</p>
+                        <p>{idioma.nivel_Idioma || "Não informado."}</p>
                     </div>
                     <div className="idiomaVisualizar-item certificado-item">
                         <span className='formacao-titulo'>Certificado</span>
-                        <p>{idioma.certificado || "Não incluído"}</p>
-                        {/* {
-                            idioma.certificado ? (
-                                <p>
-                                    <img src={URL.createObjectURL(idioma.certificado)} alt="Certificado" className="certificado-img"/>
-                                </p>
-                            ) : (
-                                <p>Não incluído</p>
-                            )
-                        } */}
+                        <p>
+                            {idioma.certificado ?? "Não incluído"}
+                        </p>
                     </div>
                 </div>
             </div>

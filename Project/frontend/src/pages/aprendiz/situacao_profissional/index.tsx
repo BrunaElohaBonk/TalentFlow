@@ -32,12 +32,12 @@ function SituacaoProfissional({ visible, setVisible, setEditarSituacao,onSuccess
     }
     useEffect(() => {
         carregarPerfil();
+        onSuccess();
     }, []);
     if (!visible) {
 
         return null
     }
-    onSuccess()
 
     return (
         <>
