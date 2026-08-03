@@ -10,7 +10,7 @@ export function GraficoSetor( {dados} : Props) {
     const corPrimaria = darkMode ? "#F97316" : "#193B82";
     return (
         <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={dados}>
+            <BarChart data={dados.slice(0, 10)}>
                 <CartesianGrid strokeDasharray="3 3" stroke={darkMode ? "#444" : "#ccc"}/>
                 <XAxis  dataKey="setor" stroke={darkMode ? "#fff" : "#000"}/>
                 <YAxis stroke={darkMode ? "#fff" : "#000"}/>
@@ -82,7 +82,7 @@ export function GraficoCompetencias({ dados }: Props) {
     return (
         <ResponsiveContainer width="100%" height={300}>
             <BarChart
-                data={dados}
+                data={dados.slice(0, 6)}
                 layout="vertical"
                 margin={{ top: 10, right: 30, left: 20, bottom: 10 }}
             >
@@ -113,7 +113,7 @@ export function GraficoIdiomas({ dados }: Props) {
     
     return (
         <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={dados} layout="vertical" margin={{ top: 10, right: 30, left: 20, bottom: 10 }}>
+            <BarChart data={dados.slice(0, 6)} layout="vertical" margin={{ top: 10, right: 30, left: 20, bottom: 10 }}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis type="number" />
                 <YAxis type="category" dataKey="idioma" width={100} />
