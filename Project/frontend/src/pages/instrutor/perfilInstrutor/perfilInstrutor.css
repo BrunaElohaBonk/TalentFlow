@@ -34,7 +34,7 @@ body.dark .perfil-form {
     flex-direction: column;
     position: relative;
     width: 95%;
-    max-width: 45rem;
+    max-width: 50rem;
     min-height: 25rem;
     max-height: 80vh;
     padding: clamp(20px, 3vw, 35px);
@@ -66,8 +66,10 @@ body.dark .perfil-form {
 }
 
 .perfil-user {
-    width: clamp(80px, 12vw, 150px);
-    height: clamp(80px, 12vw, 150px);
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 .perfil-titulo {

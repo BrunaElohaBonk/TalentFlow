@@ -86,6 +86,10 @@ export const editarInstrutorSchema = z.object({
             6,
             "A senha deve possuir pelo menos 6 caracteres"
         )
+        .optional(),
+
+    fotoPerfil: z.string()
         .optional()
+        .nullable()
 
 });

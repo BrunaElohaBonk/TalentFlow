@@ -37,7 +37,7 @@ route
 
         authMiddleware,
 
-        roleMiddleware("INSTRUTOR"),
+        roleMiddleware("INSTRUTOR", "APRENDIZ"),
 
         validationMiddleware(editarInstrutorSchema),
 

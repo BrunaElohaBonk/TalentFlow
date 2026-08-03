@@ -51,7 +51,7 @@ function VerInstrutor(){
             const response = await api.get("/auth/buscaruser/INSTRUTOR");
             console.log("API RESPONSE:", response.data);
             console.log("PRIMEIRO USUARIO:", response.data[0]);
-
+            console.log("FOTO:", response.data[0].fotoPerfil);
             const usuarios = response.data;
             const usuarioLogado = getUsuarioLogado();
             const outrosInstrutores = usuarios.filter(
@@ -115,7 +115,15 @@ function VerInstrutor(){
                                 <div className="instrutor-modal" key={instrutor.EDV}>
                                     <button className="instrutor-btn-delete" onClick={() => handleDelete(instrutor.EDV)}><img src={lixeira} alt="deletar" className="instrutor-deletar"/></button>
                                     <div className="instrutor-header">
-                                        <img src={user} alt="user" className="instrutor-img"/>
+                                        <img
+                                            src={
+                                                instrutor.fotoPerfil
+                                                ? instrutor.fotoPerfil as string
+                                                : user
+                                            }
+                                            alt="user"
+                                            className="instrutor-img"
+                                        />
                                         <span className="instrutor-titulo" title={instrutor.name}>{instrutor.name}</span>
                                     </div>
                                     <div className="instrutor-conteudo">

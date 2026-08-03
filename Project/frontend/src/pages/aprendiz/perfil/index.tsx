@@ -66,7 +66,7 @@ const formatarIdioma = (idioma: string) => {
 };
 interface Usuario {
     edv: number;
-    img: string;
+    fotoPerfil: string|null;
     nome: string;
     email: string;
     user: string;
@@ -179,10 +179,12 @@ function Perfil() {
 
     async function carregarPerfil() {
         const usuario = localStorage.getItem("usuario");
+        console.log("LOCAL STORAGE:", usuario);
         const aprendizLogado = JSON.parse(usuario??"");
+        console.log("FOTO LOCAL:", aprendizLogado.user.fotoPerfil);
         setAprendiz({
             edv: aprendizLogado.user.EDV,
-            img: aprendizLogado.user.imagem,
+            fotoPerfil: aprendizLogado.user.imagem,
             nome: aprendizLogado.user.name,
             email: aprendizLogado.user.email_bosch,
             user: aprendizLogado.user.user_bosch,
@@ -258,7 +260,11 @@ function Perfil() {
                     </button>
                     <div className="perfil-topo">
                         <div className="perfil-foto-container">
-                            <img src={icon_user} alt="icon_user" />
+                            <img 
+                                src={aprendiz?.fotoPerfil ? aprendiz.fotoPerfil : icon_user} 
+                                alt="Foto de perfil" 
+                                className="perfil-user"
+                            />
                         </div>
                         <div className="perfil-dados-perfil">
                             <div className="perfil-cabecalho-perfil">
@@ -268,7 +274,7 @@ function Perfil() {
                                 <span>Email: {aprendiz?.email}</span>
                                 <span>EDV: {aprendiz?.edv}</span>
                                 <span>User: {aprendiz?.user}</span>
-                            <span>Data de Nascimento: {formatarData(aprendiz?.data_nascimento ?? "")}</span>
+                                <span>Data de Nascimento: {formatarData(aprendiz?.data_nascimento ?? "")}</span>
                                 <span>Idade: {Idade(formatarData(aprendiz?.data_nascimento ?? ""))} anos</span>
                                 <span>Contato: {Telefone(aprendiz?.contato ?? "")}</span>
                             </div>

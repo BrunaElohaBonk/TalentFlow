@@ -76,8 +76,8 @@ body.dark .instrutor-modal{
 }
 
 .instrutor-img {
-    width: clamp(50px, 10vw, 150px);
-    height: clamp(50px, 10vw, 150px);
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
     object-fit: cover;
 }

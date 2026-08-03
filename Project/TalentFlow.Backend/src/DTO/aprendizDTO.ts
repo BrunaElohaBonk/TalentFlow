@@ -12,7 +12,7 @@ export type NivelIdioma =
 
 
 export interface AtualizarPerfilDto {
-    fotoAprendiz: File;
+    fotoPerfil ?: string;
     email: string;
     user?: string;
     EDV:number;

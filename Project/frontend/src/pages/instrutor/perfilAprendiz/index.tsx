@@ -19,7 +19,7 @@ type NivelIdioma ="BASICO" | "INTERMEDIARIO" | "AVANCADO" | "FLUENTE";
 type NivelFormacao = "ENSINO_MEDIO" | "TECNICO" | "GRADUACAO" | "POS_GRADUACAO";
 
 interface IUsuario{
-    fotoAprendiz: File | null;
+    fotoPerfil: string | null;
     email_bosch: string;
     user_bosch?: string;
     EDV: number;
@@ -154,7 +154,7 @@ function PerfilAprendiz(){
                                 <button onClick={() => navigate('/Aprendiz')}><img src={voltar} alt="voltar" /></button>
                             </div>
                             <div className="dadosAprendiz-topo">
-                                <div className="dadosAprendiz-foto-container"><img src={icon_user} alt="icon_user" /></div>
+                                <div className="dadosAprendiz-foto-container"><img src={usuario?.fotoPerfil ? usuario.fotoPerfil : icon_user} alt="user" className="dadosAprendiz-img"/></div>
                                 <div className="dadosAprendiz-dados-perfil">
                                     <div className="dadosAprendiz-cabecalho-perfil"><h1>{usuario?.name}</h1></div>
                                     {usuario && (
@@ -200,16 +200,30 @@ function PerfilAprendiz(){
                             <div className="dadosAprendiz-cards-inferiores">
                                 <div className="dadosAprendiz-card-perfil">
                                     <h3>Soft Skills</h3>
-                                    <ul>{aprendiz.soft_skills.map((skill, index) => (
-                                        <li key={index} title={skill.nome_SoftSkills}>{skill.nome_SoftSkills}</li>))
-                                    }</ul>
+                                    <ul>
+                                        {aprendiz.soft_skills
+                                            .slice(0, 3)
+                                            .map((skill, index) => (
+                                                <li key={index}>{skill.nome_SoftSkills}</li>
+                                            ))}
+                                        {aprendiz.soft_skills.length > 3 && (
+                                            <li>...</li>
+                                        )}
+                                    </ul>
                                     <button className="dadosAprendiz-btn-visualizar" onClick={() => setSoftSkill(true)}><img src={icon_olho} alt="Visualizar" /></button>
                                 </div>
                                 <div className="dadosAprendiz-card-perfil">
                                     <h3>Competências</h3>
-                                    <ul>{aprendiz.competencias.map((competencia, index) => (
-                                        <li key={index} title={`${competencia.nome_Competencia} - ${competencia.nivel_Competencia}`}>{competencia.nome_Competencia} - {competencia.nivel_Competencia}</li>))
-                                    }</ul>
+                                    <ul>
+                                        {aprendiz.competencias
+                                            .slice(0, 3)
+                                            .map((competencia, index) => (
+                                                <li key={index}>{competencia.nome_Competencia} - {competencia.nivel_Competencia}</li>
+                                            ))}
+                                        {aprendiz.competencias.length > 3 && (
+                                            <li>...</li>
+                                        )}
+                                    </ul>
                                     <button className="dadosAprendiz-btn-visualizar" onClick={() => setCompetencia(true)}><img src={icon_olho} alt="Visualizar" /></button>
                                 </div>
                             </div>

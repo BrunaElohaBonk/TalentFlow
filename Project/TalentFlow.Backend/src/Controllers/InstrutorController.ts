@@ -15,11 +15,11 @@ export default class instrutorController {
 
         const instrutor =
             await InstrutorService.editar(
+                
                 Number(EDV),
                 req.body,
                 req.user!.EDV
-            );
-
+            )
 
         return res.status(200).send({
 

@@ -12,7 +12,7 @@ export function GraficoSetor( {dados} : Props) {
         <ResponsiveContainer width="100%" height={300}>
             <BarChart data={dados}>
                 <CartesianGrid strokeDasharray="3 3" stroke={darkMode ? "#444" : "#ccc"}/>
-                <XAxis  dataKey="nome" stroke={darkMode ? "#fff" : "#000"}/>
+                <XAxis  dataKey="setor" stroke={darkMode ? "#fff" : "#000"}/>
                 <YAxis stroke={darkMode ? "#fff" : "#000"}/>
                 <Tooltip />
                 <Bar dataKey="quantidade" fill={corPrimaria} radius={[10,10,0,0]}/>
@@ -90,7 +90,7 @@ export function GraficoCompetencias({ dados }: Props) {
                 <XAxis type="number" />
                 <YAxis
                     type="category"
-                    dataKey="nome"
+                    dataKey="competencia"
                     width={140}
                     interval={0}
                 />
@@ -116,7 +116,7 @@ export function GraficoIdiomas({ dados }: Props) {
             <BarChart data={dados} layout="vertical" margin={{ top: 10, right: 30, left: 20, bottom: 10 }}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis type="number" />
-                <YAxis type="category" dataKey="nome" width={100} />
+                <YAxis type="category" dataKey="idioma" width={100} />
                 <Tooltip />
                 <Bar dataKey="quantidade" fill={corPrimaria} radius={[0, 10, 10, 0]}/>
             </BarChart>
