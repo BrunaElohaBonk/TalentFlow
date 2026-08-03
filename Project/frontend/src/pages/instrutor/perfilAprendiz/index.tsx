@@ -177,23 +177,32 @@ function PerfilAprendiz(){
                                 </div>
                                 <div className="dadosAprendiz-card-perfil">
                                     <h3>Formação Acadêmica</h3>
-                                    <ul><li>{aprendiz.formacao_academica.map((formacao, index) => (
+                                    <ul><li>{aprendiz.formacao_academica.slice(0, 1).map((formacao, index) => (
                                         <li key={index} title={formacao.name_Curso}>{formacao.name_Curso}</li>))
-                                    }</li></ul>
+                                    }
+                                    {aprendiz.formacao_academica.length > 1 && (
+                                            <li>...</li>
+                                    )}</li></ul>
                                     <button className="dadosAprendiz-btn-visualizar" onClick={() => setFormacaoAcademica(true)}><img src={icon_olho} alt="Visualizar" /></button>
                                 </div>
                                 <div className="dadosAprendiz-card-perfil">
                                     <h3>Cursos Complementares</h3>
-                                    <ul>{aprendiz.cursos_complementares.map((curso, index) => (
+                                    <ul>{aprendiz.cursos_complementares.slice(0, 1).map((curso, index) => (
                                         <li key={index} title={curso.name_Curso}>{curso.name_Curso}</li>))
-                                    }</ul>
+                                    }
+                                    {aprendiz.cursos_complementares.length > 1 && (
+                                            <li>...</li>
+                                    )}</ul>
                                     <button className="dadosAprendiz-btn-visualizar" onClick={() => setCursoComplementar(true)}><img src={icon_olho} alt="Visualizar" /></button>
                                 </div>
                                 <div className="dadosAprendiz-card-perfil">
                                     <h3>Idiomas</h3>
-                                    <ul> {aprendiz.idiomas.map((idioma, index) => (
+                                    <ul> {aprendiz.idiomas.slice(0, 1).map((idioma, index) => (
                                         <li key={index} title={idioma.nome_Idioma}>{idioma.nome_Idioma} - {idioma.nivel_Idioma}</li>))
-                                    }</ul>
+                                    }
+                                    {aprendiz.idiomas.length > 1 && (
+                                            <li>...</li>
+                                    )}</ul>
                                     <button className="dadosAprendiz-btn-visualizar" onClick={() => setIdioma(true)}><img src={icon_olho} alt="Visualizar" /></button>
                                 </div>
                             </div>
@@ -202,11 +211,11 @@ function PerfilAprendiz(){
                                     <h3>Soft Skills</h3>
                                     <ul>
                                         {aprendiz.soft_skills
-                                            .slice(0, 3)
+                                            .slice(0, 2)
                                             .map((skill, index) => (
                                                 <li key={index}>{skill.nome_SoftSkills}</li>
                                             ))}
-                                        {aprendiz.soft_skills.length > 3 && (
+                                        {aprendiz.soft_skills.length > 2 && (
                                             <li>...</li>
                                         )}
                                     </ul>
@@ -216,11 +225,11 @@ function PerfilAprendiz(){
                                     <h3>Competências</h3>
                                     <ul>
                                         {aprendiz.competencias
-                                            .slice(0, 3)
+                                            .slice(0, 2)
                                             .map((competencia, index) => (
                                                 <li key={index}>{competencia.nome_Competencia} - {competencia.nivel_Competencia}</li>
                                             ))}
-                                        {aprendiz.competencias.length > 3 && (
+                                        {aprendiz.competencias.length > 2 && (
                                             <li>...</li>
                                         )}
                                     </ul>
