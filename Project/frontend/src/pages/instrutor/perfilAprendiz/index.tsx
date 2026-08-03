@@ -200,16 +200,30 @@ function PerfilAprendiz(){
                             <div className="dadosAprendiz-cards-inferiores">
                                 <div className="dadosAprendiz-card-perfil">
                                     <h3>Soft Skills</h3>
-                                    <ul>{aprendiz.soft_skills.map((skill, index) => (
-                                        <li key={index} title={skill.nome_SoftSkills}>{skill.nome_SoftSkills}</li>))
-                                    }</ul>
+                                    <ul>
+                                        {aprendiz.soft_skills
+                                            .slice(0, 3)
+                                            .map((skill, index) => (
+                                                <li key={index}>{skill.nome_SoftSkills}</li>
+                                            ))}
+                                        {aprendiz.soft_skills.length > 3 && (
+                                            <li>...</li>
+                                        )}
+                                    </ul>
                                     <button className="dadosAprendiz-btn-visualizar" onClick={() => setSoftSkill(true)}><img src={icon_olho} alt="Visualizar" /></button>
                                 </div>
                                 <div className="dadosAprendiz-card-perfil">
                                     <h3>Competências</h3>
-                                    <ul>{aprendiz.competencias.map((competencia, index) => (
-                                        <li key={index} title={`${competencia.nome_Competencia} - ${competencia.nivel_Competencia}`}>{competencia.nome_Competencia} - {competencia.nivel_Competencia}</li>))
-                                    }</ul>
+                                    <ul>
+                                        {aprendiz.competencias
+                                            .slice(0, 3)
+                                            .map((competencia, index) => (
+                                                <li key={index}>{competencia.nome_Competencia} - {competencia.nivel_Competencia}</li>
+                                            ))}
+                                        {aprendiz.competencias.length > 3 && (
+                                            <li>...</li>
+                                        )}
+                                    </ul>
                                     <button className="dadosAprendiz-btn-visualizar" onClick={() => setCompetencia(true)}><img src={icon_olho} alt="Visualizar" /></button>
                                 </div>
                             </div>

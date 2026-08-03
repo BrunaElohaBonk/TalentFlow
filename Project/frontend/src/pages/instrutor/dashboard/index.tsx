@@ -22,15 +22,13 @@ interface IAprendiz {
     email_bosch: string;
     user_bosch: string;
     contato: string;
-    data_nascimento: Date;
+    data_nascimento: string;
     fotoPerfil: string | null;
     tipoUser: "APRENDIZ";
     Ativo: boolean;
+    idTurma: number;
 
     data: {
-        id: number;
-        EDV_Aprendiz: number;
-
         situacao_profissional: {
             nome_Setor: string;
             nome_Lider: string;
@@ -61,6 +59,16 @@ interface IAprendiz {
             nome_Idioma: string;
             nivel_Idioma: string;
         }[];
+        soft_skills: {
+        id: number;
+        nome_SoftSkills: string;
+        }[];
+
+        competencia: {
+            id: number;
+            nome_Competencia: string;
+            nivel_Competencia: string;
+        }[];
     };
 }
 
@@ -78,9 +86,90 @@ function Dashboard() {
         estagio: null as boolean | null,
         formacoes: [] as string[]
     });
+    useEffect(() => {
+    console.log("Filtros atualizados:", filtros);
+}, [filtros]);
+    const Idade = (dataNascimento: string) => {
+        const nascimento = new Date(dataNascimento);
+        const hoje = new Date();
+        let idade = hoje.getFullYear() - nascimento.getFullYear();
+        const mes = hoje.getMonth() - nascimento.getMonth();
+        if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())
+        ) {
+            idade--;
+        }
+        return idade;
+    };
+    const aprendizesFiltrados = aprendiz
+        .filter((item) => {
+        if (filtros.turmas.length > 0) {
+            const turmaDoAprendiz = item.idTurma;
+            if (!filtros.turmas.includes(turmaDoAprendiz)) {
+                return false;
+            }
+        }
+        if (filtros.setores.length > 0) {
+            const setorAprendiz = item.data.situacao_profissional[0]?.nome_Setor;
+            const possuiSetor = filtros.setores.includes(setorAprendiz);
+            if (!possuiSetor) {
+                return false;
+            }
+        }
+        if (filtros.idadeMin !== "" || filtros.idadeMax !== "") {
+            const idade = Idade(item.data_nascimento);
+            const idadeMin = filtros.idadeMin !== "" ? Number(filtros.idadeMin) : null;
+            const idadeMax = filtros.idadeMax !== "" ? Number(filtros.idadeMax) : null;
+            if (idadeMin !== null && idadeMax === null) {
+                if (idade !== idadeMin) {
+                    return false;
+                }
+            }
+            if (idadeMin === null && idadeMax !== null) {
+                if (idade > idadeMax) {
+                    return false;
+                }
+            }
+            if (idadeMin !== null && idadeMax !== null) {
+                if (idadeMin === idadeMax) {
+                    if (idade !== idadeMin) {
+                        return false;
+                    }
+                } 
+                else {
+                    if (idade < idadeMin || idade > idadeMax) {
+                        return false;
+                    }
+                }
+            }
+        }
+        if (filtros.idiomas.length > 0) {
+            const idiomasAprendiz = item.data.idiomas.map(
+                i => i.nome_Idioma
+            );
+            const possuiIdioma = filtros.idiomas.some(idioma => idiomasAprendiz.includes(idioma));
+            if (!possuiIdioma) {
+                return false;
+            }
+        }
+        if (filtros.formacoes.length > 0) {
+            const formacoesAprendiz = item.data.formacao_academica.map(f => f.name_Curso);
+            const possuiFormacao = filtros.formacoes.some(formacao => formacoesAprendiz.includes(formacao));
+            if (!possuiFormacao) {
+                return false;
+            }
+        }
+        if (filtros.estagio !== null) {
+            const estaEmEstagio = item.data.situacao_profissional[0]?.cumprido_Estagio; 
+            if (estaEmEstagio !== filtros.estagio) {
+                return false;
+            }
+        }
+        return true;
+    })
     const fetchDashboard = async () => {
         try {
             const response = await api.get("/aprendiz/dashboard");
+            console.log('Dashboard ',response.data);
             setDadosDashboard(response.data);
         } 
         catch (error) {
@@ -96,6 +185,74 @@ function Dashboard() {
             console.error("Erro ao buscar turmas:", error);
         }
     };
+    
+    const quantidadeEstagio = aprendizesFiltrados.filter(
+        a => a.data.situacao_profissional[0]?.cumprido_Estagio
+    ).length;
+
+    const quantidadeSuperior = aprendizesFiltrados.filter(a =>
+        a.data.formacao_academica.some(f =>
+            f.nivel_formacao === "GRADUACAO"
+        )
+    ).length;
+
+    const dashboardFiltrado = {
+        setores: Object.values(
+            aprendizesFiltrados.reduce((acc: any, item) => {
+                const setor = item.data.situacao_profissional[0]?.nome_Setor ?? "NAO_INFORMADO";
+                if (!acc[setor]) {
+                    acc[setor] = {
+                        setor,
+                        quantidade: 0
+                    };
+                }
+                acc[setor].quantidade++;
+                return acc;
+            }, {})
+        ),
+        estagio: {
+            quantidade: quantidadeEstagio,
+            naoEstagiando: aprendizesFiltrados.length - quantidadeEstagio
+        },
+        
+        competencias: Object.values(
+            aprendizesFiltrados.reduce((acc: any, item) => {
+                item.data.competencia?.forEach(comp => {
+                    if (!acc[comp.nome_Competencia]) {
+                        acc[comp.nome_Competencia] = {
+                            competencia: comp.nome_Competencia,
+                            quantidade: 0
+                        };
+                    }
+
+                    acc[comp.nome_Competencia].quantidade++;
+                });
+
+                return acc;
+            }, {})
+        ),
+        idiomas: Object.values(
+            aprendizesFiltrados.reduce((acc: any, item) => {
+                item.data.idiomas.forEach(idioma => {
+                    if (!acc[idioma.nome_Idioma]) {
+                        acc[idioma.nome_Idioma] = {
+                            idioma: idioma.nome_Idioma,
+                            quantidade: 0
+                        };
+                    }
+
+                    acc[idioma.nome_Idioma].quantidade++;
+                });
+
+                return acc;
+            }, {})
+        ),
+        formacao: {
+            cursoSuperior: quantidadeSuperior, 
+            naocursoSuperior: aprendizesFiltrados.length - quantidadeSuperior
+        }
+    };
+
     const fetchAprendizes = async () => {
         try {
             const response = await api.get("/auth/buscaruser/APRENDIZ");
@@ -103,8 +260,10 @@ function Dashboard() {
             const aprendizesComPerfil = await Promise.all(
                 usuarios.map(async (usuario: IAprendiz) => {
                     const perfilResponse = await api.get(`/aprendiz/perfil/${usuario.EDV}`);
+                    const turmaResponse = await api.get(`/aprendiz/aprendiz/${usuario.EDV}`);
                     return {
                         ...usuario,
+                        idTurma: turmaResponse.data.data.Id_Turma,
                         data: perfilResponse.data.data
                     };
                 })
@@ -115,6 +274,7 @@ function Dashboard() {
             console.error(error);
         }
     };
+
     useEffect(() => {
         fetchDashboard();
         fetchTurmas();
@@ -136,40 +296,45 @@ function Dashboard() {
             <Filtro visible={filtro} setVisible={setFiltro} filtros={filtros} setFiltros={setFiltros} aprendizes={aprendiz} turmas={turma}/>   
             <div className="dashboard-content">
                 <Sidebar />
+                
                 <div className="dashboard-body">
                     <div className="dashboard-pesquisa">
                         <button type="button" className="dashboard-button-filtro"><img src={filter} alt="filtro" className="img-filter" onClick={() => setFiltro(true)}/></button>
                     </div>
-                    <div className="dashboard-graficos">
-                        {(
-                            <>
-                                <div className="dashboard-card">
-                                    <h3 className="grafico-titulo">Distribuição por Setor</h3>
-                                    <GraficoSetor dados={dadosDashboard.setores}/>
-                                </div>
+                        {aprendizesFiltrados.length === 0 ? (
+                            <p className="dashboard-aviso">Nenhum aprendiz encontrado</p>
+                        ):(
+                            <div className="dashboard-graficos">
+                            {(
+                                <>
+                                    <div className="dashboard-card">
+                                        <h3 className="grafico-titulo">Distribuição por Setor</h3>
+                                        <GraficoSetor dados={dashboardFiltrado.setores}/>
+                                    </div>
 
-                                <div className="dashboard-card">
-                                    <h3 className="grafico-titulo">Percentual em Estágio</h3>
-                                    <GraficoEstagio dados={dadosDashboard.estagio}/>
-                                </div>
+                                    <div className="dashboard-card">
+                                        <h3 className="grafico-titulo">Percentual em Estágio</h3>
+                                        <GraficoEstagio dados={dashboardFiltrado.estagio}/>
+                                    </div>
 
-                                <div className="dashboard-card">
-                                    <h3 className="grafico-titulo">Aprendizes Cursando Ensino Superior</h3>
-                                    <GraficoSuperior dados={dadosDashboard.formacao}/>
-                                </div>
+                                    <div className="dashboard-card">
+                                        <h3 className="grafico-titulo">Aprendizes Cursando Ensino Superior</h3>
+                                        <GraficoSuperior dados={dashboardFiltrado.formacao}/>
+                                    </div>
 
-                                <div className="dashboard-card">
-                                    <h3 className="grafico-titulo">Competências</h3>
-                                    <GraficoCompetencias dados={dadosDashboard.competencias}/>
-                                </div>
+                                    <div className="dashboard-card">
+                                        <h3 className="grafico-titulo">Competências</h3>
+                                        <GraficoCompetencias dados={dashboardFiltrado.competencias}/>
+                                    </div>
 
-                                <div className="dashboard-card">
-                                    <h3 className="grafico-titulo">Idiomas</h3>
-                                    <GraficoIdiomas dados={dadosDashboard.idiomas}/>
-                                </div>
-                            </>
+                                    <div className="dashboard-card">
+                                        <h3 className="grafico-titulo">Idiomas</h3>
+                                        <GraficoIdiomas dados={dashboardFiltrado.idiomas}/>
+                                    </div>
+                                </>
                         )}
                     </div>
+                    )}
                 </div>
             </div>
         </div>

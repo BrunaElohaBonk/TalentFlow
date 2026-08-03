@@ -6,6 +6,17 @@
     height: 100vh;
 }
 
+.dashboard-aviso {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2rem;
+    font-weight: bold;
+    grid-column: span 3;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20%;
+}
+
 .dashboard-content{
     display: flex;
     flex: 1;

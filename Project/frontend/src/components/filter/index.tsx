@@ -48,7 +48,6 @@ interface Props {
 }
 
 function Filtro({ visible, setVisible, filtros, setFiltros, aprendizes, turmas } :Props){
-    console.log("TURMAS RECEBIDAS NO FILTRO:", turmas);
     const [aberto, setAberto] = useState<string | null>(null);
     const alternarFiltro = (nome: string) => {
         setAberto(aberto === nome ? null : nome);
