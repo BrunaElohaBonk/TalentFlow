@@ -297,7 +297,7 @@ function Perfil() {
                             <h3>Formação Acadêmica</h3>
                             <ul>
                                 {apireq?.formacao_academica
-                                    .slice(0, 2)
+                                    .slice(0, 1)
                                     .map((formacao, index) => (
                                         <li key={formacao.id}>
                                             {formacao.name_Curso} - {formacao.status_Academico}
@@ -305,6 +305,7 @@ function Perfil() {
                                         </li>
                                     ))
                                 }
+                                
                             </ul>
                             <button
                                 className="perfil-btn-visualizar"
