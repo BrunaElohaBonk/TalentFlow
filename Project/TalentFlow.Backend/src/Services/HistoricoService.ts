@@ -31,6 +31,7 @@ export class HistoricoService {
 
         const perfil = await Promise.all(
             historicoPerfil.map(async (item) => {
+                console.log("EDVAlteradoPor:", item.EDVAlteradoPor);
                 const usuario = item.EDVAlteradoPor
                     ? await prisma.user.findUnique({
                         where: {
@@ -51,7 +52,8 @@ export class HistoricoService {
                     const dados = item.Dados as any;
 
                     nome = dados?.user?.name;
-                }
+                }   
+                console.log("Usuário encontrado:", usuario);
 
                 return {
                     id: item.Id,
@@ -66,8 +68,10 @@ export class HistoricoService {
 
         const turma = await Promise.all(
             historicoTurma.map(async (item) => {
+                
                 const usuario = item.EDVAlteradoPor
                     ? await prisma.user.findUnique({
+                        
                         where: {
                             EDV: item.EDVAlteradoPor
                         },
@@ -76,7 +80,8 @@ export class HistoricoService {
                         }
                     })
                     : null;
-
+                    
+                
                 return {
                     id: item.Id,
                     tipo: "TURMA",
