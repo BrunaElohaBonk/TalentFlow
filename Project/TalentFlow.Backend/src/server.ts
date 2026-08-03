@@ -24,13 +24,15 @@ app.use(cors({
     credentials: true
 }));
 
-routes(app);
 
 app.get('/', (req,res)=>{
     res.status(200).send({
         response:"Sucesso ao Carregar a pagina"
     });
 });
+
+routes(app);
+
 
 // SEMPRE POR ÚLTIMO
 app.use(errorMiddleware);
